@@ -163,6 +163,10 @@ MonoBehaviour:
   isDrop: 0
   dropCostReduction: 0
   skillCostReduction: 99
+  consumable: 0
+  drop: 0
+  weapon: 1
+  chestArmor: 0
   fieldWeaponIndex: 2
   isEquiped: 0
   physicalAttack: 20

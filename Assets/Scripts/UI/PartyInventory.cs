@@ -137,6 +137,7 @@ public class PartyInventory : MonoBehaviour
             }
         }
 
+
         if (continueAdd)
         {
             for (int i = 0; i < partyInventory.Length; i++)
@@ -378,12 +379,6 @@ public class PartyInventory : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(chestArmorInventorySlots[inventoryPointerIndex].gameObject);
     }
 
-    public void SortInventoryByType(string type)
-    {
-
-        Debug.Log(partyInventory = partyInventory.OrderBy(type => type).ToArray());
-
-    }
 
     // Handles Various Menu Navigation
     void HandleInventory()
@@ -426,6 +421,175 @@ public class PartyInventory : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void SortInventoryByName()
+    {
+        List<Item> sortedList = new List<Item>();
+        for (int i = 0; i < partyInventory.Length; i++)
+        {
+            if (partyInventory[i] != null)
+            {
+                sortedList.Add(partyInventory[i]);
+                partyInventory[i] = null;
+                itemInventorySlots[i].ClearSlot();
+            }
+        }
+
+        sortedList = sortedList.OrderBy(item => item.itemName).ToList();
+
+        for (int i = 0; i < sortedList.Count; i++)
+        {
+            if (sortedList[i] != null)
+            {
+                partyInventory[i] = sortedList[i];
+                itemInventorySlots[i].AddItemSorting(partyInventory[i]);
+            }
+        }
+
+        inventoryPointerIndex = 0;
+        OpenInventoryMenu();
+    }
+
+    public void SortInventoryByType()
+    {
+        List<Item> sortedList = new List<Item>();
+        for (int i = 0; i < partyInventory.Length; i++)
+        {
+            if (partyInventory[i] != null)
+            {
+                sortedList.Add(partyInventory[i]);
+                partyInventory[i] = null;
+                itemInventorySlots[i].ClearSlot();
+            }
+        }
+
+        sortedList = sortedList.OrderBy(item => item.itemType).ToList();
+
+        for (int i = 0; i < sortedList.Count; i++)
+        {
+            if (sortedList[i] != null)
+            {
+                partyInventory[i] = sortedList[i];
+                itemInventorySlots[i].AddItemSorting(partyInventory[i]);
+            }
+        }
+
+        inventoryPointerIndex = 0;
+        OpenInventoryMenu();
+    }
+
+    public void SortInventoryByWeapon()
+    {
+        List<Item> sortedList = new List<Item>();
+        for (int i = 0; i < partyInventory.Length; i++)
+        {
+            if (partyInventory[i] != null)
+            {
+                sortedList.Add(partyInventory[i]);
+                partyInventory[i] = null;
+                itemInventorySlots[i].ClearSlot();
+            }
+        }
+
+        sortedList = sortedList.OrderBy(item => !item.weapon).ToList();
+
+        for (int i = 0; i < sortedList.Count; i++)
+        {
+            if (sortedList[i] != null)
+            {
+                partyInventory[i] = sortedList[i];
+                itemInventorySlots[i].AddItemSorting(partyInventory[i]);
+            }
+        }
+
+        inventoryPointerIndex = 0;
+        OpenInventoryMenu();
+    }
+
+    public void SortInventoryByChestArmor()
+    {
+        List<Item> sortedList = new List<Item>();
+        for (int i = 0; i < partyInventory.Length; i++)
+        {
+            if (partyInventory[i] != null)
+            {
+                sortedList.Add(partyInventory[i]);
+                partyInventory[i] = null;
+                itemInventorySlots[i].ClearSlot();
+            }
+        }
+
+        sortedList = sortedList.OrderBy(item => !item.chestArmor).ToList();
+
+        for (int i = 0; i < sortedList.Count; i++)
+        {
+            if (sortedList[i] != null)
+            {
+                partyInventory[i] = sortedList[i];
+                itemInventorySlots[i].AddItemSorting(partyInventory[i]);
+            }
+        }
+
+        inventoryPointerIndex = 0;
+        OpenInventoryMenu();
+    }
+
+    public void SortInventoryByDrop()
+    {
+        List<Item> sortedList = new List<Item>();
+        for (int i = 0; i < partyInventory.Length; i++)
+        {
+            if (partyInventory[i] != null)
+            {
+                sortedList.Add(partyInventory[i]);
+                partyInventory[i] = null;
+                itemInventorySlots[i].ClearSlot();
+            }
+        }
+
+        sortedList = sortedList.OrderBy(item => !item.drop).ToList();
+
+        for (int i = 0; i < sortedList.Count; i++)
+        {
+            if (sortedList[i] != null)
+            {
+                partyInventory[i] = sortedList[i];
+                itemInventorySlots[i].AddItemSorting(partyInventory[i]);
+            }
+        }
+
+        inventoryPointerIndex = 0;
+        OpenInventoryMenu();
+    }
+
+    // "Consumable Item" (excludes Drops)
+    public void SortInventoryByItem()
+    {
+        List<Item> sortedList = new List<Item>();
+        for (int i = 0; i < partyInventory.Length; i++)
+        {
+            if (partyInventory[i] != null)
+            {
+                sortedList.Add(partyInventory[i]);
+                partyInventory[i] = null;
+                itemInventorySlots[i].ClearSlot();
+            }
+        }
+
+        sortedList = sortedList.OrderBy(item => !item.consumable).ToList();
+
+        for (int i = 0; i < sortedList.Count; i++)
+        {
+            if (sortedList[i] != null)
+            {
+                partyInventory[i] = sortedList[i];
+                itemInventorySlots[i].AddItemSorting(partyInventory[i]);
+            }
+        }
+
+        inventoryPointerIndex = 0;
+        OpenInventoryMenu();
     }
 
     void PressDown()

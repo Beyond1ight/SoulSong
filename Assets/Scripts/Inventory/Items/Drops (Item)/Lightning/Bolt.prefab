@@ -164,6 +164,10 @@ MonoBehaviour:
   isDrop: 1
   dropCostReduction: 0
   skillCostReduction: 0
+  consumable: 0
+  drop: 1
+  weapon: 0
+  chestArmor: 0
 --- !u!1 &4412401449860616489
 GameObject:
   m_ObjectHideFlags: 0

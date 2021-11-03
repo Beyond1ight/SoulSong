@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 
 //[CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Items")]
 public class Item : MonoBehaviour
@@ -26,6 +27,8 @@ public class Item : MonoBehaviour
     public bool isDrop;
     public float dropCostReduction;
     public float skillCostReduction;
+
+    public bool consumable, drop, weapon, chestArmor;
 
     public void ItemSetup(GameObject item)
     {

@@ -19,7 +19,13 @@ public class InventorySlot : MonoBehaviour
         _item.numberHeld++;
         UpdateHeld();
     }
-
+    public void AddItemSorting(Item _item)
+    {
+        item = _item;
+        itemName.GetComponent<TMP_Text>().text = _item.itemName;
+        itemType.GetComponent<TMP_Text>().text = _item.itemType;
+        UpdateHeld();
+    }
     public void UpdateHeld()
     {
         if (item.itemType == "Item")

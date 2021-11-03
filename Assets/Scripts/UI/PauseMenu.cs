@@ -252,7 +252,7 @@ public class PauseMenu : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(pauseFirstButton);
             atPauseMenu = true;
-
+            Engine.e.partyInventoryReference.inventoryPointerIndex = 0;
             //Engine.e.partyInventoryReference.inventoryScreenSet = false;
 
             Engine.e.partyInventoryReference.partyInventoryRectTransform.offsetMax -= new Vector2(0, 0);
