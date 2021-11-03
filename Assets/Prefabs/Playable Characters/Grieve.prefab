@@ -1,0 +1,342 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6341603529141071098
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1542083580195482946}
+  - component: {fileID: 6657188191967139049}
+  - component: {fileID: 631019898473975974}
+  - component: {fileID: 6499351907438347948}
+  - component: {fileID: 8643373140373863403}
+  - component: {fileID: 6154385487382725465}
+  m_Layer: 0
+  m_Name: Grieve
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1542083580195482946
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6341603529141071098}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &6657188191967139049
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6341603529141071098}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 10
+  m_Sprite: {fileID: 21300000, guid: 10292a7c138744a09ae2ee3e7b07a2ca, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!50 &631019898473975974
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6341603529141071098}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!70 &6499351907438347948
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6341603529141071098}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1, y: 1}
+  m_Direction: 0
+--- !u!114 &8643373140373863403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6341603529141071098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9f38e135e3f2475488ed72939343b12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterName: Grieve
+  maxHealth: 100
+  currentHealth: 70
+  maxMana: 35
+  currentMana: 35
+  maxEnergy: 30
+  currentEnergy: 30
+  healthCapped: 1
+  manaCapped: 1
+  energyCapped: 1
+  haste: 17
+  experiencePoints: 0
+  levelUpReq: 100
+  lvl: 1
+  baseDamage: 10
+  physicalDamage: 10
+  isInParty: 1
+  isInActiveParty: 1
+  isLeader: 1
+  canUseMagic: 0
+  availableSkillPoints: 0
+  healthOffset: 0
+  manaOffset: -30
+  energyOffset: 0
+  strengthOffset: 0
+  dodgeChance: 10
+  physicalDefense: 7
+  fireDefense: 1
+  iceDefense: 1
+  waterDefense: 1
+  lightningDefense: 3
+  shadowDefense: 3
+  poisonDefense: 1
+  sleepDefense: 1
+  confuseDefense: 1
+  deathDefense: 0
+  fireDrops:
+  - {fileID: 11400000, guid: 6aaf764512c964247a1ab6f74e0e27b7, type: 2}
+  - {fileID: 11400000, guid: 1227ecefb6f5e4a1c9a406e55a2cc35d, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  iceDrops:
+  - {fileID: 11400000, guid: e682586f4b05941a7b430a85010d480e, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  holyDrops:
+  - {fileID: 11400000, guid: 877fa2c092b4e40128e3db11707ac684, type: 2}
+  - {fileID: 11400000, guid: e94ea1f0a7f8f4ed5a7ce9f966d97f0e, type: 2}
+  - {fileID: 11400000, guid: acfc2504593e94e81bc2d480b0c3d05a, type: 2}
+  - {fileID: 11400000, guid: cf4a2d22f4fac4ff0b1d3c8d8acf6bad, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  waterDrops:
+  - {fileID: 11400000, guid: f7911b3b316a64289b089119b0194868, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  lightningDrops:
+  - {fileID: 11400000, guid: 8c550a8dffde3433db125665c63f91f8, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  shadowDrops:
+  - {fileID: 11400000, guid: 3592519a364064da4bc7bbbebcbed1f6, type: 2}
+  - {fileID: 11400000, guid: eaf944b95521b408790e43b275c3e83f, type: 2}
+  - {fileID: 11400000, guid: e0c55993744e74610911118330d20954, type: 2}
+  - {fileID: 11400000, guid: f925fe39fda49454abd0dfe3fec0ced2, type: 2}
+  - {fileID: 11400000, guid: c8f97beea63974c6296a406d12a79774, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  dropCostReduction: 0
+  skillCostReduction: 0
+  fireDropsLevel: 1
+  fireDropsExperience: 0
+  fireDropsLvlReq: 50
+  firePhysicalAttackBonus: 0
+  fireDropAttackBonus: 0
+  iceDropsLevel: 1
+  iceDropsExperience: 0
+  iceDropsLvlReq: 50
+  icePhysicalAttackBonus: 0
+  iceDropAttackBonus: 0
+  waterDropsLevel: 1
+  waterDropsExperience: 0
+  waterDropsLvlReq: 50
+  waterPhysicalAttackBonus: 0
+  waterDropAttackBonus: 0
+  lightningDropsLevel: 1
+  lightningDropsExperience: 0
+  lightningDropsLvlReq: 50
+  lightningPhysicalAttackBonus: 0
+  lightningDropAttackBonus: 0
+  shadowDropsLevel: 1
+  shadowDropsExperience: 0
+  shadowDropsLvlReq: 50
+  shadowPhysicalAttackBonus: 0
+  shadowDropAttackBonus: 0
+  holyDropsLevel: 2
+  holyDropsExperience: 0
+  holyDropsLvlReq: 50
+  canUseFireDrops: 1
+  canUseIceDrops: 1
+  canUseHolyDrops: 1
+  canUseWaterDrops: 1
+  canUseLightningDrops: 1
+  canUseShadowDrops: 1
+  skills:
+  - {fileID: 11400000, guid: 6e5821a29f25149f19782eeed785f6d3, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  spellPower: 0
+  skillPower: 0
+  lastDropChoice: {fileID: 11400000, guid: 1227ecefb6f5e4a1c9a406e55a2cc35d, type: 2}
+  lastSkillChoice: {fileID: 0}
+  skillScale: 1
+  stealChance: 60
+  hitChance: 99
+  weapon: {fileID: 6075365292892509267, guid: 3df1b49a15c0a4fa7b1c86c96286159f, type: 3}
+  chestArmor: {fileID: 3137854586391407116, guid: 552a109bd39414d8180a998df500f23e, type: 3}
+  skillIndex: 0
+  skillTotal: 1
+  isPoisoned: 0
+  isAsleep: 0
+  isConfused: 0
+  deathInflicted: 0
+  poisonDmg: 0
+  sleepTimer: 0
+  confuseTimer: 0
+  deathTimer: 3
+  siphonAnim: {fileID: 0}
+  deathTimerPopup: {fileID: 0}
+--- !u!114 &6154385487382725465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6341603529141071098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef7d30963c67d4d5f9fb7bf9411d9c06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 2
+  rb: {fileID: 631019898473975974}
+  movement: {x: 0, y: 0}

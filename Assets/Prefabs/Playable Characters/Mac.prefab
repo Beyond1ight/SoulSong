@@ -1,0 +1,318 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2602189283547092602
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2602189283547092581}
+  m_Layer: 0
+  m_Name: macGFX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2602189283547092581
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2602189283547092602}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3.198807, y: -1.9375753, z: -0.4746369}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2602189284047916202}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2602189284047916194
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2602189284047916202}
+  - component: {fileID: 2602189284047916203}
+  - component: {fileID: 2602189284047916200}
+  m_Layer: 0
+  m_Name: Mac
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2602189284047916202
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2602189284047916194}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2602189283547092581}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &2602189284047916203
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2602189284047916194}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 10
+  m_Sprite: {fileID: 21300000, guid: 7927a394c228f4904aee51696860557a, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!114 &2602189284047916200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2602189284047916194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a78537c8030c548b2aa966133362dfd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterName: Mac
+  maxHealth: 80
+  currentHealth: 71
+  maxMana: 60
+  currentMana: 60
+  maxEnergy: 30
+  currentEnergy: 30
+  healthCapped: 1
+  manaCapped: 1
+  energyCapped: 1
+  haste: 14
+  experiencePoints: 0
+  levelUpReq: 100
+  lvl: 1
+  baseDamage: 10
+  physicalDamage: 8
+  isInParty: 1
+  isInActiveParty: 1
+  isLeader: 0
+  canUseMagic: 1
+  availableSkillPoints: 0
+  healthOffset: -20
+  manaOffset: 20
+  energyOffset: 0
+  strengthOffset: -20
+  dodgeChance: 10
+  physicalDefense: 6
+  fireDefense: 2
+  iceDefense: 1
+  waterDefense: 2
+  lightningDefense: 2
+  shadowDefense: 1
+  poisonDefense: 1
+  sleepDefense: 1
+  confuseDefense: 1
+  deathDefense: 0
+  fireDrops:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  iceDrops:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  holyDrops:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  waterDrops:
+  - {fileID: 11400000, guid: f7911b3b316a64289b089119b0194868, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  lightningDrops:
+  - {fileID: 11400000, guid: 8c550a8dffde3433db125665c63f91f8, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  shadowDrops:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  dropCostReduction: 0
+  skillCostReduction: 0
+  fireDropsLevel: 1
+  fireDropsExperience: 0
+  fireDropsLvlReq: 50
+  firePhysicalAttackBonus: 0
+  fireDropAttackBonus: 0
+  iceDropsLevel: 1
+  iceDropsExperience: 0
+  iceDropsLvlReq: 50
+  icePhysicalAttackBonus: 0
+  iceDropAttackBonus: 0
+  waterDropsLevel: 2
+  waterDropsExperience: 0
+  waterDropsLvlReq: 50
+  waterPhysicalAttackBonus: 0
+  waterDropAttackBonus: 0
+  lightningDropsLevel: 2
+  lightningDropsExperience: 0
+  lightningDropsLvlReq: 50
+  lightningPhysicalAttackBonus: 0
+  lightningDropAttackBonus: 0
+  shadowDropsLevel: 1
+  shadowDropsExperience: 0
+  shadowDropsLvlReq: 50
+  shadowPhysicalAttackBonus: 0
+  shadowDropAttackBonus: 0
+  holyDropsLevel: 1
+  holyDropsExperience: 0
+  holyDropsLvlReq: 50
+  canUseFireDrops: 0
+  canUseIceDrops: 0
+  canUseHolyDrops: 0
+  canUseWaterDrops: 1
+  canUseLightningDrops: 1
+  canUseShadowDrops: 0
+  skills:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 1df5a6e2c9d234357b27a7bafcffe23d, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  spellPower: 0
+  skillPower: 0
+  lastDropChoice: {fileID: 11400000, guid: 8c550a8dffde3433db125665c63f91f8, type: 2}
+  lastSkillChoice: {fileID: 11400000, guid: 1df5a6e2c9d234357b27a7bafcffe23d, type: 2}
+  skillScale: 1
+  stealChance: 60
+  hitChance: 99
+  weapon: {fileID: 7319004692465405328, guid: ab0ed2716eb3b457e947e63dfabc1642, type: 3}
+  chestArmor: {fileID: 3137854586391407116, guid: 552a109bd39414d8180a998df500f23e, type: 3}
+  skillIndex: 5
+  skillTotal: 1
+  isPoisoned: 0
+  isAsleep: 0
+  isConfused: 0
+  deathInflicted: 0
+  poisonDmg: 0
+  sleepTimer: 0
+  confuseTimer: 0
+  deathTimer: 3
+  siphonAnim: {fileID: 2065137212769976307, guid: 32eaef68e32af41e4ba12179ce0890dd, type: 3}
+  deathTimerPopup: {fileID: 0}
