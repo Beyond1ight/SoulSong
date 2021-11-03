@@ -72,7 +72,6 @@ public class Grieve : Character
     {
         weapon = _weapon;
         Engine.e.charEquippedWeapons[0] = _weapon;
-        Debug.Log("test");
         Engine.e.equipMenuReference.GetComponent<EquipDisplay>().grieveEquippedWeapon.GetComponent<InventorySlot>().item = _weapon;
         Engine.e.equipMenuReference.GetComponent<EquipDisplay>().grieveEquippedWeapon.GetComponentInChildren<TMP_Text>().text = _weapon.itemName;
 
