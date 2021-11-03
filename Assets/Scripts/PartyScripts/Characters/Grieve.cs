@@ -20,7 +20,6 @@ public class Grieve : Character
             //skills[1] = "Holy Blast";
         }
     }
-
     public void SetGrieveEquipWeapon()
     {
 
