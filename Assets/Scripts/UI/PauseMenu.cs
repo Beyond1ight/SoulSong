@@ -315,25 +315,6 @@ public class PauseMenu : MonoBehaviour
         atPauseMenu = false;
     }
 
-    public void OpenDropsMenu()
-    {
-        dropsMenu.SetActive(true);
-
-        EventSystem.current.SetSelectedGameObject(null);
-        if (Engine.e.partyDropsInventory.Count == 0)
-        {
-            EventSystem.current.SetSelectedGameObject(dropsInventoryFirstButton);
-        }
-        else
-        {
-            EventSystem.current.SetSelectedGameObject(Engine.e.partyDropsInventory[0].GetComponent<Item>().inventoryButtonLogic);
-        }
-
-        atPauseMenu = false;
-    }
-
-
-
     public void OpenGrieveWeaponSelection()
     {
         grieveWeaponSelection.SetActive(true);

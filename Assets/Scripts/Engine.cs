@@ -95,6 +95,7 @@ public class Engine : MonoBehaviour
 
 
     // Misc References
+    public int characterBeingTargeted;
     public Item itemToBeUsed;
     public List<int> remainingPartyMembers;
     bool gameStart;
@@ -1362,8 +1363,9 @@ public class Engine : MonoBehaviour
     }
 
     // Function for "consuming" a Drop item, out of battle. Teaches the targeted character the corresponding Drop.
-    public void UseItemDrop(int index)
+    public void UseItemDrop()
     {
+        int index = characterBeingTargeted;
 
         switch (itemToBeUsed.itemName)
         {
@@ -1389,7 +1391,7 @@ public class Engine : MonoBehaviour
                         fireDrops[0].isKnown = true;
                     }
 
-                    SubtractItemDropFromInventory("Fire Blast");
+                    partyInventoryReference.SubtractItemFromInventory(gameFireDrops[0]);
                     break;
                 }
 
@@ -1415,7 +1417,8 @@ public class Engine : MonoBehaviour
                         iceDrops[0].isKnown = true;
                     }
 
-                    SubtractItemDropFromInventory("Blizzard");
+                    partyInventoryReference.SubtractItemFromInventory(gameIceDrops[0]);
+
                     break;
                 }
 
@@ -1441,7 +1444,8 @@ public class Engine : MonoBehaviour
                         lightningDrops[0].isKnown = true;
                     }
 
-                    SubtractItemDropFromInventory("Bolt");
+                    partyInventoryReference.SubtractItemFromInventory(gameLightningDrops[0]);
+
                     break;
                 }
 
@@ -1467,7 +1471,8 @@ public class Engine : MonoBehaviour
                         waterDrops[0].isKnown = true;
                     }
 
-                    SubtractItemDropFromInventory("Bubble");
+                    partyInventoryReference.SubtractItemFromInventory(gameWaterDrops[0]);
+
                     break;
                 }
 
@@ -1493,7 +1498,8 @@ public class Engine : MonoBehaviour
                         shadowDrops[0].isKnown = true;
                     }
 
-                    SubtractItemDropFromInventory("Dark Embrace");
+                    partyInventoryReference.SubtractItemFromInventory(gameShadowDrops[0]);
+
                     break;
                 }
 
@@ -1518,7 +1524,8 @@ public class Engine : MonoBehaviour
                         shadowDrops[1].isKnown = true;
                     }
 
-                    SubtractItemDropFromInventory("Bio");
+                    partyInventoryReference.SubtractItemFromInventory(gameShadowDrops[1]);
+
                     break;
                 }
 
@@ -1543,7 +1550,8 @@ public class Engine : MonoBehaviour
                         shadowDrops[2].isKnown = true;
                     }
 
-                    SubtractItemDropFromInventory("Knockout");
+                    partyInventoryReference.SubtractItemFromInventory(gameShadowDrops[2]);
+
                     break;
                 }
 
@@ -1568,7 +1576,8 @@ public class Engine : MonoBehaviour
                         shadowDrops[3].isKnown = true;
                     }
 
-                    SubtractItemDropFromInventory("Blind");
+                    partyInventoryReference.SubtractItemFromInventory(gameShadowDrops[3]);
+
                     break;
                 }
             // Holy Drops    
@@ -1593,7 +1602,8 @@ public class Engine : MonoBehaviour
                         holyDrops[0].isKnown = true;
                     }
 
-                    SubtractItemDropFromInventory("Holy Light");
+                    partyInventoryReference.SubtractItemFromInventory(gameHolyDrops[0]);
+
                     break;
                 }
 
@@ -1618,7 +1628,8 @@ public class Engine : MonoBehaviour
                         holyDrops[1].isKnown = true;
                     }
 
-                    SubtractItemDropFromInventory("Raise");
+                    partyInventoryReference.SubtractItemFromInventory(gameHolyDrops[1]);
+
                     break;
                 }
 
@@ -1643,7 +1654,8 @@ public class Engine : MonoBehaviour
                         holyDrops[2].isKnown = true;
                     }
 
-                    SubtractItemDropFromInventory("Repent");
+                    partyInventoryReference.SubtractItemFromInventory(gameHolyDrops[2]);
+
                     break;
                 }
 
@@ -1668,12 +1680,13 @@ public class Engine : MonoBehaviour
                         holyDrops[3].isKnown = true;
                     }
 
-                    SubtractItemDropFromInventory("Repent");
+                    partyInventoryReference.SubtractItemFromInventory(gameHolyDrops[3]);
+
                     break;
                 }
         }
-        canvasReference.GetComponent<PauseMenu>().OpenDropsMenu();
-        ItemDismissCharacterUseButtons();
+
+        partyInventoryReference.DismissDropConfirm();
     }
 
     // Dismisses "character target" buttons, outside of combat.
@@ -1689,28 +1702,6 @@ public class Engine : MonoBehaviour
         }
     }
 
-
-    // Removes a specific Drop item from the party's inventory.
-    public void SubtractItemDropFromInventory(string drop)
-    {
-        for (int i = 0; i < partyDropsInventory.Count; i++)
-        {
-            if (partyDropsInventory[i] != null)
-            {
-                if (partyDropsInventory[i].GetComponent<Item>().itemName == drop)
-                {
-                    partyDropsInventory[i].GetComponent<Item>().numberHeld--;
-                    partyDropsInventory[i].GetComponent<Item>().inventoryButtonLogic.GetComponent<Item>().numberHeldDisplay.text = partyDropsInventory[i].GetComponent<Item>().numberHeld.ToString();
-
-                    if (partyDropsInventory[i].GetComponent<Item>().numberHeld <= 0)
-                    {
-                        Destroy(partyDropsInventory[i].GetComponent<Item>().inventoryButtonLogic);
-                        partyDropsInventory.Remove(partyDropsInventory[i]);
-                    }
-                }
-            }
-        }
-    }
 
     // Handles character healing, outside of battle.
     public void HealCharacter(string _name, int healAmount)
@@ -2801,7 +2792,7 @@ public class Engine : MonoBehaviour
             //partyInventoryReference.AddItemToInventory(gameInventory[3]);
             partyInventoryReference.AddItemToInventory(grieveGameWeapons[1].GetComponent<GrieveWeapons>());
             partyInventoryReference.AddItemToInventory(gameArmor[2].GetComponent<ChestArmor>());
-            //partyInventoryReference.AddItemToInventory(gameFireDrops[0]);
+            partyInventoryReference.AddItemToInventory(gameFireDrops[0]);
 
             //partyInventoryReference.AddMacWeaponToInventory(macGameWeapons[2].GetComponent<MacWeapons>());
             //partyInventoryReference.AddFieldWeaponToInventory(fieldGameWeapons[2].GetComponent<FieldWeapons>());
@@ -2847,79 +2838,6 @@ public class Engine : MonoBehaviour
             if (gameInventory[i] != null)
             {
                 gameInventory[i].numberHeld = 0;
-            }
-        }
-        for (int i = 0; i < gameArmor.Count; i++)
-        {
-            if (gameArmor[i] != null)
-            {
-                gameArmor[i].numberHeld = 0;
-            }
-        }
-        for (int i = 0; i < gameFireDrops.Count; i++)
-        {
-            if (gameFireDrops[i] != null)
-            {
-                gameFireDrops[i].numberHeld = 0;
-                if (fireDrops[i] != null)
-                {
-                    fireDrops[i].isKnown = false;
-                }
-            }
-        }
-        for (int i = 0; i < gameIceDrops.Count; i++)
-        {
-            if (gameIceDrops[i] != null)
-            {
-                gameIceDrops[i].numberHeld = 0;
-                if (iceDrops[i] != null)
-                {
-                    iceDrops[i].isKnown = false;
-                }
-            }
-        }
-        for (int i = 0; i < gameLightningDrops.Count; i++)
-        {
-            if (gameLightningDrops[i] != null)
-            {
-                gameLightningDrops[i].numberHeld = 0;
-                if (lightningDrops[i] != null)
-                {
-                    lightningDrops[i].isKnown = false;
-                }
-            }
-        }
-        for (int i = 0; i < gameWaterDrops.Count; i++)
-        {
-            if (gameWaterDrops[i] != null)
-            {
-                gameWaterDrops[i].numberHeld = 0;
-                if (waterDrops[i] != null)
-                {
-                    waterDrops[i].isKnown = false;
-                }
-            }
-        }
-        for (int i = 0; i < gameShadowDrops.Count; i++)
-        {
-            if (gameShadowDrops[i] != null)
-            {
-                gameShadowDrops[i].numberHeld = 0;
-                if (shadowDrops[i] != null)
-                {
-                    shadowDrops[i].isKnown = false;
-                }
-            }
-        }
-        for (int i = 0; i < gameHolyDrops.Count; i++)
-        {
-            if (gameHolyDrops[i] != null)
-            {
-                gameHolyDrops[i].numberHeld = 0;
-                if (holyDrops[i] != null)
-                {
-                    holyDrops[i].isKnown = false;
-                }
             }
         }
 

@@ -54,7 +54,7 @@ public class Field : Character
         weapon = _weapon;
         Engine.e.charEquippedWeapons[2] = _weapon;
         Engine.e.equipMenuReference.GetComponent<EquipDisplay>().fieldEquippedWeapon.GetComponent<InventorySlot>().item = _weapon;
-        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().fieldEquippedChestArmor.GetComponentInChildren<TMP_Text>().text = _weapon.itemName;
+        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().fieldEquippedWeapon.GetComponentInChildren<TMP_Text>().text = _weapon.itemName;
     }
     public void EquipFieldChestArmor(ChestArmor _armor)
     {

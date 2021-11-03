@@ -69,8 +69,11 @@ public class Item : MonoBehaviour
                         Engine.e.itemDropConfirmUseButtons[i].SetActive(true);
                     }
                 }
+
                 EventSystem.current.SetSelectedGameObject(null);
                 EventSystem.current.SetSelectedGameObject(Engine.e.dropMenuCharFirst);
+                Engine.e.partyInventoryReference.inventoryScreenSet = false;
+
             }
         }
         else

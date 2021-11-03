@@ -135,20 +135,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Field
   maxHealth: 80
-  currentHealth: 80
-  maxMana: 20
-  currentMana: 20
-  maxEnergy: 50
-  currentEnergy: 50
+  currentHealth: 130
+  maxMana: 50
+  currentMana: 80
+  maxEnergy: 36
+  currentEnergy: 61
   healthCapped: 1
   manaCapped: 1
   energyCapped: 1
   haste: 19
   experiencePoints: 0
   levelUpReq: 100
-  lvl: 3
+  lvl: 1
   baseDamage: 10
-  physicalDamage: 10
+  physicalDamage: 9
   isInParty: 1
   isInActiveParty: 1
   isLeader: 0

@@ -28,7 +28,7 @@ public class InventorySlot : MonoBehaviour
     }
     public void UpdateHeld()
     {
-        if (item.itemType == "Item")
+        if (item.stackable)
         {
             itemCount.GetComponent<TMP_Text>().text = ": " + item.numberHeld.ToString();
         }

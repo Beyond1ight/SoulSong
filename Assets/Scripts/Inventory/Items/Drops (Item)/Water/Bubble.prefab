@@ -152,10 +152,10 @@ MonoBehaviour:
   itemType: Drop
   itemValue: 1000
   resaleValue: 750
-  numberHeld: 0
+  numberHeld: 5
   itemPower: 0
   numberHeldDisplay: {fileID: 3901579155371155446}
-  stackable: 0
+  stackable: 1
   inventoryButton: {fileID: 1265434297713002468}
   inventoryButtonLogic: {fileID: 0}
   itemIndex: 0

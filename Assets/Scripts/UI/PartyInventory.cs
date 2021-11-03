@@ -26,6 +26,7 @@ public class PartyInventory : MonoBehaviour
     chestArmorRectTransform;
 
     bool pressUp, pressDown, pressRelease = false;
+    public GameObject confirmDropCheck, confirmDropYesButton;
 
     public void AddItemToInventory(Item item)
     {
@@ -191,6 +192,25 @@ public class PartyInventory : MonoBehaviour
         }
     }
 
+    public void ConfirmDropCheck(int index)
+    {
+        Engine.e.characterBeingTargeted = index;
+        confirmDropCheck.SetActive(true);
+
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(confirmDropYesButton);
+
+        Engine.e.helpText.text = "Teach " + Engine.e.playableCharacters[index].GetComponent<Character>().characterName + " " + Engine.e.itemToBeUsed.itemName + "?";
+    }
+
+    public void DismissDropConfirm()
+    {
+        confirmDropCheck.SetActive(false);
+        Engine.e.helpText.text = string.Empty;
+
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(itemInventorySlots[inventoryPointerIndex].gameObject);
+    }
     // Removes a specific consumable item from the party's inventory.
     public void SubtractItemFromInventory(Item item)
     {

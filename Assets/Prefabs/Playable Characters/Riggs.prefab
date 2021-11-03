@@ -96,22 +96,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: Riggs
-  maxHealth: 200
-  currentHealth: 200
-  maxMana: 50
-  currentMana: 50
-  maxEnergy: 20
-  currentEnergy: 24
+  maxHealth: 177
+  currentHealth: 227
+  maxMana: 52
+  currentMana: 82
+  maxEnergy: 24
+  currentEnergy: 49
   healthCapped: 1
   manaCapped: 1
   energyCapped: 1
   haste: 15
   experiencePoints: 0
   levelUpReq: 100
-  lvl: 5
+  lvl: 2
   baseDamage: 20
-  physicalDamage: 20
-  isInParty: 0
+  physicalDamage: 13
+  isInParty: 1
   isInActiveParty: 0
   isLeader: 0
   canUseMagic: 1

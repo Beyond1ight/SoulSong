@@ -128,11 +128,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Mac
   maxHealth: 80
-  currentHealth: 80
+  currentHealth: 130
   maxMana: 60
-  currentMana: 60
+  currentMana: 90
   maxEnergy: 30
-  currentEnergy: 30
+  currentEnergy: 55
   healthCapped: 1
   manaCapped: 1
   energyCapped: 1

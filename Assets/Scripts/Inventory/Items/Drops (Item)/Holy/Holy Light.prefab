@@ -155,7 +155,7 @@ MonoBehaviour:
   numberHeld: 0
   itemPower: 0
   numberHeldDisplay: {fileID: 2667936330161574184}
-  stackable: 0
+  stackable: 1
   inventoryButton: {fileID: 192777016973658426}
   inventoryButtonLogic: {fileID: 0}
   itemIndex: 0
