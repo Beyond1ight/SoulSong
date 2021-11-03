@@ -53,7 +53,7 @@ public class Grieve : Character
         lightningPhysicalAttackBonus += _weapon.lightningAttack;
         shadowPhysicalAttackBonus += _weapon.shadowAttack;
         icePhysicalAttackBonus += _weapon.iceAttack;
-
+        Debug.Log("Sup");
         // Set Array Position For New (Equipped) Weapon
         // weapon.itemIndex = -1;
 
