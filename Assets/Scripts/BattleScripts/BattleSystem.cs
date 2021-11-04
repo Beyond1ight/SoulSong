@@ -218,11 +218,6 @@ public class BattleSystem : MonoBehaviour
                 state = BattleState.ATBCHECK;
             }
 
-            // ATB Management
-            // if (currentInQueue != BattleState.ENEMY1TURN && currentInQueue != BattleState.ENEMY2TURN
-            //        && currentInQueue != BattleState.ENEMY3TURN && currentInQueue != BattleState.ENEMY4TURN)
-            // {
-
             if (!battleQueue.Contains(BattleState.CHAR1TURN) && !battleQueue.Contains(BattleState.CONFCHAR1))
             {
                 if (activeParty.activeParty[0].GetComponent<Character>().currentHealth > 0
@@ -538,7 +533,6 @@ public class BattleSystem : MonoBehaviour
 
                             if (char2Supporting)
                             {
-
                                 usingItem = char2UsingItem;
                                 dropAttack = char2DropAttack;
                                 Engine.e.charBeingTargeted = char2SupportTarget;
@@ -4202,9 +4196,11 @@ public class BattleSystem : MonoBehaviour
 
         }
 
+        inBattleMenu = false;
         DeactivateAttackButtons();
         DeactivateSupportButtons();
         DeactivateTargetSprite();
+        state = BattleState.ATBCHECK;
 
     }
 
@@ -4494,28 +4490,34 @@ public class BattleSystem : MonoBehaviour
 
     public void ActivateChar1MenuButtons()
     {
-        if (!char1MenuButtonsActive)
+        if (!isDead)
         {
-            for (int i = 0; i < char1MenuButtons.Length; i++)
+            if (!char1MenuButtonsActive)
             {
-                char1MenuButtons[i].SetActive(true);
-                if (battleSwitchButtons == false)
+                for (int i = 0; i < char1MenuButtons.Length; i++)
                 {
-                    char1MenuButtons[2].SetActive(false);
+                    char1MenuButtons[i].SetActive(true);
+                    if (battleSwitchButtons == false)
+                    {
+                        char1MenuButtons[2].SetActive(false);
+                    }
                 }
             }
         }
     }
     public void ActivateChar2MenuButtons()
     {
-        if (!char2MenuButtonsActive)
+        if (!isDead)
         {
-            for (int i = 0; i < char2MenuButtons.Length; i++)
+            if (!char2MenuButtonsActive)
             {
-                char2MenuButtons[i].SetActive(true);
-                if (battleSwitchButtons == false)
+                for (int i = 0; i < char2MenuButtons.Length; i++)
                 {
-                    char2MenuButtons[2].SetActive(false);
+                    char2MenuButtons[i].SetActive(true);
+                    if (battleSwitchButtons == false)
+                    {
+                        char2MenuButtons[2].SetActive(false);
+                    }
                 }
             }
         }
@@ -4523,14 +4525,17 @@ public class BattleSystem : MonoBehaviour
 
     public void ActivateChar3MenuButtons()
     {
-        if (!char3MenuButtonsActive)
+        if (!isDead)
         {
-            for (int i = 0; i < char3MenuButtons.Length; i++)
+            if (!char3MenuButtonsActive)
             {
-                char3MenuButtons[i].SetActive(true);
-                if (battleSwitchButtons == false)
+                for (int i = 0; i < char3MenuButtons.Length; i++)
                 {
-                    char3MenuButtons[2].SetActive(false);
+                    char3MenuButtons[i].SetActive(true);
+                    if (battleSwitchButtons == false)
+                    {
+                        char3MenuButtons[2].SetActive(false);
+                    }
                 }
             }
         }
@@ -6160,6 +6165,7 @@ public class BattleSystem : MonoBehaviour
                 Engine.e.party[i].GetComponent<Character>().sleepTimer = 0;
                 Engine.e.party[i].GetComponent<Character>().confuseTimer = 0;
                 Engine.e.party[i].GetComponent<Character>().deathTimer = 3;
+                Engine.e.party[i].GetComponent<SpriteRenderer>().color = Color.white;
                 Destroy(Engine.e.party[i].GetComponent<Character>().deathTimerPopup);
             }
         }
@@ -6303,6 +6309,10 @@ public class BattleSystem : MonoBehaviour
         {
             if (isDead)
             {
+                DeactivateChar1MenuButtons();
+                DeactivateChar2MenuButtons();
+                DeactivateChar3MenuButtons();
+
                 if (activeParty.activeParty[2] != null)
                 {
                     if (activeParty.activeParty[0].GetComponent<Character>().currentHealth <= 0 && activeParty.activeParty[1].GetComponent<Character>().currentHealth <= 0

@@ -30,13 +30,6 @@ public class Item : MonoBehaviour
 
     public bool consumable, drop, weapon, chestArmor;
 
-    public void ItemSetup(GameObject item)
-    {
-
-        inventoryButtonContainer = Engine.e.itemDisplay;
-
-    }
-
     public void UseItemCheck()
     {
 

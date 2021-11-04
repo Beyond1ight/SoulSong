@@ -13,6 +13,7 @@ public class Engine : MonoBehaviour
     public GameObject[] party;
     public ActiveParty activeParty;
     public Character[] playableCharacters;
+    public Item[] charEquippedWeapons, charEquippedChestArmor;
     public int partyMoney;
     public float timeOfDay;
     public string currentScene;
@@ -23,118 +24,45 @@ public class Engine : MonoBehaviour
     public bool battleModeActive = true;
 
     // Stat Curves
-    public AnimationCurve healthCurve;
-    public AnimationCurve manaCurve;
-    public AnimationCurve energyCurve;
-    public AnimationCurve strengthCurve;
-
+    [SerializeField]
+    AnimationCurve healthCurve, manaCurve, energyCurve, strengthCurve;
 
     // Drops
-    public Drops[] fireDrops;
-    public Drops[] iceDrops;
-    public Drops[] holyDrops;
-    public Drops[] waterDrops;
-    public Drops[] lightningDrops;
-    public Drops[] shadowDrops;
+    public Drops[] fireDrops, iceDrops, lightningDrops, waterDrops, shadowDrops, holyDrops;
 
     // Skills    
     public Skills[] gameSkills;
 
 
-    // Armor / Weapons / Inventory
-    public List<GameObject> partyDropsInventory;
-    public List<GameObject> partyArmor;
+    // Inventory / Weapons / Armor / Drops
+    // "Game Inventory" is the most important. The other lists are mainly for visual reference.
     public List<Item> gameInventory;
-    public List<Item> gameArmor;
-    public List<Item> gameFireDrops;
-    public List<Item> gameIceDrops;
-    public List<Item> gameLightningDrops;
-    public List<Item> gameWaterDrops;
-    public List<Item> gameShadowDrops;
-    public List<Item> gameHolyDrops;
-
-
-    public List<GameObject> grieveGameWeapons;
-    public Transform grieveWeaponsDisplay;
-    public List<GameObject> macWeapons;
-    public List<GameObject> macGameWeapons;
-    public Transform macWeaponsDisplay;
-    public List<GameObject> fieldWeapons;
-    public List<GameObject> fieldGameWeapons;
-    public Transform fieldWeaponsDisplay;
-    public List<GameObject> riggsWeapons;
-    public List<GameObject> riggsGameWeapons;
-    public Transform riggsWeaponsDisplay;
-
-
-    // Menu References
-    public Transform[] charWeapons;
-    public Transform[] charChestArmor;
-    public Transform chestArmorDisplay;
-    public GameObject[] charEquipPanels;
-    public Item[] charEquippedWeapons;
-    public Item[] charEquippedChestArmor;
-
-    public PauseMenu pauseMenu;
-    public PartyInventory partyInventoryReference;
-    public TextMeshProUGUI[] inventoryMenuPartyStats;
-    public TextMeshProUGUI[] inventoryMenuPartyHPStatsReference, inventoryMenuPartyMPStatsReference, inventoryMenuPartyENRStatsReference;
-    public GameObject[] inventoryMenuPartyStatPanels;
-    public TextMeshProUGUI partyGAmount;
-    public Transform itemDisplay, battleItemDisplay, itemDropDisplay;
-    public BattleMenu battleMenu;
-    public GameObject equipMenuReference;
-    public GameObject abilityScreenReference, equipScreenReference;
-    public GameObject menuBackButton;
-    public GameObject mainMenu, battleSystemMenu;
-    public GameObject storeSellMenuReference, pauseMenuReference, inventoryMenuReference;
-    public GameObject[] pauseMenuCharacterPanels, itemMenuPanels;
-    public GameObject canvasReference;
-    public GameObject char1BattlePanel, char2BattlePanel, char3BattlePanel;
-    public GameObject[] charAbilityButtons, charSkillTierButtons;
+    [SerializeField]
+    List<Item> gameGrieveWeapons, gameMacWeapons, gameFieldWeapons, gameRiggsWeapons, gameChestArmor, gameFireDrops, gameIceDrops,
+    gameLightningDrops, gameWaterDrops, gameShadowDrops, gameHolyDrops;
 
 
     // Misc References
-    public int characterBeingTargeted;
+    public int characterBeingTargeted, charBeingTargeted;
     public Item itemToBeUsed;
     public List<int> remainingPartyMembers;
     bool gameStart;
     public static Engine e;
-    public bool ableToSave = false;
+    public bool ableToSave, arrangePartyButtonActive, char1LevelUp, char2LevelUp, char3LevelUp;
     public BattleSystem battleSystem;
-    public int randomPartyMemberIndex;
     public BattleHUD hud;
-    int newTarget;
-    int nextRemainingCharacterIndex;
-    public DisplayText[] displayText;
-    public GameObject[] targetPartyCharacters;
-    public GameObject activateArrangePartyButton;
-    public bool arrangePartyButtonActive;
+    int nextRemainingCharacterIndex, randomPartyMemberIndex;
     public CinemachineVirtualCamera mainCamera;
-    public GameObject char1Panel, char2Panel, char3Panel;
-    public GameObject char1LevelUpPanel, char2LevelUpPanel, char3LevelUpPanel;
+    public GameObject char1Panel, char1LevelUpPanel, char2Panel, char2LevelUpPanel, char3Panel, char3LevelUpPanel, activateArrangePartyButton,
+    activePartyMember2, activePartyMember3, enemyLootReference, enemyLootPanelReference, enemyPanel, enemyLootCountReference, itemMenuCharFirst, dropMenuCharFirst;
     public TextMeshProUGUI[] char1LevelUpPanelReference, char2LevelUpPanelReference, char3LevelUpPanelReference;
-    public GameObject enemyLootReference;
-    public GameObject enemyLootCountReference;
-    public TextMeshProUGUI enemyLootReferenceG;
-    public TextMeshProUGUI enemyLootReferenceExp;
-    public GameObject enemyLootPanelReference;
-    public GameObject enemyPanel;
-    public bool char1LevelUp, char2LevelUp, char3LevelUp;
-    public GameObject activePartyMember2, activePartyMember3;
-    public int charBeingTargeted;
-    public Vector3 startingPos;
+    public TextMeshProUGUI enemyLootReferenceG, enemyLootReferenceExp, battleHelp;
+    Vector3 startingPos;
     public System.Random randomIndex;
-    public TextMeshProUGUI battleHelp;
-    public GameObject itemMenuCharFirst, dropMenuCharFirst;
+
     // Shopping
-    public GameObject inventoryMenuSellReference, dropMenuSellReference;
-    public TextMeshProUGUI dialogueText;
-    public GameObject dialogueScreen;
-    public GameObject dialogueContinueButton;
     public bool selling = false;
     public TextMeshProUGUI storeDialogueReference, helpText;
-    public GameObject itemTypeSellReference;
     public GameObject[] shopSellButtons;
     public Merchant currentMerchant;
     public TavernBarkeeperDialogue currentTavern;
@@ -143,6 +71,20 @@ public class Engine : MonoBehaviour
     public bool loadTimer = false;
     public GameObject deathTimerPopup;
     public GameObject weatherRain;
+
+    // Menu References
+    public PartyInventory partyInventoryReference;
+    public EquipDisplay equipMenuReference;
+    public BattleMenu battleMenu;
+    public AbilitiesDisplay abilityScreenReference;
+    public GameObject mainMenu, battleSystemMenu;
+    public GameObject inventoryMenuReference;
+    public GameObject[] pauseMenuCharacterPanels, itemMenuPanels;
+    public GameObject canvasReference;
+    public GameObject char1BattlePanel, char2BattlePanel, char3BattlePanel;
+    public GameObject[] charAbilityButtons, charSkillTierButtons;
+    [SerializeField]
+    TextMeshProUGUI[] inventoryMenuPartyNameStatsReference, inventoryMenuPartyHPStatsReference, inventoryMenuPartyMPStatsReference, inventoryMenuPartyENRStatsReference;
 
     //public float rainTimer = 0f, rainChance, rainOff;
     //public bool startTimer = true, stopTimer = false, weatherRainOn = false;
@@ -205,18 +147,18 @@ public class Engine : MonoBehaviour
         partyMoney = 0;
 
         //Beginning Weapons
-        playableCharacters[0].GetComponent<Grieve>().EquipGrieveWeaponOnLoad(grieveGameWeapons[0].GetComponent<GrieveWeapons>());
-        playableCharacters[1].GetComponent<Mac>().EquipMacWeaponOnLoad(macGameWeapons[0].GetComponent<MacWeapons>());
-        playableCharacters[2].GetComponent<Field>().EquipFieldWeaponOnLoad(fieldGameWeapons[0].GetComponent<FieldWeapons>());
-        playableCharacters[3].GetComponent<Riggs>().EquipRiggsWeaponOnLoad(riggsGameWeapons[0].GetComponent<RiggsWeapons>());
+        playableCharacters[0].GetComponent<Grieve>().EquipGrieveWeaponOnLoad(gameGrieveWeapons[0].GetComponent<GrieveWeapons>());
+        playableCharacters[1].GetComponent<Mac>().EquipMacWeaponOnLoad(gameMacWeapons[0].GetComponent<MacWeapons>());
+        playableCharacters[2].GetComponent<Field>().EquipFieldWeaponOnLoad(gameFieldWeapons[0].GetComponent<FieldWeapons>());
+        playableCharacters[3].GetComponent<Riggs>().EquipRiggsWeaponOnLoad(gameRiggsWeapons[0].GetComponent<RiggsWeapons>());
         //partyInventoryReference.AddItemToInventory(grieveGameWeapons[0].GetComponent<GrieveWeapons>());
         //partyInventoryReference.AddItemToInventory(macGameWeapons[0].GetComponent<MacWeapons>()); // Depends If Mac Is In Party From Start
 
         //Beginning Armor
-        playableCharacters[0].GetComponent<Grieve>().EquipGrieveChestArmorOnLoad(gameArmor[0].GetComponent<ChestArmor>());
-        playableCharacters[1].GetComponent<Mac>().EquipMacChestArmorOnLoad(gameArmor[0].GetComponent<ChestArmor>());
-        playableCharacters[2].GetComponent<Field>().EquipFieldChestArmorOnLoad(gameArmor[0].GetComponent<ChestArmor>());
-        playableCharacters[3].GetComponent<Riggs>().EquipRiggsChestArmorOnLoad(gameArmor[1].GetComponent<ChestArmor>());
+        playableCharacters[0].GetComponent<Grieve>().EquipGrieveChestArmorOnLoad(gameChestArmor[0].GetComponent<ChestArmor>());
+        playableCharacters[1].GetComponent<Mac>().EquipMacChestArmorOnLoad(gameChestArmor[0].GetComponent<ChestArmor>());
+        playableCharacters[2].GetComponent<Field>().EquipFieldChestArmorOnLoad(gameChestArmor[0].GetComponent<ChestArmor>());
+        playableCharacters[3].GetComponent<Riggs>().EquipRiggsChestArmorOnLoad(gameChestArmor[1].GetComponent<ChestArmor>());
         //partyInventoryReference.AddItemToInventory(gameArmor[0].GetComponent<ChestArmor>());
         //partyInventoryReference.AddItemToInventory(gameArmor[0].GetComponent<ChestArmor>()); // Depends If Mac Is In Party From Start
 
@@ -251,7 +193,7 @@ public class Engine : MonoBehaviour
         playableCharacters[0].energyCapped = true;
 
         playableCharacters[0].physicalDefense = 2;
-        playableCharacters[0].physicalDefense += gameArmor[0].GetComponent<ChestArmor>().physicalArmor;
+        playableCharacters[0].physicalDefense += gameChestArmor[0].GetComponent<ChestArmor>().physicalArmor;
         playableCharacters[0].fireDefense = 1f;
         playableCharacters[0].waterDefense = 1f;
         playableCharacters[0].lightningDefense = 3f;
@@ -407,7 +349,7 @@ public class Engine : MonoBehaviour
         playableCharacters[1].dodgeChance = 10f;
 
         playableCharacters[1].physicalDefense = 1;
-        playableCharacters[1].physicalDefense += gameArmor[0].GetComponent<ChestArmor>().physicalArmor;
+        playableCharacters[1].physicalDefense += gameChestArmor[0].GetComponent<ChestArmor>().physicalArmor;
         playableCharacters[1].fireDefense = 2f;
         playableCharacters[1].waterDefense = 2f;
         playableCharacters[1].lightningDefense = 2f;
@@ -531,7 +473,7 @@ public class Engine : MonoBehaviour
         playableCharacters[2].energyCapped = true;
 
         playableCharacters[2].physicalDefense = 1f;
-        playableCharacters[2].physicalDefense += gameArmor[0].GetComponent<ChestArmor>().physicalArmor;
+        playableCharacters[2].physicalDefense += gameChestArmor[0].GetComponent<ChestArmor>().physicalArmor;
         playableCharacters[2].fireDefense = 1f;
         playableCharacters[2].waterDefense = 1f;
         playableCharacters[2].lightningDefense = 1f;
@@ -651,7 +593,7 @@ public class Engine : MonoBehaviour
         playableCharacters[3].energyCapped = true;
 
         playableCharacters[3].physicalDefense = 5;
-        playableCharacters[3].physicalDefense += gameArmor[1].GetComponent<ChestArmor>().physicalArmor;
+        playableCharacters[3].physicalDefense += gameChestArmor[1].GetComponent<ChestArmor>().physicalArmor;
         playableCharacters[3].fireDefense = 2f;
         playableCharacters[3].waterDefense = 2f;
         playableCharacters[3].lightningDefense = 2f;
@@ -1071,6 +1013,8 @@ public class Engine : MonoBehaviour
     // index refers to the target, not the item.
     public void UseItem(int index)
     {
+        bool failedItemUse = false;
+
         if (inBattle)
         {
             if (battleSystem.currentInQueue == BattleState.CHAR1TURN)
@@ -1085,6 +1029,11 @@ public class Engine : MonoBehaviour
             {
                 itemToBeUsed = battleSystem.char3ItemToBeUsed;
             }
+
+            if (itemToBeUsed.numberHeld == 0)
+            {
+                failedItemUse = true;
+            }
         }
 
         switch (itemToBeUsed.itemName)
@@ -1095,7 +1044,7 @@ public class Engine : MonoBehaviour
                 {
                     if (inBattle)
                     {
-                        battleSystem.failedItemUse = true;
+                        failedItemUse = true;
                         partyInventoryReference.OpenInventoryMenu();
                         break;
                     }
@@ -1104,67 +1053,51 @@ public class Engine : MonoBehaviour
                 }
                 else
                 {
-                    if (inBattle)
+                    if (!failedItemUse)
                     {
-                        /*
-                        if (battleSystem.char1ATB >= 100)
+                        if (inBattle)
                         {
-                            Engine.e.battleSystem.ActivateChar1MenuButtons();
-                        }
-
-                        if (Engine.e.activeParty.activeParty[1] != null)
-                        {
-                            if (battleSystem.char2ATB >= 100)
+                            if (index == 0)
                             {
-                                Engine.e.battleSystem.ActivateChar2MenuButtons();
+                                GameObject healthSprite = Instantiate(gameInventory[itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activeParty.transform.position, Quaternion.identity);
+                                GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activeParty.transform.position, Quaternion.identity);
+                                dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = itemToBeUsed.itemPower.ToString();
+                                dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
+                                Destroy(dmgPopup, 1f);
+                                Destroy(healthSprite, 1f);
+                            }
+                            if (index == 1)
+                            {
+                                GameObject healthSprite = Instantiate(gameInventory[itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
+                                GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
+                                dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = itemToBeUsed.itemPower.ToString();
+                                dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
+                                Destroy(dmgPopup, 1f);
+                                Destroy(healthSprite, 1f);
+
+                            }
+                            if (index == 2)
+                            {
+                                GameObject healthSprite = Instantiate(gameInventory[itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
+                                GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
+                                dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = itemToBeUsed.itemPower.ToString();
+                                dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
+                                Destroy(dmgPopup, 1f);
+                                Destroy(healthSprite, 1f);
                             }
                         }
 
-                        if (Engine.e.activeParty.activeParty[2] != null)
-                        {
-                            if (battleSystem.char3ATB >= 100)
-                            {
-                                Engine.e.battleSystem.ActivateChar3MenuButtons();
-                            }
-                        }*/
-                        if (index == 0)
-                        {
-                            GameObject healthSprite = Instantiate(gameInventory[itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                            GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activeParty.transform.position, Quaternion.identity);
-                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = itemToBeUsed.itemPower.ToString();
-                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
-                            Destroy(dmgPopup, 1f);
-                            Destroy(healthSprite, 1f);
-                        }
-                        if (index == 1)
-                        {
-                            GameObject healthSprite = Instantiate(gameInventory[itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
-                            GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
-                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = itemToBeUsed.itemPower.ToString();
-                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
-                            Destroy(dmgPopup, 1f);
-                            Destroy(healthSprite, 1f);
+                        party[index].GetComponent<Character>().currentHealth += itemToBeUsed.itemPower;
 
-                        }
-                        if (index == 2)
+                        if (party[index].GetComponent<Character>().currentHealth > party[index].GetComponent<Character>().maxHealth)
                         {
-                            GameObject healthSprite = Instantiate(gameInventory[itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
-                            GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
-                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = itemToBeUsed.itemPower.ToString();
-                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
-                            Destroy(dmgPopup, 1f);
-                            Destroy(healthSprite, 1f);
+                            party[index].GetComponent<Character>().currentHealth = party[index].GetComponent<Character>().maxHealth;
                         }
+                        ItemDisplayCharacterStats(index);
+                        partyInventoryReference.SubtractItemFromInventory(itemToBeUsed);
+                        break;
+
                     }
-
-                    party[index].GetComponent<Character>().currentHealth += itemToBeUsed.itemPower;
-
-                    if (party[index].GetComponent<Character>().currentHealth > party[index].GetComponent<Character>().maxHealth)
-                    {
-                        party[index].GetComponent<Character>().currentHealth = party[index].GetComponent<Character>().maxHealth;
-                    }
-                    ItemDisplayCharacterStats(index);
-                    partyInventoryReference.SubtractItemFromInventory(itemToBeUsed);
                     break;
                 }
 
@@ -1174,7 +1107,7 @@ public class Engine : MonoBehaviour
                 {
                     if (inBattle)
                     {
-                        battleSystem.failedItemUse = true;
+                        failedItemUse = true;
                         partyInventoryReference.OpenInventoryMenu();
 
                         break;
@@ -1184,45 +1117,50 @@ public class Engine : MonoBehaviour
                         break;
                 }
 
-                if (inBattle)
+                if (!failedItemUse)
                 {
-                    if (index == 0)
+                    if (inBattle)
                     {
-                        GameObject manaSprite = Instantiate(gameInventory[itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                        GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activeParty.transform.position, Quaternion.identity);
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = itemToBeUsed.itemPower.ToString();
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 54, 255, 255);
-                        Destroy(dmgPopup, 1f);
-                        Destroy(manaSprite, 1f);
+                        if (index == 0)
+                        {
+                            GameObject manaSprite = Instantiate(gameInventory[itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activeParty.transform.position, Quaternion.identity);
+                            GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activeParty.transform.position, Quaternion.identity);
+                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = itemToBeUsed.itemPower.ToString();
+                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 54, 255, 255);
+                            Destroy(dmgPopup, 1f);
+                            Destroy(manaSprite, 1f);
+                        }
+                        if (index == 1)
+                        {
+                            GameObject manaSprite = Instantiate(gameInventory[itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
+                            GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
+                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = itemToBeUsed.itemPower.ToString();
+                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 54, 255, 255);
+                            Destroy(dmgPopup, 1f);
+                            Destroy(manaSprite, 1f);
+                        }
+                        if (index == 2)
+                        {
+                            GameObject manaSprite = Instantiate(gameInventory[itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
+                            GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
+                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = itemToBeUsed.itemPower.ToString();
+                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 54, 255, 255);
+                            Destroy(dmgPopup, 1f);
+                            Destroy(manaSprite, 1f);
+                        }
                     }
-                    if (index == 1)
-                    {
-                        GameObject manaSprite = Instantiate(gameInventory[itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
-                        GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = itemToBeUsed.itemPower.ToString();
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 54, 255, 255);
-                        Destroy(dmgPopup, 1f);
-                        Destroy(manaSprite, 1f);
-                    }
-                    if (index == 2)
-                    {
-                        GameObject manaSprite = Instantiate(gameInventory[itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
-                        GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = itemToBeUsed.itemPower.ToString();
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 54, 255, 255);
-                        Destroy(dmgPopup, 1f);
-                        Destroy(manaSprite, 1f);
-                    }
-                }
 
-                party[index].GetComponent<Character>().currentMana += itemToBeUsed.itemPower;
+                    party[index].GetComponent<Character>().currentMana += itemToBeUsed.itemPower;
 
-                if (party[index].GetComponent<Character>().currentMana > party[index].GetComponent<Character>().maxMana)
-                {
-                    party[index].GetComponent<Character>().currentMana = party[index].GetComponent<Character>().maxMana;
+                    if (party[index].GetComponent<Character>().currentMana > party[index].GetComponent<Character>().maxMana)
+                    {
+                        party[index].GetComponent<Character>().currentMana = party[index].GetComponent<Character>().maxMana;
+                    }
+                    ItemDisplayCharacterStats(index);
+                    partyInventoryReference.SubtractItemFromInventory(itemToBeUsed);
+                    break;
+
                 }
-                ItemDisplayCharacterStats(index);
-                partyInventoryReference.SubtractItemFromInventory(itemToBeUsed);
                 break;
 
             case "Ashes":
@@ -1232,7 +1170,7 @@ public class Engine : MonoBehaviour
 
                     if (inBattle)
                     {
-                        battleSystem.failedItemUse = true;
+                        failedItemUse = true;
                         partyInventoryReference.OpenInventoryMenu();
                         break;
                     }
@@ -1240,14 +1178,18 @@ public class Engine : MonoBehaviour
                         break;
                 }
 
-                party[index].GetComponent<Character>().currentHealth += itemToBeUsed.itemPower;
-
-                if (party[index].GetComponent<Character>().currentHealth > party[index].GetComponent<Character>().maxHealth)
+                if (!failedItemUse)
                 {
-                    party[index].GetComponent<Character>().currentHealth = party[index].GetComponent<Character>().maxHealth;
+                    party[index].GetComponent<Character>().currentHealth += itemToBeUsed.itemPower;
+
+                    if (party[index].GetComponent<Character>().currentHealth > party[index].GetComponent<Character>().maxHealth)
+                    {
+                        party[index].GetComponent<Character>().currentHealth = party[index].GetComponent<Character>().maxHealth;
+                    }
+                    ItemDisplayCharacterStats(index);
+                    partyInventoryReference.SubtractItemFromInventory(itemToBeUsed);
                 }
-                ItemDisplayCharacterStats(index);
-                partyInventoryReference.SubtractItemFromInventory(itemToBeUsed);
+
                 break;
 
             case "Antidote":
@@ -1256,7 +1198,7 @@ public class Engine : MonoBehaviour
                 {
                     if (inBattle)
                     {
-                        battleSystem.failedItemUse = true;
+                        failedItemUse = true;
                         partyInventoryReference.OpenInventoryMenu();
 
                         break;
@@ -1266,48 +1208,53 @@ public class Engine : MonoBehaviour
                         break;
                 }
 
-                if (inBattle)
+                if (!failedItemUse)
                 {
-                    if (index == 0)
+                    if (inBattle)
                     {
-                        GameObject antidote = Instantiate(gameInventory[itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                        GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activeParty.transform.position, Quaternion.identity);
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Cured";
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
-                        Destroy(dmgPopup, 1f);
-                        Destroy(antidote, 1f);
-                        Engine.e.activeParty.GetComponent<SpriteRenderer>().color = Color.white;
+                        if (index == 0)
+                        {
+                            GameObject antidote = Instantiate(gameInventory[itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activeParty.transform.position, Quaternion.identity);
+                            GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activeParty.transform.position, Quaternion.identity);
+                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Cured";
+                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
+                            Destroy(dmgPopup, 1f);
+                            Destroy(antidote, 1f);
+                            Engine.e.activeParty.GetComponent<SpriteRenderer>().color = Color.white;
 
-                    }
-                    if (index == 1)
-                    {
-                        GameObject antidote = Instantiate(gameInventory[itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
-                        GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Cured";
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
-                        Destroy(dmgPopup, 1f);
-                        Destroy(antidote, 1f);
-                        Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().color = Color.white;
+                        }
+                        if (index == 1)
+                        {
+                            GameObject antidote = Instantiate(gameInventory[itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
+                            GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
+                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Cured";
+                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
+                            Destroy(dmgPopup, 1f);
+                            Destroy(antidote, 1f);
+                            Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().color = Color.white;
 
-                    }
-                    if (index == 2)
-                    {
-                        GameObject antidote = Instantiate(gameInventory[itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
-                        GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Cured";
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
-                        Destroy(dmgPopup, 1f);
-                        Destroy(antidote, 1f);
-                        Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().color = Color.white;
+                        }
+                        if (index == 2)
+                        {
+                            GameObject antidote = Instantiate(gameInventory[itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
+                            GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
+                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Cured";
+                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
+                            Destroy(dmgPopup, 1f);
+                            Destroy(antidote, 1f);
+                            Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().color = Color.white;
 
+                        }
                     }
+                    party[index].GetComponent<Character>().isPoisoned = false;
+                    party[index].GetComponent<Character>().inflicted = false;
+
+                    ItemDisplayCharacterStats(index);
+
                 }
 
-                party[index].GetComponent<Character>().isPoisoned = false;
-                party[index].GetComponent<Character>().inflicted = false;
-
-                ItemDisplayCharacterStats(index);
                 break;
+
         }
 
         if (!inBattle)
@@ -1316,6 +1263,10 @@ public class Engine : MonoBehaviour
             partyInventoryReference.OpenInventoryMenu();
         }
 
+        if (failedItemUse)
+        {
+            failedItemUse = false;
+        }
         itemToBeUsed = null;
 
     }
@@ -2158,14 +2109,36 @@ public class Engine : MonoBehaviour
                 case 0:
                     battleSystem.char1ATB = 0;
                     battleSystem.char1ATBGuage.value = 0;
+
+                    battleSystem.DeactivateChar1MenuButtons();
+
+                    if (battleSystem.state == BattleState.CHAR1TURN)
+                    {
+                        battleSystem.state = BattleState.ATBCHECK;
+                    }
+
                     break;
                 case 1:
                     battleSystem.char2ATB = 0;
                     battleSystem.char2ATBGuage.value = 0;
+
+                    battleSystem.DeactivateChar2MenuButtons();
+
+                    if (battleSystem.state == BattleState.CHAR2TURN)
+                    {
+                        battleSystem.state = BattleState.ATBCHECK;
+                    }
                     break;
                 case 2:
                     battleSystem.char3ATB = 0;
                     battleSystem.char3ATBGuage.value = 0;
+
+                    battleSystem.DeactivateChar3MenuButtons();
+
+                    if (battleSystem.state == BattleState.CHAR3TURN)
+                    {
+                        battleSystem.state = BattleState.ATBCHECK;
+                    }
                     break;
             }
         }
@@ -2529,6 +2502,35 @@ public class Engine : MonoBehaviour
             activeParty.activeParty[index].GetComponent<Character>().poisonDmg = 0f;
             activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.white;
 
+            if (index == 0)
+            {
+                battleSystem.DeactivateChar1MenuButtons();
+
+                if (battleSystem.state == BattleState.CHAR1TURN)
+                {
+                    battleSystem.state = BattleState.ATBCHECK;
+                }
+            }
+
+            if (index == 1)
+            {
+                battleSystem.DeactivateChar2MenuButtons();
+
+                if (battleSystem.state == BattleState.CHAR2TURN)
+                {
+                    battleSystem.state = BattleState.ATBCHECK;
+                }
+            }
+
+            if (index == 2)
+            {
+                battleSystem.DeactivateChar3MenuButtons();
+
+                if (battleSystem.state == BattleState.CHAR3TURN)
+                {
+                    battleSystem.state = BattleState.ATBCHECK;
+                }
+            }
         }
 
         if (activeParty.activeParty[index].GetComponent<Character>().isAsleep)
@@ -2669,8 +2671,8 @@ public class Engine : MonoBehaviour
 
             // partyInventoryReference.AddItemToInventory(gameInventory[2]);
             //partyInventoryReference.AddItemToInventory(gameInventory[3]);
-            partyInventoryReference.AddItemToInventory(grieveGameWeapons[1].GetComponent<GrieveWeapons>());
-            partyInventoryReference.AddItemToInventory(gameArmor[2].GetComponent<ChestArmor>());
+            partyInventoryReference.AddItemToInventory(gameGrieveWeapons[1].GetComponent<GrieveWeapons>());
+            partyInventoryReference.AddItemToInventory(gameChestArmor[2].GetComponent<ChestArmor>());
             partyInventoryReference.AddItemToInventory(gameFireDrops[0]);
 
             //partyInventoryReference.AddMacWeaponToInventory(macGameWeapons[2].GetComponent<MacWeapons>());
@@ -2791,8 +2793,8 @@ public class Engine : MonoBehaviour
 
     public void DisplayGrieveInventoryStats()
     {
-        inventoryMenuPartyStats[0].text = string.Empty;
-        inventoryMenuPartyStats[0].text += party[0].GetComponent<Character>().characterName;
+        inventoryMenuPartyNameStatsReference[0].text = string.Empty;
+        inventoryMenuPartyNameStatsReference[0].text += party[0].GetComponent<Character>().characterName;
 
         inventoryMenuPartyHPStatsReference[0].text = string.Empty;
         inventoryMenuPartyHPStatsReference[0].text += "HP: " + party[0].GetComponent<Character>().currentHealth + " / " + party[0].GetComponent<Character>().maxHealth;
@@ -2809,8 +2811,8 @@ public class Engine : MonoBehaviour
     {
         if (party[1] != null)
         {
-            inventoryMenuPartyStats[1].text = string.Empty;
-            inventoryMenuPartyStats[1].text += party[1].GetComponent<Character>().characterName;
+            inventoryMenuPartyNameStatsReference[1].text = string.Empty;
+            inventoryMenuPartyNameStatsReference[1].text += party[1].GetComponent<Character>().characterName;
 
             inventoryMenuPartyHPStatsReference[1].text = string.Empty;
             inventoryMenuPartyHPStatsReference[1].text += "HP: " + party[1].GetComponent<Character>().currentHealth + " / " + party[1].GetComponent<Character>().maxHealth;
@@ -2827,8 +2829,8 @@ public class Engine : MonoBehaviour
     {
         if (party[2] != null)
         {
-            inventoryMenuPartyStats[2].text = string.Empty;
-            inventoryMenuPartyStats[2].text += party[2].GetComponent<Character>().characterName;
+            inventoryMenuPartyNameStatsReference[2].text = string.Empty;
+            inventoryMenuPartyNameStatsReference[2].text += party[2].GetComponent<Character>().characterName;
 
             inventoryMenuPartyHPStatsReference[2].text = string.Empty;
             inventoryMenuPartyHPStatsReference[2].text += "HP: " + party[2].GetComponent<Character>().currentHealth + " / " + party[2].GetComponent<Character>().maxHealth;
@@ -2845,8 +2847,8 @@ public class Engine : MonoBehaviour
     {
         if (party[3] != null)
         {
-            inventoryMenuPartyStats[3].text = string.Empty;
-            inventoryMenuPartyStats[3].text += party[3].GetComponent<Character>().characterName;
+            inventoryMenuPartyNameStatsReference[3].text = string.Empty;
+            inventoryMenuPartyNameStatsReference[3].text += party[3].GetComponent<Character>().characterName;
 
             inventoryMenuPartyHPStatsReference[3].text = string.Empty;
             inventoryMenuPartyHPStatsReference[3].text += "HP: " + party[3].GetComponent<Character>().currentHealth + " / " + party[3].GetComponent<Character>().maxHealth;

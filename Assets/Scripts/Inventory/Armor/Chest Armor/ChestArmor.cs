@@ -20,51 +20,6 @@ public class ChestArmor : Item
     public GameObject armorCloneReference;
     public int gameArmorIndex;
 
-    public void ChestArmorSetup(GameObject item)
-    {
-
-        inventoryButtonContainer = Engine.e.chestArmorDisplay;
-
-    }
-
-    public void SubtractArmorFromInventory(GameObject armor)
-    {
-        for (int i = 0; i < Engine.e.partyArmor.Count; i++)
-        {
-            if (Engine.e.partyArmor[i] != null)
-            {
-                if (Engine.e.partyArmor[i].GetComponent<Item>().itemName == armor.GetComponent<Item>().itemName)
-                {
-
-                    Engine.e.partyArmor.Remove(Engine.e.partyArmor[i]);
-                    //Destroy(armor.GetComponent<Item>().inventoryButtonLogic);
-                    //Destroy(this);
-                    break;
-
-                }
-            }
-        }
-    }
-
-    public void SellArmorFromInventory(GameObject armor)
-    {
-        for (int i = 0; i < Engine.e.partyArmor.Count; i++)
-        {
-            if (Engine.e.partyArmor[i] != null)
-            {
-                if (Engine.e.partyArmor[i].GetComponent<Item>().itemName == armor.GetComponent<Item>().itemName)
-                {
-
-                    Engine.e.partyArmor.Remove(Engine.e.partyArmor[i]);
-                    Destroy(armor.gameObject);
-                    Destroy(this.gameObject);
-                    break;
-
-                }
-            }
-        }
-    }
-
     // CHANGE METHOD NAME
     public void DisplayArmorEquipCharacterTargets()
     {

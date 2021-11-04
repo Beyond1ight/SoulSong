@@ -19,13 +19,6 @@ public class GrieveWeapons : Item
     public float lightningAttack;
     public float shadowAttack;
 
-    public void GrieveWeaponsSetup(GameObject item)
-    {
-
-        inventoryButtonContainer = Engine.e.grieveWeaponsDisplay;
-
-    }
-
     public void EquipGrieveWeapon()
     {
 

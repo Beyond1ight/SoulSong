@@ -18,36 +18,12 @@ public class FieldWeapons : Item
     public float lightningAttack;
     public float shadowAttack;
 
-    public void FieldWeaponsSetup(GameObject item)
-    {
-
-        inventoryButtonContainer = Engine.e.fieldWeaponsDisplay;
-
-    }
-
     public void EquipFieldWeapon()
     {
 
         //Engine.e.party[2].GetComponent<Field>().weaponCloneReference = this.gameObject;
         fieldReference = Engine.e.party[2].GetComponent<Field>();
         fieldReference.EquipFieldWeapon(this);
-    }
-
-    public void SubtractWeaponFromInventory(GameObject weapon)
-    {
-        for (int i = 0; i < Engine.e.fieldWeapons.Count; i++)
-        {
-            if (Engine.e.fieldWeapons[i] != null)
-            {
-                if (Engine.e.fieldWeapons[i].GetComponent<Item>().itemName == weapon.GetComponent<Item>().itemName)
-                {
-
-                    Engine.e.fieldWeapons.Remove(Engine.e.fieldWeapons[i]);
-                    break;
-
-                }
-            }
-        }
     }
 }
 

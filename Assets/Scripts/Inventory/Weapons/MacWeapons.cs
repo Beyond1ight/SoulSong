@@ -18,13 +18,6 @@ public class MacWeapons : Item
     public float lightningAttack;
     public float shadowAttack;
 
-    public void MacWeaponsSetup(GameObject item)
-    {
-
-        inventoryButtonContainer = Engine.e.macWeaponsDisplay;
-
-    }
-
     public void EquipMacWeapon()
     {
 
@@ -33,22 +26,6 @@ public class MacWeapons : Item
         macReference.EquipMacWeapon(this);
 
 
-    }
-    public void SubtractWeaponFromInventory(GameObject weapon)
-    {
-        for (int i = 0; i < Engine.e.macWeapons.Count; i++)
-        {
-            if (Engine.e.macWeapons[i] != null)
-            {
-                if (Engine.e.macWeapons[i].GetComponent<Item>().itemName == weapon.GetComponent<Item>().itemName)
-                {
-
-                    Engine.e.macWeapons.Remove(Engine.e.macWeapons[i]);
-                    break;
-
-                }
-            }
-        }
     }
 
 }

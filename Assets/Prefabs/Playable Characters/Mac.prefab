@@ -104,7 +104,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 7927a394c228f4904aee51696860557a, type: 3}
-  m_Color: {r: 0, g: 1, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -127,21 +127,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: Mac
-  maxHealth: 109
-  currentHealth: 109
-  maxMana: 62
-  currentMana: 62
+  maxHealth: 80
+  currentHealth: 80
+  maxMana: 60
+  currentMana: 60
   maxEnergy: 30
   currentEnergy: 30
   healthCapped: 1
   manaCapped: 1
   energyCapped: 1
   haste: 14
-  experiencePoints: 100
-  levelUpReq: 300
-  lvl: 2
+  experiencePoints: 0
+  levelUpReq: 100
+  lvl: 1
   baseDamage: 10
-  physicalDamage: 10
+  physicalDamage: 8
   isInParty: 1
   isInActiveParty: 1
   isLeader: 0
@@ -152,15 +152,15 @@ MonoBehaviour:
   energyOffset: 0
   strengthOffset: -20
   dodgeChance: 10
-  physicalDefense: 6.5
+  physicalDefense: 6
   fireDefense: 2
   iceDefense: 1
   waterDefense: 2
   lightningDefense: 2
   shadowDefense: 1
   poisonDefense: 1
-  sleepDefense: 0.5
-  confuseDefense: 1.5
+  sleepDefense: 1
+  confuseDefense: 1
   deathDefense: 0
   fireDrops:
   - {fileID: 0}
@@ -246,7 +246,7 @@ MonoBehaviour:
   waterPhysicalAttackBonus: 0
   waterDropAttackBonus: 0
   lightningDropsLevel: 2
-  lightningDropsExperience: 5
+  lightningDropsExperience: 0
   lightningDropsLvlReq: 50
   lightningPhysicalAttackBonus: 0
   lightningDropAttackBonus: 0
@@ -299,19 +299,19 @@ MonoBehaviour:
   skillPower: 0
   lastDropChoice: {fileID: 11400000, guid: 8c550a8dffde3433db125665c63f91f8, type: 2}
   lastSkillChoice: {fileID: 11400000, guid: 1df5a6e2c9d234357b27a7bafcffe23d, type: 2}
-  skillScale: 2
+  skillScale: 1
   stealChance: 60
   hitChance: 99
   weapon: {fileID: 7319004692465405328, guid: ab0ed2716eb3b457e947e63dfabc1642, type: 3}
   chestArmor: {fileID: 3137854586391407116, guid: 552a109bd39414d8180a998df500f23e, type: 3}
   skillIndex: 5
   skillTotal: 1
-  isPoisoned: 1
+  isPoisoned: 0
   isAsleep: 0
   isConfused: 0
   deathInflicted: 0
-  inflicted: 1
-  poisonDmg: 5
+  inflicted: 0
+  poisonDmg: 0
   sleepTimer: 0
   confuseTimer: 0
   deathTimer: 3

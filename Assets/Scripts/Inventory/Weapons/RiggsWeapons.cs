@@ -18,13 +18,6 @@ public class RiggsWeapons : Item
     public float lightningAttack;
     public float shadowAttack;
 
-    public void RiggsWeaponsSetup(GameObject item)
-    {
-
-        inventoryButtonContainer = Engine.e.riggsWeaponsDisplay;
-
-    }
-
     public void EquipRiggsWeapon()
     {
 
@@ -32,23 +25,6 @@ public class RiggsWeapons : Item
         riggsReference = Engine.e.party[3].GetComponent<Riggs>();
         riggsReference.EquipRiggsWeapon(this);
 
-    }
-
-    public void SubtractWeaponFromInventory(GameObject weapon)
-    {
-        for (int i = 0; i < Engine.e.riggsWeapons.Count; i++)
-        {
-            if (Engine.e.riggsWeapons[i] != null)
-            {
-                if (Engine.e.riggsWeapons[i].GetComponent<Item>().itemName == weapon.GetComponent<Item>().itemName)
-                {
-
-                    Engine.e.riggsWeapons.Remove(Engine.e.riggsWeapons[i]);
-                    break;
-
-                }
-            }
-        }
     }
 
 }
