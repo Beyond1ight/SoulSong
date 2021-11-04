@@ -133,6 +133,9 @@ public class BattleSystem : MonoBehaviour
     public bool enemy1Ready, enemy2Ready, enemy3Ready, enemy4Ready;
     public bool checkNextInQueue;
     public int previousTargetReferenceChar, previousTargetReferenceEnemy; // For HUD and Drop Reference
+    public bool char1Switching, char2Switching, char3Switching;
+    public int char1SwitchToIndex, char2SwitchToIndex, char3SwitchToIndex;
+    public Item char1ItemToBeUsed, char2ItemToBeUsed, char3ItemToBeUsed;
 
     [SerializeField]
     public bool grieveStatBoost = false, macStatBoost = false, fieldStatBoost = false, riggsStatBoost;
@@ -152,6 +155,9 @@ public class BattleSystem : MonoBehaviour
         enemyGroup.groupInBattle = true;
         confuseAttack = false;
         ATBReady = 100;
+        char1ItemToBeUsed = null;
+        char2ItemToBeUsed = null;
+        char3ItemToBeUsed = null;
 
         char1ATB += 20;
         char2ATB = 0;
@@ -488,6 +494,12 @@ public class BattleSystem : MonoBehaviour
                             StartCoroutine(CharSupport(char1SupportTarget));
 
                         }
+
+                        if (char1Switching)
+                        {
+                            char1Switching = false;
+                            StartCoroutine(CharSwitch(char1SwitchToIndex));
+                        }
                     }
                     else
                     {
@@ -534,6 +546,12 @@ public class BattleSystem : MonoBehaviour
                                 char2UsingItem = false;
                                 char2Supporting = false;
                                 StartCoroutine(CharSupport(char2SupportTarget));
+                            }
+
+                            if (char2Switching)
+                            {
+                                char2Switching = false;
+                                StartCoroutine(CharSwitch(char2SwitchToIndex));
                             }
                         }
                         else
@@ -584,6 +602,12 @@ public class BattleSystem : MonoBehaviour
                             char3UsingItem = false;
                             char3Supporting = false;
                             StartCoroutine(CharSupport(char3SupportTarget));
+                        }
+
+                        if (char3Switching)
+                        {
+                            char3Switching = false;
+                            StartCoroutine(CharSwitch(char3SwitchToIndex));
                         }
                     }
                     else
@@ -886,7 +910,7 @@ public class BattleSystem : MonoBehaviour
             }
 
             enemyGroup.moveToPosition = false;
-            Vector3 targetPos = Vector3.MoveTowards(characterAttacking.GetComponent<Rigidbody2D>().transform.position, enemies[target].transform.position, 8f * Time.deltaTime);
+            Vector3 targetPos = Vector3.MoveTowards(characterAttacking.GetComponent<Rigidbody2D>().transform.position, enemies[target].transform.position, 0.5f * Time.deltaTime);
             characterAttacking.GetComponent<Rigidbody2D>().MovePosition(targetPos);
 
             if (Vector3.Distance(characterAttacking.transform.position, enemies[target].transform.position) < 1)
@@ -1576,8 +1600,21 @@ public class BattleSystem : MonoBehaviour
         if (usingItem)
         {
             usingItem = false;
+
             Engine.e.UseItem(allyTarget);
 
+            if (index == 0)
+            {
+                char1ItemToBeUsed = null;
+            }
+            if (index == 1)
+            {
+                char2ItemToBeUsed = null;
+            }
+            if (index == 2)
+            {
+                char3ItemToBeUsed = null;
+            }
 
             hud.displayHealth[allyTarget].text = activeParty.activeParty[allyTarget].gameObject.GetComponent<Character>().currentHealth.ToString();
             hud.displayMana[allyTarget].text = activeParty.activeParty[allyTarget].gameObject.GetComponent<Character>().currentMana.ToString();
@@ -1828,11 +1865,13 @@ public class BattleSystem : MonoBehaviour
         DeactivateSkillsUI();
         DeactivateChar1SwitchButtons();
 
-        if (state == BattleState.CHAR1TURN)
+        if (currentInQueue == BattleState.CHAR1TURN)
         {
             DeactivateChar1MenuButtons();
             DeactivateChar1SwitchButtons();
             char1ATB = 0;
+            char1ATBGuage.value = char1ATB;
+            char1Ready = false;
             Engine.e.activeParty.InstantiateBattleLeader(index);
 
             hud.displayNames[0].text = activeParty.activeParty[0].gameObject.GetComponent<Character>().characterName;
@@ -1840,11 +1879,13 @@ public class BattleSystem : MonoBehaviour
             hud.displayMana[0].text = activeParty.activeParty[0].gameObject.GetComponent<Character>().currentMana.ToString();
 
         }
-        if (state == BattleState.CHAR2TURN)
+        if (currentInQueue == BattleState.CHAR2TURN)
         {
             DeactivateChar2MenuButtons();
             DeactivateChar2SwitchButtons();
             char2ATB = 0;
+            char2ATBGuage.value = char2ATB;
+            char2Ready = false;
             Engine.e.activeParty.InstantiateBattleActiveParty2(index);
 
             hud.displayNames[1].text = activeParty.activeParty[1].gameObject.GetComponent<Character>().characterName;
@@ -1852,11 +1893,14 @@ public class BattleSystem : MonoBehaviour
             hud.displayMana[1].text = activeParty.activeParty[1].gameObject.GetComponent<Character>().currentMana.ToString();
 
         }
-        if (state == BattleState.CHAR3TURN)
+        if (currentInQueue == BattleState.CHAR3TURN)
         {
             DeactivateChar3MenuButtons();
             DeactivateChar3SwitchButtons();
             char3ATB = 0;
+            char3ATBGuage.value = char3ATB;
+            char3Ready = false;
+
             Engine.e.activeParty.InstantiateBattleActiveParty3(index);
 
             hud.displayNames[2].text = activeParty.activeParty[2].gameObject.GetComponent<Character>().characterName;
@@ -1869,7 +1913,16 @@ public class BattleSystem : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        StartCoroutine(CheckNext());
+        if (!Engine.e.battleModeActive)
+        {
+            StartCoroutine(CheckNext());
+        }
+        else
+        {
+            battleQueue.Dequeue();
+            state = BattleState.ATBCHECK;
+            currentInQueue = BattleState.QUEUECHECK;
+        }
     }
 
     void CharSkills(Skills skill)
@@ -4286,6 +4339,12 @@ public class BattleSystem : MonoBehaviour
                 Engine.e.activeParty.activeParty[2].GetComponent<Character>().characterName == "Grieve")
             {
                 availableChar2Buttons[0].SetActive(false);
+
+            }
+            else
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(GetComponent<BattleMenuControllerNav>().char2AvailSwitchGrieve);
             }
 
             if (Engine.e.activeParty.activeParty[0].GetComponent<Character>().characterName == "Mac" ||
@@ -4294,6 +4353,11 @@ public class BattleSystem : MonoBehaviour
             {
                 availableChar2Buttons[1].SetActive(false);
             }
+            else
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(GetComponent<BattleMenuControllerNav>().char2AvailSwitchMac);
+            }
 
             if (Engine.e.activeParty.activeParty[0].GetComponent<Character>().characterName == "Field" ||
           Engine.e.activeParty.activeParty[1].GetComponent<Character>().characterName == "Field" ||
@@ -4301,12 +4365,22 @@ public class BattleSystem : MonoBehaviour
             {
                 availableChar2Buttons[2].SetActive(false);
             }
+            else
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(GetComponent<BattleMenuControllerNav>().char2AvailSwitchField);
+            }
 
             if (Engine.e.activeParty.activeParty[0].GetComponent<Character>().characterName == "Riggs" ||
           Engine.e.activeParty.activeParty[1].GetComponent<Character>().characterName == "Riggs" ||
           Engine.e.activeParty.activeParty[2].GetComponent<Character>().characterName == "Riggs")
             {
                 availableChar2Buttons[3].SetActive(false);
+            }
+            else
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(GetComponent<BattleMenuControllerNav>().char2AvailSwitchRiggs);
             }
         }
 
@@ -4323,12 +4397,22 @@ public class BattleSystem : MonoBehaviour
             {
                 availableChar3Buttons[0].SetActive(false);
             }
+            else
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(GetComponent<BattleMenuControllerNav>().char3AvailSwitchGrieve);
+            }
 
             if (Engine.e.activeParty.activeParty[0].GetComponent<Character>().characterName == "Mac" ||
            Engine.e.activeParty.activeParty[1].GetComponent<Character>().characterName == "Mac" ||
            Engine.e.activeParty.activeParty[2].GetComponent<Character>().characterName == "Mac")
             {
                 availableChar3Buttons[1].SetActive(false);
+            }
+            else
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(GetComponent<BattleMenuControllerNav>().char3AvailSwitchMac);
             }
 
             if (Engine.e.activeParty.activeParty[0].GetComponent<Character>().characterName == "Field" ||
@@ -4337,6 +4421,11 @@ public class BattleSystem : MonoBehaviour
             {
                 availableChar3Buttons[2].SetActive(false);
             }
+            else
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(GetComponent<BattleMenuControllerNav>().char3AvailSwitchField);
+            }
 
             if (Engine.e.activeParty.activeParty[0].GetComponent<Character>().characterName == "Riggs" ||
           Engine.e.activeParty.activeParty[1].GetComponent<Character>().characterName == "Riggs" ||
@@ -4344,13 +4433,47 @@ public class BattleSystem : MonoBehaviour
             {
                 availableChar3Buttons[3].SetActive(false);
             }
+            else
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(GetComponent<BattleMenuControllerNav>().char3AvailSwitchRiggs);
+            }
         }
     }
 
 
     public void SwitchCharButton(int index)
     {
-        StartCoroutine(CharSwitch(index));
+
+        if (state == BattleState.CHAR1TURN)
+        {
+            char1Switching = true;
+            char1SwitchToIndex = index;
+            DeactivateChar1MenuButtons();
+
+            battleQueue.Enqueue(BattleState.CHAR1TURN);
+
+        }
+        if (state == BattleState.CHAR2TURN)
+        {
+            char2Switching = true;
+            char2SwitchToIndex = index;
+            DeactivateChar2MenuButtons();
+
+            battleQueue.Enqueue(BattleState.CHAR2TURN);
+
+        }
+        if (state == BattleState.CHAR3TURN)
+        {
+            char3Switching = true;
+            char3SwitchToIndex = index;
+            DeactivateChar3MenuButtons();
+
+            battleQueue.Enqueue(BattleState.CHAR3TURN);
+
+        }
+
+        state = BattleState.ATBCHECK;
     }
 
 
@@ -5938,6 +6061,7 @@ public class BattleSystem : MonoBehaviour
         char1SkillRangedAttack = false;
         char1Supporting = false;
         char1UsingItem = false;
+        char1Switching = false;
 
         char2Attacking = false;
         char2ConfusedReady = false;
@@ -5949,6 +6073,7 @@ public class BattleSystem : MonoBehaviour
         char2SkillRangedAttack = false;
         char2Supporting = false;
         char2UsingItem = false;
+        char2Switching = false;
 
         char3Attacking = false;
         char3ConfusedReady = false;
@@ -5960,6 +6085,7 @@ public class BattleSystem : MonoBehaviour
         char3SkillRangedAttack = false;
         char3Supporting = false;
         char3UsingItem = false;
+        char3Switching = false;
 
         if (grieveStatBoost)
             if (Engine.e.party[0] != null)
@@ -6248,13 +6374,27 @@ public class BattleSystem : MonoBehaviour
                 Engine.e.battleSystem.hud.displayHealth[0].text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentHealth.ToString();
             }
         }
+        if (Engine.e.battleSystem.hud.displayMaxHealth[0].text != Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxHealth.ToString())
+        {
+            Engine.e.battleSystem.hud.displayMaxHealth[0].text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxHealth.ToString();
+        }
+
         if (Engine.e.battleSystem.hud.displayMana[0].text != Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentMana.ToString())
         {
             Engine.e.battleSystem.hud.displayMana[0].text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentMana.ToString();
         }
+        if (Engine.e.battleSystem.hud.displayMaxMana[0].text != Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxMana.ToString())
+        {
+            Engine.e.battleSystem.hud.displayMaxMana[0].text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxMana.ToString();
+        }
+
         if (Engine.e.battleSystem.hud.displayEnergy[0].text != Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentEnergy.ToString())
         {
             Engine.e.battleSystem.hud.displayEnergy[0].text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentEnergy.ToString();
+        }
+        if (Engine.e.battleSystem.hud.displayMaxEnergy[0].text != Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxEnergy.ToString())
+        {
+            Engine.e.battleSystem.hud.displayMaxEnergy[0].text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxEnergy.ToString();
         }
 
         if (activeParty.activeParty[0].GetComponent<Character>().isAsleep || activeParty.activeParty[0].GetComponent<Character>().isConfused)
@@ -6300,15 +6440,28 @@ public class BattleSystem : MonoBehaviour
                 {
                     Engine.e.battleSystem.hud.displayHealth[1].text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentHealth.ToString();
                 }
+                if (Engine.e.battleSystem.hud.displayMaxHealth[1].text != Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxHealth.ToString())
+                {
+                    Engine.e.battleSystem.hud.displayMaxHealth[1].text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxHealth.ToString();
+                }
             }
 
             if (Engine.e.battleSystem.hud.displayMana[1].text != Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentMana.ToString())
             {
                 Engine.e.battleSystem.hud.displayMana[1].text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentMana.ToString();
             }
+            if (Engine.e.battleSystem.hud.displayMaxMana[1].text != Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxMana.ToString())
+            {
+                Engine.e.battleSystem.hud.displayMaxMana[1].text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxMana.ToString();
+            }
+
             if (Engine.e.battleSystem.hud.displayEnergy[1].text != Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentEnergy.ToString())
             {
                 Engine.e.battleSystem.hud.displayEnergy[1].text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentEnergy.ToString();
+            }
+            if (Engine.e.battleSystem.hud.displayMaxEnergy[1].text != Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxEnergy.ToString())
+            {
+                Engine.e.battleSystem.hud.displayMaxEnergy[1].text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxEnergy.ToString();
             }
 
             if (activeParty.activeParty[1].GetComponent<Character>().isAsleep || activeParty.activeParty[1].GetComponent<Character>().isConfused)
@@ -6355,14 +6508,27 @@ public class BattleSystem : MonoBehaviour
                 {
                     Engine.e.battleSystem.hud.displayHealth[2].text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth.ToString();
                 }
+                if (Engine.e.battleSystem.hud.displayMaxHealth[2].text != Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxHealth.ToString())
+                {
+                    Engine.e.battleSystem.hud.displayMaxHealth[2].text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxHealth.ToString();
+                }
             }
             if (Engine.e.battleSystem.hud.displayMana[2].text != Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth.ToString())
             {
                 Engine.e.battleSystem.hud.displayMana[2].text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentMana.ToString();
             }
+            if (Engine.e.battleSystem.hud.displayMaxMana[2].text != Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxMana.ToString())
+            {
+                Engine.e.battleSystem.hud.displayMaxMana[2].text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxMana.ToString();
+            }
+
             if (Engine.e.battleSystem.hud.displayEnergy[2].text != Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth.ToString())
             {
                 Engine.e.battleSystem.hud.displayEnergy[2].text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentEnergy.ToString();
+            }
+            if (Engine.e.battleSystem.hud.displayMaxEnergy[2].text != Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxEnergy.ToString())
+            {
+                Engine.e.battleSystem.hud.displayMaxEnergy[2].text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxEnergy.ToString();
             }
 
             if (activeParty.activeParty[2].GetComponent<Character>().isAsleep || activeParty.activeParty[2].GetComponent<Character>().isConfused)

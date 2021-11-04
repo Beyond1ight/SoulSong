@@ -1071,6 +1071,21 @@ public class Engine : MonoBehaviour
     // index refers to the target, not the item.
     public void UseItem(int index)
     {
+        if (inBattle)
+        {
+            if (battleSystem.currentInQueue == BattleState.CHAR1TURN)
+            {
+                itemToBeUsed = battleSystem.char1ItemToBeUsed;
+            }
+            if (battleSystem.currentInQueue == BattleState.CHAR2TURN)
+            {
+                itemToBeUsed = battleSystem.char2ItemToBeUsed;
+            }
+            if (battleSystem.currentInQueue == BattleState.CHAR3TURN)
+            {
+                itemToBeUsed = battleSystem.char3ItemToBeUsed;
+            }
+        }
 
         switch (itemToBeUsed.itemName)
         {

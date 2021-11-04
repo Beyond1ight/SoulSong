@@ -40,8 +40,25 @@ public class Item : MonoBehaviour
     public void UseItemCheck()
     {
 
-
-        Engine.e.itemToBeUsed = this;
+        if (!Engine.e.inBattle)
+        {
+            Engine.e.itemToBeUsed = this;
+        }
+        else
+        {
+            if (Engine.e.battleSystem.state == BattleState.CHAR1TURN)
+            {
+                Engine.e.battleSystem.char1ItemToBeUsed = this;
+            }
+            if (Engine.e.battleSystem.state == BattleState.CHAR2TURN)
+            {
+                Engine.e.battleSystem.char2ItemToBeUsed = this;
+            }
+            if (Engine.e.battleSystem.state == BattleState.CHAR3TURN)
+            {
+                Engine.e.battleSystem.char3ItemToBeUsed = this;
+            }
+        }
 
         if (!Engine.e.inBattle)
         {

@@ -104,7 +104,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 7927a394c228f4904aee51696860557a, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 1, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -246,7 +246,7 @@ MonoBehaviour:
   waterPhysicalAttackBonus: 0
   waterDropAttackBonus: 0
   lightningDropsLevel: 2
-  lightningDropsExperience: 0
+  lightningDropsExperience: 5
   lightningDropsLvlReq: 50
   lightningPhysicalAttackBonus: 0
   lightningDropAttackBonus: 0
@@ -306,12 +306,12 @@ MonoBehaviour:
   chestArmor: {fileID: 3137854586391407116, guid: 552a109bd39414d8180a998df500f23e, type: 3}
   skillIndex: 5
   skillTotal: 1
-  isPoisoned: 0
+  isPoisoned: 1
   isAsleep: 0
   isConfused: 0
   deathInflicted: 0
-  inflicted: 0
-  poisonDmg: 0
+  inflicted: 1
+  poisonDmg: 5
   sleepTimer: 0
   confuseTimer: 0
   deathTimer: 3
