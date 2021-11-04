@@ -34,6 +34,7 @@ public class EnemyDropMovement : MonoBehaviour
         SpriteRenderer characterObjectSprite = null;
         SpriteRenderer characterSprite = null;
         charBeingTargeted = Engine.e.battleSystem.previousTargetReferenceEnemy;
+
         if (charBeingTargeted == 0)
         {
             characterLocation = Engine.e.activeParty.gameObject;
@@ -145,7 +146,7 @@ public class EnemyDropMovement : MonoBehaviour
 
             characterObjectSprite.color = GetComponent<SpriteRenderer>().color;
             GetComponent<ParticleSystem>().Emit(1);
-            Engine.e.battleSystem.hud.displayHealth[Engine.e.charBeingTargeted].text = Engine.e.activeParty.activeParty[Engine.e.charBeingTargeted].gameObject.GetComponent<Character>().currentHealth.ToString();
+            Engine.e.battleSystem.hud.displayHealth[Engine.e.battleSystem.previousTargetReferenceChar].text = Engine.e.activeParty.activeParty[Engine.e.battleSystem.previousTargetReferenceChar].GetComponent<Character>().currentHealth.ToString();
             yield return new WaitForSeconds(1.0f);
             Engine.e.battleSystem.dropExists = false;
 

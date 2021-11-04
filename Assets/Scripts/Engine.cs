@@ -1129,7 +1129,6 @@ public class Engine : MonoBehaviour
                             dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
                             Destroy(dmgPopup, 1f);
                             Destroy(healthSprite, 1f);
-                            Debug.Log("2");
 
                         }
                         if (index == 2)
@@ -1290,7 +1289,7 @@ public class Engine : MonoBehaviour
                 }
 
                 party[index].GetComponent<Character>().isPoisoned = false;
-                party[index].GetComponent<SpriteRenderer>().color = Color.white;
+                party[index].GetComponent<Character>().inflicted = false;
 
                 ItemDisplayCharacterStats(index);
                 break;
@@ -1301,63 +1300,7 @@ public class Engine : MonoBehaviour
             ItemDismissCharacterUseButtons();
             partyInventoryReference.OpenInventoryMenu();
         }
-        else
-        {
-            if (!battleSystem.failedItemUse)
-            {
-                if (battleSystem.currentInQueue == BattleState.CHAR1TURN)
-                {
-                    battleSystem.char1ATB = 0;
-                    battleSystem.char1ATBGuage.value = 0;
-                    battleSystem.DeactivateChar1MenuButtons();
-                    battleSystem.char1Ready = false;
-                }
-                if (battleSystem.currentInQueue == BattleState.CHAR2TURN)
-                {
-                    battleSystem.char2ATB = 0;
-                    battleSystem.DeactivateChar2MenuButtons();
-                    battleSystem.char2Ready = false;
-                }
-                if (battleSystem.currentInQueue == BattleState.CHAR3TURN)
-                {
-                    battleSystem.char3ATB = 0;
-                    battleSystem.DeactivateChar3MenuButtons();
-                    battleSystem.char3Ready = false;
-                }
 
-                if (battleModeActive)
-                {
-                    battleSystem.battleQueue.Dequeue();
-                    battleSystem.currentInQueue = BattleState.QUEUECHECK;
-
-                    partyInventoryReference.battleScreenInventorySet = false;
-                }
-            }
-            else
-            {
-                if (battleSystem.state == BattleState.CHAR1TURN)
-                {
-                    battleSystem.char1ATB = battleSystem.ATBReady;
-                    battleSystem.char1ATBGuage.value = battleSystem.ATBReady;
-                    battleSystem.ActivateChar1MenuButtons();
-                    battleSystem.char1Ready = true;
-                }
-                if (battleSystem.state == BattleState.CHAR2TURN)
-                {
-                    battleSystem.char2ATB = battleSystem.ATBReady;
-                    battleSystem.char2ATBGuage.value = battleSystem.ATBReady;
-                    battleSystem.ActivateChar2MenuButtons();
-                    battleSystem.char2Ready = true;
-                }
-                if (battleSystem.state == BattleState.CHAR3TURN)
-                {
-                    battleSystem.char3ATB = battleSystem.ATBReady;
-                    battleSystem.char3ATBGuage.value = battleSystem.ATBReady;
-                    battleSystem.ActivateChar3MenuButtons();
-                    battleSystem.char3Ready = true;
-                }
-            }
-        }
         itemToBeUsed = null;
 
     }
@@ -2151,6 +2094,8 @@ public class Engine : MonoBehaviour
         {
             adjustedDodge = 100;
             character.isAsleep = false;
+            character.inflicted = false;
+
             activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.white;
             activeParty.GetComponent<SpriteRenderer>().color = Color.white;
         }
@@ -2161,12 +2106,12 @@ public class Engine : MonoBehaviour
             if (character.confuseDefense > snapoutChance)
             {
                 character.isConfused = false;
+                character.inflicted = false;
                 character.confuseTimer = 0;
                 activeParty.GetComponent<SpriteRenderer>().color = Color.white;
 
                 //  GetComponent<SpriteRenderer>().color = Color.white;
             }
-            Debug.Log("Hello");
         }
 
 
@@ -2189,8 +2134,9 @@ public class Engine : MonoBehaviour
             character.isPoisoned = false;
             character.isConfused = false;
             character.isAsleep = false;
+            character.inflicted = false;
             character.poisonDmg = 0f;
-            activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.white;
+            // activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.white;
 
             switch (index)
             {
@@ -2323,10 +2269,7 @@ public class Engine : MonoBehaviour
                 {
                     battleSystem.char3AttackTarget = index;
                 }
-                if (battleSystem.currentInQueue == BattleState.ENEMY4TURN)
-                {
-                    battleSystem.enemy4AttackTarget = index;
-                }
+
                 if (battleSystem.currentInQueue == BattleState.ENEMY1TURN)
                 {
                     battleSystem.enemy1AttackTarget = index;
@@ -2451,6 +2394,7 @@ public class Engine : MonoBehaviour
                         {
                             activeParty.activeParty[index].GetComponent<Character>().isPoisoned = true;
                             activeParty.activeParty[index].GetComponent<Character>().poisonDmg = battleSystem.lastDropChoice.dotDmg;
+                            activeParty.activeParty[index].GetComponent<Character>().inflicted = true;
                         }
                     }
                 }
@@ -2465,64 +2409,22 @@ public class Engine : MonoBehaviour
                         {
                             activeParty.activeParty[index].GetComponent<Character>().isAsleep = true;
                             activeParty.activeParty[index].GetComponent<Character>().sleepTimer = 0;
+                            activeParty.activeParty[index].GetComponent<Character>().inflicted = true;
+
                             Queue<BattleState> newQueue = new Queue<BattleState>(7);
 
                             if (index == 0)
                             {
                                 battleSystem.DeactivateChar1MenuButtons();
-                                foreach (BattleState state in battleSystem.battleQueue)
-                                {
-                                    if (state != BattleState.CHAR1TURN || state != BattleState.CONFCHAR1)
-                                    {
-                                        newQueue.Enqueue(state);
-                                    }
-                                }
-
-                                battleSystem.battleQueue = new Queue<BattleState>(7);
-
-                                foreach (BattleState state in newQueue)
-                                {
-                                    battleSystem.battleQueue.Enqueue(state);
-                                }
                             }
 
                             if (index == 1)
                             {
                                 battleSystem.DeactivateChar2MenuButtons();
-
-                                foreach (BattleState state in battleSystem.battleQueue)
-                                {
-                                    if (state != BattleState.CHAR2TURN || state != BattleState.CONFCHAR2)
-                                    {
-                                        newQueue.Enqueue(state);
-                                    }
-                                }
-
-                                battleSystem.battleQueue = new Queue<BattleState>(7);
-
-                                foreach (BattleState state in newQueue)
-                                {
-                                    battleSystem.battleQueue.Enqueue(state);
-                                }
                             }
                             if (index == 2)
                             {
                                 battleSystem.DeactivateChar3MenuButtons();
-
-                                foreach (BattleState state in battleSystem.battleQueue)
-                                {
-                                    if (state != BattleState.CHAR3TURN || state != BattleState.CONFCHAR3)
-                                    {
-                                        newQueue.Enqueue(state);
-                                    }
-                                }
-
-                                battleSystem.battleQueue = new Queue<BattleState>(7);
-
-                                foreach (BattleState state in newQueue)
-                                {
-                                    battleSystem.battleQueue.Enqueue(state);
-                                }
                             }
                         }
                     }
@@ -2538,7 +2440,7 @@ public class Engine : MonoBehaviour
                         {
                             activeParty.activeParty[index].GetComponent<Character>().isConfused = true;
                             battleSystem.state = BattleState.ATBCHECK;
-                            Queue<BattleState> newQueue = new Queue<BattleState>(7);
+                            activeParty.activeParty[index].GetComponent<Character>().inflicted = true;
 
                             if (index == 0)
                             {
@@ -2552,20 +2454,6 @@ public class Engine : MonoBehaviour
                                     }
                                 }
 
-                                foreach (BattleState state in battleSystem.battleQueue)
-                                {
-                                    if (state != BattleState.CHAR1TURN || state != BattleState.CONFCHAR1)
-                                    {
-                                        newQueue.Enqueue(state);
-                                    }
-                                }
-
-                                battleSystem.battleQueue = new Queue<BattleState>(7);
-
-                                foreach (BattleState state in newQueue)
-                                {
-                                    battleSystem.battleQueue.Enqueue(state);
-                                }
                             }
                             if (index == 1)
                             {
@@ -2578,20 +2466,7 @@ public class Engine : MonoBehaviour
                                         battleSystem.DisableBattleMenus();
                                     }
                                 }
-                                foreach (BattleState state in battleSystem.battleQueue)
-                                {
-                                    if (state != BattleState.CHAR2TURN || state != BattleState.CONFCHAR2)
-                                    {
-                                        newQueue.Enqueue(state);
-                                    }
-                                }
 
-                                battleSystem.battleQueue = new Queue<BattleState>(7);
-
-                                foreach (BattleState state in newQueue)
-                                {
-                                    battleSystem.battleQueue.Enqueue(state);
-                                }
                             }
                             if (index == 2)
                             {
@@ -2603,20 +2478,6 @@ public class Engine : MonoBehaviour
                                     {
                                         battleSystem.DisableBattleMenus();
                                     }
-                                }
-                                foreach (BattleState state in battleSystem.battleQueue)
-                                {
-                                    if (state != BattleState.CHAR3TURN || state != BattleState.CONFCHAR3)
-                                    {
-                                        newQueue.Enqueue(state);
-                                    }
-                                }
-
-                                battleSystem.battleQueue = new Queue<BattleState>(7);
-
-                                foreach (BattleState state in newQueue)
-                                {
-                                    battleSystem.battleQueue.Enqueue(state);
                                 }
                             }
                         }
@@ -2649,6 +2510,7 @@ public class Engine : MonoBehaviour
             activeParty.activeParty[index].GetComponent<Character>().isConfused = false;
             activeParty.activeParty[index].GetComponent<Character>().isAsleep = false;
             activeParty.activeParty[index].GetComponent<Character>().deathInflicted = false;
+            activeParty.activeParty[index].GetComponent<Character>().inflicted = false;
             activeParty.activeParty[index].GetComponent<Character>().poisonDmg = 0f;
             activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.white;
 
@@ -2660,8 +2522,8 @@ public class Engine : MonoBehaviour
             {
                 activeParty.activeParty[index].GetComponent<Character>().isAsleep = false;
                 activeParty.activeParty[index].GetComponent<Character>().isConfused = false;
-
-                activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.grey;
+                activeParty.activeParty[index].GetComponent<Character>().inflicted = false;
+                // activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.grey;
                 //activeParty.GetComponent<SpriteRenderer>().color = Color.grey;
             }
         }
@@ -2673,8 +2535,9 @@ public class Engine : MonoBehaviour
             {
                 activeParty.activeParty[index].GetComponent<Character>().isConfused = false;
                 activeParty.activeParty[index].GetComponent<Character>().confuseTimer = 0;
+                activeParty.activeParty[index].GetComponent<Character>().inflicted = false;
 
-                activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.grey;
+                //activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.grey;
                 // activeParty.GetComponent<SpriteRenderer>().color = Color.grey;
 
             }
@@ -2684,7 +2547,7 @@ public class Engine : MonoBehaviour
                 activeParty.activeParty[index].GetComponent<Character>().isAsleep = true;
                 activeParty.activeParty[index].GetComponent<Character>().isConfused = false;
 
-                activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.grey;
+                //activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.grey;
                 // activeParty.GetComponent<SpriteRenderer>().color = Color.grey;
             }
         }
@@ -2743,6 +2606,7 @@ public class Engine : MonoBehaviour
             activeParty.activeParty[index].GetComponent<Character>().isConfused = false;
             activeParty.activeParty[index].GetComponent<Character>().isAsleep = false;
             activeParty.activeParty[index].GetComponent<Character>().poisonDmg = 0f;
+            activeParty.activeParty[index].GetComponent<Character>().inflicted = false;
             activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.white;
             characterObject.GetComponent<SpriteRenderer>().color = Color.white;
 
@@ -2786,7 +2650,7 @@ public class Engine : MonoBehaviour
         {
             //GameManager.gameManager.activeParty.activeParty[0].GetComponent<Grieve>().weapon.GetComponent<GrieveWeapons>().fireAttack += 10;
             partyInventoryReference.AddItemToInventory(gameInventory[0]);
-            //partyInventoryReference.AddItemToInventory(gameInventory[1]);
+            partyInventoryReference.AddItemToInventory(gameInventory[1]);
 
             // partyInventoryReference.AddItemToInventory(gameInventory[2]);
             //partyInventoryReference.AddItemToInventory(gameInventory[3]);
@@ -3036,7 +2900,7 @@ public class Engine : MonoBehaviour
             }
         }
 
-        if (battleSystem.state == BattleState.CHAR1TURN)
+        if (battleSystem.currentInQueue == BattleState.CHAR1TURN)
         {
             for (int i = 1; i < remainingPartyMembers.Count; i++)
             {
@@ -3051,7 +2915,7 @@ public class Engine : MonoBehaviour
             }
         }
 
-        if (battleSystem.state == BattleState.CHAR2TURN)
+        if (battleSystem.currentInQueue == BattleState.CHAR2TURN)
         {
             for (int i = 2; i < remainingPartyMembers.Count; i++)
             {
@@ -3066,8 +2930,8 @@ public class Engine : MonoBehaviour
             }
         }
 
-        if (battleSystem.state == BattleState.CHAR3TURN || battleSystem.state == BattleState.ENEMY1TURN || battleSystem.state == BattleState.ENEMY2TURN
-       || battleSystem.state == BattleState.ENEMY3TURN || battleSystem.state == BattleState.ENEMY4TURN)
+        if (battleSystem.currentInQueue == BattleState.CHAR3TURN || battleSystem.currentInQueue == BattleState.ENEMY1TURN || battleSystem.currentInQueue == BattleState.ENEMY2TURN
+       || battleSystem.currentInQueue == BattleState.ENEMY3TURN || battleSystem.currentInQueue == BattleState.ENEMY4TURN)
         {
             for (int i = 0; i < remainingPartyMembers.Count; i++)
             {

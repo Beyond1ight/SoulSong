@@ -97,6 +97,7 @@ public class Character : MonoBehaviour
     public bool isAsleep;
     public bool isConfused;
     public bool deathInflicted;
+    public bool inflicted;
     public float poisonDmg;
     public int sleepTimer = 0;
     public int confuseTimer = 0;

@@ -26,6 +26,7 @@ public class Enemy : MonoBehaviour
     public bool isConfused;
     public bool isAsleep;
     public bool deathInflicted;
+    public bool inflicted;
     public float poisonDmg;
     public int sleepTimer;
     public int confuseTimer;
@@ -156,6 +157,7 @@ public class Enemy : MonoBehaviour
         if (isAsleep && damageTotal != 0)
         {
             isAsleep = false;
+            inflicted = false;
             if (GetComponent<EnemyMovement>() != null)
             {
                 GetComponent<EnemyMovement>().enabled = true;
@@ -169,6 +171,7 @@ public class Enemy : MonoBehaviour
             if (confuseDefense > snapoutChance)
             {
                 isConfused = false;
+                inflicted = false;
                 confuseTimer = 0;
                 if (GetComponent<EnemyMovement>() != null)
                 {
@@ -190,6 +193,8 @@ public class Enemy : MonoBehaviour
             battleSystem.enemies[index].GetComponent<Enemy>().isPoisoned = false;
             battleSystem.enemies[index].GetComponent<Enemy>().isConfused = false;
             battleSystem.enemies[index].GetComponent<Enemy>().isAsleep = false;
+            battleSystem.enemies[index].GetComponent<Enemy>().deathInflicted = false;
+            battleSystem.enemies[index].GetComponent<Enemy>().inflicted = false;
             battleSystem.enemies[index].GetComponent<Enemy>().poisonDmg = 0;
 
             switch (index)
@@ -444,6 +449,7 @@ public class Enemy : MonoBehaviour
             if (confuseDefense > snapoutChance)
             {
                 isConfused = false;
+                inflicted = false;
                 confuseTimer = 0;
 
                 if (GetComponent<EnemyMovement>() != null)
@@ -484,6 +490,8 @@ public class Enemy : MonoBehaviour
                 battleSystem.enemies[index].GetComponent<Enemy>().isPoisoned = false;
                 battleSystem.enemies[index].GetComponent<Enemy>().isConfused = false;
                 battleSystem.enemies[index].GetComponent<Enemy>().isAsleep = false;
+                battleSystem.enemies[index].GetComponent<Enemy>().deathInflicted = false;
+                battleSystem.enemies[index].GetComponent<Enemy>().inflicted = false;
                 battleSystem.enemies[index].GetComponent<Enemy>().poisonDmg = 0;
 
                 battleSystem.enemies[index].gameObject.GetComponent<SpriteRenderer>().enabled = false;
@@ -543,6 +551,7 @@ public class Enemy : MonoBehaviour
                     if (poisonDefense < poisonChance)
                     {
                         isPoisoned = true;
+                        inflicted = true;
                         float poisonDmgCalculation = (battleSystem.lastDropChoice.dotDmg) * 4 / 2;
                         poisonDmg = ((poisonDmgCalculation) - (poisonDmgCalculation * poisonDefense / 100));
                     }
@@ -557,6 +566,7 @@ public class Enemy : MonoBehaviour
                     if (sleepDefense < sleepChance)
                     {
                         isAsleep = true;
+                        inflicted = true;
                         sleepTimer = 0;
                     }
                 }
@@ -571,6 +581,7 @@ public class Enemy : MonoBehaviour
                     if (confuseDefense < confuseChance)
                     {
                         isConfused = true;
+                        inflicted = true;
                     }
                 }
             }
@@ -593,11 +604,12 @@ public class Enemy : MonoBehaviour
             {
                 isAsleep = false;
                 isConfused = false;
+                inflicted = false;
                 if (GetComponent<EnemyMovement>() != null)
                 {
                     GetComponent<EnemyMovement>().enabled = true;
                 }
-                GetComponent<SpriteRenderer>().color = Color.grey;
+                // GetComponent<SpriteRenderer>().color = Color.grey;
             }
         }
 
@@ -608,7 +620,7 @@ public class Enemy : MonoBehaviour
             {
                 isConfused = false;
                 confuseTimer = 0;
-
+                inflicted = false;
                 if (GetComponent<EnemyMovement>() != null)
                 {
                     GetComponent<EnemyMovement>().enabled = true;
@@ -645,6 +657,8 @@ public class Enemy : MonoBehaviour
                 battleSystem.enemies[index].GetComponent<Enemy>().isConfused = false;
                 battleSystem.enemies[index].GetComponent<Enemy>().isAsleep = false;
                 battleSystem.enemies[index].GetComponent<Enemy>().poisonDmg = 0;
+                battleSystem.enemies[index].GetComponent<Enemy>().deathInflicted = false;
+                battleSystem.enemies[index].GetComponent<Enemy>().inflicted = false;
                 battleSystem.enemies[index].gameObject.GetComponent<SpriteRenderer>().enabled = false;
 
 
@@ -668,6 +682,8 @@ public class Enemy : MonoBehaviour
                 battleSystem.enemies[target].GetComponent<Enemy>().isPoisoned = false;
                 battleSystem.enemies[target].GetComponent<Enemy>().isConfused = false;
                 battleSystem.enemies[target].GetComponent<Enemy>().isAsleep = false;
+                battleSystem.enemies[target].GetComponent<Enemy>().deathInflicted = false;
+                battleSystem.enemies[target].GetComponent<Enemy>().inflicted = false;
                 battleSystem.enemies[target].GetComponent<Enemy>().poisonDmg = 0;
 
                 if (GetComponent<Light2D>())
@@ -681,6 +697,7 @@ public class Enemy : MonoBehaviour
         if (isAsleep)
         {
             isAsleep = false;
+            inflicted = false;
         }
 
         if (isConfused)
@@ -689,6 +706,7 @@ public class Enemy : MonoBehaviour
             if (confuseDefense > snapoutChance)
             {
                 isConfused = false;
+                inflicted = false;
                 confuseTimer = 0;
 
                 if (GetComponent<EnemyMovement>() != null)
@@ -709,6 +727,7 @@ public class Enemy : MonoBehaviour
         if (poisonDefense < poisonChance)
         {
             isPoisoned = true;
+            inflicted = true;
             float poisonDmgCalculation = Mathf.Round(_poisonDmg + (character.shadowDropsLevel * 6) / 2);
             poisonDmg = ((poisonDmgCalculation) - (poisonDmgCalculation * poisonDefense / 100));
             if (!Engine.e.battleSystem.dropExists)
@@ -799,6 +818,7 @@ public class Enemy : MonoBehaviour
             isConfused = false;
             isAsleep = false;
             deathInflicted = false;
+            inflicted = false;
             poisonDmg = 0;
 
             Destroy(deathTimerPopup);
@@ -825,6 +845,9 @@ public class Enemy : MonoBehaviour
             battleSystem.enemies[index].GetComponent<Enemy>().isConfused = false;
             battleSystem.enemies[index].GetComponent<Enemy>().isAsleep = false;
             battleSystem.enemies[index].GetComponent<Enemy>().poisonDmg = 0;
+            battleSystem.enemies[index].GetComponent<Enemy>().deathInflicted = false;
+            battleSystem.enemies[index].GetComponent<Enemy>().inflicted = false;
+
 
             if (GetComponent<Light2D>())
             {

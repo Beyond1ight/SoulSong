@@ -348,6 +348,7 @@ public class PartyInventory : MonoBehaviour
         }
         else
         {
+            Engine.e.battleSystem.inventoryPointerIndex = 0;
             EventSystem.current.SetSelectedGameObject(null);
 
             EventSystem.current.SetSelectedGameObject(Engine.e.battleSystem.battleItems[inventoryPointerIndex].gameObject);
