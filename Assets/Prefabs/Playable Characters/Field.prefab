@@ -134,8 +134,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: Field
-  maxHealth: 80
-  currentHealth: 43
+  maxHealth: 9999
+  currentHealth: 9999
   maxMana: 50
   currentMana: 50
   maxEnergy: 36
@@ -315,7 +315,7 @@ MonoBehaviour:
   skillTotal: 1
   isPoisoned: 0
   isAsleep: 0
-  isConfused: 0
+  isConfused: 1
   deathInflicted: 0
   inflicted: 0
   poisonDmg: 0

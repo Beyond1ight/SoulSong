@@ -836,8 +836,21 @@ public class BattleSystem : MonoBehaviour
 
     public IEnumerator AttackMoveToTargetChar()
     {
+        int targetEnemy = 0;
+        if (currentInQueue == BattleState.CHAR1TURN)
+        {
+            targetEnemy = char1AttackTarget;
+        }
+        if (currentInQueue == BattleState.CHAR2TURN)
+        {
+            targetEnemy = char2AttackTarget;
+        }
+        if (currentInQueue == BattleState.CHAR3TURN)
+        {
+            targetEnemy = char3AttackTarget;
+        }
 
-        Enemy enemy = enemies[target].GetComponent<Enemy>();
+        Enemy enemy = enemies[targetEnemy].GetComponent<Enemy>();
 
         if (targetCheck)
         {
@@ -904,10 +917,10 @@ public class BattleSystem : MonoBehaviour
             }
 
             enemyGroup.moveToPosition = false;
-            Vector3 targetPos = Vector3.MoveTowards(characterAttacking.GetComponent<Rigidbody2D>().transform.position, enemies[target].transform.position, 8f * Time.deltaTime);
+            Vector3 targetPos = Vector3.MoveTowards(characterAttacking.GetComponent<Rigidbody2D>().transform.position, enemies[targetEnemy].transform.position, 8f * Time.deltaTime);
             characterAttacking.GetComponent<Rigidbody2D>().MovePosition(targetPos);
 
-            if (Vector3.Distance(characterAttacking.transform.position, enemies[target].transform.position) < 1)
+            if (Vector3.Distance(characterAttacking.transform.position, enemies[targetEnemy].transform.position) < 1)
             {
 
                 charAttacking = false;
@@ -922,17 +935,17 @@ public class BattleSystem : MonoBehaviour
                     switch (skillTierChoice)
                     {
                         case 0:
-                            enemy.TakeSkillDamage(damageTotal, target);
+                            enemy.TakeSkillDamage(damageTotal, targetEnemy);
                             break;
                         case 10:
-                            enemy.StealAttempt(target, characterAttackIndex.stealChance);
+                            enemy.StealAttempt(targetEnemy, characterAttackIndex.stealChance);
                             break;
                         case 11:
                             float hitChanceReduction = 10 + Mathf.Round(characterAttackIndex.skillScale * 10 / 25);
                             enemy.hitChance -= hitChanceReduction;
                             break;
                         case 13:
-                            enemy.TakeSkillDamage(damageTotal, target);
+                            enemy.TakeSkillDamage(damageTotal, targetEnemy);
                             enemy.InflictPoisonAttack(charAttackingIndex, 10);
                             break;
                         case 14:
@@ -943,7 +956,7 @@ public class BattleSystem : MonoBehaviour
 
                 if (!dontDisplayDmgPopup)
                 {
-                    GameObject dmgPopup = Instantiate(damagePopup, enemies[target].transform.position, Quaternion.identity);
+                    GameObject dmgPopup = Instantiate(damagePopup, enemies[targetEnemy].transform.position, Quaternion.identity);
 
                     if (dodgedAttack == true)
                     {
@@ -953,7 +966,7 @@ public class BattleSystem : MonoBehaviour
                     }
                     else
                     {
-                        enemies[target].GetComponent<SpriteRenderer>().material = damageFlash;
+                        enemies[targetEnemy].GetComponent<SpriteRenderer>().material = damageFlash;
                         dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = enemy.damageTotal.ToString();
 
                         yield return new WaitForSeconds(0.2f);
@@ -967,7 +980,7 @@ public class BattleSystem : MonoBehaviour
                     dontDisplayDmgPopup = false;
                 }
             }
-            hud.displayEnemyHealth[target].text = enemies[target].gameObject.GetComponent<Enemy>().health.ToString();
+            hud.displayEnemyHealth[targetEnemy].text = enemies[targetEnemy].gameObject.GetComponent<Enemy>().health.ToString();
         }
 
 

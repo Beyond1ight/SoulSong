@@ -127,8 +127,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: Mac
-  maxHealth: 80
-  currentHealth: 36
+  maxHealth: 9999
+  currentHealth: 9999
   maxMana: 60
   currentMana: 60
   maxEnergy: 30
@@ -308,7 +308,7 @@ MonoBehaviour:
   skillTotal: 1
   isPoisoned: 0
   isAsleep: 0
-  isConfused: 0
+  isConfused: 1
   deathInflicted: 0
   inflicted: 0
   poisonDmg: 0
