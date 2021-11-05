@@ -137,7 +137,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Grieve
   maxHealth: 100
-  currentHealth: 100
+  currentHealth: 46
   maxMana: 35
   currentMana: 35
   maxEnergy: 30

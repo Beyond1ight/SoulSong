@@ -135,7 +135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Field
   maxHealth: 80
-  currentHealth: 80
+  currentHealth: 43
   maxMana: 50
   currentMana: 50
   maxEnergy: 36

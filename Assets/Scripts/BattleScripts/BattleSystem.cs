@@ -904,7 +904,7 @@ public class BattleSystem : MonoBehaviour
             }
 
             enemyGroup.moveToPosition = false;
-            Vector3 targetPos = Vector3.MoveTowards(characterAttacking.GetComponent<Rigidbody2D>().transform.position, enemies[target].transform.position, 0.5f * Time.deltaTime);
+            Vector3 targetPos = Vector3.MoveTowards(characterAttacking.GetComponent<Rigidbody2D>().transform.position, enemies[target].transform.position, 8f * Time.deltaTime);
             characterAttacking.GetComponent<Rigidbody2D>().MovePosition(targetPos);
 
             if (Vector3.Distance(characterAttacking.transform.position, enemies[target].transform.position) < 1)
@@ -4096,18 +4096,18 @@ public class BattleSystem : MonoBehaviour
         }
         else
         {
-            if (state == BattleState.CHAR1TURN || currentState == BattleState.CHAR1TURN)
+            if (state == BattleState.CHAR1TURN)
             {
                 battleQueue.Enqueue(BattleState.CHAR1TURN);
             }
 
-            if (state == BattleState.CHAR2TURN || currentState == BattleState.CHAR2TURN)
+            if (state == BattleState.CHAR2TURN)
             {
                 battleQueue.Enqueue(BattleState.CHAR2TURN);
 
             }
 
-            if (state == BattleState.CHAR3TURN || currentState == BattleState.CHAR3TURN)
+            if (state == BattleState.CHAR3TURN)
             {
                 battleQueue.Enqueue(BattleState.CHAR3TURN);
             }
