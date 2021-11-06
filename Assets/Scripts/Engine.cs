@@ -301,9 +301,9 @@ public class Engine : MonoBehaviour
 
         playableCharacters[0].isPoisoned = false;
         playableCharacters[0].isAsleep = false;
-        playableCharacters[0].isConfused = true;
+        playableCharacters[0].isConfused = false;
         playableCharacters[0].deathInflicted = false;
-        playableCharacters[0].inflicted = true;
+        playableCharacters[0].inflicted = false;
 
 
         playableCharacters[0].poisonDmg = 0f;
@@ -428,9 +428,9 @@ public class Engine : MonoBehaviour
 
         playableCharacters[1].isPoisoned = false;
         playableCharacters[1].isAsleep = false;
-        playableCharacters[1].isConfused = true;
+        playableCharacters[1].isConfused = false;
         playableCharacters[1].deathInflicted = false;
-        playableCharacters[1].inflicted = true;
+        playableCharacters[1].inflicted = false;
 
         playableCharacters[1].stealChance = 60f;
 
@@ -550,9 +550,9 @@ public class Engine : MonoBehaviour
 
         playableCharacters[2].isPoisoned = false;
         playableCharacters[2].isAsleep = false;
-        playableCharacters[2].isConfused = true;
+        playableCharacters[2].isConfused = false;
         playableCharacters[2].deathInflicted = false;
-        playableCharacters[2].inflicted = true;
+        playableCharacters[2].inflicted = false;
 
         playableCharacters[2].stealChance = 75f;
 

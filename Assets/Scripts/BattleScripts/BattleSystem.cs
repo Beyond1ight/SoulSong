@@ -3009,16 +3009,6 @@ public class BattleSystem : MonoBehaviour
         char1Ready = false;
 
         dialogueText.text = Engine.e.activeParty.activeParty[0].gameObject.GetComponent<Character>().characterName;
-
-
-        if (activeParty.activeParty[0].GetComponent<Character>().isPoisoned)
-        {
-            GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activeParty.transform.position, Quaternion.identity);
-            isDead = Engine.e.TakePoisonDamage(0, activeParty.activeParty[0].GetComponent<Character>().poisonDmg);
-            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = activeParty.activeParty[0].GetComponent<Character>().poisonDmg.ToString();
-            Destroy(dmgPopup, 1f);
-        }
-
         confuseTargetCheck = true;
         confuseAttack = true;
         StartCoroutine(ConfuseTargetFinder());
@@ -3081,15 +3071,6 @@ public class BattleSystem : MonoBehaviour
 
         dialogueText.text = Engine.e.activeParty.activeParty[1].gameObject.GetComponent<Character>().characterName;
 
-
-
-        if (activeParty.activeParty[1].GetComponent<Character>().isPoisoned)
-        {
-            GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
-            isDead = Engine.e.TakePoisonDamage(1, activeParty.activeParty[1].GetComponent<Character>().poisonDmg);
-            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = activeParty.activeParty[1].GetComponent<Character>().poisonDmg.ToString();
-            Destroy(dmgPopup, 1f);
-        }
         confuseTargetCheck = true;
         confuseAttack = true;
         StartCoroutine(ConfuseTargetFinder());
@@ -3152,15 +3133,6 @@ public class BattleSystem : MonoBehaviour
 
         dialogueText.text = Engine.e.activeParty.activeParty[2].gameObject.GetComponent<Character>().characterName;
 
-
-
-        if (activeParty.activeParty[2].GetComponent<Character>().isPoisoned)
-        {
-            GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
-            isDead = Engine.e.TakePoisonDamage(2, activeParty.activeParty[2].GetComponent<Character>().poisonDmg);
-            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = activeParty.activeParty[2].GetComponent<Character>().poisonDmg.ToString();
-            Destroy(dmgPopup, 1f);
-        }
         confuseTargetCheck = true;
         confuseAttack = true;
         StartCoroutine(ConfuseTargetFinder());
@@ -5587,6 +5559,7 @@ public class BattleSystem : MonoBehaviour
                 if (enemies[index].GetComponent<Enemy>().confuseTimer == 3)
                 {
                     enemies[index].GetComponent<Enemy>().isConfused = false;
+                    enemies[index].GetComponent<Enemy>().inflicted = false;
                     enemies[index].GetComponent<Enemy>().confuseTimer = 0;
                 }
             }

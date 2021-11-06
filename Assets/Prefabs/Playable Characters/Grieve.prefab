@@ -137,9 +137,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Grieve
   maxHealth: 100
-  currentHealth: 85
+  currentHealth: 100
   maxMana: 35
-  currentMana: 5
+  currentMana: 35
   maxEnergy: 30
   currentEnergy: 30
   healthCapped: 1
@@ -250,7 +250,7 @@ MonoBehaviour:
   icePhysicalAttackBonus: 0
   iceDropAttackBonus: 0
   waterDropsLevel: 1
-  waterDropsExperience: 5
+  waterDropsExperience: 0
   waterDropsLvlReq: 50
   waterPhysicalAttackBonus: 0
   waterDropAttackBonus: 0
@@ -306,7 +306,7 @@ MonoBehaviour:
   - {fileID: 0}
   spellPower: 0
   skillPower: 0
-  lastDropChoice: {fileID: 11400000, guid: f925fe39fda49454abd0dfe3fec0ced2, type: 2}
+  lastDropChoice: {fileID: 11400000, guid: e682586f4b05941a7b430a85010d480e, type: 2}
   lastSkillChoice: {fileID: 0}
   skillScale: 1
   stealChance: 60

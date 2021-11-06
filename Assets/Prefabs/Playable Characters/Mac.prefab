@@ -128,7 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Mac
   maxHealth: 80
-  currentHealth: 32
+  currentHealth: 80
   maxMana: 60
   currentMana: 60
   maxEnergy: 30
@@ -297,7 +297,7 @@ MonoBehaviour:
   - {fileID: 0}
   spellPower: 0
   skillPower: 0
-  lastDropChoice: {fileID: 11400000, guid: 8c550a8dffde3433db125665c63f91f8, type: 2}
+  lastDropChoice: {fileID: 11400000, guid: f7911b3b316a64289b089119b0194868, type: 2}
   lastSkillChoice: {fileID: 11400000, guid: 1df5a6e2c9d234357b27a7bafcffe23d, type: 2}
   skillScale: 1
   stealChance: 60
@@ -306,12 +306,12 @@ MonoBehaviour:
   chestArmor: {fileID: 3137854586391407116, guid: 552a109bd39414d8180a998df500f23e, type: 3}
   skillIndex: 5
   skillTotal: 1
-  isPoisoned: 0
+  isPoisoned: 1
   isAsleep: 0
-  isConfused: 0
+  isConfused: 1
   deathInflicted: 0
-  inflicted: 0
-  poisonDmg: 0
+  inflicted: 1
+  poisonDmg: 5
   sleepTimer: 0
   confuseTimer: 0
   deathTimer: 3
