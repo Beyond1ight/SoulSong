@@ -26,16 +26,16 @@ public class BattleMenuControllerNav : MonoBehaviour
 
     public void OpenFirstTurn()
     {
-        Engine.e.char1BattlePanel.SetActive(true);
+        Engine.e.battleSystem.char1BattlePanel.SetActive(true);
         if (Engine.e.activeParty.activeParty[1] != null)
         {
-            Engine.e.char2BattlePanel.SetActive(true);
+            Engine.e.battleSystem.char2BattlePanel.SetActive(true);
         }
         if (Engine.e.activeParty.activeParty[2] != null)
         {
-            Engine.e.char3BattlePanel.SetActive(true);
+            Engine.e.battleSystem.char3BattlePanel.SetActive(true);
         }
-        Engine.e.enemyPanel.SetActive(true);
+        Engine.e.battleSystem.enemyPanel.SetActive(true);
 
         Engine.e.battleHelp.text = string.Empty;
         if (Engine.e.battleSystem.state == BattleState.CHAR1TURN)
@@ -57,9 +57,9 @@ public class BattleMenuControllerNav : MonoBehaviour
 
     public void OpenSkillChoice()
     {
-        Engine.e.char1BattlePanel.SetActive(false);
-        Engine.e.char2BattlePanel.SetActive(false);
-        Engine.e.char3BattlePanel.SetActive(false);
+        Engine.e.battleSystem.char1BattlePanel.SetActive(false);
+        Engine.e.battleSystem.char2BattlePanel.SetActive(false);
+        Engine.e.battleSystem.char3BattlePanel.SetActive(false);
 
 
         EventSystem.current.SetSelectedGameObject(null);
@@ -251,15 +251,15 @@ public class BattleMenuControllerNav : MonoBehaviour
 
     public void OpenDropChoice()
     {
-        Engine.e.enemyPanel.SetActive(false);
-        Engine.e.char1BattlePanel.SetActive(false);
+        Engine.e.battleSystem.enemyPanel.SetActive(false);
+        Engine.e.battleSystem.char1BattlePanel.SetActive(false);
         if (Engine.e.activeParty.activeParty[1] != null)
         {
-            Engine.e.char2BattlePanel.SetActive(false);
+            Engine.e.battleSystem.char2BattlePanel.SetActive(false);
         }
         if (Engine.e.activeParty.activeParty[2] != null)
         {
-            Engine.e.char3BattlePanel.SetActive(false);
+            Engine.e.battleSystem.char3BattlePanel.SetActive(false);
         }
 
         EventSystem.current.SetSelectedGameObject(null);

@@ -435,6 +435,7 @@ public class Enemy : MonoBehaviour
             {
                 isAsleep = false;
                 isConfused = false;
+                inflicted = false;
                 if (GetComponent<EnemyMovement>() != null)
                 {
                     GetComponent<EnemyMovement>().enabled = true;

@@ -134,21 +134,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: Field
-  maxHealth: 9999
-  currentHealth: 9999
-  maxMana: 50
-  currentMana: 50
-  maxEnergy: 36
-  currentEnergy: 36
+  maxHealth: 80
+  currentHealth: 80
+  maxMana: 20
+  currentMana: 20
+  maxEnergy: 50
+  currentEnergy: 50
   healthCapped: 1
   manaCapped: 1
   energyCapped: 1
   haste: 19
   experiencePoints: 0
   levelUpReq: 100
-  lvl: 1
+  lvl: 3
   baseDamage: 10
-  physicalDamage: 9
+  physicalDamage: 10
   isInParty: 1
   isInActiveParty: 1
   isLeader: 0
@@ -317,7 +317,7 @@ MonoBehaviour:
   isAsleep: 0
   isConfused: 1
   deathInflicted: 0
-  inflicted: 0
+  inflicted: 1
   poisonDmg: 0
   sleepTimer: 0
   confuseTimer: 0

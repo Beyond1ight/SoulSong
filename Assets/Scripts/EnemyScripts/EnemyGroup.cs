@@ -49,9 +49,9 @@ public class EnemyGroup : MonoBehaviour
 
             //GetComponent<Teleport>().OnTriggerEnter2D(other);
 
-            Engine.e.hud.SetEnemyGroupHUD();
+            Engine.e.battleSystem.hud.SetEnemyGroupHUD();
 
-            Engine.e.hud.SetPlayerHUD();
+            Engine.e.battleSystem.hud.SetPlayerHUD();
 
             if (battleCamera != null)
             {
@@ -74,8 +74,8 @@ public class EnemyGroup : MonoBehaviour
 
     public void GroupItemDrops()
     {
-        Engine.e.enemyLootReference.GetComponent<TMP_Text>().text = string.Empty;
-        Engine.e.enemyLootCountReference.GetComponent<TMP_Text>().text = string.Empty;
+        Engine.e.battleSystem.enemyLootReference.GetComponent<TMP_Text>().text = string.Empty;
+        Engine.e.battleSystem.enemyLootCountReference.GetComponent<TMP_Text>().text = string.Empty;
 
         for (int i = 0; i < enemies.Length; i++)
         {
@@ -105,16 +105,16 @@ public class EnemyGroup : MonoBehaviour
                             Debug.Log(enemies[i].gameObject.GetComponent<Enemy>().itemDrops[j].itemName);
                             Engine.e.partyInventoryReference.AddItemToInventory(enemies[i].gameObject.GetComponent<Enemy>().itemDrops[j]);
 
-                            if (!Engine.e.enemyLootReference.GetComponent<TMP_Text>().text.Contains(enemies[i].gameObject.GetComponent<Enemy>().itemDrops[j].itemName))
+                            if (!Engine.e.battleSystem.enemyLootReference.GetComponent<TMP_Text>().text.Contains(enemies[i].gameObject.GetComponent<Enemy>().itemDrops[j].itemName))
                             {
-                                Engine.e.enemyLootReference.GetComponent<TMP_Text>().text += "\n";
+                                Engine.e.battleSystem.enemyLootReference.GetComponent<TMP_Text>().text += "\n";
 
-                                Engine.e.enemyLootReference.GetComponent<TMP_Text>().text += enemies[i].gameObject.GetComponent<Enemy>().itemDrops[j].itemName;
+                                Engine.e.battleSystem.enemyLootReference.GetComponent<TMP_Text>().text += enemies[i].gameObject.GetComponent<Enemy>().itemDrops[j].itemName;
                             }
                             else
                             {
                                 numberDropped++;
-                                Engine.e.enemyLootCountReference.GetComponent<TMP_Text>().text += "\n" + numberDropped;
+                                Engine.e.battleSystem.enemyLootCountReference.GetComponent<TMP_Text>().text += "\n" + numberDropped;
                             }
                         }
                     }

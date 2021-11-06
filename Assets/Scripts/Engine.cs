@@ -50,11 +50,10 @@ public class Engine : MonoBehaviour
     public static Engine e;
     public bool ableToSave, arrangePartyButtonActive, char1LevelUp, char2LevelUp, char3LevelUp;
     public BattleSystem battleSystem;
-    public BattleHUD hud;
     int nextRemainingCharacterIndex, randomPartyMemberIndex;
     public CinemachineVirtualCamera mainCamera;
-    public GameObject char1Panel, char1LevelUpPanel, char2Panel, char2LevelUpPanel, char3Panel, char3LevelUpPanel, activateArrangePartyButton,
-    activePartyMember2, activePartyMember3, enemyLootReference, enemyLootPanelReference, enemyPanel, enemyLootCountReference, itemMenuCharFirst, dropMenuCharFirst;
+    public GameObject activateArrangePartyButton,
+    activePartyMember2, activePartyMember3, itemMenuCharFirst, dropMenuCharFirst;
     public TextMeshProUGUI[] char1LevelUpPanelReference, char2LevelUpPanelReference, char3LevelUpPanelReference;
     public TextMeshProUGUI enemyLootReferenceG, enemyLootReferenceExp, battleHelp;
     Vector3 startingPos;
@@ -81,7 +80,6 @@ public class Engine : MonoBehaviour
     public GameObject inventoryMenuReference;
     public GameObject[] pauseMenuCharacterPanels, itemMenuPanels;
     public GameObject canvasReference;
-    public GameObject char1BattlePanel, char2BattlePanel, char3BattlePanel;
     public GameObject[] charAbilityButtons, charSkillTierButtons;
     [SerializeField]
     TextMeshProUGUI[] inventoryMenuPartyNameStatsReference, inventoryMenuPartyHPStatsReference, inventoryMenuPartyMPStatsReference, inventoryMenuPartyENRStatsReference;
@@ -205,7 +203,6 @@ public class Engine : MonoBehaviour
 
 
 
-
         playableCharacters[0].canUseFireDrops = true;
         playableCharacters[0].canUseHolyDrops = true;
         playableCharacters[0].canUseWaterDrops = true;
@@ -304,8 +301,9 @@ public class Engine : MonoBehaviour
 
         playableCharacters[0].isPoisoned = false;
         playableCharacters[0].isAsleep = false;
-        playableCharacters[0].isConfused = false;
+        playableCharacters[0].isConfused = true;
         playableCharacters[0].deathInflicted = false;
+        playableCharacters[0].inflicted = true;
 
 
         playableCharacters[0].poisonDmg = 0f;
@@ -430,8 +428,9 @@ public class Engine : MonoBehaviour
 
         playableCharacters[1].isPoisoned = false;
         playableCharacters[1].isAsleep = false;
-        playableCharacters[1].isConfused = false;
+        playableCharacters[1].isConfused = true;
         playableCharacters[1].deathInflicted = false;
+        playableCharacters[1].inflicted = true;
 
         playableCharacters[1].stealChance = 60f;
 
@@ -551,8 +550,9 @@ public class Engine : MonoBehaviour
 
         playableCharacters[2].isPoisoned = false;
         playableCharacters[2].isAsleep = false;
-        playableCharacters[2].isConfused = false;
+        playableCharacters[2].isConfused = true;
         playableCharacters[2].deathInflicted = false;
+        playableCharacters[2].inflicted = true;
 
         playableCharacters[2].stealChance = 75f;
 
@@ -671,6 +671,7 @@ public class Engine : MonoBehaviour
         playableCharacters[3].isAsleep = false;
         playableCharacters[3].isConfused = false;
         playableCharacters[3].deathInflicted = false;
+        playableCharacters[3].inflicted = false;
 
         playableCharacters[3].stealChance = 50f;
 
@@ -2143,7 +2144,7 @@ public class Engine : MonoBehaviour
             }
         }
 
-        hud.displayHealth[battleSystem.previousTargetReferenceEnemy].text = activeParty.activeParty[battleSystem.previousTargetReferenceEnemy].gameObject.GetComponent<Character>().currentHealth.ToString();
+        battleSystem.hud.displayHealth[battleSystem.previousTargetReferenceEnemy].text = activeParty.activeParty[battleSystem.previousTargetReferenceEnemy].gameObject.GetComponent<Character>().currentHealth.ToString();
 
 
         if (activeParty.activeParty[0].gameObject.GetComponent<Character>().currentHealth <= 0)

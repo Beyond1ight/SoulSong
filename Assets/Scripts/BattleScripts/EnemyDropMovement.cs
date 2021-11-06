@@ -25,6 +25,35 @@ public class EnemyDropMovement : MonoBehaviour
             GetComponent<Light2D>().intensity = 1f;
         }
 
+        if (Engine.e.battleSystem.currentInQueue == BattleState.CONFCHAR1)
+        {
+            charBeingTargeted = Engine.e.battleSystem.char1AttackTarget;
+        }
+        if (Engine.e.battleSystem.currentInQueue == BattleState.CONFCHAR2)
+        {
+            charBeingTargeted = Engine.e.battleSystem.char2AttackTarget;
+        }
+        if (Engine.e.battleSystem.currentInQueue == BattleState.CONFCHAR3)
+        {
+            charBeingTargeted = Engine.e.battleSystem.char3AttackTarget;
+        }
+
+        if (Engine.e.battleSystem.currentInQueue == BattleState.ENEMY1TURN)
+        {
+            charBeingTargeted = Engine.e.battleSystem.enemy1AttackTarget;
+        }
+        if (Engine.e.battleSystem.currentInQueue == BattleState.ENEMY2TURN)
+        {
+            charBeingTargeted = Engine.e.battleSystem.enemy2AttackTarget;
+        }
+        if (Engine.e.battleSystem.currentInQueue == BattleState.ENEMY3TURN)
+        {
+            charBeingTargeted = Engine.e.battleSystem.enemy3AttackTarget;
+        }
+        if (Engine.e.battleSystem.currentInQueue == BattleState.ENEMY4TURN)
+        {
+            charBeingTargeted = Engine.e.battleSystem.enemy4AttackTarget;
+        }
     }
 
     public IEnumerator CheckDistance()
@@ -33,7 +62,6 @@ public class EnemyDropMovement : MonoBehaviour
         Character character = null;
         SpriteRenderer characterObjectSprite = null;
         SpriteRenderer characterSprite = null;
-        charBeingTargeted = Engine.e.battleSystem.previousTargetReferenceEnemy;
 
         if (charBeingTargeted == 0)
         {

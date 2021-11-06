@@ -27,14 +27,16 @@ public class BattleSystem : MonoBehaviour
     public bool usingItem = false;
     public float damageTotal;
     public float skillBoostTotal;
-    int randTarget;
-    public int target;
+    //int randTarget;
+    // public int target;
     public bool isDead;
     public float enemyGroupExperiencePoints;
     public bool dropExists = false;
     public bool enemyMoving = false, charMoving = false;
     public Vector3 leaderPos, activeParty2Pos, activeParty3Pos;
     public GameObject[] availableChar1Buttons, availableChar2Buttons, availableChar3Buttons;
+    public GameObject char1BattlePanel, char1LevelUpPanel, char2BattlePanel, char2LevelUpPanel, char3BattlePanel, char3LevelUpPanel,
+    enemyLootReference, enemyLootPanelReference, enemyPanel, enemyLootCountReference;
     bool charAtBattlePos = true;
     bool charAttacking = false;
     bool enemyAtBattlePos = true;
@@ -112,9 +114,6 @@ public class BattleSystem : MonoBehaviour
     List<Drops> charRandomDropList;
     public bool char1Ready = false, char2Ready = false, char3Ready = false;
     bool targetCheck = false;
-    int charAttackingIndex = 0;
-    GameObject characterAttacking = null;
-    Character characterAttackIndex = null;
     public GameObject characterDropTarget;
     bool confuseTargetCheck = false;
     bool char1MenuButtonsActive = false, char2MenuButtonsActive = false, char3MenuButtonsActive = false;
@@ -136,7 +135,7 @@ public class BattleSystem : MonoBehaviour
     public bool char1Switching, char2Switching, char3Switching;
     public int char1SwitchToIndex, char2SwitchToIndex, char3SwitchToIndex;
     public Item char1ItemToBeUsed, char2ItemToBeUsed, char3ItemToBeUsed;
-
+    bool partyTurn = false;
     [SerializeField]
     public bool grieveStatBoost = false, macStatBoost = false, fieldStatBoost = false, riggsStatBoost;
     [SerializeField]
@@ -459,6 +458,8 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (activeParty.activeParty[0].GetComponent<Character>().currentHealth > 0 && !activeParty.activeParty[0].GetComponent<Character>().isAsleep)
                     {
+                        partyTurn = true;
+
                         if (char1Attacking)
                         {
                             physicalAttack = char1PhysicalAttack;
@@ -508,6 +509,8 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (activeParty.activeParty[1].GetComponent<Character>().currentHealth > 0 && !activeParty.activeParty[1].GetComponent<Character>().isAsleep)
                     {
+                        partyTurn = true;
+
                         if (!activeParty.activeParty[0].GetComponent<Character>().isConfused)
                         {
                             if (char2Attacking)
@@ -566,6 +569,8 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (activeParty.activeParty[2].GetComponent<Character>().currentHealth > 0 && !activeParty.activeParty[2].GetComponent<Character>().isAsleep)
                     {
+                        partyTurn = true;
+
                         if (char3Attacking)
                         {
                             physicalAttack = char3PhysicalAttack;
@@ -616,6 +621,8 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (activeParty.activeParty[0].GetComponent<Character>().currentHealth > 0 && !activeParty.activeParty[0].GetComponent<Character>().isAsleep)
                     {
+                        partyTurn = true;
+
                         Char1ConfusedTurn();
                     }
                     else
@@ -630,6 +637,8 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (activeParty.activeParty[1].GetComponent<Character>().currentHealth > 0 && !activeParty.activeParty[1].GetComponent<Character>().isAsleep)
                     {
+                        partyTurn = true;
+
                         Char2ConfusedTurn();
                     }
                     else
@@ -644,6 +653,8 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (activeParty.activeParty[2].GetComponent<Character>().currentHealth > 0 && !activeParty.activeParty[2].GetComponent<Character>().isAsleep)
                     {
+                        partyTurn = true;
+
                         Char3ConfusedTurn();
                     }
                     else
@@ -658,6 +669,8 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (enemies[0].GetComponent<Enemy>().health > 0 && !enemies[0].GetComponent<Enemy>().isAsleep)
                     {
+                        partyTurn = false;
+
                         Enemy1Turn();
                     }
                     else
@@ -671,6 +684,8 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (enemies[1].GetComponent<Enemy>().health > 0 && !enemies[1].GetComponent<Enemy>().isAsleep)
                     {
+                        partyTurn = false;
+
                         Enemy2Turn();
                     }
                     else
@@ -684,6 +699,8 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (enemies[2].GetComponent<Enemy>().health > 0 && !enemies[2].GetComponent<Enemy>().isAsleep)
                     {
+                        partyTurn = false;
+
                         Enemy3Turn();
                     }
                     else
@@ -697,6 +714,8 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (enemies[3].GetComponent<Enemy>().health > 0 && !enemies[3].GetComponent<Enemy>().isAsleep)
                     {
+                        partyTurn = false;
+
                         Enemy4Turn();
                     }
                     else
@@ -716,18 +735,24 @@ public class BattleSystem : MonoBehaviour
         DeactivateAttackButtons();
         inBattleMenu = false;
         int index = 0;
+        int target = 0;
+        GameObject characterAttacking = null;
 
         if (currentInQueue == BattleState.CHAR1TURN)
         {
             index = 0;
+            characterAttacking = Engine.e.activeParty.gameObject;
         }
         if (currentInQueue == BattleState.CHAR2TURN)
         {
             index = 1;
+            characterAttacking = Engine.e.activePartyMember2;
+
         }
         if (currentInQueue == BattleState.CHAR3TURN)
         {
             index = 2;
+            characterAttacking = Engine.e.activePartyMember3;
         }
 
 
@@ -803,51 +828,39 @@ public class BattleSystem : MonoBehaviour
                 isDead = EnemyGroup.enemyGroup.CheckEndBattle();
                 yield return new WaitForSeconds(0.1f);
             }
-
-            if (activeParty.activeParty[index].GetComponent<Character>().isPoisoned)
-            {
-                GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, characterAttacking.transform.position, Quaternion.identity);
-
-                isDead = Engine.e.TakePoisonDamage(index, activeParty.activeParty[index].GetComponent<Character>().poisonDmg);
-
-                dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = activeParty.activeParty[charAttackingIndex].GetComponent<Character>().poisonDmg.ToString();
-                Destroy(dmgPopup, 1f);
-            }
-
-            if (activeParty.activeParty[index].GetComponent<Character>().deathInflicted)
-            {
-                isDead = activeParty.activeParty[index].GetComponent<Character>().TakeDeathDamage(charAttackingIndex);
-            }
-
-            if (Engine.e.activeParty.activeParty[Engine.e.charBeingTargeted].GetComponent<Character>().currentHealth <= 0)
-            {
-                Engine.e.activeParty.activeParty[Engine.e.charBeingTargeted].GetComponent<Character>().currentHealth = 0;
-
-                if (isDead)
-                {
-                    state = BattleState.LOST;
-                    yield return new WaitForSeconds(2f);
-                    StartCoroutine(EndBattle());
-                }
-            }
-            charAttacking = false;
         }
     }
 
     public IEnumerator AttackMoveToTargetChar()
     {
         int targetEnemy = 0;
-        if (currentInQueue == BattleState.CHAR1TURN)
+        int index = 0;
+        GameObject characterAttacking = null;
+        Character characterAttackIndex = null;
+
+        if (currentInQueue == BattleState.CHAR1TURN || currentInQueue == BattleState.CONFCHAR1)
         {
+            index = 0;
             targetEnemy = char1AttackTarget;
+            characterAttacking = Engine.e.activeParty.gameObject;
+            characterAttackIndex = Engine.e.activeParty.activeParty[0].GetComponent<Character>();
+
         }
-        if (currentInQueue == BattleState.CHAR2TURN)
+        if (currentInQueue == BattleState.CHAR2TURN || currentInQueue == BattleState.CONFCHAR2)
         {
+            index = 1;
             targetEnemy = char2AttackTarget;
+            characterAttacking = Engine.e.activePartyMember2;
+            characterAttackIndex = Engine.e.activeParty.activeParty[1].GetComponent<Character>();
+
+
         }
-        if (currentInQueue == BattleState.CHAR3TURN)
+        if (currentInQueue == BattleState.CHAR3TURN || currentInQueue == BattleState.CONFCHAR3)
         {
+            index = 2;
             targetEnemy = char3AttackTarget;
+            characterAttacking = Engine.e.activePartyMember3;
+            characterAttackIndex = Engine.e.activeParty.activeParty[2].GetComponent<Character>();
         }
 
         Enemy enemy = enemies[targetEnemy].GetComponent<Enemy>();
@@ -856,40 +869,8 @@ public class BattleSystem : MonoBehaviour
         {
             targetCheck = false;
 
-            if (currentInQueue == BattleState.CHAR1TURN || currentInQueue == BattleState.CONFCHAR1)
-            {
-                charAttackingIndex = 0;
-                characterAttacking = Engine.e.activeParty.gameObject;
-                characterAttackIndex = Engine.e.activeParty.activeParty[0].GetComponent<Character>();
-            }
-            if (currentInQueue == BattleState.CHAR2TURN || currentInQueue == BattleState.CONFCHAR2)
-            {
-                charAttackingIndex = 1;
-                characterAttacking = Engine.e.activePartyMember2;
-                characterAttackIndex = Engine.e.activeParty.activeParty[1].GetComponent<Character>();
 
-            }
-            if (currentInQueue == BattleState.CHAR3TURN || currentInQueue == BattleState.CONFCHAR3)
-            {
-                charAttackingIndex = 2;
-                characterAttacking = Engine.e.activePartyMember3;
-                characterAttackIndex = Engine.e.activeParty.activeParty[2].GetComponent<Character>();
-
-            }
-
-            if (confuseAttack)
-            {
-                confuseAttack = false;
-                Debug.Log("Adding confuse timer");
-                activeParty.activeParty[charAttackingIndex].GetComponent<Character>().confuseTimer++;
-                if (activeParty.activeParty[charAttackingIndex].GetComponent<Character>().confuseTimer == 3)
-                {
-                    activeParty.activeParty[charAttackingIndex].GetComponent<Character>().isConfused = false;
-                    activeParty.activeParty[charAttackingIndex].GetComponent<Character>().confuseTimer = 0;
-                }
-            }
-
-            if (Engine.e.battleModeActive && !activeParty.activeParty[charAttackingIndex].GetComponent<Character>().isConfused)
+            if (Engine.e.battleModeActive && !activeParty.activeParty[index].GetComponent<Character>().isConfused)
             {
                 //    ActiveCheckNext();
                 //state = BattleState.ATBCHECK;
@@ -897,10 +878,9 @@ public class BattleSystem : MonoBehaviour
             }
         }
 
-
         if (charAttacking && charAtBattlePos)
         {
-            switch (charAttackingIndex)
+            switch (index)
             {
                 case 0:
                     char1ATB = 0;
@@ -918,6 +898,7 @@ public class BattleSystem : MonoBehaviour
 
             enemyGroup.moveToPosition = false;
             Vector3 targetPos = Vector3.MoveTowards(characterAttacking.GetComponent<Rigidbody2D>().transform.position, enemies[targetEnemy].transform.position, 8f * Time.deltaTime);
+
             characterAttacking.GetComponent<Rigidbody2D>().MovePosition(targetPos);
 
             if (Vector3.Distance(characterAttacking.transform.position, enemies[targetEnemy].transform.position) < 1)
@@ -928,7 +909,7 @@ public class BattleSystem : MonoBehaviour
 
                 if (!charUsingSkill)
                 {
-                    enemy.TakePhysicalDamage(target, characterAttackIndex.physicalDamage, characterAttackIndex.hitChance);
+                    enemy.TakePhysicalDamage(targetEnemy, characterAttackIndex.physicalDamage, characterAttackIndex.hitChance);
                 }
                 else
                 {
@@ -946,7 +927,7 @@ public class BattleSystem : MonoBehaviour
                             break;
                         case 13:
                             enemy.TakeSkillDamage(damageTotal, targetEnemy);
-                            enemy.InflictPoisonAttack(charAttackingIndex, 10);
+                            enemy.InflictPoisonAttack(index, 10);
                             break;
                         case 14:
                             enemy.InflictDeathAttack();
@@ -970,7 +951,7 @@ public class BattleSystem : MonoBehaviour
                         dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = enemy.damageTotal.ToString();
 
                         yield return new WaitForSeconds(0.2f);
-                        enemies[target].GetComponent<SpriteRenderer>().material = originalMaterial;
+                        enemies[targetEnemy].GetComponent<SpriteRenderer>().material = originalMaterial;
                     }
 
                     Destroy(dmgPopup, 0.8f);
@@ -988,21 +969,21 @@ public class BattleSystem : MonoBehaviour
         {
             enemyGroup.moveToPosition = true;
 
-            if (charAttackingIndex == 0)
+            if (index == 0)
             {
                 if (characterAttacking.transform.position == leaderPos)
                 {
                     charAtBattlePos = true;
                 }
             }
-            if (charAttackingIndex == 1)
+            if (index == 1)
             {
                 if (characterAttacking.transform.position == activeParty2Pos)
                 {
                     charAtBattlePos = true;
                 }
             }
-            if (charAttackingIndex == 2)
+            if (index == 2)
             {
                 if (characterAttacking.transform.position == activeParty3Pos)
                 {
@@ -1012,48 +993,9 @@ public class BattleSystem : MonoBehaviour
 
             if (charAtBattlePos && !charAttacking)
             {
-                charMoving = false;
-                physicalAttack = false;
-                skillPhysicalAttack = false;
-                skillRangedAttack = false;
-                dropAttack = false;
-                charUsingSkill = false;
-                targetCheck = false;
-
-                if (activeParty.activeParty[charAttackingIndex].GetComponent<Character>().isPoisoned)
+                if (enemies[targetEnemy].gameObject.GetComponent<Enemy>().health <= 0)
                 {
-                    GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, characterAttacking.transform.position, Quaternion.identity);
-
-                    isDead = Engine.e.TakePoisonDamage(currentIndex, activeParty.activeParty[charAttackingIndex].GetComponent<Character>().poisonDmg);
-
-                    dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = activeParty.activeParty[charAttackingIndex].GetComponent<Character>().poisonDmg.ToString();
-                    Destroy(dmgPopup, 1f);
-                }
-
-                if (activeParty.activeParty[charAttackingIndex].GetComponent<Character>().deathInflicted)
-                {
-                    isDead = activeParty.activeParty[charAttackingIndex].GetComponent<Character>().TakeDeathDamage(charAttackingIndex);
-                }
-                if (Engine.e.activeParty.activeParty[Engine.e.charBeingTargeted].GetComponent<Character>().currentHealth <= 0)
-                {
-                    Engine.e.activeParty.activeParty[Engine.e.charBeingTargeted].GetComponent<Character>().currentHealth = 0;
-
-                    if (isDead)
-                    {
-                        state = BattleState.LOST;
-                        yield return new WaitForSeconds(2f);
-                        StartCoroutine(EndBattle());
-                    }
-                }
-
-                battleQueue.Dequeue();
-                currentInQueue = BattleState.QUEUECHECK;
-                //state = BattleState.ATBCHECK;
-                //currentInQueue = nextInQueue;
-
-                if (enemies[target].gameObject.GetComponent<Enemy>().health <= 0)
-                {
-                    enemies[target].gameObject.GetComponent<Enemy>().health = 0;
+                    enemies[targetEnemy].gameObject.GetComponent<Enemy>().health = 0;
 
                     isDead = EnemyGroup.enemyGroup.CheckEndBattle();
 
@@ -1064,12 +1006,10 @@ public class BattleSystem : MonoBehaviour
                         StartCoroutine(LevelUpCheck());
                     }
                 }
-                if (Engine.e.battleModeActive && activeParty.activeParty[charAttackingIndex].GetComponent<Character>().isConfused)
-                {
-                    //    ActiveCheckNext();
-                    state = BattleState.ATBCHECK;
 
-                }
+                EndTurn();
+                //state = BattleState.ATBCHECK;
+                //currentInQueue = nextInQueue;
 
 
                 yield return new WaitForSeconds(0.3f);
@@ -1106,22 +1046,6 @@ public class BattleSystem : MonoBehaviour
         {
             targetCheck = false;
 
-            if (currentInQueue == BattleState.CHAR1TURN || currentInQueue == BattleState.CONFCHAR1)
-            {
-                char1ATB = 0;
-                char1Ready = false;
-            }
-            if (currentInQueue == BattleState.CHAR2TURN || currentInQueue == BattleState.CONFCHAR2)
-            {
-                char2ATB = 0;
-                char2Ready = false;
-            }
-            if (currentInQueue == BattleState.CHAR3TURN || currentInQueue == BattleState.CONFCHAR3)
-            {
-                char3ATB = 0;
-                char3Ready = false;
-            }
-
             if (Engine.e.battleModeActive)
             {
                 //  state = BattleState.ATBCHECK;
@@ -1130,16 +1054,8 @@ public class BattleSystem : MonoBehaviour
         }
         if (!dropExists && !charAttackDrop)
         {
-            battleQueue.Dequeue();
 
-            if (battleQueue.Count > 0)
-            {
-                currentInQueue = battleQueue.Peek();
-            }
-            else
-            {
-                currentInQueue = BattleState.ATBCHECK;
-            }
+            EndTurn();
 
             //currentInQueue = nextInQueue;
             //if (s)
@@ -1219,8 +1135,8 @@ public class BattleSystem : MonoBehaviour
     {
         int index = 0;
         GameObject character = null;
-        //if (state == BattleState.CHAR1TURN)
-        //{
+        int target = 0;
+
         if (currentInQueue == BattleState.CONFCHAR1)
         {
             index = 0;
@@ -1244,10 +1160,7 @@ public class BattleSystem : MonoBehaviour
 
         yield return new WaitForSeconds(0.3f);
 
-        if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().isPoisoned)
-        {
-            Engine.e.TakePoisonDamage(index, Engine.e.activeParty.activeParty[index].GetComponent<Character>().poisonDmg);
-        }
+
         Debug.Log("entered CharConfuseAttack");
 
         int choiceAttack = Random.Range(0, 100);
@@ -1325,41 +1238,10 @@ public class BattleSystem : MonoBehaviour
 
                             isDead = Engine.e.TakeElementalDamage(target, lastDropChoice.dropPower, lastDropChoice.dropType);
                             // ActiveCheckNext();
-                            if (currentInQueue == BattleState.CONFCHAR1)
-                            {
-                                char1ATB = 0;
-                            }
-                            if (currentInQueue == BattleState.CONFCHAR2)
-                            {
-                                char2ATB = 0;
-                            }
-                            if (currentInQueue == BattleState.CONFCHAR3)
-                            {
-                                char3ATB = 0;
-                            }
-
-                            if (currentInQueue == BattleState.ENEMY1TURN)
-                            {
-                                enemy1ATB = 0;
-                            }
-                            if (currentInQueue == BattleState.ENEMY2TURN)
-                            {
-                                enemy2ATB = 0;
-                            }
-                            if (currentInQueue == BattleState.ENEMY3TURN)
-                            {
-                                enemy3ATB = 0;
-                            }
-                            if (currentInQueue == BattleState.ENEMY4TURN)
-                            {
-                                enemy4ATB = 0;
-                            }
-                            Debug.Log("State should be changing here.");
-                            confuseAttack = false;
-                            state = currentState;
                         }
                         else
                         {
+                            int randTarget = Engine.e.GetRandomRemainingPartyMember();
                             switch (lastDropChoice.dropName)
                             {
                                 case "Holy Light":
@@ -1369,36 +1251,6 @@ public class BattleSystem : MonoBehaviour
 
                             }
 
-                            if (currentInQueue == BattleState.CONFCHAR1)
-                            {
-                                char1ATB = 0;
-                            }
-                            if (currentInQueue == BattleState.CONFCHAR2)
-                            {
-                                char2ATB = 0;
-                            }
-                            if (currentInQueue == BattleState.CONFCHAR3)
-                            {
-                                char3ATB = 0;
-                            }
-
-                            if (currentInQueue == BattleState.ENEMY1TURN)
-                            {
-                                enemy1ATB = 0;
-                            }
-                            if (currentInQueue == BattleState.ENEMY2TURN)
-                            {
-                                enemy2ATB = 0;
-                            }
-                            if (currentInQueue == BattleState.ENEMY3TURN)
-                            {
-                                enemy3ATB = 0;
-                            }
-                            if (currentInQueue == BattleState.ENEMY4TURN)
-                            {
-                                enemy4ATB = 0;
-                            }
-                            confuseAttack = false;
 
                             //state = BattleState.ATBCHECK;
 
@@ -1415,37 +1267,6 @@ public class BattleSystem : MonoBehaviour
 
                             isDead = EnemyGroup.enemyGroup.CheckEndBattle();
 
-                            if (currentInQueue == BattleState.CONFCHAR1)
-                            {
-                                char1ATB = 0;
-                            }
-                            if (currentInQueue == BattleState.CONFCHAR2)
-                            {
-                                char2ATB = 0;
-                            }
-                            if (currentInQueue == BattleState.CONFCHAR3)
-                            {
-                                char3ATB = 0;
-                            }
-
-                            if (currentInQueue == BattleState.ENEMY1TURN)
-                            {
-                                enemy1ATB = 0;
-                            }
-                            if (currentInQueue == BattleState.ENEMY2TURN)
-                            {
-                                enemy2ATB = 0;
-                            }
-                            if (currentInQueue == BattleState.ENEMY3TURN)
-                            {
-                                enemy3ATB = 0;
-                            }
-                            if (currentInQueue == BattleState.ENEMY4TURN)
-                            {
-                                enemy4ATB = 0;
-                            }
-                            confuseAttack = false;
-
                             //state = BattleState.ATBCHECK;
                             yield return new WaitForSeconds(0.1f);
 
@@ -1453,37 +1274,13 @@ public class BattleSystem : MonoBehaviour
                     }
                 }
 
-                if (activeParty.activeParty[index].GetComponent<Character>().isConfused)
-                {
-                    activeParty.activeParty[index].GetComponent<Character>().confuseTimer++;
-                    if (activeParty.activeParty[index].GetComponent<Character>().confuseTimer == 3)
-                    {
-                        activeParty.activeParty[index].GetComponent<Character>().isConfused = false;
-                        activeParty.activeParty[index].GetComponent<Character>().confuseTimer = 0;
-                    }
-                }
-                if (activeParty.activeParty[index].GetComponent<Character>().isPoisoned)
-                {
-                    GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, character.transform.position, Quaternion.identity);
-
-                    isDead = Engine.e.TakePoisonDamage(currentIndex, activeParty.activeParty[index].GetComponent<Character>().poisonDmg);
-
-                    dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = activeParty.activeParty[index].GetComponent<Character>().poisonDmg.ToString();
-                    Destroy(dmgPopup, 1f);
-                }
-
-                if (activeParty.activeParty[index].GetComponent<Character>().deathInflicted)
-                {
-                    isDead = activeParty.activeParty[index].GetComponent<Character>().TakeDeathDamage(index);
-                }
-
                 confuseAttack = false;
                 Debug.Log("Cost: " + lastDropChoice.dropCost);
+
                 activeParty.activeParty[index].GetComponent<Character>().currentMana -= Mathf.Round(activeParty.activeParty[index].GetComponent<Character>().GetDropChoice().dropCost
             - (activeParty.activeParty[index].GetComponent<Character>().GetDropChoice().dropCost * activeParty.activeParty[index].GetComponent<Character>().dropCostReduction / 100) + 0.45f);
                 activeParty.activeParty[index].GetComponent<Character>().ResetDropChoice();
 
-                hud.displayMana[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana.ToString();
                 if (currentInQueue == BattleState.CONFCHAR1)
                 {
                     char1ATB = 0;
@@ -1496,69 +1293,7 @@ public class BattleSystem : MonoBehaviour
                 {
                     char3ATB = 0;
                 }
-
-                if (currentInQueue == BattleState.ENEMY1TURN)
-                {
-                    enemy1ATB = 0;
-                }
-                if (currentInQueue == BattleState.ENEMY2TURN)
-                {
-                    enemy2ATB = 0;
-                }
-                if (currentInQueue == BattleState.ENEMY3TURN)
-                {
-                    enemy3ATB = 0;
-                }
-                if (currentInQueue == BattleState.ENEMY4TURN)
-                {
-                    enemy4ATB = 0;
-                }
-                //state = currentState;
-                /*
-                                if (currentState == BattleState.ATBCHECK)
-                                {
-                                    dialogueText.text = string.Empty;
-                                }
-
-                                if (currentState == BattleState.CHAR1TURN)
-                                {
-                                    if (activeParty.activeParty[0].GetComponent<Character>().isConfused)
-                                    {
-                                        dialogueText.text = string.Empty;
-                                        state = BattleState.ATBCHECK;
-                                    }
-                                    else
-                                    {
-                                        dialogueText.text = string.Empty;
-                                        dialogueText.text = activeParty.activeParty[0].GetComponent<Character>().characterName;
-                                    }
-                                }
-                                if (currentState == BattleState.CHAR2TURN)
-                                {
-                                    if (activeParty.activeParty[1].GetComponent<Character>().isConfused)
-                                    {
-                                        dialogueText.text = string.Empty;
-                                        state = BattleState.ATBCHECK;
-                                    }
-                                    else
-                                    {
-                                        dialogueText.text = string.Empty;
-                                        dialogueText.text = activeParty.activeParty[1].GetComponent<Character>().characterName;
-                                    }
-                                }
-                                if (currentState == BattleState.CHAR3TURN)
-                                {
-                                    if (activeParty.activeParty[2].GetComponent<Character>().isConfused)
-                                    {
-                                        dialogueText.text = string.Empty;
-                                        state = BattleState.ATBCHECK;
-                                    }
-                                    else
-                                    {
-                                        dialogueText.text = string.Empty;
-                                        dialogueText.text = activeParty.activeParty[2].GetComponent<Character>().characterName;
-                                    }
-                                */
+                confuseAttack = false;
             }
             else
             {
@@ -1937,6 +1672,7 @@ public class BattleSystem : MonoBehaviour
         int index = 0;
         Character character = Engine.e.activeParty.activeParty[index].GetComponent<Character>();
         GameObject characterGameObject = null;
+        int target = 0;
         DeactivateSkillTargetButtons();
 
         if (currentInQueue == BattleState.CHAR1TURN)
@@ -2164,15 +1900,15 @@ public class BattleSystem : MonoBehaviour
             StartCoroutine(CharSupport(target));
         }
 
-        Engine.e.char1BattlePanel.SetActive(true);
+        char1BattlePanel.SetActive(true);
 
         if (Engine.e.activeParty.activeParty[1] != null)
         {
-            Engine.e.char2BattlePanel.SetActive(true);
+            char2BattlePanel.SetActive(true);
         }
         if (Engine.e.activeParty.activeParty[2] != null)
         {
-            Engine.e.char3BattlePanel.SetActive(true);
+            char3BattlePanel.SetActive(true);
         }
     }
 
@@ -2182,6 +1918,8 @@ public class BattleSystem : MonoBehaviour
         int index = 0;
         GameObject character = null;
         GameObject targetCharacter = null;
+        int target = 0;
+
         if (currentInQueue == BattleState.CHAR1TURN || currentInQueue == BattleState.CONFCHAR1)
         {
             index = 0;
@@ -2201,15 +1939,15 @@ public class BattleSystem : MonoBehaviour
             target = char3AttackTarget;
         }
 
-        if (randTarget == 0)
+        if (target == 0)
         {
             targetCharacter = Engine.e.activeParty.gameObject;
         }
-        if (randTarget == 1)
+        if (target == 1)
         {
             targetCharacter = Engine.e.activePartyMember2.gameObject;
         }
-        if (randTarget == 2)
+        if (target == 2)
         {
             targetCharacter = Engine.e.activePartyMember3.gameObject;
         }
@@ -2252,7 +1990,6 @@ public class BattleSystem : MonoBehaviour
             }
         }
 
-        hud.displayHealth[Engine.e.charBeingTargeted].text = Engine.e.activeParty.activeParty[Engine.e.charBeingTargeted].GetComponent<Character>().currentHealth.ToString();
         targetCheck = false;
         confuseAttack = false;
 
@@ -2284,99 +2021,25 @@ public class BattleSystem : MonoBehaviour
 
             if (charAtBattlePos && !charAttacking)
             {
-                charMoving = false;
-                attackingTeam = false;
-                physicalAttack = false;
-                targetCheck = false;
-                confuseAttack = false;
-
-                battleQueue.Dequeue();
-                currentInQueue = BattleState.QUEUECHECK;
-
-                Debug.Log("Adding confuse timer");
-                activeParty.activeParty[index].GetComponent<Character>().confuseTimer++;
-                if (activeParty.activeParty[index].GetComponent<Character>().confuseTimer == 3)
+                EndTurn();
+                if (isDead)
                 {
-                    activeParty.activeParty[index].GetComponent<Character>().isConfused = false;
-                    activeParty.activeParty[index].GetComponent<Character>().confuseTimer = 0;
+                    state = BattleState.LOST;
+                    yield return new WaitForSeconds(2f);
+                    StartCoroutine(EndBattle());
                 }
+            }
 
-                if (activeParty.activeParty[index].GetComponent<Character>().isPoisoned)
-                {
-                    GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, character.transform.position, Quaternion.identity);
+            yield return new WaitForSeconds(1f);
 
-                    isDead = Engine.e.TakePoisonDamage(currentIndex, activeParty.activeParty[index].GetComponent<Character>().poisonDmg);
-
-                    dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = activeParty.activeParty[index].GetComponent<Character>().poisonDmg.ToString();
-                    Destroy(dmgPopup, 1f);
-                }
-
-                if (activeParty.activeParty[index].GetComponent<Character>().deathInflicted)
-                {
-                    isDead = activeParty.activeParty[index].GetComponent<Character>().TakeDeathDamage(index);
-                }
-                if (Engine.e.activeParty.activeParty[Engine.e.charBeingTargeted].GetComponent<Character>().currentHealth <= 0)
-                {
-                    Engine.e.activeParty.activeParty[Engine.e.charBeingTargeted].GetComponent<Character>().currentHealth = 0;
-
-                    if (isDead)
-                    {
-                        state = BattleState.LOST;
-                        yield return new WaitForSeconds(2f);
-                        StartCoroutine(EndBattle());
-                    }
-                }
-
-                if (index == 0)
-                {
-                    char1ATB = 0;
-                }
-                if (index == 1)
-                {
-                    char2ATB = 0;
-                }
-                if (index == 2)
-                {
-                    char3ATB = 0;
-                }
-
-                if (Engine.e.battleModeActive)
-                {
-                    Debug.Log("The stored current state is " + currentState + ". The state at this moment is " + state);
-                    state = currentState;
-                    Debug.Log("The stored current state is " + currentState + ". The state at this moment is now and should be" + state);
-
-
-                    if (currentState == BattleState.ATBCHECK)
-                    {
-                        dialogueText.text = string.Empty;
-                    }
-                    if (currentState == BattleState.CHAR1TURN || state == BattleState.CONFCHAR1)
-                    {
-                        dialogueText.text = string.Empty;
-                        dialogueText.text = activeParty.activeParty[0].GetComponent<Character>().characterName;
-                    }
-                    if (currentState == BattleState.CHAR2TURN || state == BattleState.CONFCHAR2)
-                    {
-                        dialogueText.text = string.Empty;
-                        dialogueText.text = activeParty.activeParty[1].GetComponent<Character>().characterName;
-                    }
-                    if (currentState == BattleState.CHAR3TURN || state == BattleState.CONFCHAR3)
-                    {
-                        dialogueText.text = string.Empty;
-                        dialogueText.text = activeParty.activeParty[2].GetComponent<Character>().characterName;
-                    }
-                }
-                yield return new WaitForSeconds(1f);
-
-                // StartCoroutine(CheckNext());
-                if (!Engine.e.battleModeActive)
-                {
-                    state = BattleState.ATBCHECK;
-                }
+            // StartCoroutine(CheckNext());
+            if (!Engine.e.battleModeActive)
+            {
+                state = BattleState.ATBCHECK;
             }
         }
     }
+
 
     void CharRandomDropChoice()
     {
@@ -2494,25 +2157,34 @@ public class BattleSystem : MonoBehaviour
     IEnumerator EnemyAttack()
     {
         int index = 0;
+        int randTarget = 0;
 
         if (currentInQueue == BattleState.ENEMY1TURN)
         {
             index = 0;
+            enemy1AttackTarget = Engine.e.GetRandomRemainingPartyMember();
+            randTarget = enemy1AttackTarget;
         }
         if (currentInQueue == BattleState.ENEMY2TURN)
         {
             index = 1;
+            enemy2AttackTarget = Engine.e.GetRandomRemainingPartyMember();
+            randTarget = enemy2AttackTarget;
         }
         if (currentInQueue == BattleState.ENEMY3TURN)
         {
             index = 2;
+            enemy3AttackTarget = Engine.e.GetRandomRemainingPartyMember();
+            randTarget = enemy3AttackTarget;
         }
         if (currentInQueue == BattleState.ENEMY4TURN)
         {
             index = 3;
+            enemy4AttackTarget = Engine.e.GetRandomRemainingPartyMember();
+            randTarget = enemy4AttackTarget;
         }
 
-        randTarget = Engine.e.GetRandomRemainingPartyMember();
+
         previousTargetReferenceEnemy = randTarget;
         Debug.Log(randTarget);
 
@@ -2610,33 +2282,6 @@ public class BattleSystem : MonoBehaviour
 
                     isDead = Engine.e.TakeElementalDamage(randTarget, enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropPower, enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType);
                     enemies[index].GetComponent<Enemy>().mana -= enemies[index].GetComponent<Enemy>().drops[enemyDropChoice].dropCost;
-
-                    if (enemies[index].GetComponent<EnemyMovement>() != null)
-                    {
-                        enemies[index].GetComponent<EnemyMovement>().enabled = true;
-                    }
-
-                    if (enemies[index].GetComponent<Enemy>().isConfused)
-                    {
-                        enemies[index].GetComponent<Enemy>().confuseTimer++;
-                        if (enemies[index].GetComponent<Enemy>().confuseTimer == 3)
-                        {
-                            enemies[index].GetComponent<Enemy>().isConfused = false;
-                            enemies[index].GetComponent<Enemy>().confuseTimer = 0;
-                        }
-                    }
-
-                    if (enemies[index].GetComponent<Enemy>().isPoisoned)
-                    {
-                        enemies[index].GetComponent<Enemy>().TakePoisonDamage(index, enemies[index].GetComponent<Enemy>().poisonDmg);
-
-
-                    }
-
-                    if (enemies[index].GetComponent<Enemy>().deathInflicted)
-                    {
-                        enemies[index].GetComponent<Enemy>().TakeDeathDamage();
-                    }
 
                     enemyAttacking = false;
 
@@ -2747,96 +2392,9 @@ public class BattleSystem : MonoBehaviour
 
             if (enemyAtBattlePos && !enemyAttacking)
             {
-
-                if (enemies[index].GetComponent<Enemy>().isConfused)
-                {
-                    enemies[index].GetComponent<Enemy>().confuseTimer++;
-                    if (enemies[index].GetComponent<Enemy>().confuseTimer == 3)
-                    {
-                        enemies[index].GetComponent<Enemy>().isConfused = false;
-                        enemies[index].GetComponent<Enemy>().confuseTimer = 0;
-                    }
-                }
-
-                if (enemies[index].GetComponent<Enemy>().isPoisoned)
-                {
-                    enemies[index].GetComponent<Enemy>().TakePoisonDamage(index, enemies[index].GetComponent<Enemy>().poisonDmg);
-
-
-                }
-
-                if (enemies[index].GetComponent<Enemy>().deathInflicted)
-                {
-                    enemies[index].GetComponent<Enemy>().TakeDeathDamage();
-                }
-                if (enemies[index].GetComponent<EnemyMovement>() != null)
-                {
-                    enemies[index].GetComponent<EnemyMovement>().enabled = true;
-                }
                 enemyMoving = false;
-                switch (index)
-                {
-                    case 0:
-                        enemy1ATB = 0;
-                        break;
-                    case 1:
-                        enemy2ATB = 0;
-                        break;
-                    case 2:
-                        enemy3ATB = 0;
-                        break;
-                    case 3:
-                        enemy4ATB = 0;
-                        break;
-                }
 
-                //ActiveCheckNext();
-                if (Engine.e.battleModeActive)
-                {
-                    battleQueue.Dequeue();
-                    currentInQueue = BattleState.QUEUECHECK;
-
-                    /*if (currentState == BattleState.ATBCHECK)
-                    {
-                        dialogueText.text = string.Empty;
-                    }
-                    if (currentState == BattleState.CHAR1TURN)
-                    {
-                        if (!activeParty.activeParty[0].GetComponent<Character>().isConfused)
-                        {
-                            dialogueText.text = string.Empty;
-                            dialogueText.text = activeParty.activeParty[0].GetComponent<Character>().characterName;
-                        }
-                        else
-                        {
-                            state = BattleState.ATBCHECK;
-                        }
-                    }
-                    if (currentState == BattleState.CHAR2TURN)
-                    {
-                        if (!activeParty.activeParty[1].GetComponent<Character>().isConfused)
-                        {
-                            dialogueText.text = string.Empty;
-                            dialogueText.text = activeParty.activeParty[1].GetComponent<Character>().characterName;
-                        }
-                        else
-                        {
-                            state = BattleState.ATBCHECK;
-                        }
-                    }
-                    if (currentState == BattleState.CHAR3TURN)
-                    {
-                        if (!activeParty.activeParty[2].GetComponent<Character>().isConfused)
-                        {
-                            dialogueText.text = string.Empty;
-                            dialogueText.text = activeParty.activeParty[2].GetComponent<Character>().characterName;
-                        }
-                        else
-                        {
-                            state = BattleState.ATBCHECK;
-                        }
-                    }*/
-                }
+                EndTurn();
 
                 yield return new WaitForSeconds(0.3f);
 
@@ -2862,27 +2420,59 @@ public class BattleSystem : MonoBehaviour
     IEnumerator ConfuseAttackMoveToTargetEnemy()
     {
         int index = 0;
+        int randTarget = 0;
 
-        if (state == BattleState.ENEMY1TURN)
+        if (currentInQueue == BattleState.ENEMY1TURN)
         {
             index = 0;
+            randTarget = enemy1AttackTarget;
         }
-        if (state == BattleState.ENEMY2TURN)
+        if (currentInQueue == BattleState.ENEMY2TURN)
         {
             index = 1;
+            randTarget = enemy2AttackTarget;
+
         }
-        if (state == BattleState.ENEMY3TURN)
+        if (currentInQueue == BattleState.ENEMY3TURN)
         {
             index = 2;
+            randTarget = enemy3AttackTarget;
+
         }
-        if (state == BattleState.ENEMY4TURN)
+        if (currentInQueue == BattleState.ENEMY4TURN)
         {
             index = 3;
+            randTarget = enemy4AttackTarget;
+
         }
 
 
         if (enemyAttacking && enemyAtBattlePos)
         {
+            switch (index)
+            {
+                case 0:
+                    enemy1ATB = 0;
+                    enemy1ATBGuage.value = enemy1ATB;
+                    enemy1Ready = false;
+                    break;
+                case 1:
+                    enemy2ATB = 0;
+                    enemy2ATBGuage.value = enemy2ATB;
+                    enemy2Ready = false;
+                    break;
+                case 2:
+                    enemy3ATB = 0;
+                    enemy3ATBGuage.value = enemy3ATB;
+                    enemy3Ready = false;
+                    break;
+                case 3:
+                    enemy4ATB = 0;
+                    enemy4ATBGuage.value = enemy4ATB;
+                    enemy4Ready = false;
+                    break;
+            }
+
             Vector3 targetPos = Vector3.MoveTowards(enemies[index].gameObject.transform.position, enemies[randTarget].transform.position, 6 * Time.deltaTime);
 
             enemies[index].GetComponent<Rigidbody2D>().MovePosition(targetPos);
@@ -2923,51 +2513,7 @@ public class BattleSystem : MonoBehaviour
 
             if (enemyAtBattlePos && !enemyAttacking)
             {
-                if (enemies[index].GetComponent<EnemyMovement>() != null)
-                {
-                    enemies[index].GetComponent<EnemyMovement>().enabled = true;
-                }
-
-                enemyMoving = false;
-
-                /*  switch (index)
-                  {
-                      case 0:
-                          char1ATB = 0;
-                          break;
-                      case 1:
-                          char2ATB = 0;
-                          break;
-                      case 2:
-                          char3ATB = 0;
-                          break;
-                  }*/
-
-                //ActiveCheckNext();
-                if (Engine.e.battleModeActive)
-                {
-                    state = currentState;
-
-                    if (currentState == BattleState.ATBCHECK)
-                    {
-                        dialogueText.text = string.Empty;
-                    }
-                    if (currentState == BattleState.CHAR1TURN)
-                    {
-                        dialogueText.text = string.Empty;
-                        dialogueText.text = activeParty.activeParty[0].GetComponent<Character>().characterName;
-                    }
-                    if (currentState == BattleState.CHAR2TURN)
-                    {
-                        dialogueText.text = string.Empty;
-                        dialogueText.text = activeParty.activeParty[1].GetComponent<Character>().characterName;
-                    }
-                    if (currentState == BattleState.CHAR3TURN)
-                    {
-                        dialogueText.text = string.Empty;
-                        dialogueText.text = activeParty.activeParty[2].GetComponent<Character>().characterName;
-                    }
-                }
+                EndTurn();
 
                 yield return new WaitForSeconds(0.3f);
 
@@ -3002,115 +2548,9 @@ public class BattleSystem : MonoBehaviour
                 state = BattleState.ATBCHECK;
         }
 
-        //   ActiveCheckNext();
-        if (Engine.e.battleModeActive)
-        {
-            //state = BattleState.ATBCHECK;
-            if (currentInQueue == BattleState.CONFCHAR1)
-            {
-                char1ATB = 0;
-            }
-            if (currentInQueue == BattleState.CONFCHAR2)
-            {
-                char2ATB = 0;
-            }
-            if (currentInQueue == BattleState.CONFCHAR3)
-            {
-                char3ATB = 0;
-            }
-
-            if (currentInQueue == BattleState.ENEMY1TURN)
-            {
-                enemy1ATB = 0;
-                if (enemies[0].GetComponent<EnemyMovement>() != null)
-                {
-                    enemies[0].GetComponent<EnemyMovement>().enabled = true;
-                }
-            }
-            if (currentInQueue == BattleState.ENEMY2TURN)
-            {
-                enemy2ATB = 0;
-                if (enemies[1].GetComponent<EnemyMovement>() != null)
-                {
-                    enemies[1].GetComponent<EnemyMovement>().enabled = true;
-                }
-            }
-            if (currentInQueue == BattleState.ENEMY3TURN)
-            {
-                enemy3ATB = 0;
-                if (enemies[2].GetComponent<EnemyMovement>() != null)
-                {
-                    enemies[2].GetComponent<EnemyMovement>().enabled = true;
-                }
-            }
-            if (currentInQueue == BattleState.ENEMY4TURN)
-            {
-                enemy4ATB = 0;
-                if (enemies[3].GetComponent<EnemyMovement>() != null)
-                {
-                    enemies[3].GetComponent<EnemyMovement>().enabled = true;
-                }
-            }
-        }
-        /*state = currentState;
-
-        if (currentState == BattleState.ATBCHECK)
-        {
-            dialogueText.text = string.Empty;
-        }
-
-        if (currentState == BattleState.CHAR1TURN)
-        {
-            if (activeParty.activeParty[0].GetComponent<Character>().isConfused)
-            {
-                dialogueText.text = string.Empty;
-                state = BattleState.ATBCHECK;
-            }
-            else
-            {
-                dialogueText.text = string.Empty;
-                dialogueText.text = activeParty.activeParty[0].GetComponent<Character>().characterName;
-            }
-        }
-        if (currentState == BattleState.CHAR2TURN)
-        {
-            if (activeParty.activeParty[1].GetComponent<Character>().isConfused)
-            {
-                dialogueText.text = string.Empty;
-                state = BattleState.ATBCHECK;
-            }
-            else
-            {
-                dialogueText.text = string.Empty;
-                dialogueText.text = activeParty.activeParty[1].GetComponent<Character>().characterName;
-            }
-        }
-        if (currentState == BattleState.CHAR3TURN)
-        {
-            if (activeParty.activeParty[2].GetComponent<Character>().isConfused)
-            {
-                dialogueText.text = string.Empty;
-                state = BattleState.ATBCHECK;
-            }
-            else
-            {
-                dialogueText.text = string.Empty;
-                dialogueText.text = activeParty.activeParty[2].GetComponent<Character>().characterName;
-            }
-        }
-    }*/
         if (!dropExists && !enemyAttackDrop)
         {
-            battleQueue.Dequeue();
-
-            if (battleQueue.Count > 0)
-            {
-                currentInQueue = battleQueue.Peek();
-            }
-            else
-            {
-                currentInQueue = BattleState.ATBCHECK;
-            }
+            EndTurn();
             yield return new WaitForSeconds(0.3f);
 
             if (isDead)
@@ -3133,22 +2573,30 @@ public class BattleSystem : MonoBehaviour
     IEnumerator EnemyConfuseAttack()
     {
         int index = 0;
+        int randTarget = 0;
 
         if (currentInQueue == BattleState.ENEMY1TURN)
         {
             index = 0;
+            randTarget = enemy1AttackTarget;
         }
         if (currentInQueue == BattleState.ENEMY2TURN)
         {
             index = 1;
+            randTarget = enemy2AttackTarget;
+
         }
         if (currentInQueue == BattleState.ENEMY3TURN)
         {
             index = 2;
+            randTarget = enemy3AttackTarget;
+
         }
         if (currentInQueue == BattleState.ENEMY4TURN)
         {
             index = 3;
+            randTarget = enemy4AttackTarget;
+
         }
 
         yield return new WaitForSeconds(0.3f);
@@ -3167,14 +2615,16 @@ public class BattleSystem : MonoBehaviour
                 enemyMoving = true;
                 enemyAttacking = true;
 
-                if (teamTargetChoice == 0)
+                if (!attackingTeam)
                 {
+
                     Engine.e.PhysicalDamageCalculation(randTarget, enemies[index].gameObject.GetComponent<Enemy>().damage);
                 }
                 else
                 {
                     if (enemies[randTarget] != null)
                     {
+
                         enemies[randTarget].GetComponent<Enemy>().TakePhysicalDamage(randTarget, enemies[index].GetComponent<Enemy>().damageTotal, enemies[index].GetComponent<Enemy>().hitChance);
                     }
                 }
@@ -3192,7 +2642,7 @@ public class BattleSystem : MonoBehaviour
 
                     lastDropChoice = enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice];
 
-                    if (teamTargetChoice == 0)
+                    if (!attackingTeam)
                     {
                         if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Fire")
                         {
@@ -3274,22 +2724,9 @@ public class BattleSystem : MonoBehaviour
                             Instantiate(iceDropAnim, enemies[index].transform.position, Quaternion.identity);
                         }
 
-                        if (enemies[target] != null)
-                        {
-                            enemies[target].GetComponent<Enemy>().ConfuseTakeDropDamage(randTarget, enemies[index].GetComponent<Enemy>().drops[enemyDropChoice]);
-                        }
-                        if (currentInQueue == BattleState.CHAR1TURN)
-                        {
-                            char1ATB = 0;
-                        }
-                        if (currentInQueue == BattleState.CHAR2TURN)
-                        {
-                            char2ATB = 0;
-                        }
-                        if (currentInQueue == BattleState.CHAR3TURN)
-                        {
-                            char3ATB = 0;
-                        }
+
+                        enemies[randTarget].GetComponent<Enemy>().ConfuseTakeDropDamage(randTarget, enemies[index].GetComponent<Enemy>().drops[enemyDropChoice]);
+
 
                         if (currentInQueue == BattleState.ENEMY1TURN)
                         {
@@ -3307,33 +2744,12 @@ public class BattleSystem : MonoBehaviour
                         {
                             enemy4ATB = 0;
                         }
+
                         enemies[index].GetComponent<Enemy>().mana -= enemies[index].GetComponent<Enemy>().drops[enemyDropChoice].dropCost;
 
                         if (enemies[index].GetComponent<EnemyMovement>() != null)
                         {
                             enemies[index].GetComponent<EnemyMovement>().enabled = true;
-                        }
-
-                        if (enemies[index].GetComponent<Enemy>().isConfused)
-                        {
-                            enemies[index].GetComponent<Enemy>().confuseTimer++;
-                            if (enemies[index].GetComponent<Enemy>().confuseTimer == 3)
-                            {
-                                enemies[index].GetComponent<Enemy>().isConfused = false;
-                                enemies[index].GetComponent<Enemy>().confuseTimer = 0;
-                            }
-                        }
-
-                        if (enemies[index].GetComponent<Enemy>().isPoisoned)
-                        {
-                            enemies[index].GetComponent<Enemy>().TakePoisonDamage(index, enemies[index].GetComponent<Enemy>().poisonDmg);
-
-
-                        }
-
-                        if (enemies[index].GetComponent<Enemy>().deathInflicted)
-                        {
-                            enemies[index].GetComponent<Enemy>().TakeDeathDamage();
                         }
                     }
                 }
@@ -3356,123 +2772,13 @@ public class BattleSystem : MonoBehaviour
         {
             enemyMoving = true;
             enemyAttacking = true;
-            if (teamTargetChoice == 0)
+            if (!attackingTeam)
             {
                 Engine.e.PhysicalDamageCalculation(randTarget, enemies[index].gameObject.GetComponent<Enemy>().damage);
             }
             else
             {
                 enemies[randTarget].GetComponent<Enemy>().TakePhysicalDamage(randTarget, enemies[index].GetComponent<Enemy>().damageTotal, enemies[index].GetComponent<Enemy>().hitChance);
-            }
-        }
-        confuseAttack = false;
-        if (enemies[index].GetComponent<Enemy>().isConfused)
-        {
-            enemies[index].GetComponent<Enemy>().confuseTimer++;
-            if (enemies[index].GetComponent<Enemy>().confuseTimer == 3)
-            {
-                enemies[index].GetComponent<Enemy>().isConfused = false;
-                enemies[index].GetComponent<Enemy>().confuseTimer = 0;
-            }
-        }
-
-        if (enemies[index].GetComponent<Enemy>().isPoisoned)
-        {
-            enemies[index].GetComponent<Enemy>().TakePoisonDamage(index, enemies[index].GetComponent<Enemy>().poisonDmg);
-
-
-        }
-
-        if (enemies[index].GetComponent<Enemy>().deathInflicted)
-        {
-            enemies[index].GetComponent<Enemy>().TakeDeathDamage();
-        }
-        if (enemies[index].gameObject.GetComponent<Enemy>().health <= 0)
-        {
-            enemies[index].gameObject.GetComponent<Enemy>().health = 0;
-
-            isDead = EnemyGroup.enemyGroup.CheckEndBattle();
-
-            if (isDead)
-            {
-                state = BattleState.LEVELUPCHECK;
-                yield return new WaitForSeconds(2f);
-                StartCoroutine(LevelUpCheck());
-            }
-        }
-        if (state == BattleState.CONFCHAR1)
-        {
-            char1ATB = 0;
-        }
-        if (state == BattleState.CONFCHAR2)
-        {
-            char2ATB = 0;
-        }
-        if (state == BattleState.CONFCHAR3)
-        {
-            char3ATB = 0;
-        }
-
-        if (state == BattleState.ENEMY1TURN)
-        {
-            enemy1ATB = 0;
-        }
-        if (state == BattleState.ENEMY2TURN)
-        {
-            enemy2ATB = 0;
-        }
-        if (state == BattleState.ENEMY3TURN)
-        {
-            enemy3ATB = 0;
-        }
-        if (state == BattleState.ENEMY4TURN)
-        {
-            enemy4ATB = 0;
-        }
-        state = currentState;
-
-        if (currentState == BattleState.ATBCHECK)
-        {
-            dialogueText.text = string.Empty;
-        }
-
-        if (currentState == BattleState.CHAR1TURN)
-        {
-            if (activeParty.activeParty[0].GetComponent<Character>().isConfused)
-            {
-                dialogueText.text = string.Empty;
-                state = BattleState.ATBCHECK;
-            }
-            else
-            {
-                dialogueText.text = string.Empty;
-                dialogueText.text = activeParty.activeParty[0].GetComponent<Character>().characterName;
-            }
-        }
-        if (currentState == BattleState.CHAR2TURN)
-        {
-            if (activeParty.activeParty[1].GetComponent<Character>().isConfused)
-            {
-                dialogueText.text = string.Empty;
-                state = BattleState.ATBCHECK;
-            }
-            else
-            {
-                dialogueText.text = string.Empty;
-                dialogueText.text = activeParty.activeParty[1].GetComponent<Character>().characterName;
-            }
-        }
-        if (currentState == BattleState.CHAR3TURN)
-        {
-            if (activeParty.activeParty[2].GetComponent<Character>().isConfused)
-            {
-                dialogueText.text = string.Empty;
-                state = BattleState.ATBCHECK;
-            }
-            else
-            {
-                dialogueText.text = string.Empty;
-                dialogueText.text = activeParty.activeParty[2].GetComponent<Character>().characterName;
             }
         }
     }
@@ -3505,8 +2811,8 @@ public class BattleSystem : MonoBehaviour
             }
             enemyGroup.GroupItemDrops();
 
-            Engine.e.enemyPanel.SetActive(false);
-            Engine.e.enemyLootPanelReference.SetActive(true);
+            Engine.e.battleSystem.enemyPanel.SetActive(false);
+            Engine.e.battleSystem.enemyLootPanelReference.SetActive(true);
             Engine.e.GiveExperiencePoints(enemyGroupExperiencePoints);
             if (Engine.e.char1LevelUp == true || Engine.e.char2LevelUp == true || Engine.e.char3LevelUp == true)
             {
@@ -3558,9 +2864,9 @@ public class BattleSystem : MonoBehaviour
             dialogueText.text = "Victory.";
 
             Engine.e.battleMenu.battleMenuUI.SetActive(false);
-            Engine.e.enemyLootPanelReference.SetActive(false);
-            Engine.e.enemyPanel.SetActive(true);
-            Engine.e.enemyLootReference.GetComponent<TMP_Text>().text = string.Empty;
+            Engine.e.battleSystem.enemyLootPanelReference.SetActive(false);
+            Engine.e.battleSystem.enemyPanel.SetActive(true);
+            Engine.e.battleSystem.enemyLootReference.GetComponent<TMP_Text>().text = string.Empty;
             Engine.e.inBattle = false;
             Engine.e.storeDialogueReference.gameObject.SetActive(true);
 
@@ -3616,18 +2922,18 @@ public class BattleSystem : MonoBehaviour
         {
             if (Engine.e.char1LevelUp == true)
             {
-                Engine.e.char1Panel.SetActive(false);
-                Engine.e.char1LevelUpPanel.SetActive(true);
+                char1BattlePanel.SetActive(false);
+                char1LevelUpPanel.SetActive(true);
             }
             if (Engine.e.char2LevelUp == true)
             {
-                Engine.e.char2Panel.SetActive(false);
-                Engine.e.char2LevelUpPanel.SetActive(true);
+                char1BattlePanel.SetActive(false);
+                char2LevelUpPanel.SetActive(true);
             }
             if (Engine.e.char3LevelUp == true)
             {
-                Engine.e.char3Panel.SetActive(false);
-                Engine.e.char3LevelUpPanel.SetActive(true);
+                char1BattlePanel.SetActive(false);
+                char3LevelUpPanel.SetActive(true);
             }
         }
 
@@ -3635,19 +2941,19 @@ public class BattleSystem : MonoBehaviour
 
         yield return new WaitForSeconds(7f);
 
-        Engine.e.char1LevelUpPanel.SetActive(false);
-        Engine.e.char2LevelUpPanel.SetActive(false);
-        Engine.e.char3LevelUpPanel.SetActive(false);
+        char1LevelUpPanel.SetActive(false);
+        char2LevelUpPanel.SetActive(false);
+        char3LevelUpPanel.SetActive(false);
 
-        Engine.e.char1Panel.SetActive(true);
+        char1BattlePanel.SetActive(true);
 
         if (activeParty.activeParty[1] != null)
         {
-            Engine.e.char2Panel.SetActive(true);
+            char2BattlePanel.SetActive(true);
         }
         if (activeParty.activeParty[2] != null)
         {
-            Engine.e.char3Panel.SetActive(true);
+            char3BattlePanel.SetActive(true);
         }
 
         state = BattleState.WON;
@@ -3660,7 +2966,7 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.CHAR1TURN;
 
 
-        dialogueText.text = Engine.e.activeParty.activeParty[0].gameObject.GetComponent<Character>().characterName;
+        //    dialogueText.text = Engine.e.activeParty.activeParty[0].gameObject.GetComponent<Character>().characterName;
 
 
         ActivateChar1MenuButtons();
@@ -3731,7 +3037,7 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.CHAR2TURN;
 
 
-        dialogueText.text = Engine.e.activeParty.activeParty[1].gameObject.GetComponent<Character>().characterName;
+        //   dialogueText.text = Engine.e.activeParty.activeParty[1].gameObject.GetComponent<Character>().characterName;
 
 
         ActivateChar2MenuButtons();
@@ -3801,7 +3107,7 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.CHAR3TURN;
 
 
-        dialogueText.text = Engine.e.activeParty.activeParty[2].gameObject.GetComponent<Character>().characterName;
+        // dialogueText.text = Engine.e.activeParty.activeParty[2].gameObject.GetComponent<Character>().characterName;
 
 
         ActivateChar3MenuButtons();
@@ -3870,8 +3176,8 @@ public class BattleSystem : MonoBehaviour
 
         //DisableButtonInteraction();
         partyCheckNext = false;
-        dialogueText.text = string.Empty;
-        dialogueText.text = enemies[0].GetComponent<Enemy>().enemyName;
+        //dialogueText.text = string.Empty;
+        // dialogueText.text = enemies[0].GetComponent<Enemy>().enemyName;
 
         if (!enemies[0].GetComponent<Enemy>().isConfused)
         {
@@ -3894,8 +3200,8 @@ public class BattleSystem : MonoBehaviour
             enemies[1].GetComponent<EnemyMovement>().enabled = false;
         }
 
-        dialogueText.text = string.Empty;
-        dialogueText.text = enemies[1].GetComponent<Enemy>().enemyName;
+        //dialogueText.text = string.Empty;
+        // dialogueText.text = enemies[1].GetComponent<Enemy>().enemyName;
         partyCheckNext = false;
 
         if (!enemies[1].GetComponent<Enemy>().isConfused)
@@ -3919,8 +3225,8 @@ public class BattleSystem : MonoBehaviour
             enemies[2].GetComponent<EnemyMovement>().enabled = false;
         }
 
-        dialogueText.text = string.Empty;
-        dialogueText.text = enemies[2].GetComponent<Enemy>().enemyName;
+        //  dialogueText.text = string.Empty;
+        // dialogueText.text = enemies[2].GetComponent<Enemy>().enemyName;
         partyCheckNext = false;
 
         if (!enemies[2].GetComponent<Enemy>().isConfused)
@@ -3944,8 +3250,8 @@ public class BattleSystem : MonoBehaviour
             enemies[3].GetComponent<EnemyMovement>().enabled = false;
         }
 
-        dialogueText.text = string.Empty;
-        dialogueText.text = enemies[3].GetComponent<Enemy>().enemyName;
+        // dialogueText.text = string.Empty;
+        // dialogueText.text = enemies[3].GetComponent<Enemy>().enemyName;
         if (!enemies[3].GetComponent<Enemy>().isConfused)
         {
             StartCoroutine(EnemyAttack());
@@ -3970,6 +3276,7 @@ public class BattleSystem : MonoBehaviour
             teamTargetChoice = Random.Range(0, 2);
             int index = 0;
             bool partyAttacking = false;
+            int randTarget = 0;
 
             //if (state == BattleState.CHAR1TURN)
             //{
@@ -4008,37 +3315,107 @@ public class BattleSystem : MonoBehaviour
                 index = 3;
             }
 
-            if (partyAttacking)
+            if (partyAttacking) // Team is attacking
             {
-                if (teamTargetChoice == 0)
+                if (teamTargetChoice == 0) // Team is attacking themselves
                 {
-                    randTarget = Engine.e.GetRandomRemainingPartyMember();
-                    target = randTarget;
+                    if (currentInQueue == BattleState.CONFCHAR1)
+                    {
+                        char1AttackTarget = Engine.e.GetRandomRemainingPartyMember();
+                        randTarget = char1AttackTarget;
+                    }
+                    if (currentInQueue == BattleState.CONFCHAR2)
+                    {
+                        char2AttackTarget = Engine.e.GetRandomRemainingPartyMember();
+                        randTarget = char2AttackTarget;
+                    }
+                    if (currentInQueue == BattleState.CONFCHAR3)
+                    {
+                        char3AttackTarget = Engine.e.GetRandomRemainingPartyMember();
+                        randTarget = char3AttackTarget;
+                    }
+
                     Engine.e.PhysicalDamageCalculation(randTarget, Engine.e.activeParty.activeParty[index].GetComponent<Character>().physicalDamage);
                     attackingTeam = true;
+
                 }
                 else
                 {
-                    randTarget = enemyGroup.GetRandomRemainingEnemy();
-                    target = randTarget;
-
+                    if (currentInQueue == BattleState.CONFCHAR1)
+                    {
+                        char1AttackTarget = enemyGroup.GetRandomRemainingEnemy();
+                        randTarget = char1AttackTarget;
+                    }
+                    if (currentInQueue == BattleState.CONFCHAR2)
+                    {
+                        char2AttackTarget = enemyGroup.GetRandomRemainingEnemy();
+                        randTarget = char2AttackTarget;
+                    }
+                    if (currentInQueue == BattleState.CONFCHAR3)
+                    {
+                        char3AttackTarget = enemyGroup.GetRandomRemainingEnemy();
+                        randTarget = char3AttackTarget;
+                    }
                 }
 
                 Debug.Log("Team Choice: " + teamTargetChoice + " Index: " + randTarget);
                 StartCoroutine(CharConfuseAttack());
-            }
+            }   // Enemy is attacking
             else
             {
-                if (teamTargetChoice == 0)
+
+                if (teamTargetChoice == 0) // Enemy is attacking Team
                 {
-                    randTarget = Engine.e.GetRandomRemainingPartyMember();
-                    target = randTarget;
+                    if (currentInQueue == BattleState.ENEMY1TURN)
+                    {
+                        enemy1AttackTarget = Engine.e.GetRandomRemainingPartyMember();
+                        randTarget = enemy1AttackTarget;
+                    }
+                    if (currentInQueue == BattleState.ENEMY2TURN)
+                    {
+                        enemy2AttackTarget = Engine.e.GetRandomRemainingPartyMember();
+                        randTarget = enemy2AttackTarget;
+
+                    }
+                    if (currentInQueue == BattleState.ENEMY3TURN)
+                    {
+                        enemy3AttackTarget = Engine.e.GetRandomRemainingPartyMember();
+                        randTarget = enemy3AttackTarget;
+
+                    }
+                    if (currentInQueue == BattleState.ENEMY4TURN)
+                    {
+                        enemy4AttackTarget = Engine.e.GetRandomRemainingPartyMember();
+                        randTarget = enemy4AttackTarget;
+                    }
+
                     Engine.e.PhysicalDamageCalculation(randTarget, enemies[index].GetComponent<Enemy>().damage);
-                }
+                }   // Enemy is attacking themeselves
                 else
                 {
-                    randTarget = enemyGroup.GetRandomRemainingEnemy();
-                    target = randTarget;
+                    if (currentInQueue == BattleState.ENEMY1TURN)
+                    {
+                        enemy1AttackTarget = enemyGroup.GetRandomRemainingEnemy();
+                        randTarget = enemy1AttackTarget;
+                    }
+                    if (currentInQueue == BattleState.ENEMY2TURN)
+                    {
+                        enemy2AttackTarget = enemyGroup.GetRandomRemainingEnemy();
+                        randTarget = enemy2AttackTarget;
+
+                    }
+                    if (currentInQueue == BattleState.ENEMY3TURN)
+                    {
+                        enemy3AttackTarget = enemyGroup.GetRandomRemainingEnemy();
+                        randTarget = enemy3AttackTarget;
+
+                    }
+                    if (currentInQueue == BattleState.ENEMY4TURN)
+                    {
+                        enemy4AttackTarget = enemyGroup.GetRandomRemainingEnemy();
+                        randTarget = enemy4AttackTarget;
+
+                    }
                     attackingTeam = true;
 
                 }
@@ -4986,20 +4363,20 @@ public class BattleSystem : MonoBehaviour
 
     public void ActivateSupportButtons()
     {
-        Engine.e.enemyPanel.SetActive(true);
+        Engine.e.battleSystem.enemyPanel.SetActive(true);
 
         dropsListReference.SetActive(false);
-        Engine.e.char1BattlePanel.SetActive(true);
+        char1BattlePanel.SetActive(true);
         DeactivateChar1MenuButtons();
         if (Engine.e.activeParty.activeParty[1] != null)
         {
-            Engine.e.char2BattlePanel.SetActive(true);
+            char2BattlePanel.SetActive(true);
             DeactivateChar2MenuButtons();
 
         }
         if (Engine.e.activeParty.activeParty[2] != null)
         {
-            Engine.e.char3BattlePanel.SetActive(true);
+            char3BattlePanel.SetActive(true);
             DeactivateChar3MenuButtons();
 
         }
@@ -5078,17 +4455,17 @@ public class BattleSystem : MonoBehaviour
 
     public void DeactivateSkillsUI()
     {
-        Engine.e.char1BattlePanel.SetActive(true);
+        char1BattlePanel.SetActive(true);
 
         if (Engine.e.activeParty.activeParty[1] != null)
         {
             {
-                Engine.e.char2BattlePanel.SetActive(true);
+                char2BattlePanel.SetActive(true);
             }
         }
         if (Engine.e.activeParty.activeParty[2] != null)
         {
-            Engine.e.char3BattlePanel.SetActive(true);
+            char3BattlePanel.SetActive(true);
         }
         skillListReference.SetActive(false);
         for (int i = 0; i < Engine.e.gameSkills.Length; i++)
@@ -5174,7 +4551,7 @@ public class BattleSystem : MonoBehaviour
             // {
             if (Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana >= dropChoice.dropCost)
             {
-                Engine.e.enemyPanel.SetActive(true);
+                Engine.e.battleSystem.enemyPanel.SetActive(true);
 
                 Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Character>().UseDrop(dropChoice);
                 lastDropChoice = dropChoice;
@@ -6049,6 +5426,203 @@ public class BattleSystem : MonoBehaviour
 
     }
 
+    public void EndTurn()
+    {
+        charMoving = false;
+        physicalAttack = false;
+        skillPhysicalAttack = false;
+        skillRangedAttack = false;
+        dropAttack = false;
+        charUsingSkill = false;
+        targetCheck = false;
+        attackingTeam = false;
+
+        GameObject characterAttacking = null;
+        int index = 0;
+
+        if (partyTurn)
+        {
+            partyTurn = false;
+
+            if (currentInQueue == BattleState.CHAR1TURN || currentInQueue == BattleState.CONFCHAR1)
+            {
+                index = 0;
+                characterAttacking = Engine.e.activeParty.gameObject;
+
+                char1Attacking = false;
+                char1ConfusedReady = false;
+                char1DropAttack = false;
+                char1PhysicalAttack = false;
+                char1Ready = false;
+                char1SkillAttack = false;
+                char1SkillPhysicalAttack = false;
+                char1SkillRangedAttack = false;
+                char1Supporting = false;
+                char1UsingItem = false;
+                char1Switching = false;
+
+                char1ATB = 0;
+                char1ATBGuage.value = char1ATB;
+            }
+
+            if (currentInQueue == BattleState.CHAR2TURN || currentInQueue == BattleState.CONFCHAR2)
+            {
+                index = 1;
+                characterAttacking = Engine.e.activePartyMember2.gameObject;
+
+                char2Attacking = false;
+                char2ConfusedReady = false;
+                char2DropAttack = false;
+                char2PhysicalAttack = false;
+                char2Ready = false;
+                char2SkillAttack = false;
+                char2SkillPhysicalAttack = false;
+                char2SkillRangedAttack = false;
+                char2Supporting = false;
+                char2UsingItem = false;
+                char2Switching = false;
+
+                char2ATB = 0;
+                char2ATBGuage.value = char1ATB;
+            }
+
+            if (currentInQueue == BattleState.CHAR3TURN || currentInQueue == BattleState.CONFCHAR3)
+            {
+                index = 2;
+                characterAttacking = Engine.e.activePartyMember3.gameObject;
+
+                char3Attacking = false;
+                char3ConfusedReady = false;
+                char3DropAttack = false;
+                char3PhysicalAttack = false;
+                char3Ready = false;
+                char3SkillAttack = false;
+                char3SkillPhysicalAttack = false;
+                char3SkillRangedAttack = false;
+                char3Supporting = false;
+                char3UsingItem = false;
+                char3Switching = false;
+
+                char3ATB = 0;
+                char3ATBGuage.value = char3ATB;
+            }
+
+            if (activeParty.activeParty[index].GetComponent<Character>().isPoisoned)
+            {
+                GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, characterAttacking.transform.position, Quaternion.identity);
+
+                isDead = Engine.e.TakePoisonDamage(currentIndex, activeParty.activeParty[index].GetComponent<Character>().poisonDmg);
+
+                dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = activeParty.activeParty[index].GetComponent<Character>().poisonDmg.ToString();
+                Destroy(dmgPopup, 1f);
+            }
+
+            if (activeParty.activeParty[index].GetComponent<Character>().deathInflicted)
+            {
+                isDead = activeParty.activeParty[index].GetComponent<Character>().TakeDeathDamage(index);
+            }
+
+            if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().currentHealth <= 0)
+            {
+                Engine.e.activeParty.activeParty[index].GetComponent<Character>().currentHealth = 0;
+
+                if (isDead)
+                {
+                    state = BattleState.LOST;
+                    StartCoroutine(EndBattle());
+                }
+            }
+
+            if (activeParty.activeParty[index].GetComponent<Character>().isConfused)
+            {
+                confuseAttack = false;
+                Debug.Log("Adding confuse timer");
+                activeParty.activeParty[index].GetComponent<Character>().confuseTimer++;
+                if (activeParty.activeParty[index].GetComponent<Character>().confuseTimer == 3)
+                {
+                    activeParty.activeParty[index].GetComponent<Character>().isConfused = false;
+                    activeParty.activeParty[index].GetComponent<Character>().inflicted = false;
+                    activeParty.activeParty[index].GetComponent<Character>().confuseTimer = 0;
+                }
+            }
+        }
+        else
+        {
+            if (currentInQueue == BattleState.ENEMY1TURN)
+            {
+                index = 0;
+
+                enemy1Ready = false;
+                enemy1ATB = 0;
+                enemy1ATBGuage.value = enemy1ATB;
+            }
+            if (currentInQueue == BattleState.ENEMY2TURN)
+            {
+                index = 1;
+
+                enemy2Ready = false;
+                enemy2ATB = 0;
+                enemy2ATBGuage.value = enemy2ATB;
+            }
+            if (currentInQueue == BattleState.ENEMY3TURN)
+            {
+                index = 2;
+
+                enemy3Ready = false;
+                enemy3ATB = 0;
+                enemy3ATBGuage.value = enemy3ATB;
+            }
+            if (currentInQueue == BattleState.ENEMY4TURN)
+            {
+                index = 3;
+
+                enemy4Ready = false;
+                enemy4ATB = 0;
+                enemy4ATBGuage.value = enemy4ATB;
+            }
+
+            if (enemies[index].GetComponent<Enemy>().isConfused)
+            {
+                enemies[index].GetComponent<Enemy>().confuseTimer++;
+                if (enemies[index].GetComponent<Enemy>().confuseTimer == 3)
+                {
+                    enemies[index].GetComponent<Enemy>().isConfused = false;
+                    enemies[index].GetComponent<Enemy>().confuseTimer = 0;
+                }
+            }
+
+            if (enemies[index].GetComponent<Enemy>().isPoisoned)
+            {
+                enemies[index].GetComponent<Enemy>().TakePoisonDamage(index, enemies[index].GetComponent<Enemy>().poisonDmg);
+
+
+            }
+
+            if (enemies[index].GetComponent<Enemy>().deathInflicted)
+            {
+                enemies[index].GetComponent<Enemy>().TakeDeathDamage();
+            }
+            if (enemies[index].GetComponent<EnemyMovement>() != null)
+            {
+                enemies[index].GetComponent<EnemyMovement>().enabled = true;
+            }
+        }
+
+
+        battleQueue.Dequeue();
+
+        if (battleQueue.Count > 0)
+        {
+            currentInQueue = battleQueue.Peek();
+        }
+        else
+        {
+            currentInQueue = BattleState.ATBCHECK;
+        }
+
+        // currentInQueue = BattleState.QUEUECHECK;
+    }
+
     public void ResetPartyMemberStats()
     {
 
@@ -6301,7 +5875,7 @@ public class BattleSystem : MonoBehaviour
 
     public void DisableBattleMenus()
     {
-        Engine.e.enemyPanel.SetActive(true);
+        Engine.e.battleSystem.enemyPanel.SetActive(true);
         inBattleMenu = false;
 
         DeactivateTargetSprite();
@@ -6317,6 +5891,56 @@ public class BattleSystem : MonoBehaviour
     private void Update()
     {
         ChangeCharState();
+
+        if (state == BattleState.CHAR1TURN)
+        {
+            dialogueText.text = activeParty.activeParty[0].GetComponent<Character>().characterName;
+        }
+        if (state == BattleState.CHAR2TURN)
+        {
+            dialogueText.text = activeParty.activeParty[1].GetComponent<Character>().characterName;
+        }
+        if (state == BattleState.CHAR3TURN)
+        {
+            dialogueText.text = activeParty.activeParty[2].GetComponent<Character>().characterName;
+        }
+
+        if (state == BattleState.ATBCHECK)
+        {
+            // if (currentInQueue == BattleState.QUEUECHECK || currentInQueue == BattleState.ATBCHECK)
+            //  {
+            dialogueText.text = string.Empty;
+            // }
+            if (currentInQueue == BattleState.CHAR1TURN || currentInQueue == BattleState.CONFCHAR1)
+            {
+                dialogueText.text = activeParty.activeParty[0].GetComponent<Character>().characterName;
+            }
+            if (currentInQueue == BattleState.CHAR2TURN || currentInQueue == BattleState.CONFCHAR2)
+            {
+                dialogueText.text = activeParty.activeParty[1].GetComponent<Character>().characterName;
+            }
+            if (currentInQueue == BattleState.CHAR3TURN || currentInQueue == BattleState.CONFCHAR3)
+            {
+                dialogueText.text = activeParty.activeParty[2].GetComponent<Character>().characterName;
+            }
+
+            if (currentInQueue == BattleState.ENEMY1TURN)
+            {
+                dialogueText.text = enemies[0].GetComponent<Enemy>().name;
+            }
+            if (currentInQueue == BattleState.ENEMY2TURN)
+            {
+                dialogueText.text = enemies[1].GetComponent<Enemy>().name;
+            }
+            if (currentInQueue == BattleState.ENEMY3TURN)
+            {
+                dialogueText.text = enemies[2].GetComponent<Enemy>().name;
+            }
+            if (currentInQueue == BattleState.ENEMY4TURN)
+            {
+                dialogueText.text = enemies[3].GetComponent<Enemy>().name;
+            }
+        }
 
         if (Engine.e.battleModeActive)
         {

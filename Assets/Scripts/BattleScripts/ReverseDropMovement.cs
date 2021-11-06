@@ -9,13 +9,29 @@ public class ReverseDropMovement : MonoBehaviour
     public Rigidbody2D rb;
     public GameObject drop;
     bool dmgPopupDisplay = false;
+    int enemyTarget = 0;
+
     // Start is called before the first frame update
     void Awake()
     {
 
+        if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR1TURN)
+        {
+            enemyTarget = Engine.e.battleSystem.char1AttackTarget;
+        }
+        if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR2TURN)
+        {
+            enemyTarget = Engine.e.battleSystem.char2AttackTarget;
+
+        }
+        if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR3TURN)
+        {
+            enemyTarget = Engine.e.battleSystem.char3AttackTarget;
+
+        }
+
         Engine.e.battleSystem.dropExists = true;
-        Engine.e.battleSystem.enemies[Engine.e.battleSystem.target].GetComponent<SpriteRenderer>().color = GetComponent<SpriteRenderer>().color;
-        GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.battleSystem.enemies[Engine.e.battleSystem.target].transform.position, Quaternion.identity);
+        GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.battleSystem.enemies[enemyTarget].transform.position, Quaternion.identity);
         dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = Engine.e.battleSystem.skillBoostTotal.ToString();
         Destroy(dmgPopup, 1f);
 
@@ -55,38 +71,12 @@ public class ReverseDropMovement : MonoBehaviour
                 }
                 Destroy(dmgPopup, 1f);
             }
-            Engine.e.battleSystem.hud.displayEnemyHealth[Engine.e.battleSystem.target].text = Engine.e.battleSystem.enemies[Engine.e.battleSystem.target].gameObject.GetComponent<Enemy>().health.ToString();
             GetComponent<ParticleSystem>().Emit(1);
-            Engine.e.battleSystem.enemies[Engine.e.battleSystem.target].GetComponent<SpriteRenderer>().color = GetComponent<SpriteRenderer>().color;
-
-            if (Engine.e.battleSystem.enemies[Engine.e.battleSystem.target].gameObject.GetComponent<Enemy>().health <= 0)
-            {
-                if (Engine.e.battleSystem.enemies[Engine.e.battleSystem.target].gameObject.GetComponent<EnemyMovement>())
-                {
-                    Engine.e.battleSystem.enemies[Engine.e.battleSystem.target].gameObject.GetComponent<EnemyMovement>().enabled = false;
-                }
-
-            }
 
             characterObjectSprite.color = GetComponent<SpriteRenderer>().color;
 
             yield return new WaitForSeconds(1.0f);
-            Engine.e.battleSystem.enemies[Engine.e.battleSystem.target].GetComponent<SpriteRenderer>().color = Color.white;
-            characterSprite.color = Color.white;
-            characterObjectSprite.color = Color.white;
 
-            if (Engine.e.battleSystem.enemies[Engine.e.battleSystem.target].gameObject.GetComponent<Enemy>().health <= 0)
-            {
-                if (Engine.e.battleSystem.enemies[Engine.e.battleSystem.target].gameObject.GetComponent<Light2D>())
-                {
-                    Engine.e.battleSystem.enemies[Engine.e.battleSystem.target].gameObject.GetComponent<Light2D>().enabled = false;
-                }
-
-                Engine.e.battleSystem.enemies[Engine.e.battleSystem.target].gameObject.GetComponent<SpriteRenderer>().enabled = false;
-
-                Engine.e.battleSystem.enemyUI[Engine.e.battleSystem.target].SetActive(false);
-            }
-            Engine.e.battleSystem.enemies[Engine.e.battleSystem.target].GetComponent<SpriteRenderer>().color = Color.white;
             Engine.e.battleSystem.mpRestore = false;
             Engine.e.battleSystem.dropExists = false;
 
