@@ -128,7 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Mac
   maxHealth: 80
-  currentHealth: 80
+  currentHealth: 71
   maxMana: 60
   currentMana: 60
   maxEnergy: 30
@@ -306,12 +306,12 @@ MonoBehaviour:
   chestArmor: {fileID: 3137854586391407116, guid: 552a109bd39414d8180a998df500f23e, type: 3}
   skillIndex: 5
   skillTotal: 1
-  isPoisoned: 1
+  isPoisoned: 0
   isAsleep: 0
-  isConfused: 1
+  isConfused: 0
   deathInflicted: 0
-  inflicted: 1
-  poisonDmg: 5
+  inflicted: 0
+  poisonDmg: 0
   sleepTimer: 0
   confuseTimer: 0
   deathTimer: 3

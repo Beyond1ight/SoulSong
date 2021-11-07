@@ -315,9 +315,9 @@ MonoBehaviour:
   skillTotal: 1
   isPoisoned: 0
   isAsleep: 0
-  isConfused: 1
+  isConfused: 0
   deathInflicted: 0
-  inflicted: 1
+  inflicted: 0
   poisonDmg: 0
   sleepTimer: 0
   confuseTimer: 0

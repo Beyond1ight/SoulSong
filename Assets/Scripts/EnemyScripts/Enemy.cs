@@ -90,11 +90,76 @@ public class Enemy : MonoBehaviour
 
     public void TakePhysicalDamage(int index, float _damage, float hitChance)
     {
+        float critChance = 2;
+
+        if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR1TURN || Engine.e.battleSystem.currentInQueue == BattleState.CONFCHAR1)
+        {
+            if (Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentHealth > (Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxHealth * 50 / 100))
+            {
+                critChance = Random.Range(0, 10);
+            }
+            if (Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentHealth > (Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxHealth * 40 / 100) &&
+            Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentHealth < (Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxHealth * 50 / 100))
+            {
+                critChance = Random.Range(0, 9);
+            }
+            if (Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentHealth > (Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxHealth * 25 / 100) &&
+          Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentHealth < (Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxHealth * 40 / 100))
+            {
+                critChance = Random.Range(0, 8);
+            }
+        }
+
+        if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR2TURN || Engine.e.battleSystem.currentInQueue == BattleState.CONFCHAR2)
+        {
+            if (Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentHealth > (Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxHealth * 50 / 100))
+            {
+                critChance = Random.Range(0, 10);
+            }
+            if (Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentHealth > (Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxHealth * 40 / 100) &&
+            Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentHealth < (Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxHealth * 50 / 100))
+            {
+                critChance = Random.Range(0, 9);
+            }
+            if (Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentHealth > (Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxHealth * 25 / 100) &&
+          Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentHealth < (Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxHealth * 40 / 100))
+            {
+                critChance = Random.Range(0, 8);
+            }
+        }
+
+        if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR3TURN || Engine.e.battleSystem.currentInQueue == BattleState.CONFCHAR3)
+        {
+            if (Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth > (Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxHealth * 50 / 100))
+            {
+                critChance = Random.Range(0, 10);
+            }
+            if (Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth > (Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxHealth * 40 / 100) &&
+            Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth < (Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxHealth * 50 / 100))
+            {
+                critChance = Random.Range(0, 9);
+            }
+            if (Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth > (Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxHealth * 25 / 100) &&
+          Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth < (Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxHealth * 40 / 100))
+            {
+                critChance = Random.Range(0, 8);
+            }
+        }
+
         float elementFireDamageBonus = 0;
         float elementWaterDamageBonus = 0;
         float elementLightningDamageBonus = 0;
         float elementShadowDamageBonus = 0;
         float elementIceDamageBonus = 0;
+
+        if (critChance == 0)
+        {
+            float critDamage = Mathf.Round((_damage + (_damage * (2 / 3))));
+            _damage = _damage + critDamage;
+        }
+
+        _damage = Random.Range(_damage, _damage + 5);
+
         float adjustedDodge = Mathf.Round(hitChance - dodgeChance);
         int hit = Random.Range(0, 99);
         int characterIndex = 0;

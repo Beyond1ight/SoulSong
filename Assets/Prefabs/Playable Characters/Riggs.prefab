@@ -101,7 +101,7 @@ MonoBehaviour:
   maxMana: 50
   currentMana: 50
   maxEnergy: 20
-  currentEnergy: 24
+  currentEnergy: 26
   healthCapped: 1
   manaCapped: 1
   energyCapped: 1

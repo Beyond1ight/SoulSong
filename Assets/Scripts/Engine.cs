@@ -2172,10 +2172,12 @@ public class Engine : MonoBehaviour
         return false;
     }
 
-    // Calculates how much Physical Damage a party member (index) recieves, typically in battle. Checks for various Defense ratings,
+    // Calculates how much Physical Damage a party member (index) recieves, typically in battle. Checks for Physical Defense rating,
     // as well as the overall Physical Damage the enemy is dealing (_dmg).
     public void PhysicalDamageCalculation(int index, float _dmg)
     {
+        float critChance = 2;
+
         if (activeParty.activeParty[index] != null)
         {
             if (activeParty.activeParty[index].GetComponent<Character>().currentHealth > 0)
@@ -2194,21 +2196,54 @@ public class Engine : MonoBehaviour
                 }
                 if (battleSystem.currentInQueue == BattleState.ENEMY1TURN)
                 {
+                    critChance = Random.Range(0, 10);
+
+                    if (critChance == 0)
+                    {
+                        float critDamage = Mathf.Round((_dmg + (_dmg * (2 / 3))));
+                        _dmg = _dmg + critDamage;
+                    }
+
                     battleSystem.enemy1AttackTarget = index;
                 }
                 if (battleSystem.currentInQueue == BattleState.ENEMY2TURN)
                 {
+                    critChance = Random.Range(0, 10);
+
+                    if (critChance == 0)
+                    {
+                        float critDamage = Mathf.Round((_dmg + (_dmg * (2 / 3))));
+                        _dmg = _dmg + critDamage;
+                    }
+
                     battleSystem.enemy2AttackTarget = index;
                 }
                 if (battleSystem.currentInQueue == BattleState.ENEMY3TURN)
                 {
+                    critChance = Random.Range(0, 10);
+
+                    if (critChance == 0)
+                    {
+                        float critDamage = Mathf.Round((_dmg + (_dmg * (2 / 3))));
+                        _dmg = _dmg + critDamage;
+                    }
+
                     battleSystem.enemy3AttackTarget = index;
                 }
                 if (battleSystem.currentInQueue == BattleState.ENEMY4TURN)
                 {
+                    critChance = Random.Range(0, 10);
+
+                    if (critChance == 0)
+                    {
+                        float critDamage = Mathf.Round((_dmg + (_dmg * (2 / 3))));
+                        _dmg = _dmg + critDamage;
+                    }
+
                     battleSystem.enemy4AttackTarget = index;
                 }
-                battleSystem.damageTotal = Mathf.Round((_dmg) - (_dmg * activeParty.activeParty[index].gameObject.GetComponent<Character>().physicalDefense / 100));
+
+                battleSystem.damageTotal = Mathf.Round((_dmg) - (_dmg * (activeParty.activeParty[index].gameObject.GetComponent<Character>().physicalDefense / 100)));
             }
             else
             {
