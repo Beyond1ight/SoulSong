@@ -7,10 +7,13 @@ using UnityEngine.EventSystems;
 
 public class Merchant : MonoBehaviour
 {
+    public Quest quest;
     public TextMeshProUGUI textDisplay, storeTextDisplay, partyGAmount, storeHelpText;
     public string shopDialogue;
     public string[] sentences;
+    public string[] questSentences;
     private int index;
+    private int questIndex;
     public float typingSpeed;
     public GameObject talkButton, endTalkButton, continueButton, endButton;
     public GameObject shopButton, sellButton;
@@ -27,9 +30,18 @@ public class Merchant : MonoBehaviour
     public int inventoryPointerIndex = 0, vertMove = 0;
     public RectTransform storeInventoryRectTransform;
 
-
     void Awake()
     {
+        if (quest != null)
+        {
+            questSentences = new string[quest.questDialogue.Length];
+        }
+
+        for (int i = 0; i < questSentences.Length; i++)
+        {
+            questSentences[i] = quest.questDialogue[i];
+        }
+
         for (int i = 0; i < inventoryList.Count; i++)
         {
             inventorySlots[i].AddItem(inventoryList[i]);
@@ -57,12 +69,24 @@ public class Merchant : MonoBehaviour
 
         if (talking)
         {
-            if (textDisplay.text == sentences[index])
+            if (quest == null)
             {
-                continueButton.SetActive(true);
+                if (textDisplay.text == sentences[index])
+                {
+                    continueButton.SetActive(true);
+                }
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(continueButton);
             }
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(continueButton);
+            else
+            {
+                if (textDisplay.text == questSentences[questIndex])
+                {
+                    continueButton.SetActive(true);
+                }
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(continueButton);
+            }
         }
         else
         {
@@ -107,6 +131,7 @@ public class Merchant : MonoBehaviour
             yield return new WaitForSeconds(typingSpeed);
 
         }
+
         talking = false;
         shopButton.SetActive(true);
         sellButton.SetActive(true);
@@ -121,31 +146,67 @@ public class Merchant : MonoBehaviour
     IEnumerator Type()
     {
         talking = false;
-        foreach (char letter in sentences[index].ToCharArray())
-        {
-            textDisplay.text += letter;
 
-            yield return new WaitForSeconds(typingSpeed);
-
-        }
-        if (index == sentences.Length - 1)
+        if (quest == null)
         {
-            talking = false;
-            endTalkButton.SetActive(true);
-            continueButton.SetActive(false);
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(endTalkButton);
+            foreach (char letter in sentences[index].ToCharArray())
+            {
+                textDisplay.text += letter;
+
+                yield return new WaitForSeconds(typingSpeed);
+
+            }
+            if (index == sentences.Length - 1)
+            {
+                talking = false;
+                endTalkButton.SetActive(true);
+                continueButton.SetActive(false);
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(endTalkButton);
+            }
+            else
+                talking = true;
+
         }
         else
-            talking = true;
+        {
+            foreach (char letter in questSentences[questIndex].ToCharArray())
+            {
+                textDisplay.text += letter;
 
+                yield return new WaitForSeconds(typingSpeed);
+
+            }
+            if (questIndex == questSentences.Length - 1)
+            {
+                talking = false;
+                endTalkButton.SetActive(true);
+                continueButton.SetActive(false);
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(endTalkButton);
+            }
+            else
+                talking = true;
+
+        }
     }
 
 
     public void Talk()
     {
         continueButton.SetActive(false);
-        index++;
+
+        if (quest == null)
+        {
+            index++;
+        }
+        else
+        {
+
+            questIndex++;
+
+        }
+
         talking = true;
         textDisplay.text = string.Empty;
 
@@ -162,12 +223,25 @@ public class Merchant : MonoBehaviour
     {
         continueButton.SetActive(false);
 
-        if (index < sentences.Length - 1)
+        if (quest == null)
         {
-            index++;
-            textDisplay.text = string.Empty;
-            StartCoroutine(Type());
-            continueButton.SetActive(false);
+            if (index < sentences.Length - 1)
+            {
+                index++;
+                textDisplay.text = string.Empty;
+                StartCoroutine(Type());
+                continueButton.SetActive(false);
+            }
+        }
+        else
+        {
+            if (questIndex < questSentences.Length - 1)
+            {
+                questIndex++;
+                textDisplay.text = string.Empty;
+                StartCoroutine(Type());
+                continueButton.SetActive(false);
+            }
         }
     }
 
@@ -175,7 +249,13 @@ public class Merchant : MonoBehaviour
     {
         textDisplay.text = string.Empty;
         index = 0;
+        questIndex = 0;
         talking = false;
+
+        if (quest != null)
+        {
+            Engine.e.adventureLogReference.AddQuestToAdventureLog(quest);
+        }
         StartCoroutine(Greeting());
 
         continueButton.SetActive(false);
@@ -185,7 +265,10 @@ public class Merchant : MonoBehaviour
     {
         textDisplay.text = string.Empty;
         textDisplay.text = sentences[index];
+
         index = 0;
+        questIndex = 0;
+
         dialogueScreen.SetActive(false);
         endButton.SetActive(false);
         shopButton.SetActive(false);

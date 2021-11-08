@@ -20,7 +20,7 @@ public class PauseMenu : MonoBehaviour
     public TextMeshProUGUI partyMoneyDisplay;
     public TextMeshProUGUI timeOfDayDisplay;
     public TextMeshProUGUI partyLocationDisplay;
-    public GameObject pauseMenu, equipMenu, inventoryMenu, mainMenuScreen, dropsMenu, itemMenu, abilitiesMenu;
+    public GameObject pauseMenu, equipMenu, inventoryMenu, mainMenuScreen, dropsMenu, itemMenu, abilitiesMenu, adventureLogMenu;
     public GameObject chestArmorSelection, chestArmorFirstButton;
 
     // Controller Support UI
@@ -290,6 +290,12 @@ public class PauseMenu : MonoBehaviour
         atPauseMenu = false;
     }
 
+    public void OpenAdventureLogMenu()
+    {
+        adventureLogMenu.SetActive(true);
+
+        Engine.e.adventureLogReference.OpenAdventureLogMenu();
+    }
 
     public void OpenAbilitiesMenu()
     {

@@ -73,6 +73,7 @@ public class Engine : MonoBehaviour
 
     // Menu References
     public PartyInventory partyInventoryReference;
+    public AdventureLog adventureLogReference;
     public EquipDisplay equipMenuReference;
     public BattleMenu battleMenu;
     public AbilitiesDisplay abilityScreenReference;
@@ -130,6 +131,7 @@ public class Engine : MonoBehaviour
     {
         party = new GameObject[playableCharacters.Length];
 
+        adventureLogReference.questLog = new Quest[adventureLogReference.questSlots.Length];
         partyInventoryReference.partyInventory = new Item[partyInventoryReference.itemInventorySlots.Length];
         partyInventoryReference.grieveWeapons = new GrieveWeapons[partyInventoryReference.grieveWeaponInventorySlots.Length];
         partyInventoryReference.macWeapons = new MacWeapons[partyInventoryReference.macWeaponInventorySlots.Length];
@@ -3044,6 +3046,11 @@ public class Engine : MonoBehaviour
         for (int i = 0; i < partyInventoryReference.riggsWeaponInventorySlots.Length; i++)
         {
             partyInventoryReference.riggsWeaponInventorySlots[i].index = i;
+        }
+
+        for (int i = 0; i < adventureLogReference.questSlots.Length; i++)
+        {
+            adventureLogReference.questSlots[i].index = i;
         }
     }
 

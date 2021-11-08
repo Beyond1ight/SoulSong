@@ -128,7 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Mac
   maxHealth: 80
-  currentHealth: 71
+  currentHealth: 80
   maxMana: 60
   currentMana: 60
   maxEnergy: 30
