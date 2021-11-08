@@ -6,14 +6,16 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 public class AdventureLog : MonoBehaviour
 {
-    public Quest[] questLog;
+    public Quest[] questLog, completedQuestLog;
     public QuestSlot[] questSlots;
+    public QuestCompleteSlot[] completedQuestSlots;
     public TextMeshProUGUI questDescription;
-    public bool adventureLogScreenSet;
+    public bool adventureLogScreenSet, adventureLogScreenCompletedQuestsSet;
     public int indexReference;
     public int questLogPointerIndex = 0, vertMove = 0;
-    public RectTransform questLogRectTransform;
+    public RectTransform questLogRectTransform, completedQuestLogRectTransform;
     bool pressUp, pressDown, pressRelease = false;
+    public GameObject currentQuestList, completedQuestList;
 
     public void AddQuestToAdventureLog(Quest _quest)
     {
@@ -22,7 +24,31 @@ public class AdventureLog : MonoBehaviour
             if (questLog[i] == null)
             {
                 questLog[i] = _quest;
+                _quest.inAdventureLog = true;
                 questSlots[i].AddQuest(_quest);
+                break;
+            }
+        }
+    }
+
+    public void AddQuestToCompleteQuestLog(Quest _quest)
+    {
+        for (int i = 0; i < questLog.Length; i++)
+        {
+            if (questLog[i] == _quest)
+            {
+                questLog[i] = null;
+                questSlots[i].ClearSlot();
+                break;
+            }
+        }
+
+        for (int i = 0; i < completedQuestLog.Length; i++)
+        {
+            if (completedQuestLog[i] == null)
+            {
+                completedQuestLog[i] = _quest;
+                completedQuestSlots[i].AddQuest(_quest);
                 break;
             }
         }
@@ -30,6 +56,8 @@ public class AdventureLog : MonoBehaviour
 
     public void OpenAdventureLogMenu()
     {
+        currentQuestList.SetActive(true);
+        completedQuestList.SetActive(false);
 
         questLogPointerIndex = 0;
         questLogRectTransform.offsetMax = new Vector2(0, 0);
@@ -38,6 +66,19 @@ public class AdventureLog : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(questSlots[questLogPointerIndex].gameObject);
 
     }
+    public void OpenAdventureLogCompletedQuestsList()
+    {
+        currentQuestList.SetActive(false);
+        completedQuestList.SetActive(true);
+
+        questLogPointerIndex = 0;
+        completedQuestLogRectTransform.offsetMax = new Vector2(0, 0);
+
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(completedQuestSlots[questLogPointerIndex].gameObject);
+
+    }
+
 
     void HandleInventory()
     {
@@ -80,6 +121,45 @@ public class AdventureLog : MonoBehaviour
                 }
             }
         }
+
+        if (adventureLogScreenCompletedQuestsSet)
+        {
+            if (vertMove > 0 && pressDown)
+            {
+                pressDown = false;
+
+                if (questLogPointerIndex < questLog.Length)
+                {
+                    questLogPointerIndex += vertMove;
+
+                    EventSystem.current.SetSelectedGameObject(null);
+                    EventSystem.current.SetSelectedGameObject(completedQuestSlots[questLogPointerIndex].gameObject);
+
+                    if (questLogPointerIndex > 5 && questLogPointerIndex < completedQuestLog.Length)
+                    {
+                        completedQuestLogRectTransform.offsetMax -= new Vector2(0, -30);
+                    }
+                }
+            }
+
+            if (vertMove < 0 && pressUp)
+            {
+                pressUp = false;
+                if (questLogPointerIndex > 0)
+                {
+                    questLogPointerIndex += vertMove;
+
+                    EventSystem.current.SetSelectedGameObject(null);
+                    EventSystem.current.SetSelectedGameObject(completedQuestSlots[questLogPointerIndex].gameObject);
+
+
+                    if (questLogPointerIndex >= 5 && questLogPointerIndex > 0)
+                    {
+                        completedQuestLogRectTransform.offsetMax -= new Vector2(0, 30);
+                    }
+                }
+            }
+        }
     }
 
     void PressDown()
@@ -106,7 +186,7 @@ public class AdventureLog : MonoBehaviour
     void Update()
     {
 
-        if (adventureLogScreenSet)
+        if (adventureLogScreenSet || adventureLogScreenCompletedQuestsSet)
         {
             if (Input.GetKeyDown(KeyCode.S))
             {

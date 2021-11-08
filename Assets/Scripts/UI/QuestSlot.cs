@@ -10,16 +10,17 @@ public class QuestSlot : MonoBehaviour
     public GameObject questName, questItemReward, questMoneyReward;
     public int index;
     public GameObject scrollReference;
+
     public void AddQuest(Quest _quest)
     {
         quest = _quest;
         questName.GetComponent<TMP_Text>().text = _quest.questName;
         questItemReward.GetComponent<TMP_Text>().text = _quest.itemReward.itemName;
-        questMoneyReward.GetComponent<TMP_Text>().text = _quest.moneyReward.ToString();
+        questMoneyReward.GetComponent<TMP_Text>().text = _quest.moneyReward.ToString() + "G";
     }
 
 
-    public void SetHelpText()
+    public virtual void SetHelpText()
     {
         if (!Engine.e.adventureLogReference.adventureLogScreenSet)
         {
@@ -36,9 +37,9 @@ public class QuestSlot : MonoBehaviour
         }
     }
 
-    public void ClearHelpText()
+    public virtual void ClearHelpText()
     {
-        if (!Engine.e.adventureLogReference.adventureLogScreenSet)
+        if (Engine.e.adventureLogReference.adventureLogScreenSet)
         {
             Engine.e.adventureLogReference.adventureLogScreenSet = false;
         }

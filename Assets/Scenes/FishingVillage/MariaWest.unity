@@ -4696,6 +4696,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c775b5cefcc4e0f96ea98f07a72786, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnChance: 100
   enemies:
   - {fileID: 8029690686883459818}
   itemDrops: []

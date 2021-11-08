@@ -146,7 +146,7 @@ MonoBehaviour:
   manaCapped: 1
   energyCapped: 1
   haste: 17
-  experiencePoints: 0
+  experiencePoints: 90
   levelUpReq: 100
   lvl: 1
   baseDamage: 10

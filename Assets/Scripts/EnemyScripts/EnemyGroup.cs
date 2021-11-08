@@ -6,6 +6,8 @@ using TMPro;
 
 public class EnemyGroup : MonoBehaviour
 {
+    public Quest quest;
+    public int spawnChance;
     public static EnemyGroup enemyGroup;
     public GameObject[] enemies;
     public List<Item> itemDrops;
@@ -26,6 +28,20 @@ public class EnemyGroup : MonoBehaviour
         battleSystem = Engine.e.battleSystem;
 
         GroupExperienceValue();
+
+        if (spawnChance != 0)
+        {
+            int deSpawn = Random.Range(0, 100);
+
+            if (deSpawn > spawnChance)
+            {
+                DespawnGroup();
+            }
+        }
+        else
+        {
+            DespawnGroup();
+        }
     }
 
     public void OnTriggerEnter2D(Collider2D other)
@@ -62,6 +78,7 @@ public class EnemyGroup : MonoBehaviour
 
         }
     }
+
 
     public int GroupExperienceValue()
     {
@@ -123,9 +140,21 @@ public class EnemyGroup : MonoBehaviour
         }
     }
 
+    public void HandleQuestObjective()
+    {
+        if (quest != null)
+        {
+            // quest.
+        }
+    }
     public void DestroyGroup()
     {
         Destroy(this.gameObject);
+    }
+
+    public void DespawnGroup()
+    {
+        this.gameObject.SetActive(false);
     }
 
     public bool CheckEndBattle()

@@ -2659,6 +2659,11 @@ public class BattleSystem : MonoBehaviour
 
             Engine.e.battleSystem.enemyPanel.SetActive(false);
 
+            if (enemyGroup.quest != null)
+            {
+                enemyGroup.HandleQuestObjective();
+            }
+
             yield return new WaitForSeconds(1f);
             enemyGroup.GroupItemDrops();
 

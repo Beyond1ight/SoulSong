@@ -12,6 +12,7 @@ public class Merchant : MonoBehaviour
     public string shopDialogue;
     public string[] sentences;
     public string[] questSentences;
+    public string[] questCompleteSentences;
     private int index;
     private int questIndex;
     public float typingSpeed;
@@ -30,16 +31,36 @@ public class Merchant : MonoBehaviour
     public int inventoryPointerIndex = 0, vertMove = 0;
     public RectTransform storeInventoryRectTransform;
 
+    void Start()
+    {
+        if (quest.questComplete)
+        {
+            for (int i = 0; i < Engine.e.adventureLogReference.completedQuestLog.Length; i++)
+            {
+                if (Engine.e.adventureLogReference.completedQuestLog[i] == quest)
+                {
+                    quest = null;
+                }
+            }
+        }
+    }
+
     void Awake()
     {
         if (quest != null)
         {
             questSentences = new string[quest.questDialogue.Length];
+            questCompleteSentences = new string[quest.questCompleteDialogue.Length];
         }
 
         for (int i = 0; i < questSentences.Length; i++)
         {
             questSentences[i] = quest.questDialogue[i];
+        }
+
+        for (int i = 0; i < questCompleteSentences.Length; i++)
+        {
+            questCompleteSentences[i] = quest.questCompleteDialogue[i];
         }
 
         for (int i = 0; i < inventoryList.Count; i++)
@@ -170,24 +191,49 @@ public class Merchant : MonoBehaviour
         }
         else
         {
-            foreach (char letter in questSentences[questIndex].ToCharArray())
+            if (!quest.questComplete)
             {
-                textDisplay.text += letter;
+                foreach (char letter in questSentences[questIndex].ToCharArray())
+                {
+                    textDisplay.text += letter;
 
-                yield return new WaitForSeconds(typingSpeed);
+                    yield return new WaitForSeconds(typingSpeed);
 
-            }
-            if (questIndex == questSentences.Length - 1)
-            {
-                talking = false;
-                endTalkButton.SetActive(true);
-                continueButton.SetActive(false);
-                EventSystem.current.SetSelectedGameObject(null);
-                EventSystem.current.SetSelectedGameObject(endTalkButton);
+                }
+                if (questIndex == questSentences.Length - 1)
+                {
+                    talking = false;
+                    endTalkButton.SetActive(true);
+                    continueButton.SetActive(false);
+                    EventSystem.current.SetSelectedGameObject(null);
+                    EventSystem.current.SetSelectedGameObject(endTalkButton);
+                }
+                else
+                    talking = true;
+
             }
             else
-                talking = true;
+            {
+                foreach (char letter in questCompleteSentences[questIndex].ToCharArray())
+                {
+                    textDisplay.text += letter;
 
+                    yield return new WaitForSeconds(typingSpeed);
+
+                }
+                if (questIndex == questCompleteSentences.Length - 1)
+                {
+                    talking = false;
+                    endTalkButton.SetActive(true);
+                    continueButton.SetActive(false);
+                    EventSystem.current.SetSelectedGameObject(null);
+                    EventSystem.current.SetSelectedGameObject(endTalkButton);
+                }
+                else
+                    talking = true;
+
+
+            }
         }
     }
 
@@ -204,7 +250,6 @@ public class Merchant : MonoBehaviour
         {
 
             questIndex++;
-
         }
 
         talking = true;
@@ -235,15 +280,29 @@ public class Merchant : MonoBehaviour
         }
         else
         {
-            if (questIndex < questSentences.Length - 1)
+            if (!quest.questComplete)
             {
-                questIndex++;
-                textDisplay.text = string.Empty;
-                StartCoroutine(Type());
-                continueButton.SetActive(false);
+                if (questIndex < questSentences.Length - 1)
+                {
+                    questIndex++;
+                    textDisplay.text = string.Empty;
+                    StartCoroutine(Type());
+                    continueButton.SetActive(false);
+                }
+            }
+            else
+            {
+                if (questIndex < questCompleteSentences.Length - 1)
+                {
+                    questIndex++;
+                    textDisplay.text = string.Empty;
+                    StartCoroutine(Type());
+                    continueButton.SetActive(false);
+                }
             }
         }
     }
+
 
     public void EndTalk()
     {
@@ -254,13 +313,25 @@ public class Merchant : MonoBehaviour
 
         if (quest != null)
         {
-            Engine.e.adventureLogReference.AddQuestToAdventureLog(quest);
+            if (!quest.questComplete)
+            {
+                Engine.e.adventureLogReference.AddQuestToAdventureLog(quest);
+            }
+            else
+            {
+
+                quest.AddRewardsToPartyInventory();
+                Engine.e.adventureLogReference.AddQuestToCompleteQuestLog(quest);
+                quest = null;
+            }
         }
+
         StartCoroutine(Greeting());
 
         continueButton.SetActive(false);
         endTalkButton.SetActive(false);
     }
+
     public void EndDialogue()
     {
         textDisplay.text = string.Empty;
@@ -326,7 +397,7 @@ public class Merchant : MonoBehaviour
              grieveWeaponStats[3].text = "\nWater Damage: " + Engine.e.grieveGameWeapons[index].GetComponent<GrieveWeapons>().waterAttack.ToString();
              grieveWeaponStats[4].text = "\nLightning Damage: " + Engine.e.grieveGameWeapons[index].GetComponent<GrieveWeapons>().lightningAttack.ToString();
              grieveWeaponStats[5].text = "\nShadow Damage: " + Engine.e.grieveGameWeapons[index].GetComponent<GrieveWeapons>().shadowAttack.ToString();
- */
+    */
             int amountOwned = 0;
 
 
@@ -366,8 +437,8 @@ public class Merchant : MonoBehaviour
              {
                  grieveWeaponStats[i].text = string.Empty;
              }
- grieveWeaponBackButton.SetActive(true);
- OpenGrieveWeaponMenu();
+    grieveWeaponBackButton.SetActive(true);
+    OpenGrieveWeaponMenu();
          }*/
     }
 

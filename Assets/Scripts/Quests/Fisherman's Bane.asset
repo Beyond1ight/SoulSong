@@ -18,6 +18,7 @@ MonoBehaviour:
     Go to the southern beach and slay them!
   moneyReward: 25
   itemReward: {fileID: 475117527870452808, guid: c37cdb1cfe8e54b409308b0270b551c3, type: 3}
+  experienceReward: 50
   questComplete: 0
   questDialogue:
   - Fisherman's Bane
@@ -27,3 +28,8 @@ MonoBehaviour:
   - Please, if you can, go to the southern beach and rid the land of these beasts!
     If you manage, return to me and I will give you a nice reward from my personal
     collection. Goodluck!
+  questCompleteDialogue:
+  - Fisherman's Bane
+  - Thank you for taking care of those monsters! Please take this Iron Armor, as
+    well as some money for your troubles! Feel free to spend that here!
+  inAdventureLog: 0

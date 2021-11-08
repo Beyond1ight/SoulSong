@@ -41,6 +41,8 @@ public class Engine : MonoBehaviour
     List<Item> gameGrieveWeapons, gameMacWeapons, gameFieldWeapons, gameRiggsWeapons, gameChestArmor, gameFireDrops, gameIceDrops,
     gameLightningDrops, gameWaterDrops, gameShadowDrops, gameHolyDrops;
 
+    // Quests
+    public Quest[] gameQuests;
 
     // Misc References
     public int characterBeingTargeted, charBeingTargeted;
@@ -103,6 +105,7 @@ public class Engine : MonoBehaviour
     public void NewGame()
     {
         ClearGameInventoryHeld();
+        ClearGameQuests();
         SetParty();
 
         //Cursor.lockState = CursorLockMode.Locked;
@@ -123,6 +126,7 @@ public class Engine : MonoBehaviour
         activeParty.gameObject.transform.position = startingPos;
         inWorldMap = false;
         battleModeActive = true;
+        battleSystem.enemyGroup = null;
 
     }
 
@@ -132,6 +136,8 @@ public class Engine : MonoBehaviour
         party = new GameObject[playableCharacters.Length];
 
         adventureLogReference.questLog = new Quest[adventureLogReference.questSlots.Length];
+        adventureLogReference.completedQuestLog = new Quest[adventureLogReference.completedQuestSlots.Length];
+
         partyInventoryReference.partyInventory = new Item[partyInventoryReference.itemInventorySlots.Length];
         partyInventoryReference.grieveWeapons = new GrieveWeapons[partyInventoryReference.grieveWeaponInventorySlots.Length];
         partyInventoryReference.macWeapons = new MacWeapons[partyInventoryReference.macWeaponInventorySlots.Length];
@@ -1011,6 +1017,155 @@ public class Engine : MonoBehaviour
         }
     }
 
+    // Handles Experience Point gain for quests, as well as character Level Ups.
+    public void GiveQuestExperiencePoints(float xp)
+    {
+        for (int i = 0; i < party.Length; i++)
+        {
+            if (party[i] != null)
+            {
+                if (party[i].GetComponent<Character>().lvl < 99)
+                {
+
+                    party[i].GetComponent<Character>().experiencePoints += xp;
+
+                    // Level Up
+                    if (party[i].GetComponent<Character>().experiencePoints >= party[i].GetComponent<Character>().levelUpReq)
+                    {
+                        party[i].GetComponent<Character>().lvl = party[i].GetComponent<Character>().lvl + 1;
+
+                        // Health
+                        //float gainedHealth = Mathf.Round((party[i].GetComponent<Character>().maxHealth * 3 / 2) - party[i].GetComponent<Character>().maxHealth);
+                        float newHealthCheck = Mathf.Round(healthCurve.Evaluate(party[i].GetComponent<Character>().lvl) * (party[i].GetComponent<Character>().healthOffset / 100));
+                        float newHealth = Mathf.Round(healthCurve.Evaluate(party[i].GetComponent<Character>().lvl) + newHealthCheck);
+                        float gainedHealth = Mathf.Round(newHealth - party[i].GetComponent<Character>().maxHealth);
+
+                        // Mana
+                        float newManaCheck = Mathf.Round(manaCurve.Evaluate(party[i].GetComponent<Character>().lvl) * (party[i].GetComponent<Character>().manaOffset / 100));
+                        float newMana = Mathf.Round(manaCurve.Evaluate(party[i].GetComponent<Character>().lvl) + newManaCheck);
+                        float gainedMana = Mathf.Round(newMana - party[i].GetComponent<Character>().maxMana);
+
+                        // Energy
+                        float newEnergyCheck = Mathf.Round(energyCurve.Evaluate(party[i].GetComponent<Character>().lvl) * (party[i].GetComponent<Character>().energyOffset / 100));
+                        float newEnergy = Mathf.Round(energyCurve.Evaluate(party[i].GetComponent<Character>().lvl) + newEnergyCheck);
+                        float gainedEnergy = Mathf.Round(newEnergy - party[i].GetComponent<Character>().maxEnergy);
+
+
+                        float newExperiencePointsTotal = Mathf.Round((party[i].GetComponent<Character>().experiencePoints - party[i].GetComponent<Character>().levelUpReq));
+
+                        if (newHealth > 9999f)
+                        {
+                            if (party[i].GetComponent<Character>().healthCapped)
+                            {
+                                party[i].GetComponent<Character>().maxHealth = 9999f;
+                            }
+                            else
+                            {
+                                party[i].GetComponent<Character>().maxHealth = newHealth;
+                            }
+                        }
+                        else
+                        {
+                            party[i].GetComponent<Character>().maxHealth = newHealth;
+                        }
+
+                        if (newMana > 999f)
+                        {
+                            if (party[i].GetComponent<Character>().manaCapped)
+                            {
+                                party[i].GetComponent<Character>().maxMana = 999f;
+                            }
+                            else
+                            {
+                                party[i].GetComponent<Character>().maxMana = newMana;
+                            }
+                        }
+                        else
+                        {
+                            party[i].GetComponent<Character>().maxMana = newMana;
+                        }
+
+                        if (newEnergy > 999f)
+                        {
+                            if (party[i].GetComponent<Character>().energyCapped)
+                            {
+                                party[i].GetComponent<Character>().maxEnergy = 999f;
+                            }
+                            else
+                            {
+                                party[i].GetComponent<Character>().maxEnergy = newEnergy;
+                            }
+                        }
+                        else
+                        {
+                            party[i].GetComponent<Character>().maxEnergy = newEnergy;
+
+                        }
+
+
+                        //                       party[i].GetComponent<Character>().maxHealth = Mathf.Round(party[i].GetComponent<Character>().maxHealth * 3 / 2);
+                        party[i].GetComponent<Character>().currentHealth = party[i].GetComponent<Character>().maxHealth;
+                        party[i].GetComponent<Character>().currentMana = party[i].GetComponent<Character>().maxMana;
+                        party[i].GetComponent<Character>().currentEnergy = party[i].GetComponent<Character>().maxEnergy;
+
+                        float newStrengthCheck = Mathf.Round(strengthCurve.Evaluate(party[i].GetComponent<Character>().lvl) * (party[i].GetComponent<Character>().strengthOffset / 100));
+                        float newStrength = Mathf.Round(strengthCurve.Evaluate(party[i].GetComponent<Character>().lvl) + newStrengthCheck);
+                        float gainedStrength = Mathf.Round(newStrength - party[i].GetComponent<Character>().physicalDamage);
+
+                        party[i].GetComponent<Character>().physicalDamage = newStrength;
+                        party[i].GetComponent<Character>().physicalDefense = party[i].GetComponent<Character>().physicalDefense + 0.5f;
+
+                        party[i].GetComponent<Character>().experiencePoints = newExperiencePointsTotal;
+                        party[i].GetComponent<Character>().levelUpReq = Mathf.Round(party[i].GetComponent<Character>().levelUpReq * 6 / 2);
+
+                        party[i].GetComponent<Character>().sleepDefense = 0.5f;
+                        party[i].GetComponent<Character>().confuseDefense += 0.5f;
+
+
+
+                        party[i].GetComponent<Character>().skillScale += 1f;
+
+                        if (party[i].GetComponent<Character>().lvl <= 20)
+                        {
+                            if (party[i].GetComponent<Character>().lvl % 5 == 0)
+                            {
+                                party[i].GetComponent<Character>().skillIndex++;
+                                party[i].GetComponent<Character>().skillTotal++;
+
+                                switch (party[i].GetComponent<Character>().characterName)
+                                {
+                                    case "Grieve":
+                                        party[i].GetComponent<Grieve>().skills[party[i].GetComponent<Grieve>().skillIndex] = gameSkills[party[i].GetComponent<Grieve>().skillIndex];
+                                        break;
+
+                                    case "Mac":
+                                        party[i].GetComponent<Mac>().skills[party[i].GetComponent<Mac>().skillIndex] = gameSkills[party[i].GetComponent<Mac>().skillIndex];
+                                        break;
+
+                                    case "Field":
+                                        party[i].GetComponent<Field>().skills[party[i].GetComponent<Field>().skillIndex] = gameSkills[party[i].GetComponent<Field>().skillIndex];
+                                        break;
+
+                                    case "Riggs":
+                                        party[i].GetComponent<Riggs>().skills[party[i].GetComponent<Riggs>().skillIndex] = gameSkills[party[i].GetComponent<Riggs>().skillIndex];
+                                        break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (party[i].GetComponent<Character>().lvl % 3 == 0)
+                            {
+                                party[i].GetComponent<Character>().availableSkillPoints++;
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
 
     // Function for "consuming" an item, in or out of battle.
     // index refers to the target, not the item.
@@ -1685,6 +1840,10 @@ public class Engine : MonoBehaviour
         charEquippedWeapons = new Item[playableCharacters.Length];
         charEquippedChestArmor = new Item[playableCharacters.Length];
 
+        adventureLogReference.questLog = new Quest[adventureLogReference.questSlots.Length];
+        adventureLogReference.completedQuestLog = new Quest[adventureLogReference.completedQuestSlots.Length];
+
+
         for (int i = 0; i < gameData.partySize; i++)
         {
             if (party[i] == null)
@@ -1956,7 +2115,28 @@ public class Engine : MonoBehaviour
             }
         }
 
+        // Quests
+        for (int i = 0; i < gameQuests.Length; i++)
+        {
+            if (gameData.partyQuests[i] != null)
+            {
+                if (gameData.partyQuests[i] == gameQuests[i].questName)
+                {
+                    adventureLogReference.AddQuestToAdventureLog(gameQuests[i]);
+                }
+            }
 
+            if (gameData.completedQuests[i] != null)
+            {
+                if (gameData.completedQuests[i] == gameQuests[i].questName)
+                {
+                    adventureLogReference.AddQuestToCompleteQuestLog(gameQuests[i]);
+                }
+            }
+        }
+
+
+        // World Position
         Vector3 partyPosition;
         partyPosition.x = gameData.partyPosition[0];
         partyPosition.y = gameData.partyPosition[1];
@@ -2703,6 +2883,7 @@ public class Engine : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            adventureLogReference.AddQuestToAdventureLog(gameQuests[0]);
             //GameManager.gameManager.activeParty.activeParty[0].GetComponent<Grieve>().weapon.GetComponent<GrieveWeapons>().fireAttack += 10;
             partyInventoryReference.AddItemToInventory(gameInventory[0]);
             partyInventoryReference.AddItemToInventory(gameInventory[1]);
@@ -2766,9 +2947,18 @@ public class Engine : MonoBehaviour
         partyInventoryReference.riggsWeaponTotal = 0;
         partyInventoryReference.chestArmorTotal = 0;
 
-
     }
 
+    void ClearGameQuests()
+    {
+        for (int i = 0; i < gameQuests.Length; i++)
+        {
+            if (gameQuests[i] != null)
+            {
+                gameQuests[i].ClearQuest();
+            }
+        }
+    }
 
     public void ActivatePauseMenuCharacterPanels()
     {

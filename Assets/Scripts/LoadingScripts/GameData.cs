@@ -73,10 +73,13 @@ public class GameData
     public float[] partyPosition;
     public int partyMoney;
 
+    public string[] partyQuests;
+    public string[] completedQuests;
 
     public string scene;
     public float time;
     public bool battleModeActive;
+
 
     public GameData(Engine gameManager)
     {
@@ -352,6 +355,31 @@ public class GameData
             }
         }
 
+
+        // Quests
+        partyQuests = new string[Engine.e.adventureLogReference.questLog.Length];
+        completedQuests = new string[Engine.e.adventureLogReference.questLog.Length];
+
+        for (int i = 0; i < Engine.e.gameQuests.Length; i++)
+        {
+            if (Engine.e.gameQuests[i] != null)
+            {
+                if (Engine.e.gameQuests[i].inAdventureLog)
+                {
+                    if (Engine.e.gameQuests[i].questComplete)
+                    {
+                        completedQuests[i] = Engine.e.gameQuests[i].questName;
+                    }
+                    else
+                    {
+                        partyQuests[i] = Engine.e.gameQuests[i].questName;
+                    }
+                }
+            }
+
+        }
+
+        // World Position
         partyPosition = new float[3];
         partyPosition[0] = Engine.e.activeParty.transform.position.x;
         partyPosition[1] = Engine.e.activeParty.transform.position.y;
