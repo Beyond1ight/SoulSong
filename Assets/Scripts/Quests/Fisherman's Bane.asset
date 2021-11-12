@@ -16,10 +16,16 @@ MonoBehaviour:
   questDescription: The village merchant informed you of two monsters, a "Whisper"
     and a "Kelraid," who have been interupting cargo import from traveling salesman.
     Go to the southern beach and slay them!
+  objectiveCount: 00000000
+  objectiveGoal: 01000000
+  objectiveTarget:
+  - Whisper and Kelraid taken care of.
   moneyReward: 25
   itemReward: {fileID: 475117527870452808, guid: c37cdb1cfe8e54b409308b0270b551c3, type: 3}
   experienceReward: 50
-  questComplete: 0
+  isComplete: 0
+  inAdventureLog: 1
+  turnedIn: 0
   questDialogue:
   - Fisherman's Bane
   - Grieve, I heard reports of two monsters terrorizing the local fishermen! Not
@@ -32,4 +38,3 @@ MonoBehaviour:
   - Fisherman's Bane
   - Thank you for taking care of those monsters! Please take this Iron Armor, as
     well as some money for your troubles! Feel free to spend that here!
-  inAdventureLog: 0

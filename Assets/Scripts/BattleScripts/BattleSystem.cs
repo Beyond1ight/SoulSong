@@ -18,7 +18,7 @@ public class BattleSystem : MonoBehaviour
     public BattleState currentInQueue;
     public Queue<BattleState> battleQueue;
     public ActiveParty activeParty;
-    public GameObject[] enemies;
+    public Enemy[] enemies;
     public EnemyGroup enemyGroup;
     public bool hpRestore, mpRestore;
     public bool physicalAttack = false;
@@ -2658,11 +2658,8 @@ public class BattleSystem : MonoBehaviour
             }
 
             Engine.e.battleSystem.enemyPanel.SetActive(false);
+            Engine.e.adventureLogReference.QuestManager(enemies);
 
-            if (enemyGroup.quest != null)
-            {
-                enemyGroup.HandleQuestObjective();
-            }
 
             yield return new WaitForSeconds(1f);
             enemyGroup.GroupItemDrops();
@@ -2779,17 +2776,17 @@ public class BattleSystem : MonoBehaviour
         {
             if (Engine.e.char1LevelUp == true)
             {
-                char1BattlePanel.SetActive(false);
+                //char1BattlePanel.SetActive(false);
                 char1LevelUpPanel.SetActive(true);
             }
             if (Engine.e.char2LevelUp == true)
             {
-                char1BattlePanel.SetActive(false);
+                // char1BattlePanel.SetActive(false);
                 char2LevelUpPanel.SetActive(true);
             }
             if (Engine.e.char3LevelUp == true)
             {
-                char1BattlePanel.SetActive(false);
+                // char1BattlePanel.SetActive(false);
                 char3LevelUpPanel.SetActive(true);
             }
         }
@@ -5304,11 +5301,6 @@ public class BattleSystem : MonoBehaviour
     public void EndTurn()
     {
         charMoving = false;
-        physicalAttack = false;
-        skillPhysicalAttack = false;
-        skillRangedAttack = false;
-        dropAttack = false;
-        charUsingSkill = false;
         targetCheck = false;
         attackingTeam = false;
 
@@ -5501,7 +5493,7 @@ public class BattleSystem : MonoBehaviour
             currentInQueue = BattleState.ATBCHECK;
         }
 
-        state = BattleState.ATBCHECK;
+        // state = BattleState.ATBCHECK;
     }
 
     public void ResetPartyMemberStats()
@@ -5829,6 +5821,7 @@ public class BattleSystem : MonoBehaviour
             {
                 DeactivateTargetSprite();
                 DeactivateChar1MenuButtons();
+
                 if (activeParty.activeParty[1] != null)
                 {
                     DeactivateChar2MenuButtons();

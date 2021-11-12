@@ -11,7 +11,7 @@ public class EquipDisplay : MonoBehaviour
     public GameObject[] weaponLists, armorLists;
     public InventorySlot grieveEquippedWeapon, grieveEquippedChestArmor, macEquippedWeapon, macEquippedChestArmor,
     fieldEquippedWeapon, fieldEquippedChestArmor, riggsEquippedWeapon, riggsEquippedChestArmor;
-    public TextMeshProUGUI charAttackStatsReference, charDefenseStatsReference;
+    public TextMeshProUGUI[] charAttackStatsReference, charDefenseStatsReference, charAttackComparisonStats, charDefenseComparisonStats;
     public TextMeshProUGUI[] charTMP;
     public GameObject[] charNewWeaponNotif;
     public bool[] charNewWeapon;
@@ -192,21 +192,19 @@ public class EquipDisplay : MonoBehaviour
         equipmentDisplays[2].SetActive(false);
         equipmentDisplays[3].SetActive(false);
 
-        charAttackStatsReference.text = string.Empty;
-        charAttackStatsReference.text += "\nPhysical Attack: " + Engine.e.party[0].GetComponent<Character>().physicalDamage
-        + "\n\n Fire Damage : " + Engine.e.party[0].GetComponent<Character>().firePhysicalAttackBonus
-        + "\n Ice Damage : " + Engine.e.party[0].GetComponent<Character>().icePhysicalAttackBonus
-        + "\n Lightning Damage : " + Engine.e.party[0].GetComponent<Character>().lightningPhysicalAttackBonus
-        + "\n Water Damage : " + Engine.e.party[0].GetComponent<Character>().waterPhysicalAttackBonus
-        + "\n Shadow Damage : " + Engine.e.party[0].GetComponent<Character>().shadowPhysicalAttackBonus;
+        charAttackStatsReference[0].text = Engine.e.party[0].GetComponent<Character>().physicalDamage.ToString();
+        charAttackStatsReference[1].text = Engine.e.party[0].GetComponent<Character>().firePhysicalAttackBonus.ToString();
+        charAttackStatsReference[2].text = Engine.e.party[0].GetComponent<Character>().icePhysicalAttackBonus.ToString();
+        charAttackStatsReference[3].text = Engine.e.party[0].GetComponent<Character>().lightningPhysicalAttackBonus.ToString();
+        charAttackStatsReference[4].text = Engine.e.party[0].GetComponent<Character>().waterPhysicalAttackBonus.ToString();
+        charAttackStatsReference[5].text = Engine.e.party[0].GetComponent<Character>().shadowPhysicalAttackBonus.ToString();
 
-        charDefenseStatsReference.text = string.Empty;
-        charDefenseStatsReference.text += "\nPhysical Defense: " + Engine.e.party[0].GetComponent<Character>().physicalDefense + "%"
-        + "\n\n Fire Defense : " + Engine.e.party[0].GetComponent<Character>().fireDefense + "%"
-        + "\n Ice Defense : " + Engine.e.party[0].GetComponent<Character>().iceDefense + "%"
-        + "\n Lightning Defense : " + Engine.e.party[0].GetComponent<Character>().lightningDefense + "%"
-        + "\n Water Defense : " + Engine.e.party[0].GetComponent<Character>().waterDefense + "%"
-        + "\n Shadow Defense : " + Engine.e.party[0].GetComponent<Character>().shadowDefense + "%";
+        charDefenseStatsReference[0].text = Engine.e.party[0].GetComponent<Character>().physicalDefense + "%";
+        charDefenseStatsReference[1].text = Engine.e.party[0].GetComponent<Character>().fireDefense + "%";
+        charDefenseStatsReference[2].text = Engine.e.party[0].GetComponent<Character>().iceDefense + "%";
+        charDefenseStatsReference[3].text = Engine.e.party[0].GetComponent<Character>().lightningDefense + "%";
+        charDefenseStatsReference[4].text = Engine.e.party[0].GetComponent<Character>().waterDefense + "%";
+        charDefenseStatsReference[5].text = Engine.e.party[0].GetComponent<Character>().shadowDefense + "%";
 
         grieveEquippedWeapon.itemName = grieveEquippedWeapon.GetComponent<InventorySlot>().itemName;
         grieveEquippedChestArmor.itemName = grieveEquippedChestArmor.GetComponent<InventorySlot>().itemName;
@@ -226,21 +224,19 @@ public class EquipDisplay : MonoBehaviour
         equipmentDisplays[2].SetActive(false);
         equipmentDisplays[3].SetActive(false);
 
-        charAttackStatsReference.text = string.Empty;
-        charAttackStatsReference.text += "\nPhysical Attack: " + Engine.e.party[1].GetComponent<Character>().physicalDamage
-        + "\n\n Fire Damage : " + Engine.e.party[1].GetComponent<Character>().firePhysicalAttackBonus
-        + "\n Ice Damage : " + Engine.e.party[1].GetComponent<Character>().icePhysicalAttackBonus
-        + "\n Lightning Damage : " + Engine.e.party[1].GetComponent<Character>().lightningPhysicalAttackBonus
-        + "\n Water Damage : " + Engine.e.party[1].GetComponent<Character>().waterPhysicalAttackBonus
-        + "\n Shadow Damage : " + Engine.e.party[1].GetComponent<Character>().shadowPhysicalAttackBonus;
+        charAttackStatsReference[0].text = Engine.e.party[1].GetComponent<Character>().physicalDamage.ToString();
+        charAttackStatsReference[1].text = Engine.e.party[1].GetComponent<Character>().firePhysicalAttackBonus.ToString();
+        charAttackStatsReference[2].text = Engine.e.party[1].GetComponent<Character>().icePhysicalAttackBonus.ToString();
+        charAttackStatsReference[3].text = Engine.e.party[1].GetComponent<Character>().lightningPhysicalAttackBonus.ToString();
+        charAttackStatsReference[4].text = Engine.e.party[1].GetComponent<Character>().waterPhysicalAttackBonus.ToString();
+        charAttackStatsReference[5].text = Engine.e.party[1].GetComponent<Character>().shadowPhysicalAttackBonus.ToString();
 
-        charDefenseStatsReference.text = string.Empty;
-        charDefenseStatsReference.text += "\nPhysical Defense: " + Engine.e.party[1].GetComponent<Character>().physicalDefense + "%"
-        + "\n\n Fire Defense : " + Engine.e.party[1].GetComponent<Character>().fireDefense + "%"
-        + "\n Ice Defense : " + Engine.e.party[1].GetComponent<Character>().iceDefense + "%"
-        + "\n Lightning Defense : " + Engine.e.party[1].GetComponent<Character>().lightningDefense + "%"
-        + "\n Water Defense : " + Engine.e.party[1].GetComponent<Character>().waterDefense + "%"
-        + "\n Shadow Defense : " + Engine.e.party[1].GetComponent<Character>().shadowDefense + "%";
+        charDefenseStatsReference[0].text = Engine.e.party[1].GetComponent<Character>().physicalDefense + "%";
+        charDefenseStatsReference[1].text = Engine.e.party[1].GetComponent<Character>().fireDefense + "%";
+        charDefenseStatsReference[2].text = Engine.e.party[1].GetComponent<Character>().iceDefense + "%";
+        charDefenseStatsReference[3].text = Engine.e.party[1].GetComponent<Character>().lightningDefense + "%";
+        charDefenseStatsReference[4].text = Engine.e.party[1].GetComponent<Character>().waterDefense + "%";
+        charDefenseStatsReference[5].text = Engine.e.party[1].GetComponent<Character>().shadowDefense + "%";
 
         macEquippedWeapon.itemName = macEquippedWeapon.GetComponent<InventorySlot>().itemName;
         macEquippedChestArmor.itemName = macEquippedChestArmor.GetComponent<InventorySlot>().itemName;
@@ -258,21 +254,19 @@ public class EquipDisplay : MonoBehaviour
         equipmentDisplays[2].SetActive(true);
         equipmentDisplays[3].SetActive(false);
 
-        charAttackStatsReference.text = string.Empty;
-        charAttackStatsReference.text += "\nPhysical Attack: " + Engine.e.party[2].GetComponent<Character>().physicalDamage
-        + "\n\n Fire Damage : " + Engine.e.party[2].GetComponent<Character>().firePhysicalAttackBonus
-        + "\n Ice Damage : " + Engine.e.party[2].GetComponent<Character>().icePhysicalAttackBonus
-        + "\n Lightning Damage : " + Engine.e.party[2].GetComponent<Character>().lightningPhysicalAttackBonus
-        + "\n Water Damage : " + Engine.e.party[2].GetComponent<Character>().waterPhysicalAttackBonus
-        + "\n Shadow Damage : " + Engine.e.party[2].GetComponent<Character>().shadowPhysicalAttackBonus;
+        charAttackStatsReference[0].text = Engine.e.party[2].GetComponent<Character>().physicalDamage.ToString();
+        charAttackStatsReference[1].text = Engine.e.party[2].GetComponent<Character>().firePhysicalAttackBonus.ToString();
+        charAttackStatsReference[2].text = Engine.e.party[2].GetComponent<Character>().icePhysicalAttackBonus.ToString();
+        charAttackStatsReference[3].text = Engine.e.party[2].GetComponent<Character>().lightningPhysicalAttackBonus.ToString();
+        charAttackStatsReference[4].text = Engine.e.party[2].GetComponent<Character>().waterPhysicalAttackBonus.ToString();
+        charAttackStatsReference[5].text = Engine.e.party[2].GetComponent<Character>().shadowPhysicalAttackBonus.ToString();
 
-        charDefenseStatsReference.text = string.Empty;
-        charDefenseStatsReference.text += "\nPhysical Defense: " + Engine.e.party[2].GetComponent<Character>().physicalDefense + "%"
-        + "\n\n Fire Defense : " + Engine.e.party[2].GetComponent<Character>().fireDefense + "%"
-        + "\n Ice Defense : " + Engine.e.party[2].GetComponent<Character>().iceDefense + "%"
-        + "\n Lightning Defense : " + Engine.e.party[2].GetComponent<Character>().lightningDefense + "%"
-        + "\n Water Defense : " + Engine.e.party[2].GetComponent<Character>().waterDefense + "%"
-        + "\n Shadow Defense : " + Engine.e.party[2].GetComponent<Character>().shadowDefense + "%";
+        charDefenseStatsReference[0].text = Engine.e.party[2].GetComponent<Character>().physicalDefense + "%";
+        charDefenseStatsReference[1].text = Engine.e.party[2].GetComponent<Character>().fireDefense + "%";
+        charDefenseStatsReference[2].text = Engine.e.party[2].GetComponent<Character>().iceDefense + "%";
+        charDefenseStatsReference[3].text = Engine.e.party[2].GetComponent<Character>().lightningDefense + "%";
+        charDefenseStatsReference[4].text = Engine.e.party[2].GetComponent<Character>().waterDefense + "%";
+        charDefenseStatsReference[5].text = Engine.e.party[2].GetComponent<Character>().shadowDefense + "%";
 
         fieldEquippedWeapon.itemName = fieldEquippedWeapon.GetComponent<InventorySlot>().itemName;
         fieldEquippedChestArmor.itemName = fieldEquippedChestArmor.GetComponent<InventorySlot>().itemName;
@@ -290,21 +284,19 @@ public class EquipDisplay : MonoBehaviour
         equipmentDisplays[2].SetActive(false);
         equipmentDisplays[3].SetActive(true);
 
-        charAttackStatsReference.text = string.Empty;
-        charAttackStatsReference.text += "\nPhysical Attack: " + Engine.e.party[3].GetComponent<Character>().physicalDamage
-        + "\n\n Fire Damage : " + Engine.e.party[3].GetComponent<Character>().firePhysicalAttackBonus
-        + "\n Ice Damage : " + Engine.e.party[3].GetComponent<Character>().icePhysicalAttackBonus
-        + "\n Lightning Damage : " + Engine.e.party[3].GetComponent<Character>().lightningPhysicalAttackBonus
-        + "\n Water Damage : " + Engine.e.party[3].GetComponent<Character>().waterPhysicalAttackBonus
-        + "\n Shadow Damage : " + Engine.e.party[3].GetComponent<Character>().shadowPhysicalAttackBonus;
+        charAttackStatsReference[0].text = Engine.e.party[3].GetComponent<Character>().physicalDamage.ToString();
+        charAttackStatsReference[1].text = Engine.e.party[3].GetComponent<Character>().firePhysicalAttackBonus.ToString();
+        charAttackStatsReference[2].text = Engine.e.party[3].GetComponent<Character>().icePhysicalAttackBonus.ToString();
+        charAttackStatsReference[3].text = Engine.e.party[3].GetComponent<Character>().lightningPhysicalAttackBonus.ToString();
+        charAttackStatsReference[4].text = Engine.e.party[3].GetComponent<Character>().waterPhysicalAttackBonus.ToString();
+        charAttackStatsReference[5].text = Engine.e.party[3].GetComponent<Character>().shadowPhysicalAttackBonus.ToString();
 
-        charDefenseStatsReference.text = string.Empty;
-        charDefenseStatsReference.text += "\nPhysical Defense: " + Engine.e.party[3].GetComponent<Character>().physicalDefense + "%"
-        + "\n\n Fire Defense : " + Engine.e.party[3].GetComponent<Character>().fireDefense + "%"
-        + "\n Ice Defense : " + Engine.e.party[3].GetComponent<Character>().iceDefense + "%"
-        + "\n Lightning Defense : " + Engine.e.party[3].GetComponent<Character>().lightningDefense + "%"
-        + "\n Water Defense : " + Engine.e.party[3].GetComponent<Character>().waterDefense + "%"
-        + "\n Shadow Defense : " + Engine.e.party[3].GetComponent<Character>().shadowDefense + "%";
+        charDefenseStatsReference[0].text = Engine.e.party[3].GetComponent<Character>().physicalDefense + "%";
+        charDefenseStatsReference[1].text = Engine.e.party[3].GetComponent<Character>().fireDefense + "%";
+        charDefenseStatsReference[2].text = Engine.e.party[3].GetComponent<Character>().iceDefense + "%";
+        charDefenseStatsReference[3].text = Engine.e.party[3].GetComponent<Character>().lightningDefense + "%";
+        charDefenseStatsReference[4].text = Engine.e.party[3].GetComponent<Character>().waterDefense + "%";
+        charDefenseStatsReference[5].text = Engine.e.party[3].GetComponent<Character>().shadowDefense + "%";
 
         riggsEquippedWeapon.itemName = riggsEquippedWeapon.GetComponent<InventorySlot>().itemName;
         riggsEquippedChestArmor.itemName = riggsEquippedChestArmor.GetComponent<InventorySlot>().itemName;
@@ -320,7 +312,7 @@ public class EquipDisplay : MonoBehaviour
     {
         for (int i = 0; i < charTMP.Length; i++)
         {
-            charTMP[i].color = Color.black;
+            charTMP[i].color = Color.white;
         }
         if (grieveScreen)
         {

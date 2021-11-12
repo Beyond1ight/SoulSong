@@ -15,8 +15,8 @@ public class QuestCompleteSlot : MonoBehaviour
     {
         quest = _quest;
         questName.GetComponent<TMP_Text>().text = _quest.questName;
-        questItemReward.GetComponent<TMP_Text>().text = _quest.itemReward.itemName;
-        questMoneyReward.GetComponent<TMP_Text>().text = _quest.moneyReward.ToString() + "G";
+        //questItemReward.GetComponent<TMP_Text>().text = _quest.itemReward.itemName;
+        //questMoneyReward.GetComponent<TMP_Text>().text = _quest.moneyReward.ToString() + "G";
     }
 
 
@@ -31,6 +31,7 @@ public class QuestCompleteSlot : MonoBehaviour
     }
     public void SetHelpText()
     {
+
         if (!Engine.e.adventureLogReference.adventureLogScreenCompletedQuestsSet)
         {
             Engine.e.adventureLogReference.adventureLogScreenCompletedQuestsSet = true;
@@ -39,10 +40,12 @@ public class QuestCompleteSlot : MonoBehaviour
         if (quest != null)
         {
             Engine.e.adventureLogReference.questDescription.text = quest.questDescription;
+            Engine.e.adventureLogReference.questComplete.text = "Complete!";
         }
         else
         {
             Engine.e.adventureLogReference.questDescription.text = string.Empty;
+            Engine.e.adventureLogReference.questComplete.text = string.Empty;
         }
     }
 
@@ -53,6 +56,7 @@ public class QuestCompleteSlot : MonoBehaviour
             Engine.e.adventureLogReference.adventureLogScreenCompletedQuestsSet = false;
         }
         Engine.e.adventureLogReference.questDescription.text = string.Empty;
+        Engine.e.adventureLogReference.questComplete.text = string.Empty;
 
     }
 }

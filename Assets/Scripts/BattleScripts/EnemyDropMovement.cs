@@ -174,7 +174,7 @@ public class EnemyDropMovement : MonoBehaviour
 
             characterObjectSprite.color = GetComponent<SpriteRenderer>().color;
             GetComponent<ParticleSystem>().Emit(1);
-            Engine.e.battleSystem.hud.displayHealth[Engine.e.battleSystem.previousTargetReferenceChar].text = Engine.e.activeParty.activeParty[Engine.e.battleSystem.previousTargetReferenceChar].GetComponent<Character>().currentHealth.ToString();
+            //Engine.e.battleSystem.hud.displayHealth[Engine.e.battleSystem.previousTargetReferenceChar].text = Engine.e.activeParty.activeParty[Engine.e.battleSystem.previousTargetReferenceChar].GetComponent<Character>().currentHealth.ToString();
             yield return new WaitForSeconds(1.0f);
             Engine.e.battleSystem.dropExists = false;
 

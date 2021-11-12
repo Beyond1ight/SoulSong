@@ -74,8 +74,10 @@ public class GameData
     public int partyMoney;
 
     public string[] partyQuests;
-    public string[] completedQuests;
+    public int[,] partyQuestObjectiveCount;
 
+    public string[] completedQuests;
+    public bool[] questTurnedIn;
     public string scene;
     public float time;
     public bool battleModeActive;
@@ -358,25 +360,35 @@ public class GameData
 
         // Quests
         partyQuests = new string[Engine.e.adventureLogReference.questLog.Length];
+        partyQuestObjectiveCount = new int[Engine.e.adventureLogReference.questLog.Length, 3];
         completedQuests = new string[Engine.e.adventureLogReference.questLog.Length];
+        questTurnedIn = new bool[Engine.e.adventureLogReference.questLog.Length];
 
         for (int i = 0; i < Engine.e.gameQuests.Length; i++)
         {
+
             if (Engine.e.gameQuests[i] != null)
             {
                 if (Engine.e.gameQuests[i].inAdventureLog)
                 {
-                    if (Engine.e.gameQuests[i].questComplete)
+                    if (Engine.e.gameQuests[i].isComplete && Engine.e.gameQuests[i].turnedIn)
                     {
                         completedQuests[i] = Engine.e.gameQuests[i].questName;
                     }
                     else
                     {
                         partyQuests[i] = Engine.e.gameQuests[i].questName;
+                        questTurnedIn[i] = false;
+
+                        for (int m = 0; m < Engine.e.gameQuests[i].objectiveCount.Length; m++)
+                        {
+                            int objectiveCount = Engine.e.gameQuests[i].objectiveCount[m];
+
+                            partyQuestObjectiveCount[i, m] = objectiveCount;
+                        }
                     }
                 }
             }
-
         }
 
         // World Position

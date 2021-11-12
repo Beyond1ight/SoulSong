@@ -9,13 +9,72 @@ public class AdventureLog : MonoBehaviour
     public Quest[] questLog, completedQuestLog;
     public QuestSlot[] questSlots;
     public QuestCompleteSlot[] completedQuestSlots;
-    public TextMeshProUGUI questDescription;
+    public TextMeshProUGUI questDescription, questObjective1Count, questObjective2Count, questObjective3Count, questComplete;
     public bool adventureLogScreenSet, adventureLogScreenCompletedQuestsSet;
     public int indexReference;
     public int questLogPointerIndex = 0, vertMove = 0;
     public RectTransform questLogRectTransform, completedQuestLogRectTransform;
     bool pressUp, pressDown, pressRelease = false;
     public GameObject currentQuestList, completedQuestList;
+
+    public void QuestManager(Enemy[] enemies)
+    {
+        for (int i = 0; i < questLog.Length; i++)
+        {
+            if (questLog[i] != null && !questLog[i].isComplete)
+            {
+                switch (questLog[i].questName)
+                {
+                    case "Prove Your Worth":
+
+                        for (int k = 0; k < enemies.Length; k++)
+                        {
+                            if (enemies[k] != null)
+                            {
+                                Debug.Log(enemies[k].enemyName);
+                                if (enemies[k].enemyName == "Fire Elemental")
+                                {
+                                    if (questLog[i].objectiveCount[0] < questLog[i].objectiveGoal[0])
+                                    {
+                                        questLog[i].objectiveCount[0]++;
+                                    }
+                                }
+                                else
+                                {
+                                    if (enemies[k].enemyName == "Skeleton Warrior")
+                                    {
+                                        if (questLog[i].objectiveCount[1] < questLog[i].objectiveGoal[1])
+                                        {
+                                            questLog[i].objectiveCount[1]++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (enemies[k].enemyName == "Cave Bat")
+                                        {
+                                            if (questLog[i].objectiveCount[2] < questLog[i].objectiveGoal[2])
+                                            {
+                                                questLog[i].objectiveCount[2]++;
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                        if (questLog[i].objectiveCount[0] == questLog[i].objectiveGoal[0] &&
+                            questLog[i].objectiveCount[1] == questLog[i].objectiveGoal[1] &&
+                            questLog[i].objectiveCount[2] == questLog[i].objectiveGoal[2])
+                        {
+                            //questLog[i].CompleteQuest();
+                            questLog[i].isComplete = true;
+                        }
+
+                        break;
+                }
+            }
+        }
+    }
 
     public void AddQuestToAdventureLog(Quest _quest)
     {
@@ -33,6 +92,10 @@ public class AdventureLog : MonoBehaviour
 
     public void AddQuestToCompleteQuestLog(Quest _quest)
     {
+        _quest.isComplete = true;
+        _quest.inAdventureLog = true;
+        _quest.turnedIn = true;
+
         for (int i = 0; i < questLog.Length; i++)
         {
             if (questLog[i] == _quest)

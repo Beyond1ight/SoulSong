@@ -20,7 +20,7 @@ public class Merchant : MonoBehaviour
     public GameObject shopButton, sellButton;
     public GameObject dialogueScreen, saleSelection;
     public GameObject confirmPurchase, denyPurchase;
-    private bool talking = false;
+    private bool talking, currentlyTalking = false;
     public bool buysAll, buysItems, buysWeapons, buysArmor, buysDrops = false;
     public MerchantInventorySlot[] inventorySlots;
     public List<Item> inventoryList;
@@ -33,7 +33,7 @@ public class Merchant : MonoBehaviour
 
     void Start()
     {
-        if (quest.questComplete)
+        if (quest.isComplete && quest.turnedIn)
         {
             for (int i = 0; i < Engine.e.adventureLogReference.completedQuestLog.Length; i++)
             {
@@ -87,7 +87,14 @@ public class Merchant : MonoBehaviour
 
             }
         }
-
+        if (currentlyTalking)
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                currentlyTalking = false;
+                // StartCoroutine(SkipType());
+            }
+        }
         if (talking)
         {
             if (quest == null)
@@ -101,7 +108,7 @@ public class Merchant : MonoBehaviour
             }
             else
             {
-                if (textDisplay.text == questSentences[questIndex])
+                if (textDisplay.text == questSentences[questIndex] || textDisplay.text == questCompleteSentences[questIndex])
                 {
                     continueButton.SetActive(true);
                 }
@@ -167,16 +174,99 @@ public class Merchant : MonoBehaviour
     IEnumerator Type()
     {
         talking = false;
+        currentlyTalking = true;
+
+        if (currentlyTalking)
+        {
+            if (quest == null)
+            {
+
+                foreach (char letter in sentences[index].ToCharArray())
+                {
+                    textDisplay.text += letter;
+
+                    yield return new WaitForSeconds(typingSpeed);
+
+                }
+                if (index == sentences.Length - 1)
+                {
+                    talking = false;
+                    endTalkButton.SetActive(true);
+                    continueButton.SetActive(false);
+                    EventSystem.current.SetSelectedGameObject(null);
+                    EventSystem.current.SetSelectedGameObject(endTalkButton);
+                }
+                else
+                {
+                    talking = true;
+                    currentlyTalking = false;
+                }
+            }
+            else
+            {
+                if (!quest.isComplete)
+                {
+                    foreach (char letter in questSentences[questIndex].ToCharArray())
+                    {
+                        textDisplay.text += letter;
+
+                        yield return new WaitForSeconds(typingSpeed);
+
+                    }
+                    if (questIndex == questSentences.Length - 1)
+                    {
+                        talking = false;
+                        endTalkButton.SetActive(true);
+                        continueButton.SetActive(false);
+                        EventSystem.current.SetSelectedGameObject(null);
+                        EventSystem.current.SetSelectedGameObject(endTalkButton);
+                    }
+                    else
+                    {
+                        talking = true;
+                        currentlyTalking = false;
+                    }
+                }
+                else
+                {
+                    foreach (char letter in questCompleteSentences[questIndex].ToCharArray())
+                    {
+                        textDisplay.text += letter;
+
+                        yield return new WaitForSeconds(typingSpeed);
+
+                    }
+                    if (questIndex == questCompleteSentences.Length - 1)
+                    {
+                        talking = false;
+                        endTalkButton.SetActive(true);
+                        continueButton.SetActive(false);
+                        EventSystem.current.SetSelectedGameObject(null);
+                        EventSystem.current.SetSelectedGameObject(endTalkButton);
+                    }
+                    else
+                    {
+                        talking = true;
+                        currentlyTalking = false;
+                    }
+                }
+            }
+        }
+    }
+
+
+    IEnumerator SkipType()
+    {
+        talking = false;
+        currentlyTalking = false;
 
         if (quest == null)
         {
-            foreach (char letter in sentences[index].ToCharArray())
-            {
-                textDisplay.text += letter;
+            textDisplay.text = sentences[index];
 
-                yield return new WaitForSeconds(typingSpeed);
+            yield return new WaitForSeconds(0.1f);
 
-            }
+
             if (index == sentences.Length - 1)
             {
                 talking = false;
@@ -187,19 +277,17 @@ public class Merchant : MonoBehaviour
             }
             else
                 talking = true;
-
         }
         else
         {
-            if (!quest.questComplete)
+            if (!quest.isComplete)
             {
-                foreach (char letter in questSentences[questIndex].ToCharArray())
-                {
-                    textDisplay.text += letter;
 
-                    yield return new WaitForSeconds(typingSpeed);
+                textDisplay.text = questSentences[questIndex];
 
-                }
+                yield return new WaitForSeconds(0.1f);
+
+
                 if (questIndex == questSentences.Length - 1)
                 {
                     talking = false;
@@ -214,13 +302,12 @@ public class Merchant : MonoBehaviour
             }
             else
             {
-                foreach (char letter in questCompleteSentences[questIndex].ToCharArray())
-                {
-                    textDisplay.text += letter;
 
-                    yield return new WaitForSeconds(typingSpeed);
+                textDisplay.text = questCompleteSentences[questIndex];
 
-                }
+                yield return new WaitForSeconds(0.1f);
+
+
                 if (questIndex == questCompleteSentences.Length - 1)
                 {
                     talking = false;
@@ -236,7 +323,6 @@ public class Merchant : MonoBehaviour
             }
         }
     }
-
 
     public void Talk()
     {
@@ -280,7 +366,7 @@ public class Merchant : MonoBehaviour
         }
         else
         {
-            if (!quest.questComplete)
+            if (!quest.isComplete)
             {
                 if (questIndex < questSentences.Length - 1)
                 {
@@ -313,7 +399,7 @@ public class Merchant : MonoBehaviour
 
         if (quest != null)
         {
-            if (!quest.questComplete)
+            if (!quest.isComplete)
             {
                 Engine.e.adventureLogReference.AddQuestToAdventureLog(quest);
             }

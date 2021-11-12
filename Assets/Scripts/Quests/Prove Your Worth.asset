@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c24be0a757cb4848841f460a8f03882, type: 3}
+  m_Name: Prove Your Worth
+  m_EditorClassIdentifier: 
+  questName: Prove Your Worth
+  questDescription: The village merchant informed you of a cave to the north west,
+    filled with various monsters. To make up for burning down the Clock Tower, your
+    task is to go clear some of the cave out. Slay four Fire Elementals, two Skeleton
+    Warriors, and one Cave Bat, and return to him!
+  objectiveCount: 000000000000000000000000
+  objectiveGoal: 040000000200000001000000
+  objectiveTarget:
+  - Fire Elemental
+  - Skeleton Warrior
+  - Cave Bat
+  moneyReward: 15
+  itemReward: {fileID: 0}
+  experienceReward: 500
+  isComplete: 0
+  inAdventureLog: 0
+  turnedIn: 0
+  questDialogue:
+  - Prove Your Worth
+  - Is it true you burned down the Clock Tower yesterday? What were you thinking!
+    If you want to make up for your foolishness, why don't you do the town a favor
+    and clear out some of the monsters at the cave to the north west.
+  - It won't restore the Clock Tower, but at least it will teach you both some discipline.
+    Come back here when you're done.
+  - I would suggest stocking up on a few Health Potions before you head out. Be careful,
+    you're an idiot but I don't want you to be a dead one.
+  questCompleteDialogue:
+  - Prove Your Worth
+  - Well now, I see you are back in one piece. I'm happy to see it, and I hope you
+    were able to reflect on your actions a bit more while you were over there!
+  - Don't burn down Clock Towers, I'm talking to you Mac. Burn down some monsters
+    instead!

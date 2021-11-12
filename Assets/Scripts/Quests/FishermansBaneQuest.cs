@@ -14,7 +14,7 @@ public class FishermansBaneQuest : MonoBehaviour
 
         if (questReference.inAdventureLog)
         {
-            if (questReference.questComplete)
+            if (questReference.isComplete)
             {
                 isDead = true;
 
@@ -43,14 +43,15 @@ public class FishermansBaneQuest : MonoBehaviour
             if (Engine.e.battleSystem.state == BattleState.LEVELUPCHECK)
             {
                 isDead = true;
-                questReference.questComplete = true;
+                questReference.objectiveCount[0]++;
+                questReference.isComplete = true;
             }
         }
     }
 
     void Update()
     {
-        if (questReference.inAdventureLog && !questReference.questComplete)
+        if (questReference.inAdventureLog && !questReference.isComplete)
         {
             HandleQuestObjective();
         }

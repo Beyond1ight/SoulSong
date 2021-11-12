@@ -146,11 +146,11 @@ MonoBehaviour:
   manaCapped: 1
   energyCapped: 1
   haste: 17
-  experiencePoints: 90
+  experiencePoints: 0
   levelUpReq: 100
   lvl: 1
   baseDamage: 10
-  physicalDamage: 10
+  physicalDamage: 20
   isInParty: 1
   isInActiveParty: 1
   isLeader: 1
@@ -161,7 +161,7 @@ MonoBehaviour:
   energyOffset: 0
   strengthOffset: 0
   dodgeChance: 10
-  physicalDefense: 7
+  physicalDefense: 12
   fireDefense: 1
   iceDefense: 1
   waterDefense: 1
@@ -311,8 +311,8 @@ MonoBehaviour:
   skillScale: 1
   stealChance: 60
   hitChance: 99
-  weapon: {fileID: 6075365292892509267, guid: 3df1b49a15c0a4fa7b1c86c96286159f, type: 3}
-  chestArmor: {fileID: 3137854586391407116, guid: 552a109bd39414d8180a998df500f23e, type: 3}
+  weapon: {fileID: 3708171271205290924, guid: a330945c7e17440d4b5ca34e0f93145d, type: 3}
+  chestArmor: {fileID: 475117527870452808, guid: c37cdb1cfe8e54b409308b0270b551c3, type: 3}
   skillIndex: 0
   skillTotal: 1
   isPoisoned: 0

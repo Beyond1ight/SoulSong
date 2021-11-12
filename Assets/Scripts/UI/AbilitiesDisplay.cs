@@ -883,7 +883,7 @@ public class AbilitiesDisplay : MonoBehaviour
             {
                 if (Engine.e.party[i] != null)
                 {
-                    charSelectionButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
+                    charSelectionButtons[i].GetComponentInChildren<TMP_Text>().color = Color.white;
                 }
             }
 

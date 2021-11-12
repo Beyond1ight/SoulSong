@@ -2123,6 +2123,13 @@ public class Engine : MonoBehaviour
                 if (gameData.partyQuests[i] == gameQuests[i].questName)
                 {
                     adventureLogReference.AddQuestToAdventureLog(gameQuests[i]);
+
+                    for (int k = 0; k < gameQuests[i].objectiveCount.Length; k++)
+                    {
+                        gameQuests[i].objectiveCount[k] = gameData.partyQuestObjectiveCount[i, k];
+                    }
+
+                    gameQuests[i].turnedIn = gameData.questTurnedIn[i];
                 }
             }
 
@@ -2131,6 +2138,7 @@ public class Engine : MonoBehaviour
                 if (gameData.completedQuests[i] == gameQuests[i].questName)
                 {
                     adventureLogReference.AddQuestToCompleteQuestLog(gameQuests[i]);
+
                 }
             }
         }
@@ -2884,6 +2892,8 @@ public class Engine : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             adventureLogReference.AddQuestToAdventureLog(gameQuests[0]);
+
+            adventureLogReference.AddQuestToAdventureLog(gameQuests[1]);
             //GameManager.gameManager.activeParty.activeParty[0].GetComponent<Grieve>().weapon.GetComponent<GrieveWeapons>().fireAttack += 10;
             partyInventoryReference.AddItemToInventory(gameInventory[0]);
             partyInventoryReference.AddItemToInventory(gameInventory[1]);
@@ -2893,7 +2903,6 @@ public class Engine : MonoBehaviour
             partyInventoryReference.AddItemToInventory(gameGrieveWeapons[1].GetComponent<GrieveWeapons>());
             partyInventoryReference.AddItemToInventory(gameChestArmor[2].GetComponent<ChestArmor>());
             partyInventoryReference.AddItemToInventory(gameFireDrops[0]);
-
             //partyInventoryReference.AddMacWeaponToInventory(macGameWeapons[2].GetComponent<MacWeapons>());
             //partyInventoryReference.AddFieldWeaponToInventory(fieldGameWeapons[2].GetComponent<FieldWeapons>());
 

@@ -9,7 +9,7 @@ public class EnemyGroup : MonoBehaviour
     public Quest quest;
     public int spawnChance;
     public static EnemyGroup enemyGroup;
-    public GameObject[] enemies;
+    public Enemy[] enemies;
     public List<Item> itemDrops;
     public Item item;
     public BattleSystem battleSystem;
@@ -25,9 +25,9 @@ public class EnemyGroup : MonoBehaviour
 
     void Start()
     {
-        battleSystem = Engine.e.battleSystem;
-
         GroupExperienceValue();
+
+        battleSystem = Engine.e.battleSystem;
 
         if (spawnChance != 0)
         {
@@ -50,15 +50,16 @@ public class EnemyGroup : MonoBehaviour
         if (other.name == "ActiveParty")
         {
             moveToPosition = true;
-            battleSystem.enemies = new GameObject[4];
+            battleSystem.enemies = new Enemy[4];
             battleSystem.enemyGroup = this;
             battleCamera.gameObject.SetActive(true);
+
             for (int i = 0; i < enemies.Length; i++)
             {
                 for (int j = i; j < battleSystem.enemies.Length; j++)
                 {
                     if (battleSystem.enemies[j] == null)
-                        battleSystem.enemies[i] = enemies[i].gameObject;
+                        battleSystem.enemies[i] = enemies[i];
                 }
             }
 
@@ -84,7 +85,8 @@ public class EnemyGroup : MonoBehaviour
     {
         for (int i = 0; i < enemies.Length; i++)
         {
-            groupExperienceLevel += enemies[i].gameObject.GetComponent<Enemy>().experiencePoints;
+            if (enemies[i] != null)
+                groupExperienceLevel += enemies[i].experiencePoints;
         }
         return groupExperienceLevel;
     }
@@ -96,7 +98,7 @@ public class EnemyGroup : MonoBehaviour
 
         for (int i = 0; i < enemies.Length; i++)
         {
-            if (enemies[i].gameObject != null)
+            if (enemies[i] != null)
             {
                 // EXP Gained
                 Engine.e.enemyLootReferenceExp.text = string.Empty;
@@ -142,11 +144,9 @@ public class EnemyGroup : MonoBehaviour
 
     public void HandleQuestObjective()
     {
-        if (quest != null)
-        {
-            // quest.
-        }
+
     }
+
     public void DestroyGroup()
     {
         Destroy(this.gameObject);
@@ -362,6 +362,34 @@ public class EnemyGroup : MonoBehaviour
     {
         if (moveToPosition)
             MoveToPosition();
+    }
+
+    public List<Enemy> GetEnemiesInGroup()
+    {
+        List<Enemy> enemiesInGroup = new List<Enemy>();
+
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            if (enemies[i] != null)
+            {
+                enemiesInGroup.Add(enemies[i].GetComponent<Enemy>());
+            }
+        }
+        return enemiesInGroup;
+    }
+
+    public List<Enemy> GetEnemyInGroup(string _enemyName)
+    {
+        List<Enemy> enemiesInGroup = new List<Enemy>();
+
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            if (enemies[i] != null && enemies[i].GetComponent<Enemy>().enemyName == _enemyName)
+            {
+                enemiesInGroup.Add(enemies[i].GetComponent<Enemy>());
+            }
+        }
+        return enemiesInGroup;
     }
 
     public void GetEnemyIndex(Enemy enemy)

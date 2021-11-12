@@ -18433,10 +18433,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c775b5cefcc4e0f96ea98f07a72786, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  quest: {fileID: 0}
   spawnChance: 99
   enemies:
-  - {fileID: 3923786371327316476}
-  - {fileID: 6413206868300743240}
+  - {fileID: 4622847354539459155}
+  - {fileID: 3611553706350189029}
   itemDrops: []
   item: {fileID: 0}
   battleSystem: {fileID: 0}
@@ -19138,6 +19139,17 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 320222316042589572, guid: 623cd691a5c5a43d7ab0e3f57595f012, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 623cd691a5c5a43d7ab0e3f57595f012, type: 3}
+--- !u!114 &3611553706350189029 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4130172063028136908, guid: 623cd691a5c5a43d7ab0e3f57595f012, type: 3}
+  m_PrefabInstance: {fileID: 3611553706350189028}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6413206868300743240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 550444e963d434843b39a0e08de9f7a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3923786371327316476 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8526353989801218990, guid: ca9e1b88a354e4208b1f2f0544f7fa8e, type: 3}
@@ -19307,6 +19319,17 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 1818470072761441670, guid: ca9e1b88a354e4208b1f2f0544f7fa8e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ca9e1b88a354e4208b1f2f0544f7fa8e, type: 3}
+--- !u!114 &4622847354539459155 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2602087732654638030, guid: ca9e1b88a354e4208b1f2f0544f7fa8e, type: 3}
+  m_PrefabInstance: {fileID: 4622847354539459154}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3923786371327316476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 550444e963d434843b39a0e08de9f7a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6413206868300743240 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7718775436105669548, guid: 623cd691a5c5a43d7ab0e3f57595f012, type: 3}
