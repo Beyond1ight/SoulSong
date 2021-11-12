@@ -87,12 +87,14 @@ public class Merchant : MonoBehaviour
 
             }
         }
+
         if (currentlyTalking)
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
-                currentlyTalking = false;
-                // StartCoroutine(SkipType());
+                StopAllCoroutines();
+
+                StartCoroutine(SkipType());
             }
         }
         if (talking)
@@ -176,19 +178,43 @@ public class Merchant : MonoBehaviour
         talking = false;
         currentlyTalking = true;
 
-        if (currentlyTalking)
-        {
-            if (quest == null)
-            {
 
-                foreach (char letter in sentences[index].ToCharArray())
+        if (quest == null)
+        {
+
+            foreach (char letter in sentences[index].ToCharArray())
+            {
+                textDisplay.text += letter;
+
+                yield return new WaitForSeconds(typingSpeed);
+
+            }
+            if (index == sentences.Length - 1)
+            {
+                talking = false;
+                endTalkButton.SetActive(true);
+                continueButton.SetActive(false);
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(endTalkButton);
+            }
+            else
+            {
+                talking = true;
+                currentlyTalking = false;
+            }
+        }
+        else
+        {
+            if (!quest.isComplete)
+            {
+                foreach (char letter in questSentences[questIndex].ToCharArray())
                 {
                     textDisplay.text += letter;
 
                     yield return new WaitForSeconds(typingSpeed);
 
                 }
-                if (index == sentences.Length - 1)
+                if (questIndex == questSentences.Length - 1)
                 {
                     talking = false;
                     endTalkButton.SetActive(true);
@@ -204,51 +230,25 @@ public class Merchant : MonoBehaviour
             }
             else
             {
-                if (!quest.isComplete)
+                foreach (char letter in questCompleteSentences[questIndex].ToCharArray())
                 {
-                    foreach (char letter in questSentences[questIndex].ToCharArray())
-                    {
-                        textDisplay.text += letter;
+                    textDisplay.text += letter;
 
-                        yield return new WaitForSeconds(typingSpeed);
+                    yield return new WaitForSeconds(typingSpeed);
 
-                    }
-                    if (questIndex == questSentences.Length - 1)
-                    {
-                        talking = false;
-                        endTalkButton.SetActive(true);
-                        continueButton.SetActive(false);
-                        EventSystem.current.SetSelectedGameObject(null);
-                        EventSystem.current.SetSelectedGameObject(endTalkButton);
-                    }
-                    else
-                    {
-                        talking = true;
-                        currentlyTalking = false;
-                    }
+                }
+                if (questIndex == questCompleteSentences.Length - 1)
+                {
+                    talking = false;
+                    endTalkButton.SetActive(true);
+                    continueButton.SetActive(false);
+                    EventSystem.current.SetSelectedGameObject(null);
+                    EventSystem.current.SetSelectedGameObject(endTalkButton);
                 }
                 else
                 {
-                    foreach (char letter in questCompleteSentences[questIndex].ToCharArray())
-                    {
-                        textDisplay.text += letter;
-
-                        yield return new WaitForSeconds(typingSpeed);
-
-                    }
-                    if (questIndex == questCompleteSentences.Length - 1)
-                    {
-                        talking = false;
-                        endTalkButton.SetActive(true);
-                        continueButton.SetActive(false);
-                        EventSystem.current.SetSelectedGameObject(null);
-                        EventSystem.current.SetSelectedGameObject(endTalkButton);
-                    }
-                    else
-                    {
-                        talking = true;
-                        currentlyTalking = false;
-                    }
+                    talking = true;
+                    currentlyTalking = false;
                 }
             }
         }
@@ -429,6 +429,7 @@ public class Merchant : MonoBehaviour
         dialogueScreen.SetActive(false);
         endButton.SetActive(false);
         shopButton.SetActive(false);
+        sellButton.SetActive(false);
         talkButton.SetActive(false);
         continueButton.SetActive(false);
         Engine.e.inBattle = false;
