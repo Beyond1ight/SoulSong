@@ -21,7 +21,7 @@ EditorBuildSettings:
     path: Assets/Scenes/FishingVillage/MariaNorthWest.unity
     guid: 6a060874b319b4a0aa9c15ba0ba521e7
   - enabled: 1
-    path: Assets/Scenes/FishingVillage/Maria.unity
+    path: Assets/Scenes/FishingVillage/Sturgeon.unity
     guid: 2554e95b98bbc42859c08b71d461790b
   - enabled: 1
     path: Assets/Scenes/FishingVillage/MariaSouthWest.unity

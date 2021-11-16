@@ -461,7 +461,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 181087874}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -110.88, y: -5.69, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1157617281}
@@ -582,7 +582,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 223234652}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -110.88, y: -5.69, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1362439131}
@@ -1249,11 +1249,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2078352036930986178, guid: 6a23f7160efac4dc3b1f8c70b258be8e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.352789
+      value: -104.52721
       objectReference: {fileID: 0}
     - target: {fileID: 2078352036930986178, guid: 6a23f7160efac4dc3b1f8c70b258be8e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.8368466
+      value: -7.5268464
       objectReference: {fileID: 0}
     - target: {fileID: 2078352036930986178, guid: 6a23f7160efac4dc3b1f8c70b258be8e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1970,7 +1970,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 818441229}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -22.35, y: 7.29, z: 0}
+  m_LocalPosition: {x: -28.43, y: 20.95, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5185616711191042854}
@@ -3091,7 +3091,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1178701134}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -110.88, y: -5.69, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1281778845}
@@ -13238,7 +13238,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1543768161}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -110.88, y: -5.69, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 911872354}
@@ -13354,7 +13354,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1667004683}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -110.88, y: -5.69, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1238218676}
@@ -15572,7 +15572,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1914893775}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -22.35, y: 7.29, z: 0}
+  m_LocalPosition: {x: -28.430002, y: 20.95, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5185616711191042854}
@@ -16225,7 +16225,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6058184828834983059}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -22.35, y: 7.29, z: 0}
+  m_LocalPosition: {x: -28.430002, y: 20.95, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5185616711191042854}
@@ -16381,7 +16381,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8403762740544047275}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.42, y: 5.57, z: 0}
+  m_LocalPosition: {x: -103.46, y: -0.12000036, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 232278435811429140}
@@ -16507,13 +16507,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b2994a76ed9b4f98bee9bf8e34173ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scene: MariaNorthWest
+  scene: WorldMap
   sceneUnload: MariaCave
   loaded: 0
   unloaded: 0
   transition: {fileID: 7043195738289901106}
   indoors: 0
-  worldMap: 0
+  worldMap: 1
 --- !u!225 &7906011623948250688
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -16547,7 +16547,7 @@ GameObject:
   - component: {fileID: 7422146847702533744}
   - component: {fileID: 6269601363370534265}
   m_Layer: 0
-  m_Name: MariaNorthWestTransition
+  m_Name: WorldMapTransition
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0

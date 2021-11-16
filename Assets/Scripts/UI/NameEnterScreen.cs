@@ -55,8 +55,9 @@ public class NameEnterScreen : MonoBehaviour
         {
             Engine.e.party[0].GetComponent<Character>().characterName = grieveName;
             SceneManager.UnloadSceneAsync("GrieveNameInput");
-            SceneManager.LoadSceneAsync("Maria", LoadSceneMode.Additive);
-            Engine.e.currentScene = "Maria";
+            SceneManager.LoadSceneAsync("Sturgeon", LoadSceneMode.Additive);
+            Engine.e.currentScene = "Sturgeon";
+            Engine.e.canvasReference.GetComponent<PauseMenu>().partyLocationDisplay.text = "Location: Sturgeon";
             Engine.e.activeParty.gameObject.transform.position = GameObject.FindWithTag("NewGameSpawnLocation").transform.position;
             Engine.e.activePartyMember2.transform.position = Engine.e.activeParty.gameObject.transform.position;
             Engine.e.activePartyMember3.transform.position = Engine.e.activeParty.gameObject.transform.position;

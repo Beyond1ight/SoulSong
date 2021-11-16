@@ -87,7 +87,8 @@ public class Engine : MonoBehaviour
     public GameObject[] charAbilityButtons, charSkillTierButtons;
     [SerializeField]
     TextMeshProUGUI[] inventoryMenuPartyNameStatsReference, inventoryMenuPartyHPStatsReference, inventoryMenuPartyMPStatsReference, inventoryMenuPartyENRStatsReference;
-
+    [SerializeField]
+    GameObject miniMap;
     //public float rainTimer = 0f, rainChance, rainOff;
     //public bool startTimer = true, stopTimer = false, weatherRainOn = false;
     // Music
@@ -123,9 +124,14 @@ public class Engine : MonoBehaviour
         arrangePartyButtonActive = false;
         mainCamera.GetComponent<CinemachineVirtualCamera>().Priority = 10;
         partyMoney = 100;
+        aboveLayer = false;
         inWorldMap = false;
         battleModeActive = true;
         battleSystem.enemyGroup = null;
+
+        activeParty.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Layer1";
+        activePartyMember2.GetComponent<SpriteRenderer>().sortingLayerName = "Layer1";
+        activePartyMember3.GetComponent<SpriteRenderer>().sortingLayerName = "Layer1";
 
     }
 
@@ -2216,21 +2222,57 @@ public class Engine : MonoBehaviour
         currentScene = gameData.scene;
         SceneManager.LoadSceneAsync(gameData.scene, LoadSceneMode.Additive);
         battleModeActive = gameData.battleModeActive;
+        Engine.e.canvasReference.GetComponent<PauseMenu>().partyLocationDisplay.text = gameData.scene;
 
         if (gameData.scene == "WorldMap")
         {
-            if (mainCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 5)
+            if (Engine.e.mainCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 6.5f)
             {
-                mainCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 7.5f;
-                activeParty.GetComponent<PlayerController>().speed = 3.5f;
-                if (activeParty.activeParty[1] != null)
-                {
-                    activePartyMember2.GetComponent<APFollow>().speed = 3.5f;
-                }
-                if (activeParty.activeParty[2] != null)
-                {
-                    activePartyMember3.GetComponent<APFollow>().speed = 3.5f;
-                }
+                Engine.e.mainCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 10f;
+            }
+
+            Engine.e.activeParty.gameObject.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
+            Engine.e.activeParty.GetComponent<PlayerController>().speed = 3.5f;
+
+            if (Engine.e.activeParty.activeParty[1] != null)
+            {
+                Engine.e.activePartyMember2.GetComponent<APFollow>().speed = 3.5f;
+                Engine.e.activePartyMember2.GetComponent<APFollow>().distance = 1.0f;
+                Engine.e.activePartyMember2.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
+
+            }
+            if (Engine.e.activeParty.activeParty[2] != null)
+            {
+                Engine.e.activePartyMember3.GetComponent<APFollow>().speed = 3.5f;
+                Engine.e.activePartyMember3.GetComponent<APFollow>().distance = 1.0f;
+                Engine.e.activePartyMember3.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
+
+            }
+
+            ableToSave = true;
+        }
+        else
+        {
+            if (Engine.e.mainCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 10f)
+            {
+                Engine.e.mainCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 6.5f;
+            }
+
+            Engine.e.activeParty.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
+            Engine.e.activeParty.GetComponent<PlayerController>().speed = 4.5f;
+            if (Engine.e.activeParty.activeParty[1] != null)
+            {
+                Engine.e.activePartyMember2.GetComponent<APFollow>().speed = 4.5f;
+                Engine.e.activePartyMember2.GetComponent<APFollow>().distance = 1.25f;
+                Engine.e.activePartyMember2.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
+
+            }
+            if (Engine.e.activeParty.activeParty[2] != null)
+            {
+                Engine.e.activePartyMember3.GetComponent<APFollow>().speed = 4.5f;
+                Engine.e.activePartyMember3.GetComponent<APFollow>().distance = 1.25f;
+                Engine.e.activePartyMember3.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
+
             }
         }
     }
@@ -2931,6 +2973,22 @@ public class Engine : MonoBehaviour
         {
 
         }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            if (!inBattle)
+            {
+                if (miniMap.activeInHierarchy)
+                {
+                    miniMap.SetActive(false);
+                }
+                else
+                {
+                    miniMap.SetActive(true);
+                }
+            }
+        }
+
         if (Input.GetKeyDown(KeyCode.I))
         {
             AddCharacterToParty("Mac");

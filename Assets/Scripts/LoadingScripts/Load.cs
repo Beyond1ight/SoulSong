@@ -37,6 +37,7 @@ public class Load : MonoBehaviour
                 Engine.e.indoors = indoors;
                 Engine.e.inWorldMap = worldMap;
 
+
                 if (Engine.e.inWorldMap)
                 {
                     if (Engine.e.mainCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 6.5f)
@@ -61,6 +62,9 @@ public class Load : MonoBehaviour
                         Engine.e.activePartyMember3.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
 
                     }
+                    Engine.e.canvasReference.GetComponent<PauseMenu>().partyLocationDisplay.text = string.Empty;
+                    Engine.e.canvasReference.GetComponent<PauseMenu>().partyLocationDisplay.text = "Location: World Map";
+                    Engine.e.ableToSave = true;
                 }
                 else
                 {
@@ -85,6 +89,9 @@ public class Load : MonoBehaviour
                         Engine.e.activePartyMember3.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
 
                     }
+                    Engine.e.canvasReference.GetComponent<PauseMenu>().partyLocationDisplay.text = string.Empty;
+                    Engine.e.canvasReference.GetComponent<PauseMenu>().partyLocationDisplay.text = "Location: " + GetComponent<Teleport>().onLoadSceneReference;
+                    Engine.e.ableToSave = false;
                 }
 
                 if (Engine.e.activeParty.transform.position != GetComponent<Teleport>().toLocation.transform.position)
@@ -148,6 +155,7 @@ public class Load : MonoBehaviour
                             Engine.e.activePartyMember3.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
 
                         }
+
                     }
                     else
                     {
@@ -172,6 +180,7 @@ public class Load : MonoBehaviour
                             Engine.e.activePartyMember3.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
 
                         }
+
                     }
 
                     if (Engine.e.activeParty.transform.position != GetComponent<Teleport>().toLocation.transform.position)
