@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Enemy
   - Tilemap
+  - NewGameSpawnLocation
+  - PartyMember2
+  - PartyMember3
   layers:
   - Default
   - TransparentFX
@@ -17,11 +20,11 @@ TagManager:
   - GlobalLighting
   - Over
   - PostProcessing
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Layer1
+  - Layer2
+  - Layer3
+  - Layer4
   - 
   - 
   - 
@@ -42,4 +45,16 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Layer1
+    uniqueID: 1510677795
+    locked: 0
+  - name: Layer2
+    uniqueID: 1797195743
+    locked: 0
+  - name: Layer3
+    uniqueID: 2857306257
+    locked: 0
+  - name: Layer4
+    uniqueID: 1885155551
     locked: 0

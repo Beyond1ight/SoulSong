@@ -5,18 +5,9 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/NeverUnload.unity
     guid: ae392db358a9a44ff822bcc845b8d97d
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/WorldMap.unity
     guid: 30fb5c71893cb4117a38567b6bc6f4ec
@@ -45,14 +36,8 @@ EditorBuildSettings:
     path: Assets/Scenes/FishingVillage/MariaWest.unity
     guid: ddc52439b875143efa391e424c1e13c4
   - enabled: 1
-    path: Assets/Scenes/FishingVillage/MariaWeaponShop.unity
-    guid: b60e23ceaea6244fda154d4aed5160c7
-  - enabled: 1
     path: Assets/Scenes/FishingVillage/MariaCave.unity
     guid: 6b79904d01d8c40c1b8411e9e144450e
-  - enabled: 1
-    path: Assets/Scenes/FishingVillage/MariaDropShop.unity
-    guid: 8047964796b07472494bf36271da8e33
   - enabled: 1
     path: Assets/Scenes/FishingVillage/MariaTavern.unity
     guid: 88d1b358dfbec47aab48b932317e00f9
@@ -60,17 +45,11 @@ EditorBuildSettings:
     path: Assets/Scenes/FishingVillage/MariaTavernUpstairs.unity
     guid: 418aa8998fe934d64a5c25c57b9ae932
   - enabled: 1
-    path: Assets/Scenes/FishingVillage/MariaItemShop.unity
-    guid: f0b86ab9a001f4a98ab9a2e1af40a0c8
-  - enabled: 1
     path: Assets/Scenes/Juniper/JuniperCave.unity
     guid: af21b5ff3c70143aa92f09bbf02ba1a5
   - enabled: 1
     path: Assets/Scenes/Juniper/Juniper.unity
     guid: 125c09a9ee4f84ee58e64ed775df7912
-  - enabled: 1
-    path: Assets/Scenes/Juniper/JuniperWest.unity
-    guid: 58346b3491d324458b5d2b41d90aab90
   - enabled: 1
     path: Assets/Scenes/Juniper/JuniperEast.unity
     guid: c931256fe6bb64238b18257493986940

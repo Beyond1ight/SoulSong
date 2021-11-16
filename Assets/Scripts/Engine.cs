@@ -22,6 +22,7 @@ public class Engine : MonoBehaviour
     public bool inWorldMap = false;
     public bool inRange = false;
     public bool battleModeActive = true;
+    public bool aboveLayer = false;
 
     // Stat Curves
     [SerializeField]
@@ -117,13 +118,11 @@ public class Engine : MonoBehaviour
         loadTimer = true;
         SceneManager.LoadSceneAsync("GrieveNameInput", LoadSceneMode.Additive);
 
-
         activeParty.SetLeaderSprite();
         timeOfDay = 0f;
         arrangePartyButtonActive = false;
         mainCamera.GetComponent<CinemachineVirtualCamera>().Priority = 10;
         partyMoney = 100;
-        activeParty.gameObject.transform.position = startingPos;
         inWorldMap = false;
         battleModeActive = true;
         battleSystem.enemyGroup = null;
@@ -2197,6 +2196,16 @@ public class Engine : MonoBehaviour
 
         }
 
+        aboveLayer = gameData.aboveLayer;
+        activeParty.GetComponent<SpriteRenderer>().sortingLayerName = gameData.whichLayer;
+        if (party[1] != null)
+        {
+            activePartyMember2.GetComponent<SpriteRenderer>().sortingLayerName = activeParty.GetComponent<SpriteRenderer>().sortingLayerName;
+        }
+        if (party[2] != null)
+        {
+            activePartyMember3.GetComponent<SpriteRenderer>().sortingLayerName = activeParty.GetComponent<SpriteRenderer>().sortingLayerName;
+        }
         ActivatePauseMenuCharacterPanels();
         arrangePartyButtonActive = gameData.arrangePartyButtonActive;
 
@@ -2886,6 +2895,7 @@ public class Engine : MonoBehaviour
     // Calls Update() every frame.
     void Update()
     {
+
 
         timeOfDay += Time.deltaTime;
 

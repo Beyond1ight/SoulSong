@@ -10,7 +10,7 @@ public class Interactable : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && !other.isTrigger)
+        if (other.CompareTag("Player") && !other.isTrigger && GetComponent<SpriteRenderer>().sortingLayerName == Engine.e.activeParty.GetComponent<SpriteRenderer>().sortingLayerName)
         {
             context.Raise();
             playerInRange = true;

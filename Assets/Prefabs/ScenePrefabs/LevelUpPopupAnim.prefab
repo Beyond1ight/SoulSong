@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7151524221447135127}
   - component: {fileID: 4910671963249096783}
   - component: {fileID: 3892599446026803828}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: LevelUpPopupAnim
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -75,8 +75,8 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1885155551
+  m_SortingLayer: 4
   m_SortingOrder: 50
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &4910671963249096783
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 7151524221447135127}
   m_maskType: 0
-  _SortingLayerID: 0
+  _SortingLayerID: 1885155551
   _SortingOrder: 50
 --- !u!95 &3892599446026803828
 Animator:
@@ -198,7 +198,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1005695828012631352}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: LevelUpPopupAnim
   m_TagString: Untagged
   m_Icon: {fileID: 0}

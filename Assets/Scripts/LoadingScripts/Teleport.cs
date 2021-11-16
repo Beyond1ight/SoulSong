@@ -9,12 +9,21 @@ public class Teleport : MonoBehaviour
     public GameObject activeParty3Location;
     public string onLoadSceneReference;
 
-    public void OnTriggerEnter2D(Collider2D other)
+    public void OnTriggerStay2D(Collider2D other)
     {
-        if (other.name == "ActiveParty")
+        if (!Engine.e.inWorldMap)
         {
-            StartCoroutine(Teleport());
-
+            if (other.name == "ActiveParty")
+            {
+                StartCoroutine(Teleport());
+            }
+        }
+        else
+        {
+            if (other.name == "ActiveParty" && Input.GetKeyDown(KeyCode.E))
+            {
+                StartCoroutine(Teleport());
+            }
         }
         IEnumerator Teleport()
         {

@@ -306,7 +306,7 @@ MonoBehaviour:
   - {fileID: 0}
   spellPower: 0
   skillPower: 0
-  lastDropChoice: {fileID: 11400000, guid: 1227ecefb6f5e4a1c9a406e55a2cc35d, type: 2}
+  lastDropChoice: {fileID: 11400000, guid: 877fa2c092b4e40128e3db11707ac684, type: 2}
   lastSkillChoice: {fileID: 0}
   skillScale: 1
   stealChance: 60

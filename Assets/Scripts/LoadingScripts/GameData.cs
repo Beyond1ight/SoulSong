@@ -81,7 +81,8 @@ public class GameData
     public string scene;
     public float time;
     public bool battleModeActive;
-
+    public bool aboveLayer;
+    public string whichLayer;
 
     public GameData(Engine gameManager)
     {
@@ -410,6 +411,8 @@ public class GameData
             activeParty[2] = gameManager.activeParty.activeParty[2].GetComponent<Character>().characterName;
         }
 
+        aboveLayer = Engine.e.aboveLayer;
+        whichLayer = Engine.e.activeParty.GetComponent<SpriteRenderer>().sortingLayerName;
         scene = gameManager.currentScene;
         time = gameManager.timeOfDay;
 

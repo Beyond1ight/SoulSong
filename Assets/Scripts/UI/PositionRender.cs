@@ -18,16 +18,19 @@ public class PositionRender : MonoBehaviour
 
     private void Awake()
     {
-        myRenderer = gameObject.GetComponent<Renderer>();
+        myRenderer = gameObject.GetComponent<SpriteRenderer>();
     }
 
     void LateUpdate()
     {
+        Debug.Log("Test");
         timer -= Time.deltaTime;
         if (timer <= 0f)
         {
             timer = timerMax;
-            myRenderer.sortingOrder = (int)(sortingOrderBase - transform.position.y - offset);
+            // myRenderer.sortingOrder = (int)(sortingOrderBase - transform.position.y - offset);
+            myRenderer.sortingOrder = (int)Engine.e.transform.position.z;
+
             if (runOnlyOnce)
             {
                 Destroy(this);

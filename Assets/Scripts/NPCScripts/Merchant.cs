@@ -72,7 +72,7 @@ public class Merchant : MonoBehaviour
 
     void Update()
     {
-        if (GetComponent<NPC>().playerInRange && !Engine.e.inBattle)
+        if (GetComponent<NPC>().playerInRange && !Engine.e.inBattle && GetComponent<SpriteRenderer>().sortingLayerName == Engine.e.activeParty.GetComponent<SpriteRenderer>().sortingLayerName)
         {
             if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown("joystick button 0"))
             {
@@ -90,7 +90,7 @@ public class Merchant : MonoBehaviour
 
         if (currentlyTalking)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown("joystick button 0"))
             {
                 StopAllCoroutines();
 
