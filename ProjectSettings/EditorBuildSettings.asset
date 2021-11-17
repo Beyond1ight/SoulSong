@@ -53,4 +53,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Juniper/JuniperEast.unity
     guid: c931256fe6bb64238b18257493986940
+  - enabled: 1
+    path: Assets/Scenes/Juniper/JuniperShop.unity
+    guid: d5da43cd8d5494fe3936eb902ffcaebe
   m_configObjects: {}

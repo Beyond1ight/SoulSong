@@ -51,7 +51,7 @@ public class Engine : MonoBehaviour
     public List<int> remainingPartyMembers;
     bool gameStart;
     public static Engine e;
-    public bool ableToSave, arrangePartyButtonActive, char1LevelUp, char2LevelUp, char3LevelUp;
+    public bool loading, onRamp, ableToSave, arrangePartyButtonActive, char1LevelUp, char2LevelUp, char3LevelUp;
     public BattleSystem battleSystem;
     int nextRemainingCharacterIndex, randomPartyMemberIndex;
     public CinemachineVirtualCamera mainCamera;
@@ -128,7 +128,7 @@ public class Engine : MonoBehaviour
         inWorldMap = false;
         battleModeActive = true;
         battleSystem.enemyGroup = null;
-
+        onRamp = false;
         activeParty.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Layer1";
         activePartyMember2.GetComponent<SpriteRenderer>().sortingLayerName = "Layer1";
         activePartyMember3.GetComponent<SpriteRenderer>().sortingLayerName = "Layer1";
@@ -1831,6 +1831,7 @@ public class Engine : MonoBehaviour
     public void LoadGame()
     {
         GameData gameData = SaveSystem.LoadGame();
+        loading = true;
         SetInventoryArrayPositions();
         party = new GameObject[playableCharacters.Length];
         activeParty.activeParty = new GameObject[3];
@@ -2155,6 +2156,7 @@ public class Engine : MonoBehaviour
         partyPosition.y = gameData.partyPosition[1];
         partyPosition.z = gameData.partyPosition[2];
 
+
         timeOfDay = gameData.time;
         partyMoney = gameData.partyMoney;
         activeParty.gameObject.GetComponent<SpriteRenderer>().sprite = activeParty.activeParty[0].gameObject.GetComponent<SpriteRenderer>().sprite;
@@ -2220,7 +2222,9 @@ public class Engine : MonoBehaviour
             ActivateArrangePartyButton();
         }
         currentScene = gameData.scene;
+
         SceneManager.LoadSceneAsync(gameData.scene, LoadSceneMode.Additive);
+
         battleModeActive = gameData.battleModeActive;
         Engine.e.canvasReference.GetComponent<PauseMenu>().partyLocationDisplay.text = gameData.scene;
 

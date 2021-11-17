@@ -26,8 +26,17 @@ public class PlayerController : MonoBehaviour
     {
         if (!Engine.e.inBattle)
         {
-            movement.x = Input.GetAxisRaw("Horizontal") * speed;
-            movement.y = Input.GetAxisRaw("Vertical") * speed;
+            if (!Engine.e.onRamp)
+            {
+                movement.x = Input.GetAxisRaw("Horizontal") * speed;
+                movement.y = Input.GetAxisRaw("Vertical") * speed;
+            }
+            else
+            {
+                movement.x = Input.GetAxisRaw("Horizontal") * speed;
+                movement.y = Input.GetAxisRaw("Horizontal") * speed;
+
+            }
         }
         else
         {
