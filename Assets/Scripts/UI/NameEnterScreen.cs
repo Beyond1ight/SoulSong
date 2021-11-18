@@ -61,7 +61,7 @@ public class NameEnterScreen : MonoBehaviour
             Engine.e.activeParty.gameObject.transform.position = GameObject.FindWithTag("NewGameSpawnLocation").transform.position;
             Engine.e.activePartyMember2.transform.position = Engine.e.activeParty.gameObject.transform.position;
             Engine.e.activePartyMember3.transform.position = Engine.e.activeParty.gameObject.transform.position;
-
+            Engine.e.gameStart = true;
         }
         else
         {

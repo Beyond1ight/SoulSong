@@ -23,6 +23,7 @@ public class Engine : MonoBehaviour
     public bool inRange = false;
     public bool battleModeActive = true;
     public bool aboveLayer = false;
+    public bool autoSaveReady, recentAutoSave = false;
 
     // Stat Curves
     [SerializeField]
@@ -49,9 +50,8 @@ public class Engine : MonoBehaviour
     public int characterBeingTargeted, charBeingTargeted;
     public Item itemToBeUsed;
     public List<int> remainingPartyMembers;
-    bool gameStart;
     public static Engine e;
-    public bool loading, onRamp, ableToSave, arrangePartyButtonActive, char1LevelUp, char2LevelUp, char3LevelUp;
+    public bool gameStart, loading, onRamp, ableToSave, arrangePartyButtonActive, char1LevelUp, char2LevelUp, char3LevelUp;
     public BattleSystem battleSystem;
     int nextRemainingCharacterIndex, randomPartyMemberIndex;
     public CinemachineVirtualCamera mainCamera;
@@ -78,6 +78,7 @@ public class Engine : MonoBehaviour
     public PartyInventory partyInventoryReference;
     public AdventureLog adventureLogReference;
     public EquipDisplay equipMenuReference;
+    public FileMenu fileMenuReference;
     public BattleMenu battleMenu;
     public AbilitiesDisplay abilityScreenReference;
     public GameObject mainMenu, battleSystemMenu;
@@ -96,11 +97,10 @@ public class Engine : MonoBehaviour
 
     void Awake()
     {
-        if (!gameStart)
-        {
-            e = this;
-            gameStart = true;
-        }
+        gameStart = false;
+        e = this;
+        SaveSystem.CheckFilesForDisplay();
+
     }
 
     // Establishes a New Game. Clears multiple variables to their default states for a fresh start.
@@ -120,7 +120,8 @@ public class Engine : MonoBehaviour
         SceneManager.LoadSceneAsync("GrieveNameInput", LoadSceneMode.Additive);
 
         activeParty.SetLeaderSprite();
-        timeOfDay = 0f;
+        timeOfDay = 750f;
+        recentAutoSave = true;
         arrangePartyButtonActive = false;
         mainCamera.GetComponent<CinemachineVirtualCamera>().Priority = 10;
         partyMoney = 100;
@@ -1811,14 +1812,12 @@ public class Engine : MonoBehaviour
     }
 
     // Establishes a new Save File by storing the data found in the GameData class.
-    public void SaveGame()
+    public void SaveGame(int saveSlot)
     {
         if (ableToSave)
         {
-            SaveSystem.SaveGame(this);
-            GameObject dmgPopup = Instantiate(battleSystem.damagePopup, activeParty.transform.position, Quaternion.identity);
-            dmgPopup.GetComponentInChildren<TMP_Text>().text = "Save Complete!";
-            Destroy(dmgPopup, 1f);
+            SaveSystem.SaveGame(this, saveSlot);
+
         }
         else
         {
@@ -1828,10 +1827,14 @@ public class Engine : MonoBehaviour
     }
 
     // Sets values based on an existing Save File.    
-    public void LoadGame()
+    public void LoadGame(int saveSlot)
     {
-        GameData gameData = SaveSystem.LoadGame();
+        GameData gameData = SaveSystem.LoadGame(saveSlot);
         loading = true;
+        recentAutoSave = true;
+        fileMenuReference.loading = false;
+        fileMenuReference.saveMenuSet = false;
+        fileMenuReference.gameObject.SetActive(false);
         SetInventoryArrayPositions();
         party = new GameObject[playableCharacters.Length];
         activeParty.activeParty = new GameObject[3];
@@ -2156,13 +2159,19 @@ public class Engine : MonoBehaviour
         partyPosition.y = gameData.partyPosition[1];
         partyPosition.z = gameData.partyPosition[2];
 
-
-        timeOfDay = gameData.time;
+        if (gameData.time <= 50)
+        {
+            timeOfDay = 51;
+        }
+        else
+        {
+            timeOfDay = gameData.time;
+        }
         partyMoney = gameData.partyMoney;
         activeParty.gameObject.GetComponent<SpriteRenderer>().sprite = activeParty.activeParty[0].gameObject.GetComponent<SpriteRenderer>().sprite;
         activeParty.gameObject.transform.position = partyPosition;
         activePartyMember2.gameObject.transform.position = partyPosition;
-
+        inWorldMap = gameData.inWorldMap;
         if (activeParty.activeParty[1] != null)
         {
             activePartyMember2.gameObject.GetComponent<SpriteRenderer>().sprite = activeParty.activeParty[1].gameObject.GetComponent<SpriteRenderer>().sprite;
@@ -2279,6 +2288,7 @@ public class Engine : MonoBehaviour
 
             }
         }
+        gameStart = true;
     }
 
     // Establishes a battle by communicating with the BattleSystem class.
@@ -2942,8 +2952,24 @@ public class Engine : MonoBehaviour
     void Update()
     {
 
+        if (gameStart)
+        {
+            if (timeOfDay > 650 || timeOfDay < 400)
+            {
+                timeOfDay += Time.deltaTime / 2;
+            }
+            else
+            {
+                timeOfDay += Time.deltaTime;
+            }
+        }
 
-        timeOfDay += Time.deltaTime;
+        if (autoSaveReady && ableToSave && !inBattle && !recentAutoSave)
+        {
+            autoSaveReady = false;
+            recentAutoSave = true;
+            SaveGame(3);
+        }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -2971,8 +2997,14 @@ public class Engine : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.O) || Input.GetKeyDown("joystick button 2"))
         {
-            SaveGame();
+            //SaveGame();
         }
+
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            SaveGame(0);
+        }
+
         if (Input.GetKeyDown(KeyCode.P))
         {
 

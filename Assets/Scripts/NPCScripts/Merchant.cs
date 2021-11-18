@@ -399,13 +399,12 @@ public class Merchant : MonoBehaviour
 
         if (quest != null)
         {
-            if (!quest.isComplete)
+            if (!quest.isComplete && !quest.inAdventureLog)
             {
                 Engine.e.adventureLogReference.AddQuestToAdventureLog(quest);
             }
             else
             {
-
                 quest.AddRewardsToPartyInventory();
                 Engine.e.adventureLogReference.AddQuestToCompleteQuestLog(quest);
                 quest = null;

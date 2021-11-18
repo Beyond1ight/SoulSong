@@ -14,6 +14,15 @@ public class DayAndNight : MonoBehaviour
 
     private void Update()
     {
+        if (Engine.e.timeOfDay < 50)
+        {
+            Engine.e.recentAutoSave = false;
+        }
+        if (Engine.e.timeOfDay > 50 && !Engine.e.recentAutoSave && !Engine.e.autoSaveReady && !Engine.e.inBattle)
+        {
+            Engine.e.autoSaveReady = true;
+        }
+
         if ((int)Engine.e.timeOfDay >= 400 && (int)Engine.e.timeOfDay <= 650)
         {
             if (daylight == true)

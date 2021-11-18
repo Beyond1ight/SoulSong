@@ -813,6 +813,26 @@ PrefabInstance:
       propertyPath: m_ShapeLightParametricRadius
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5907642815693464936, guid: 6a23f7160efac4dc3b1f8c70b258be8e, type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5907642815693464936, guid: 6a23f7160efac4dc3b1f8c70b258be8e, type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.data[1]
+      value: 1510677795
+      objectReference: {fileID: 0}
+    - target: {fileID: 5907642815693464936, guid: 6a23f7160efac4dc3b1f8c70b258be8e, type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.data[2]
+      value: 1797195743
+      objectReference: {fileID: 0}
+    - target: {fileID: 5907642815693464936, guid: 6a23f7160efac4dc3b1f8c70b258be8e, type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.data[3]
+      value: -1437661039
+      objectReference: {fileID: 0}
+    - target: {fileID: 5907642815693464936, guid: 6a23f7160efac4dc3b1f8c70b258be8e, type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.data[4]
+      value: 1885155551
+      objectReference: {fileID: 0}
     - target: {fileID: 7199058918817099902, guid: 6a23f7160efac4dc3b1f8c70b258be8e, type: 3}
       propertyPath: lighting
       value: 

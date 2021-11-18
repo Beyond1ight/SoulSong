@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class GameData
 {
-
+    public static GameData gameData;
     public string[] charNames;
     public float[] charMaxHealth;
     public float[] charCurrentHealth;
@@ -82,6 +82,8 @@ public class GameData
     public float time;
     public bool battleModeActive;
     public bool aboveLayer;
+    public bool inWorldMap;
+    public bool recentAutoSave;
     public string whichLayer;
 
     public GameData(Engine gameManager)
@@ -415,9 +417,7 @@ public class GameData
         whichLayer = Engine.e.activeParty.GetComponent<SpriteRenderer>().sortingLayerName;
         scene = gameManager.currentScene;
         time = gameManager.timeOfDay;
-
+        inWorldMap = Engine.e.inWorldMap;
         partyMoney = gameManager.partyMoney;
-
     }
-
 }
