@@ -35,14 +35,8 @@ public class GameData
 
 
 
-    public string[,] charFireDrops;
-    public string[,] charIceDrops;
-    public string[,] charHolyDrops;
-    public string[,] charWaterDrops;
-    public string[,] charLightningDrops;
-    public string[,] charShadowDrops;
+    public string[,] charDrops;
 
-    public bool[] fireDropsisKnown, iceDropsisKnown, lightningDropsisKnown, waterDropsisKnown, shadowDropsisKnown, holyDropsisKnown;
 
     public float[] charFireDropLevel, charWaterDropLevel, charLightningDropLevel, charShadowDropLevel, charIceDropLevel, charHolyDropLevel;
     public float[] charFireDropExperience, charWaterDropExperience, charLightningDropExperience, charShadowDropExperience, charIceDropExperience, charHolyDropExperience;
@@ -85,7 +79,8 @@ public class GameData
     public bool inWorldMap;
     public bool recentAutoSave;
     public string whichLayer;
-
+    public bool[] grieveNodes, macNodes, fieldNodes, riggsNodes;
+    public int[] charNodePositions;
     public GameData(Engine gameManager)
     {
         charNames = new string[gameManager.party.Length];
@@ -143,21 +138,14 @@ public class GameData
         charConfuseDefense = new float[gameManager.party.Length];
         charHaste = new float[gameManager.party.Length];
 
-
-        charFireDrops = new string[gameManager.party.Length, gameManager.fireDrops.Length];
+        charDrops = new string[Engine.e.party.Length, Engine.e.gameDrops.Length];
+        /*charFireDrops = new string[gameManager.party.Length, gameManager.fireDrops.Length];
         charHolyDrops = new string[gameManager.party.Length, gameManager.holyDrops.Length];
         charWaterDrops = new string[gameManager.party.Length, gameManager.waterDrops.Length];
         charLightningDrops = new string[gameManager.party.Length, gameManager.lightningDrops.Length];
         charShadowDrops = new string[gameManager.party.Length, gameManager.shadowDrops.Length];
         charIceDrops = new string[gameManager.party.Length, gameManager.iceDrops.Length];
-
-        fireDropsisKnown = new bool[gameManager.fireDrops.Length];
-        iceDropsisKnown = new bool[gameManager.iceDrops.Length];
-        lightningDropsisKnown = new bool[gameManager.lightningDrops.Length];
-        waterDropsisKnown = new bool[gameManager.waterDrops.Length];
-        shadowDropsisKnown = new bool[gameManager.shadowDrops.Length];
-        holyDropsisKnown = new bool[gameManager.holyDrops.Length];
-
+*/
         charSkillScale = new float[gameManager.party.Length];
         charSkillIndex = new int[gameManager.party.Length];
         charAvailableSkillPoints = new int[gameManager.party.Length];
@@ -232,84 +220,94 @@ public class GameData
                 charStealChance[i] = gameManager.party[i].GetComponent<Character>().stealChance;
                 charHaste[i] = gameManager.party[i].GetComponent<Character>().haste;
 
-                // Fire Drops
-                for (int f = 0; f < gameManager.party[i].GetComponent<Character>().fireDrops.Length; f++)
+                for (int f = 0; f < Engine.e.party[i].GetComponent<Character>().drops.Length; f++)
                 {
-                    if (gameManager.party[i].GetComponent<Character>().fireDrops[f] != null)
+                    if (Engine.e.party[i].GetComponent<Character>().drops[f] != null)
                     {
-                        if (gameManager.party[i].GetComponent<Character>().fireDrops[f] = gameManager.fireDrops[f])
+                        if (Engine.e.party[i].GetComponent<Character>().drops[f] = Engine.e.gameDrops[f])
                         {
-                            charFireDrops[i, f] = gameManager.fireDrops[f].dropName;
-                            fireDropsisKnown[f] = true;
+                            charDrops[i, f] = Engine.e.gameDrops[f].dropName;
                         }
                     }
                 }
-                // Holy Drops
-                for (int f = 0; f < gameManager.party[i].GetComponent<Character>().holyDrops.Length; f++)
-                {
-                    if (gameManager.party[i].GetComponent<Character>().holyDrops[f] != null)
-                    {
-                        if (gameManager.party[i].GetComponent<Character>().holyDrops[f] = gameManager.holyDrops[f])
-                        {
-                            charHolyDrops[i, f] = gameManager.holyDrops[f].dropName;
-                            holyDropsisKnown[f] = true;
+                /*  // Fire Drops
+                  for (int f = 0; f < gameManager.party[i].GetComponent<Character>().fireDrops.Length; f++)
+                  {
+                      if (gameManager.party[i].GetComponent<Character>().fireDrops[f] != null)
+                      {
+                          if (gameManager.party[i].GetComponent<Character>().fireDrops[f] = gameManager.fireDrops[f])
+                          {
+                              charFireDrops[i, f] = gameManager.fireDrops[f].dropName;
+                              fireDropsisKnown[f] = true;
+                          }
+                      }
+                  }
+                  // Holy Drops
+                  for (int f = 0; f < gameManager.party[i].GetComponent<Character>().holyDrops.Length; f++)
+                  {
+                      if (gameManager.party[i].GetComponent<Character>().holyDrops[f] != null)
+                      {
+                          if (gameManager.party[i].GetComponent<Character>().holyDrops[f] = gameManager.holyDrops[f])
+                          {
+                              charHolyDrops[i, f] = gameManager.holyDrops[f].dropName;
+                              holyDropsisKnown[f] = true;
 
-                        }
-                    }
-                }
-                // Water Drops
-                for (int f = 0; f < gameManager.party[i].GetComponent<Character>().waterDrops.Length; f++)
-                {
-                    if (gameManager.party[i].GetComponent<Character>().waterDrops[f] != null)
-                    {
-                        if (gameManager.party[i].GetComponent<Character>().waterDrops[f] = gameManager.waterDrops[f])
-                        {
-                            charWaterDrops[i, f] = gameManager.waterDrops[f].dropName;
-                            waterDropsisKnown[f] = true;
+                          }
+                      }
+                  }
+                  // Water Drops
+                  for (int f = 0; f < gameManager.party[i].GetComponent<Character>().waterDrops.Length; f++)
+                  {
+                      if (gameManager.party[i].GetComponent<Character>().waterDrops[f] != null)
+                      {
+                          if (gameManager.party[i].GetComponent<Character>().waterDrops[f] = gameManager.waterDrops[f])
+                          {
+                              charWaterDrops[i, f] = gameManager.waterDrops[f].dropName;
+                              waterDropsisKnown[f] = true;
 
-                        }
-                    }
-                }
-                // Lightning Drops
-                for (int f = 0; f < gameManager.party[i].GetComponent<Character>().lightningDrops.Length; f++)
-                {
-                    if (gameManager.party[i].GetComponent<Character>().lightningDrops[f] != null)
-                    {
-                        if (gameManager.party[i].GetComponent<Character>().lightningDrops[f] = gameManager.lightningDrops[f])
-                        {
-                            charLightningDrops[i, f] = gameManager.lightningDrops[f].dropName;
-                            lightningDropsisKnown[f] = true;
+                          }
+                      }
+                  }
+                  // Lightning Drops
+                  for (int f = 0; f < gameManager.party[i].GetComponent<Character>().lightningDrops.Length; f++)
+                  {
+                      if (gameManager.party[i].GetComponent<Character>().lightningDrops[f] != null)
+                      {
+                          if (gameManager.party[i].GetComponent<Character>().lightningDrops[f] = gameManager.lightningDrops[f])
+                          {
+                              charLightningDrops[i, f] = gameManager.lightningDrops[f].dropName;
+                              lightningDropsisKnown[f] = true;
 
-                        }
-                    }
-                }
-                // Shadow Drops
-                for (int f = 0; f < gameManager.party[i].GetComponent<Character>().shadowDrops.Length; f++)
-                {
-                    if (gameManager.party[i].GetComponent<Character>().shadowDrops[f] != null)
-                    {
-                        if (gameManager.party[i].GetComponent<Character>().shadowDrops[f] = gameManager.shadowDrops[f])
-                        {
-                            charShadowDrops[i, f] = gameManager.shadowDrops[f].dropName;
-                            shadowDropsisKnown[f] = true;
+                          }
+                      }
+                  }
+                  // Shadow Drops
+                  for (int f = 0; f < gameManager.party[i].GetComponent<Character>().shadowDrops.Length; f++)
+                  {
+                      if (gameManager.party[i].GetComponent<Character>().shadowDrops[f] != null)
+                      {
+                          if (gameManager.party[i].GetComponent<Character>().shadowDrops[f] = gameManager.shadowDrops[f])
+                          {
+                              charShadowDrops[i, f] = gameManager.shadowDrops[f].dropName;
+                              shadowDropsisKnown[f] = true;
 
-                        }
-                    }
-                }
-                // Ice Drops
-                for (int f = 0; f < gameManager.party[i].GetComponent<Character>().iceDrops.Length; f++)
-                {
-                    if (gameManager.party[i].GetComponent<Character>().iceDrops[f] != null)
-                    {
-                        if (gameManager.party[i].GetComponent<Character>().iceDrops[f] = gameManager.iceDrops[f])
-                        {
-                            charIceDrops[i, f] = gameManager.iceDrops[f].dropName;
-                            iceDropsisKnown[f] = true;
+                          }
+                      }
+                  }
+                  // Ice Drops
+                  for (int f = 0; f < gameManager.party[i].GetComponent<Character>().iceDrops.Length; f++)
+                  {
+                      if (gameManager.party[i].GetComponent<Character>().iceDrops[f] != null)
+                      {
+                          if (gameManager.party[i].GetComponent<Character>().iceDrops[f] = gameManager.iceDrops[f])
+                          {
+                              charIceDrops[i, f] = gameManager.iceDrops[f].dropName;
+                              iceDropsisKnown[f] = true;
 
-                        }
-                    }
-                }
-
+                          }
+                      }
+                  }
+  */
                 partySize++;
             }
         }
@@ -360,6 +358,37 @@ public class GameData
             }
         }
 
+        // Node Information
+        grieveNodes = new bool[Engine.e.abilityScreenReference.nodes.Length];
+        macNodes = new bool[Engine.e.abilityScreenReference.nodes.Length];
+        fieldNodes = new bool[Engine.e.abilityScreenReference.nodes.Length];
+        riggsNodes = new bool[Engine.e.abilityScreenReference.nodes.Length];
+        charNodePositions = new int[Engine.e.party.Length];
+
+        charNodePositions[0] = Engine.e.abilityScreenReference.grievePosition;
+        charNodePositions[1] = Engine.e.abilityScreenReference.macPosition;
+        charNodePositions[2] = Engine.e.abilityScreenReference.fieldPosition;
+        charNodePositions[3] = Engine.e.abilityScreenReference.riggsPosition;
+
+        for (int i = 0; i < Engine.e.abilityScreenReference.nodes.Length; i++)
+        {
+            if (Engine.e.abilityScreenReference.nodes[i].grieveUnlocked)
+            {
+                grieveNodes[i] = true;
+            }
+            if (Engine.e.abilityScreenReference.nodes[i].macUnlocked)
+            {
+                macNodes[i] = true;
+            }
+            if (Engine.e.abilityScreenReference.nodes[i].fieldUnlocked)
+            {
+                fieldNodes[i] = true;
+            }
+            if (Engine.e.abilityScreenReference.nodes[i].riggsUnlocked)
+            {
+                riggsNodes[i] = true;
+            }
+        }
 
         // Quests
         partyQuests = new string[Engine.e.adventureLogReference.questLog.Length];
@@ -419,5 +448,10 @@ public class GameData
         time = gameManager.timeOfDay;
         inWorldMap = Engine.e.inWorldMap;
         partyMoney = gameManager.partyMoney;
+    }
+
+    public void EraseData()
+    {
+
     }
 }

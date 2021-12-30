@@ -20,6 +20,15 @@ public class FileSlot : MonoBehaviour
         saveLocation.GetComponent<TMP_Text>().text = gameData.scene;
     }
 
+    public void ClearSave()
+    {
+        gameData = null;
+
+        saveName.GetComponent<TMP_Text>().text = string.Empty;
+        saveLvl.GetComponent<TMP_Text>().text = string.Empty;
+        saveLocation.GetComponent<TMP_Text>().text = string.Empty;
+    }
+
     // Currently only handles menuSet
     public void SetHelpTextFile()
     {
@@ -62,11 +71,28 @@ public class FileSlot : MonoBehaviour
                 return;
             }
         }
-        else
+
+        if (Engine.e.fileMenuReference.loading)
         {
             if (gameData.charNames.Length != 0)
             {
                 Engine.e.fileMenuReference.LoadGameCheck();
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        if (Engine.e.fileMenuReference.deleting)
+        {
+            if (gameData.charNames.Length != 0)
+            {
+                Engine.e.fileMenuReference.DeleteGameCheck();
+            }
+            else
+            {
+                return;
             }
         }
     }

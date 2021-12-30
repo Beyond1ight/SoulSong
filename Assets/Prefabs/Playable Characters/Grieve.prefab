@@ -171,8 +171,11 @@ MonoBehaviour:
   sleepDefense: 1
   confuseDefense: 1
   deathDefense: 0
-  fireDrops:
+  drops:
   - {fileID: 11400000, guid: 6aaf764512c964247a1ab6f74e0e27b7, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 11400000, guid: 1227ecefb6f5e4a1c9a406e55a2cc35d, type: 2}
   - {fileID: 0}
   - {fileID: 0}
@@ -182,8 +185,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  iceDrops:
-  - {fileID: 11400000, guid: e682586f4b05941a7b430a85010d480e, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -193,45 +194,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  holyDrops:
-  - {fileID: 11400000, guid: 877fa2c092b4e40128e3db11707ac684, type: 2}
-  - {fileID: 11400000, guid: e94ea1f0a7f8f4ed5a7ce9f966d97f0e, type: 2}
-  - {fileID: 11400000, guid: acfc2504593e94e81bc2d480b0c3d05a, type: 2}
-  - {fileID: 11400000, guid: cf4a2d22f4fac4ff0b1d3c8d8acf6bad, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  waterDrops:
-  - {fileID: 11400000, guid: f7911b3b316a64289b089119b0194868, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  lightningDrops:
-  - {fileID: 11400000, guid: 8c550a8dffde3433db125665c63f91f8, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  shadowDrops:
-  - {fileID: 11400000, guid: 3592519a364064da4bc7bbbebcbed1f6, type: 2}
-  - {fileID: 11400000, guid: eaf944b95521b408790e43b275c3e83f, type: 2}
-  - {fileID: 11400000, guid: e0c55993744e74610911118330d20954, type: 2}
-  - {fileID: 11400000, guid: f925fe39fda49454abd0dfe3fec0ced2, type: 2}
-  - {fileID: 11400000, guid: c8f97beea63974c6296a406d12a79774, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -306,7 +271,7 @@ MonoBehaviour:
   - {fileID: 0}
   spellPower: 0
   skillPower: 0
-  lastDropChoice: {fileID: 11400000, guid: e682586f4b05941a7b430a85010d480e, type: 2}
+  lastDropChoice: {fileID: 11400000, guid: f7911b3b316a64289b089119b0194868, type: 2}
   lastSkillChoice: {fileID: 0}
   skillScale: 1
   stealChance: 60

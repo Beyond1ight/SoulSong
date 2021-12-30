@@ -101,7 +101,7 @@ MonoBehaviour:
   maxMana: 50
   currentMana: 50
   maxEnergy: 20
-  currentEnergy: 24
+  currentEnergy: 20
   healthCapped: 1
   manaCapped: 1
   energyCapped: 1
@@ -131,7 +131,7 @@ MonoBehaviour:
   sleepDefense: 1
   confuseDefense: 1
   deathDefense: 0
-  fireDrops:
+  drops:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -142,7 +142,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  iceDrops:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -153,46 +152,12 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  holyDrops:
-  - {fileID: 11400000, guid: 877fa2c092b4e40128e3db11707ac684, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  waterDrops:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  lightningDrops:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  shadowDrops:
   - {fileID: 11400000, guid: 3592519a364064da4bc7bbbebcbed1f6, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 877fa2c092b4e40128e3db11707ac684, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

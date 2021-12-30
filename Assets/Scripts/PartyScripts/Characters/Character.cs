@@ -42,12 +42,7 @@ public class Character : MonoBehaviour
 
 
     // Drops
-    public Drops[] fireDrops;
-    public Drops[] iceDrops;
-    public Drops[] holyDrops;
-    public Drops[] waterDrops;
-    public Drops[] lightningDrops;
-    public Drops[] shadowDrops;
+    public Drops[] drops;
 
     public float dropCostReduction = 0f;
     public float skillCostReduction = 0f;
@@ -110,29 +105,13 @@ public class Character : MonoBehaviour
 
         lastDropChoice = dropChoice;
 
-        if (dropChoice.dps)
-        {
-            Engine.e.battleSystem.ActivateAttackButtons();
-        }
-        if (dropChoice.support)
-        {
-            Engine.e.battleSystem.ActivateSupportButtons();
-        }
 
         Engine.e.battleSystem.dropAttack = true;
+        Engine.e.battleSystem.ActivateTargetButtons();
+
+
     }
 
-    public void HolyLight(float healPower, int target)
-    {
-
-        float healAmount = healPower + (healPower * holyDropsLevel / 2);
-        Engine.e.activeParty.activeParty[target].GetComponent<Character>().currentHealth += healAmount;
-        Engine.e.battleSystem.damageTotal = healAmount;
-        if (Engine.e.activeParty.activeParty[target].GetComponent<Character>().currentHealth > Engine.e.activeParty.activeParty[target].GetComponent<Character>().maxHealth)
-        {
-            Engine.e.activeParty.activeParty[target].GetComponent<Character>().currentHealth = Engine.e.activeParty.activeParty[target].GetComponent<Character>().maxHealth;
-        }
-    }
     public void Revive(float healPower, int target)
     {
         float healAmount = healPower + (healPower * holyDropsLevel / 2);
@@ -351,5 +330,27 @@ public class Character : MonoBehaviour
         return fireDropsLevel;
     }
 
+    public bool KnowsSkill(Skills _skill)
+    {
+        for (int i = 0; i < skills.Length; i++)
+        {
+            if (skills[i] == _skill)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    public bool KnowsDrop(Drops _drop)
+    {
+        for (int i = 0; i < drops.Length; i++)
+        {
+            if (drops[i] == _drop)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

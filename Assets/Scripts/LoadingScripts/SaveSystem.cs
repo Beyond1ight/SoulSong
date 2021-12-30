@@ -76,4 +76,14 @@ public static class SaveSystem
             return null;
         }
     }
+
+    public static void DeleteFile(int saveSlot)
+    {
+        string path = Application.persistentDataPath + "/game" + saveSlot + ".save";
+
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+        }
+    }
 }

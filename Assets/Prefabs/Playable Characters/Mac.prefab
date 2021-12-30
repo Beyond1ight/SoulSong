@@ -162,7 +162,7 @@ MonoBehaviour:
   sleepDefense: 1
   confuseDefense: 1
   deathDefense: 0
-  fireDrops:
+  drops:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -173,51 +173,16 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  iceDrops:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  holyDrops:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  waterDrops:
-  - {fileID: 11400000, guid: f7911b3b316a64289b089119b0194868, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  lightningDrops:
   - {fileID: 11400000, guid: 8c550a8dffde3433db125665c63f91f8, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 11400000, guid: f7911b3b316a64289b089119b0194868, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  shadowDrops:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -265,7 +230,7 @@ MonoBehaviour:
   canUseLightningDrops: 1
   canUseShadowDrops: 0
   skills:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 6e5821a29f25149f19782eeed785f6d3, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -297,7 +262,7 @@ MonoBehaviour:
   - {fileID: 0}
   spellPower: 0
   skillPower: 0
-  lastDropChoice: {fileID: 11400000, guid: 8c550a8dffde3433db125665c63f91f8, type: 2}
+  lastDropChoice: {fileID: 11400000, guid: 6aaf764512c964247a1ab6f74e0e27b7, type: 2}
   lastSkillChoice: {fileID: 11400000, guid: 1df5a6e2c9d234357b27a7bafcffe23d, type: 2}
   skillScale: 1
   stealChance: 60

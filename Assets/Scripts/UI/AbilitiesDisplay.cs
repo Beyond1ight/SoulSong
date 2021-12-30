@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class AbilitiesDisplay : MonoBehaviour
 {
     public GameObject[] charSelectionButtons;
+    public TextMeshProUGUI helpReference;
     public bool grieveScreen, macScreen, fieldScreen, riggsScreen;
     public GameObject[] skillsButtons, fireDropsButtons, iceDropsButtons, lightningDropsButtons, waterDropsButtons, shadowDropsButtons, holyDropsButtons;
     public bool knowsAllFireDrops = false, knowsAllIceDrops = false, knowsAllLightningDrops = false, knowsAllWaterDrops = false, knowsAllShadowDrops = false, knowsAllHolyDrops = false;
     public GameObject confirmSkillAcquisition;
     public TextMeshProUGUI confirmSkillSentence;
     public TextMeshProUGUI[] apDisplay;
-    public int tier;
+    public AbilityStatNode[] nodes;
+    public int tier, grievePosition, macPosition, fieldPosition, riggsPosition;
 
-    public void UnlockSkillChoiceCheck(int _tier)
+    /*public void UnlockSkillChoiceCheck(int _tier)
     {
         string apCost = string.Empty;
 
@@ -229,7 +232,7 @@ public class AbilitiesDisplay : MonoBehaviour
         confirmSkillAcquisition.SetActive(false);
         confirmSkillSentence.text = string.Empty;
         tier = -1;
-    }
+    }*/
 
     public void SetSkills()
     {
@@ -268,61 +271,61 @@ public class AbilitiesDisplay : MonoBehaviour
             }
         }
 
-        if (mac != null)
-        {
-            if (mac.skillTotal <= 5)
-            {
-                for (int i = 5; i < 10; i++)
-                {
-                    if (mac.skills[i] != null)
-                    {
-                        if (skillsButtons[i].GetComponentInChildren<TMP_Text>().text == "-")
-                        {
-                            skillsButtons[i].GetComponentInChildren<TMP_Text>().text = mac.skills[i].skillName;
-                        }
-                    }
-                }
-            }
-        }
+        /*   if (mac != null)
+           {
+               if (mac.skillTotal <= 5)
+               {
+                   for (int i = 5; i < 10; i++)
+                   {
+                       if (mac.skills[i] != null)
+                       {
+                           if (skillsButtons[i].GetComponentInChildren<TMP_Text>().text == "-")
+                           {
+                               skillsButtons[i].GetComponentInChildren<TMP_Text>().text = mac.skills[i].skillName;
+                           }
+                       }
+                   }
+               }
+           }
 
-        if (field != null)
-        {
-            if (field.skillTotal <= 5)
-            {
-                for (int i = 10; i < 15; i++)
-                {
-                    if (field.skills[i] != null)
-                    {
-                        if (skillsButtons[i].GetComponentInChildren<TMP_Text>().text == "-")
-                        {
-                            skillsButtons[i].GetComponentInChildren<TMP_Text>().text = field.skills[i].skillName;
-                        }
-                    }
-                }
-            }
-        }
+           if (field != null)
+           {
+               if (field.skillTotal <= 5)
+               {
+                   for (int i = 10; i < 15; i++)
+                   {
+                       if (field.skills[i] != null)
+                       {
+                           if (skillsButtons[i].GetComponentInChildren<TMP_Text>().text == "-")
+                           {
+                               skillsButtons[i].GetComponentInChildren<TMP_Text>().text = field.skills[i].skillName;
+                           }
+                       }
+                   }
+               }
+           }
 
-        if (riggs != null)
-        {
-            if (riggs.skillTotal <= 5)
-            {
-                for (int i = 15; i < 20; i++)
-                {
-                    if (riggs.skills[i] != null)
-                    {
-                        if (skillsButtons[i].GetComponentInChildren<TMP_Text>().text == "-")
-                        {
-                            skillsButtons[i].GetComponentInChildren<TMP_Text>().text = riggs.skills[i].skillName;
-                        }
-                    }
-                }
-            }
-        }
+           if (riggs != null)
+           {
+               if (riggs.skillTotal <= 5)
+               {
+                   for (int i = 15; i < 20; i++)
+                   {
+                       if (riggs.skills[i] != null)
+                       {
+                           if (skillsButtons[i].GetComponentInChildren<TMP_Text>().text == "-")
+                           {
+                               skillsButtons[i].GetComponentInChildren<TMP_Text>().text = riggs.skills[i].skillName;
+                           }
+                       }
+                   }
+               }
+           }*/
 
         tier = -1;
     }
 
-    public void SetDrops()
+    /*public void SetDrops()
     {
 
         for (int i = 0; i < 10; i++)
@@ -411,7 +414,7 @@ public class AbilitiesDisplay : MonoBehaviour
                 }
             }
         }
-    }
+    }*/
 
     public void SetGrieveScreen()
     {
@@ -435,96 +438,38 @@ public class AbilitiesDisplay : MonoBehaviour
             charSelectionButtons[3].GetComponentInChildren<TMP_Text>().color = Color.gray;
         }
 
-        for (int i = 0; i < skillsButtons.Length; i++)
+        for (int i = 0; i < nodes.Length; i++)
         {
-            if (skillsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
+            if (nodes[i].grieveUnlocked)
             {
-                if (Engine.e.party[0].GetComponent<Grieve>().skills[i] == null)
+                for (int k = 0; k < nodes[i].connectionLines.Length; k++)
                 {
-                    skillsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    skillsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-
+                    if (nodes[i].connectionLines[k] != null)
+                    {
+                        nodes[i].connectionLines[k].GetComponent<Image>().color = Color.white;
+                    }
                 }
             }
         }
 
-        for (int i = 0; i < 10; i++)
+        EventSystem.current.SetSelectedGameObject(null);
+
+        EventSystem.current.SetSelectedGameObject(nodes[grievePosition].gameObject);
+        /*for (int i = 0; i < nodes.Length; i++)
         {
-            if (fireDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
+                   if (skillsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
             {
-                if (Engine.e.party[0].GetComponent<Grieve>().fireDrops[i] == null)
+                if (!grieveUnlocked)
                 {
-                    fireDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
+                                        skillsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
                 }
                 else
                 {
-                    fireDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
+                           skillsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
 
-            if (iceDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[0].GetComponent<Grieve>().iceDrops[i] == null)
-                {
-                    iceDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    iceDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
                 }
             }
-
-            if (lightningDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[0].GetComponent<Grieve>().lightningDrops[i] == null)
-                {
-                    lightningDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    lightningDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
-
-            if (waterDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[0].GetComponent<Grieve>().waterDrops[i] == null)
-                {
-                    waterDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    waterDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
-
-            if (shadowDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[0].GetComponent<Grieve>().shadowDrops[i] == null)
-                {
-                    shadowDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    shadowDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
-
-            if (holyDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[0].GetComponent<Grieve>().holyDrops[i] == null)
-                {
-                    holyDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    holyDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
-        }
+        }*/
     }
 
     public void SetMacScreen()
@@ -549,96 +494,34 @@ public class AbilitiesDisplay : MonoBehaviour
             charSelectionButtons[3].GetComponentInChildren<TMP_Text>().color = Color.gray;
         }
 
-
-        for (int i = 0; i < skillsButtons.Length; i++)
+        for (int i = 0; i < nodes.Length; i++)
         {
-            if (skillsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
+            if (nodes[i].macUnlocked)
             {
-                if (Engine.e.party[1].GetComponent<Mac>().skills[i] == null)
+                for (int k = 0; i < nodes[k].connectionLines.Length; k++)
                 {
-                    skillsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    skillsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
+                    if (nodes[i].connectionLines[k] != null)
+                    {
+                        nodes[i].connectionLines[k].GetComponent<Image>().color = Color.white;
+                    }
                 }
             }
         }
+        /* for (int i = 0; i < nodes.Length; i++)
+         {
+             if (skillsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
+             {
+                 if (!nodes[i].macUnlocked)
+                 {
+                     skillsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
+                 }
+                 else
+                 {
+                     skillsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
 
-        for (int i = 0; i < 10; i++)
-        {
-            if (fireDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[1].GetComponent<Mac>().fireDrops[i] == null)
-                {
-                    fireDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    fireDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
-
-            if (iceDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[1].GetComponent<Mac>().iceDrops[i] == null)
-                {
-                    iceDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    iceDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
-
-            if (lightningDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[1].GetComponent<Mac>().lightningDrops[i] == null)
-                {
-                    lightningDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    lightningDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
-
-            if (waterDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[1].GetComponent<Mac>().waterDrops[i] == null)
-                {
-                    waterDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    waterDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
-
-            if (shadowDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[1].GetComponent<Mac>().shadowDrops[i] == null)
-                {
-                    shadowDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    shadowDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
-
-            if (holyDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[1].GetComponent<Mac>().holyDrops[i] == null)
-                {
-                    holyDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    holyDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
-        }
+                 }
+             }
+         }*/
     }
 
     public void SetFieldScreen()
@@ -663,97 +546,35 @@ public class AbilitiesDisplay : MonoBehaviour
             charSelectionButtons[3].GetComponentInChildren<TMP_Text>().color = Color.gray;
         }
 
-
-        for (int i = 0; i < skillsButtons.Length; i++)
+        for (int i = 0; i < nodes.Length; i++)
         {
-            if (skillsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
+            if (nodes[i].fieldUnlocked)
             {
-                if (Engine.e.party[2].GetComponent<Field>().skills[i] == null)
+                for (int k = 0; i < nodes[k].connectionLines.Length; k++)
                 {
-                    skillsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    skillsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-
+                    if (nodes[i].connectionLines[k] != null)
+                    {
+                        nodes[i].connectionLines[k].GetComponent<Image>().color = Color.white;
+                    }
                 }
             }
         }
 
-        for (int i = 0; i < 10; i++)
-        {
-            if (fireDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[2].GetComponent<Field>().fireDrops[i] == null)
-                {
-                    fireDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    fireDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
+        /* for (int i = 0; i < nodes.Length; i++)
+         {
+             if (skillsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
+             {
+                 if (!nodes[i].fieldUnlocked)
+                 {
+                     skillsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
+                 }
+                 else
+                 {
+                     skillsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
 
-            if (iceDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[2].GetComponent<Field>().iceDrops[i] == null)
-                {
-                    iceDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    iceDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
-
-            if (lightningDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[2].GetComponent<Field>().lightningDrops[i] == null)
-                {
-                    lightningDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    lightningDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
-
-            if (waterDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[2].GetComponent<Field>().waterDrops[i] == null)
-                {
-                    waterDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    waterDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
-
-            if (shadowDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[2].GetComponent<Field>().shadowDrops[i] == null)
-                {
-                    shadowDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    shadowDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
-
-            if (holyDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[2].GetComponent<Field>().holyDrops[i] == null)
-                {
-                    holyDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    holyDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
-        }
+                 }
+             }
+         }*/
     }
 
     public void SetRiggsScreen()
@@ -778,95 +599,35 @@ public class AbilitiesDisplay : MonoBehaviour
             charSelectionButtons[2].GetComponentInChildren<TMP_Text>().color = Color.gray;
         }
 
-        for (int i = 0; i < skillsButtons.Length; i++)
+        for (int i = 0; i < nodes.Length; i++)
+        {
+            if (nodes[i].riggsUnlocked)
+            {
+                for (int k = 0; i < nodes[k].connectionLines.Length; k++)
+                {
+                    if (nodes[i].connectionLines[k] != null)
+                    {
+                        nodes[i].connectionLines[k].GetComponent<Image>().color = Color.white;
+                    }
+                }
+            }
+        }
+
+        /*for (int i = 0; i < nodes.Length; i++)
         {
             if (skillsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
             {
-                if (Engine.e.party[3].GetComponent<Riggs>().skills[i] == null)
+                if (!nodes[i].riggsUnlocked)
                 {
                     skillsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
                 }
                 else
                 {
                     skillsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
-        }
 
-        for (int i = 0; i < 10; i++)
-        {
-            if (fireDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[3].GetComponent<Riggs>().fireDrops[i] == null)
-                {
-                    fireDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    fireDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
                 }
             }
-
-            if (iceDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[3].GetComponent<Riggs>().iceDrops[i] == null)
-                {
-                    iceDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    iceDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
-
-            if (lightningDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[3].GetComponent<Riggs>().lightningDrops[i] == null)
-                {
-                    lightningDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    lightningDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
-
-            if (waterDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[3].GetComponent<Riggs>().waterDrops[i] == null)
-                {
-                    waterDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    waterDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
-
-            if (shadowDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[3].GetComponent<Riggs>().shadowDrops[i] == null)
-                {
-                    shadowDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    shadowDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
-
-            if (holyDropsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-            {
-                if (Engine.e.party[3].GetComponent<Riggs>().holyDrops[i] == null)
-                {
-                    holyDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                }
-                else
-                {
-                    holyDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-                }
-            }
-        }
+        }*/
     }
 
     public void ClearScreen()
@@ -887,31 +648,20 @@ public class AbilitiesDisplay : MonoBehaviour
                 }
             }
 
-            for (int i = 0; i < skillsButtons.Length; i++)
+            for (int i = 0; i < nodes.Length; i++)
             {
-
-                skillsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-            }
-
-            for (int i = 0; i < 10; i++)
-            {
-
-                fireDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-
-                iceDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-
-                lightningDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-
-                waterDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-
-                shadowDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
-
-                holyDropsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
+                for (int k = 0; k < nodes[i].connectionLines.Length; k++)
+                {
+                    if (nodes[i].connectionLines[k] != null)
+                    {
+                        nodes[i].connectionLines[k].GetComponent<Image>().color = Color.black;
+                    }
+                }
             }
         }
-
-        tier = -1;
     }
+
+
 
     public void DisplayAP()
     {
@@ -925,6 +675,31 @@ public class AbilitiesDisplay : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void ClearNodeUnlocked()
+    {
+        for (int i = 0; i < nodes.Length; i++)
+        {
+            nodes[i].grieveUnlocked = false;
+            nodes[i].macUnlocked = false;
+            nodes[i].fieldUnlocked = false;
+            nodes[i].riggsUnlocked = false;
+
+            for (int k = 0; k < nodes[i].connectionLines.Length; k++)
+            {
+                if (nodes[i].connectionLines[k] != null)
+                {
+                    nodes[i].connectionLines[k].GetComponent<Image>().color = Color.black;
+                }
+            }
+
+
+            if (nodes[i].nodeIndex == 0 || nodes[i].nodeIndex == -1)
+                nodes[i].nodeIndex = i;
+        }
+
+        nodes[0].grieveUnlocked = true;
     }
 }
 

@@ -127,9 +127,9 @@ public class Riggs : Character
             // Fire Drops
             if (canUseFireDrops == true)
             {
-                if (fireDrops[i] != null)
+                //       if (fireDrops[i] != null)
                 {
-                    Engine.e.battleSystem.dropsButtons[fireIndex].GetComponentInChildren<TextMeshProUGUI>().text = fireDrops[i].dropName;
+                    //          Engine.e.battleSystem.dropsButtons[fireIndex].GetComponentInChildren<TextMeshProUGUI>().text = fireDrops[i].dropName;
                     fireIndex++;
                 }
             }
@@ -138,9 +138,9 @@ public class Riggs : Character
             // Ice Drops
             if (canUseIceDrops == true)
             {
-                if (iceDrops[i] != null)
+                //      if (iceDrops[i] != null)
                 {
-                    Engine.e.battleSystem.dropsButtons[iceIndex].GetComponentInChildren<TextMeshProUGUI>().text = iceDrops[i].dropName;
+                    //         Engine.e.battleSystem.dropsButtons[iceIndex].GetComponentInChildren<TextMeshProUGUI>().text = iceDrops[i].dropName;
                     iceIndex++;
                 }
             }
@@ -149,9 +149,9 @@ public class Riggs : Character
             // Lightning Drops
             if (canUseLightningDrops == true)
             {
-                if (lightningDrops[i] != null)
+                //     if (lightningDrops[i] != null)
                 {
-                    Engine.e.battleSystem.dropsButtons[lightningIndex].GetComponentInChildren<TextMeshProUGUI>().text = lightningDrops[i].dropName;
+                    //        Engine.e.battleSystem.dropsButtons[lightningIndex].GetComponentInChildren<TextMeshProUGUI>().text = lightningDrops[i].dropName;
                     lightningIndex++;
                 }
             }
@@ -160,9 +160,9 @@ public class Riggs : Character
             // Water Drops
             if (canUseWaterDrops == true)
             {
-                if (waterDrops[i] != null)
+                //    if (waterDrops[i] != null)
                 {
-                    Engine.e.battleSystem.dropsButtons[waterIndex].GetComponentInChildren<TextMeshProUGUI>().text = waterDrops[i].dropName;
+                    //         Engine.e.battleSystem.dropsButtons[waterIndex].GetComponentInChildren<TextMeshProUGUI>().text = waterDrops[i].dropName;
                     waterIndex++;
                 }
             }
@@ -172,9 +172,9 @@ public class Riggs : Character
             if (canUseShadowDrops == true)
             {
 
-                if (shadowDrops[i] != null)
+                //     if (shadowDrops[i] != null)
                 {
-                    Engine.e.battleSystem.dropsButtons[shadowIndex].GetComponentInChildren<TextMeshProUGUI>().text = shadowDrops[i].dropName;
+                    //        Engine.e.battleSystem.dropsButtons[shadowIndex].GetComponentInChildren<TextMeshProUGUI>().text = shadowDrops[i].dropName;
                     shadowIndex++;
                 }
             }
@@ -184,9 +184,9 @@ public class Riggs : Character
             if (canUseHolyDrops == true)
             {
 
-                if (holyDrops[i] != null)
+                //    if (holyDrops[i] != null)
                 {
-                    Engine.e.battleSystem.dropsButtons[holyIndex].GetComponentInChildren<TextMeshProUGUI>().text = holyDrops[i].dropName;
+                    //          Engine.e.battleSystem.dropsButtons[holyIndex].GetComponentInChildren<TextMeshProUGUI>().text = holyDrops[i].dropName;
                     holyIndex++;
                 }
             }

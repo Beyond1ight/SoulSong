@@ -22,26 +22,20 @@ public class EnemyGroup : MonoBehaviour
     public List<int> remainingEnemies;
     int randomEnemyIndex;
     int nextRemainingEnemyIndex;
+    public bool inWorld;
 
     void Start()
     {
-        GroupExperienceValue();
+
+        GetComponent<EnemyGroupGenerator>().GenerateEnemyGroup();
+
+        if (inWorld)
+        {
+            GroupExperienceValue();
+        }
 
         battleSystem = Engine.e.battleSystem;
 
-        if (spawnChance != 0)
-        {
-            int deSpawn = Random.Range(0, 100);
-
-            if (deSpawn > spawnChance)
-            {
-                DespawnGroup();
-            }
-        }
-        else
-        {
-            DespawnGroup();
-        }
     }
 
     public void OnTriggerEnter2D(Collider2D other)

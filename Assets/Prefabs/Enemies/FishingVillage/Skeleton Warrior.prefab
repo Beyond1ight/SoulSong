@@ -29,8 +29,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6555874811245763058}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.61076593, y: 1.9885219, z: 0.23901016}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -72,8 +72,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1510677795
+  m_SortingLayer: 1
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: fb8355413d0f54824847ea3515e93f7b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -100,23 +100,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: Skeleton Warrior
   health: 15
+  maxHealth: 15
   mana: 0
   lvl: 2
   experiencePoints: 50
   damage: 15
+  groupIndex: -1
   moneyDropAmount: 0
   enemies: []
   drops:
   - {fileID: 0}
+  choiceAttack: 0
+  damageTotal: 0
+  hitChance: 99
+  isPoisoned: 0
+  isConfused: 0
+  isAsleep: 0
+  deathInflicted: 0
+  inflicted: 0
+  poisonDmg: 0
+  sleepTimer: 0
+  confuseTimer: 0
+  deathTimer: 3
+  deathTimerPopup: {fileID: 0}
+  haste: 0
   dodgeChance: 2
   physicalDefense: 1
   fireDefense: 1
+  iceDefense: 0
   waterDefense: 0
   holyDefense: 1
   lightningDefense: 0
   shadowDefense: 0
+  poisonDefense: 0
+  sleepDefense: 0
+  confuseDefense: 0
+  deathDefense: 0
   itemDrops:
   - {fileID: 7844609031142243219, guid: 194647bb24d784bb2b5523bdabac818f, type: 3}
+  stealableItem: {fileID: 0}
+  stealChance: 0
   grieveWeaponDrops: []
   macWeaponDrops: []
   fieldWeaponDrops: []
@@ -129,6 +152,7 @@ MonoBehaviour:
   battleSystem: {fileID: 0}
   enemyPos: {fileID: 8350687598919487258}
   worldZone: SampleScene
+  currentBattlePos: {x: 0, y: 0, z: 0}
 --- !u!50 &5944953072660095489
 Rigidbody2D:
   serializedVersion: 4
@@ -183,7 +207,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6555874811245763058}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 503f6f39881f34054b913aa30bd1020f, type: 3}
   m_Name: 

@@ -29,8 +29,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7725212224698786321}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.61076593, y: 1.9885219, z: 0.23901016}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -72,8 +72,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1510677795
+  m_SortingLayer: 1
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 86e4aa7b23e824dab9aa9438bfda0993, type: 3}
   m_Color: {r: 0, g: 0.36862746, b: 1, a: 1}
@@ -100,24 +100,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: Water Elemental
   health: 50
-  maxHealth: 0
+  maxHealth: 50
   mana: 50
   lvl: 2
   experiencePoints: 50
   damage: 15
+  groupIndex: 2
   moneyDropAmount: 50
   enemies: []
   drops:
   - {fileID: 11400000, guid: f7911b3b316a64289b089119b0194868, type: 2}
   choiceAttack: 60
   damageTotal: 0
+  hitChance: 99
   isPoisoned: 0
-  poisonDmg: 0
+  isConfused: 0
   isAsleep: 0
+  deathInflicted: 0
+  inflicted: 0
+  poisonDmg: 0
   sleepTimer: 0
   confuseTimer: 0
-  isConfused: 0
-  groupIndex: 2
+  deathTimer: 3
+  deathTimerPopup: {fileID: 0}
+  haste: 12
   dodgeChance: 30
   physicalDefense: 50
   fireDefense: -30
@@ -129,8 +135,11 @@ MonoBehaviour:
   poisonDefense: 0
   sleepDefense: 0
   confuseDefense: 0
+  deathDefense: 0
   itemDrops:
   - {fileID: 7844609031142243219, guid: 194647bb24d784bb2b5523bdabac818f, type: 3}
+  stealableItem: {fileID: 0}
+  stealChance: 0
   grieveWeaponDrops: []
   macWeaponDrops:
   - {fileID: 74038548412459640, guid: e7ac73c37eff54d568ce191afbffb2f1, type: 3}
@@ -165,7 +174,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 2
+  m_Constraints: 4
 --- !u!61 &4355832393731490133
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -199,7 +208,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7725212224698786321}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 503f6f39881f34054b913aa30bd1020f, type: 3}
   m_Name: 

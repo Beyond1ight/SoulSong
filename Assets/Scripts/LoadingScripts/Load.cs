@@ -37,7 +37,6 @@ public class Load : MonoBehaviour
                 Engine.e.indoors = indoors;
                 Engine.e.inWorldMap = worldMap;
 
-
                 if (Engine.e.inWorldMap)
                 {
                     if (Engine.e.mainCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 6.5f)
@@ -107,6 +106,8 @@ public class Load : MonoBehaviour
                 {
                     Engine.e.activePartyMember3.transform.position = Engine.e.activeParty.transform.position;
                 }
+                Engine.e.SaveGame(3);
+
             }
         }
         else
@@ -195,6 +196,9 @@ public class Load : MonoBehaviour
                     {
                         Engine.e.activePartyMember3.transform.position = Engine.e.activeParty.transform.position;
                     }
+
+                    Engine.e.SaveGame(3);
+
                 }
             }
         }

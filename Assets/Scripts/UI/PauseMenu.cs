@@ -317,8 +317,8 @@ public class PauseMenu : MonoBehaviour
     public void OpenAbilitiesMenu()
     {
         abilitiesMenu.SetActive(true);
-        Engine.e.abilityScreenReference.GetComponent<AbilitiesDisplay>().SetSkills();
-        Engine.e.abilityScreenReference.GetComponent<AbilitiesDisplay>().SetDrops();
+        //Engine.e.abilityScreenReference.GetComponent<AbilitiesDisplay>().SetSkills();
+        // Engine.e.abilityScreenReference.GetComponent<AbilitiesDisplay>().SetDrops();
         Engine.e.abilityScreenReference.GetComponent<AbilitiesDisplay>().DisplayAP();
 
         EventSystem.current.SetSelectedGameObject(null);

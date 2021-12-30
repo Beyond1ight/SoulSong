@@ -7,7 +7,7 @@ public class FileMenu : MonoBehaviour
 {
     public FileSlot[] saveSlots;
 
-    public bool saving, loading, saveMenuSet;
+    public bool saving, loading, deleting, saveMenuSet;
     public int indexReference;
     public int saveSlotsPointerIndex = 0, vertMove = 0;
     public RectTransform saveMenuRectTransform;
@@ -42,7 +42,7 @@ public class FileMenu : MonoBehaviour
             if (vertMove > 0 && pressDown)
             {
                 pressDown = false;
-                if (saveSlotsPointerIndex < saveSlots.Length)
+                if (saveSlotsPointerIndex < saveSlots.Length - 1)
                 {
                     saveSlotsPointerIndex += vertMove;
 
@@ -86,21 +86,30 @@ public class FileMenu : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(saveSlots[saveSlotsPointerIndex].gameObject);
         }
-        else
+
+        if (loading)
         {
             saveConfirmButton.SetActive(false);
             saveDenyButton.SetActive(false);
-            if (saveSlotsPointerIndex >= 0)
-            {
-                Engine.e.LoadGame(saveSlotsPointerIndex);
-            }
-            else
-            {
-                Engine.e.LoadGame(-1);
-            }
+
+            Engine.e.LoadGame(saveSlotsPointerIndex);
+
             Engine.e.helpText.text = string.Empty;
             EventSystem.current.SetSelectedGameObject(null);
             loading = false;
+        }
+
+        if (deleting)
+        {
+            saveConfirmButton.SetActive(false);
+            saveDenyButton.SetActive(false);
+            deleting = false;
+            saving = true;
+            saveSlots[saveSlotsPointerIndex].ClearSave();
+            SaveSystem.DeleteFile(saveSlotsPointerIndex);
+            Engine.e.helpText.text = "File + " + (saveSlotsPointerIndex + 1) + " Deleted.";
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(saveSlots[saveSlotsPointerIndex].gameObject);
         }
     }
 
@@ -108,7 +117,7 @@ public class FileMenu : MonoBehaviour
     {
         saveConfirmButton.SetActive(true);
         saveDenyButton.SetActive(true);
-        Engine.e.helpText.text = "Save exists. Are you sure you want to save?";
+        Engine.e.helpText.text = "Save exists. Are you sure you want to save File " + (saveSlotsPointerIndex + 1) + "?";
 
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(Engine.e.fileMenuReference.saveDenyButton);
@@ -118,7 +127,17 @@ public class FileMenu : MonoBehaviour
     {
         saveConfirmButton.SetActive(true);
         saveDenyButton.SetActive(true);
-        Engine.e.helpText.text = "Are you sure you want to load?";
+        Engine.e.helpText.text = "Are you sure you want to load File " + (saveSlotsPointerIndex + 1) + "?";
+
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(Engine.e.fileMenuReference.saveConfirmButton);
+    }
+
+    public void DeleteGameCheck()
+    {
+        saveConfirmButton.SetActive(true);
+        saveDenyButton.SetActive(true);
+        Engine.e.helpText.text = "Are you sure you want to delete File " + (saveSlotsPointerIndex + 1) + "?";
 
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(Engine.e.fileMenuReference.saveConfirmButton);
@@ -141,6 +160,8 @@ public class FileMenu : MonoBehaviour
         saveSlotsPointerIndex = 0;
         saveMenuRectTransform.offsetMax = new Vector2(0, 0);
         saving = true;
+        loading = false;
+        deleting = false;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(saveSlots[saveSlotsPointerIndex].gameObject);
     }
@@ -149,7 +170,22 @@ public class FileMenu : MonoBehaviour
 
         saveSlotsPointerIndex = 0;
         saveMenuRectTransform.offsetMax = new Vector2(0, 0);
+        saving = false;
         loading = true;
+        deleting = false;
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(saveSlots[saveSlotsPointerIndex].gameObject);
+
+    }
+
+    public void OpenFileMenuDeleting()
+    {
+
+        saveSlotsPointerIndex = 0;
+        saveMenuRectTransform.offsetMax = new Vector2(0, 0);
+        saving = false;
+        loading = false;
+        deleting = true;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(saveSlots[saveSlotsPointerIndex].gameObject);
 

@@ -28,8 +28,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8526353989801218990}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.42, y: 0.82, z: 0.47802}
-  m_LocalScale: {x: 1.6897892, y: 1.6897892, z: 1.6897892}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1.6897892}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -71,8 +71,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1510677795
+  m_SortingLayer: 1
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 96aba8d63f30a4e8eb7806af5866bc13, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -99,23 +99,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: Whisper
   health: 60
+  maxHealth: 0
   mana: 30
   lvl: 2
   experiencePoints: 20
   damage: 10
+  groupIndex: -1
   moneyDropAmount: 10
   enemies: []
   drops:
   - {fileID: 11400000, guid: f7911b3b316a64289b089119b0194868, type: 2}
+  choiceAttack: 0
+  damageTotal: 0
+  hitChance: 99
+  isPoisoned: 0
+  isConfused: 0
+  isAsleep: 0
+  deathInflicted: 0
+  inflicted: 0
+  poisonDmg: 0
+  sleepTimer: 0
+  confuseTimer: 0
+  deathTimer: 3
+  deathTimerPopup: {fileID: 0}
+  haste: 0
   dodgeChance: 7
   physicalDefense: 1
   fireDefense: 0
+  iceDefense: 0
   waterDefense: 25
   holyDefense: 1
   lightningDefense: -25
   shadowDefense: 0
+  poisonDefense: 0
+  sleepDefense: 0
+  confuseDefense: 0
+  deathDefense: 0
   itemDrops:
   - {fileID: 4105507051138388315, guid: af4844cb300dc4c05a4cd0c39bed1db2, type: 3}
+  stealableItem: {fileID: 0}
+  stealChance: 0
   grieveWeaponDrops: []
   macWeaponDrops: []
   fieldWeaponDrops: []
@@ -129,6 +152,7 @@ MonoBehaviour:
   battleSystem: {fileID: 0}
   enemyPos: {fileID: 6866598068103480646}
   worldZone: MariaSouth
+  currentBattlePos: {x: 0, y: 0, z: 0}
 --- !u!114 &1818470072761441670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,6 +166,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toLocation: {fileID: 0}
+  activeParty2Location: {fileID: 0}
+  activeParty3Location: {fileID: 0}
+  onLoadSceneReference: 
 --- !u!61 &1732228198715055492
 BoxCollider2D:
   m_ObjectHideFlags: 0

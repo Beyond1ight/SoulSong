@@ -100,7 +100,7 @@ public class Item : MonoBehaviour
 
             Engine.e.battleSystem.usingItem = true;
             Engine.e.battleSystem.battleItemMenu.SetActive(false);
-            Engine.e.battleSystem.ActivateSupportButtons();
+            Engine.e.battleSystem.ActivateTargetButtons();
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(Engine.e.battleSystem.allyTargetButtons[0]);
 

@@ -59,8 +59,7 @@ public class BattleSystem : MonoBehaviour
     public GameObject char3UI;
 
     public GameObject[] enemyUI;
-    public GameObject[] allyTargetButtons;
-    public GameObject[] targetButtons;
+    public GameObject[] allyTargetButtons, enemyTargetButtons;
     public TextMeshProUGUI dialogueText;
 
     public GameObject[] returnToPanelButton;
@@ -76,14 +75,13 @@ public class BattleSystem : MonoBehaviour
 
     // Drops
     public GameObject[] dropsButtons;
-    public GameObject fireDropAnim, enemyFireDropAnim;
-    public GameObject iceDropAnim, enemyIceDropAnim;
-    public GameObject waterDropAnim, enemyWaterDropAnim;
-    public GameObject lightningDropAnim, enemyLightningDropAnim;
-    public GameObject holyDropAnim, enemyHolyDropAnim;
-    public GameObject shadowDropAnim, enemyShadowDropAnim, poisonAnim, enemyPoisonAnim;
-    public GameObject sleepAnim, enemySleepAnim, confuseAnim, enemyConfuseAnim;
-    public GameObject siphonAnim;
+    public GameObject fireDropAnim;
+    public GameObject iceDropAnim;
+    public GameObject waterDropAnim;
+    public GameObject lightningDropAnim;
+    public GameObject holyDropAnim;
+    public GameObject shadowDropAnim, poisonAnim;
+    public GameObject sleepAnim, confuseAnim, siphonAnim;
 
     public GameObject[] switchButtons;
     public GameObject skillListReference;
@@ -124,6 +122,7 @@ public class BattleSystem : MonoBehaviour
     public bool char1Attacking, char1Supporting, char2Attacking, char2Supporting, char3Attacking, char3Supporting;
     public bool char1UsingItem, char2UsingItem, char3UsingItem;
     public bool char1DropAttack, char1SkillAttack, char2DropAttack, char2SkillAttack, char3DropAttack, char3SkillAttack;
+    public bool char1TargetingTeam, char1TargetingEnemy, char2TargetingTeam, char2TargetingEnemy, char3TargetingTeam, char3TargetingEnemy;
     public Skills char1SkillChoice, char2SkillChoice, char3SkillChoice;
     public bool char1PhysicalAttack, char1SkillPhysicalAttack, char1SkillRangedAttack, char2PhysicalAttack, char2SkillPhysicalAttack, char2SkillRangedAttack,
     char3PhysicalAttack, char3SkillPhysicalAttack, char3SkillRangedAttack;
@@ -137,11 +136,11 @@ public class BattleSystem : MonoBehaviour
     public Item char1ItemToBeUsed, char2ItemToBeUsed, char3ItemToBeUsed;
     bool partyTurn = false;
     [SerializeField]
-    public bool grieveStatBoost = false, macStatBoost = false, fieldStatBoost = false, riggsStatBoost;
+    bool grieveStatBoost = false, macStatBoost = false, fieldStatBoost = false, riggsStatBoost, targetingTeam, targetingEnemy, settingTarget;
     [SerializeField]
     float grievePhysicalBoost, grieveHealthBoost, grieveManaBoost, grieveEnergyBoost, grieveDodgeBoost, macPhysicalBoost, macHealthBoost,
     macManaBoost, macEnergyBoost, macDodgeBoost, fieldPhysicalBoost, fieldHealthBoost, fieldManaBoost, fieldEnergyBoost, fieldDodgeBoost,
-    riggsPhysicalBoost, riggsHealthBoost, riggsManaBoost, riggsEnergyBoost, riggsDodgeBoost;
+    riggsPhysicalBoost, riggsHealthBoost, riggsManaBoost, riggsEnergyBoost, riggsDodgeBoost, battleBodyTotal, menuTargetIndex;
 
     public IEnumerator SetupBattle()
     {
@@ -157,14 +156,37 @@ public class BattleSystem : MonoBehaviour
         char1ItemToBeUsed = null;
         char2ItemToBeUsed = null;
         char3ItemToBeUsed = null;
+        settingTarget = false;
+        targetingTeam = false;
+        targetingEnemy = false;
 
-        char1ATB += 20;
+        char1ATB += 80;
         char2ATB = 0;
         char3ATB = 0;
         enemy1ATB = 0;
         enemy2ATB = 0;
         enemy3ATB = 0;
         enemy4ATB = 0;
+
+
+        // enemyTargetButtons[0].transform.position = enemies[0].transform.position;
+
+        for (int i = 0; i < activeParty.activeParty.Length; i++)
+        {
+            if (activeParty.activeParty[i] != null)
+            {
+                battleBodyTotal++;
+            }
+        }
+
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            if (enemies[i] != null)
+            {
+                battleBodyTotal++;
+            }
+        }
+
 
         battleQueue = new Queue<BattleState>(7);
 
@@ -467,9 +489,12 @@ public class BattleSystem : MonoBehaviour
                             char1PhysicalAttack = false;
                             char1Attacking = false;
                             char1Ready = false;
+
                             if (!char1SkillAttack)
                             {
+
                                 StartCoroutine(CharAttack(char1AttackTarget));
+
                             }
                             else
                             {
@@ -503,6 +528,9 @@ public class BattleSystem : MonoBehaviour
                         currentInQueue = BattleState.QUEUECHECK;
 
                     }
+
+                    char1TargetingEnemy = false;
+                    char1TargetingTeam = false;
                 }
 
                 if (currentInQueue == BattleState.CHAR2TURN)
@@ -563,6 +591,8 @@ public class BattleSystem : MonoBehaviour
                         currentInQueue = BattleState.QUEUECHECK;
 
                     }
+                    char2TargetingEnemy = false;
+                    char2TargetingTeam = false;
                 }
 
                 if (currentInQueue == BattleState.CHAR3TURN)
@@ -624,6 +654,8 @@ public class BattleSystem : MonoBehaviour
                         currentInQueue = BattleState.QUEUECHECK;
 
                     }
+                    char3TargetingEnemy = false;
+                    char3TargetingTeam = false;
                 }
 
                 if (currentInQueue == BattleState.CONFCHAR1 && char1Ready)
@@ -738,10 +770,10 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    public IEnumerator CharAttack(int enemyTarget)
+    public IEnumerator CharAttack(int _target)
     {
 
-        DeactivateAttackButtons();
+        DeactivateTargetButtons();
         inBattleMenu = false;
         int index = 0;
         int target = 0;
@@ -751,91 +783,165 @@ public class BattleSystem : MonoBehaviour
         {
             index = 0;
             characterAttacking = Engine.e.activeParty.gameObject;
+            attackingTeam = char1TargetingTeam;
         }
         if (currentInQueue == BattleState.CHAR2TURN)
         {
             index = 1;
             characterAttacking = Engine.e.activePartyMember2;
+            attackingTeam = char2TargetingTeam;
 
         }
         if (currentInQueue == BattleState.CHAR3TURN)
         {
             index = 2;
             characterAttacking = Engine.e.activePartyMember3;
+            attackingTeam = char3TargetingTeam;
+
         }
 
-
-        if (enemies[enemyTarget].GetComponent<Enemy>().health <= 0)
+        if (!attackingTeam)
         {
-            target = enemyGroup.GetRandomRemainingEnemy();
+            if (enemies[_target].GetComponent<Enemy>().health <= 0)
+            {
+                target = enemyGroup.GetRandomRemainingEnemy();
+            }
+            else
+            {
+                target = _target;
+            }
+
+            previousTargetReferenceChar = target;
+
+            dialogueText.text = string.Empty;
+
+            if (physicalAttack == true)
+            {
+                charMoving = true;
+                targetCheck = true;
+                physicalAttack = false;
+                charAttacking = true;
+            }
+
+            if (skillPhysicalAttack == true)
+            {
+                charUsingSkill = true;
+                charMoving = true;
+                targetCheck = true;
+
+                skillPhysicalAttack = false;
+                charAttacking = true;
+
+            }
+
+            if (skillRangedAttack == true)
+            {
+                targetCheck = true;
+                charMoving = false;
+                charAttackDrop = true;
+                skillRangedAttack = false;
+                enemies[_target].GetComponent<Enemy>().TakeSkillDamage(damageTotal, _target);
+                hud.displayMana[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana.ToString();
+
+                if (enemies[_target].gameObject.GetComponent<Enemy>().health <= 0)
+                {
+                    enemies[_target].gameObject.GetComponent<Enemy>().health = 0;
+
+                    isDead = EnemyGroup.enemyGroup.CheckEndBattle();
+                    yield return new WaitForSeconds(0.1f);
+                }
+            }
+
+            if (dropAttack == true)
+            {
+                charMoving = false;
+                targetCheck = true;
+
+                charAttackDrop = true;
+
+                enemies[_target].gameObject.GetComponent<Enemy>().TakeDropDamage(_target, activeParty.activeParty[index].GetComponent<Character>().GetDropChoice());
+                activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana -= Mathf.Round(activeParty.activeParty[index].GetComponent<Character>().GetDropChoice().dropCost
+                - (activeParty.activeParty[index].GetComponent<Character>().GetDropChoice().dropCost * activeParty.activeParty[index].GetComponent<Character>().dropCostReduction / 100) + 0.45f);
+                activeParty.activeParty[index].gameObject.GetComponent<Character>().ResetDropChoice();
+                dropAttack = false;
+                hud.displayMana[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana.ToString();
+
+                if (enemies[_target].gameObject.GetComponent<Enemy>().health <= 0)
+                {
+                    enemies[_target].gameObject.GetComponent<Enemy>().health = 0;
+
+                    isDead = EnemyGroup.enemyGroup.CheckEndBattle();
+                    yield return new WaitForSeconds(0.1f);
+                }
+            }
         }
         else
         {
-            target = enemyTarget;
-
-        }
-
-        previousTargetReferenceChar = target;
-
-        dialogueText.text = string.Empty;
-
-        if (physicalAttack == true)
-        {
-            charMoving = true;
-            targetCheck = true;
-            physicalAttack = false;
-            charAttacking = true;
-        }
-
-        if (skillPhysicalAttack == true)
-        {
-            charUsingSkill = true;
-            charMoving = true;
-            targetCheck = true;
-
-            skillPhysicalAttack = false;
-            charAttacking = true;
-
-        }
-
-        if (skillRangedAttack == true)
-        {
-            targetCheck = true;
-            charMoving = false;
-            charAttackDrop = true;
-            skillRangedAttack = false;
-            enemies[enemyTarget].GetComponent<Enemy>().TakeSkillDamage(damageTotal, enemyTarget);
-            hud.displayMana[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana.ToString();
-
-            if (enemies[enemyTarget].gameObject.GetComponent<Enemy>().health <= 0)
+            if (activeParty.activeParty[_target].GetComponent<Character>().currentHealth <= 0)
             {
-                enemies[enemyTarget].gameObject.GetComponent<Enemy>().health = 0;
-
-                isDead = EnemyGroup.enemyGroup.CheckEndBattle();
-                yield return new WaitForSeconds(0.1f);
+                target = Engine.e.GetRandomRemainingPartyMember();
             }
-        }
-
-        if (dropAttack == true)
-        {
-            charMoving = false;
-            targetCheck = true;
-
-            charAttackDrop = true;
-
-            enemies[enemyTarget].gameObject.GetComponent<Enemy>().TakeDropDamage(enemyTarget, activeParty.activeParty[index].GetComponent<Character>().GetDropChoice());
-            activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana -= Mathf.Round(activeParty.activeParty[index].GetComponent<Character>().GetDropChoice().dropCost
-            - (activeParty.activeParty[index].GetComponent<Character>().GetDropChoice().dropCost * activeParty.activeParty[index].GetComponent<Character>().dropCostReduction / 100) + 0.45f);
-            activeParty.activeParty[index].gameObject.GetComponent<Character>().ResetDropChoice();
-            dropAttack = false;
-            hud.displayMana[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana.ToString();
-
-            if (enemies[enemyTarget].gameObject.GetComponent<Enemy>().health <= 0)
+            else
             {
-                enemies[enemyTarget].gameObject.GetComponent<Enemy>().health = 0;
+                target = _target;
+            }
 
-                isDead = EnemyGroup.enemyGroup.CheckEndBattle();
-                yield return new WaitForSeconds(0.1f);
+            previousTargetReferenceChar = target;
+
+            dialogueText.text = string.Empty;
+
+            if (physicalAttack == true)
+            {
+                charMoving = true;
+                targetCheck = true;
+                physicalAttack = false;
+                charAttacking = true;
+            }
+
+            if (skillPhysicalAttack == true)
+            {
+                charUsingSkill = true;
+                charMoving = true;
+                targetCheck = true;
+
+                skillPhysicalAttack = false;
+                charAttacking = true;
+
+            }
+
+            if (skillRangedAttack == true)
+            {
+                targetCheck = true;
+                charMoving = false;
+                charAttackDrop = true;
+                skillRangedAttack = false;
+                //enemies[enemyTarget].GetComponent<Enemy>().TakeSkillDamage(damageTotal, enemyTarget);
+                hud.displayMana[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana.ToString();
+
+                // if (enemies[enemyTarget].gameObject.GetComponent<Enemy>().health <= 0)
+                //{
+                //    enemies[enemyTarget].gameObject.GetComponent<Enemy>().health = 0;
+
+                //     isDead = EnemyGroup.enemyGroup.CheckEndBattle();
+                //      yield return new WaitForSeconds(0.1f);
+                //  }
+            }
+
+            if (dropAttack == true)
+            {
+                charMoving = false;
+                targetCheck = true;
+
+                charAttackDrop = true;
+
+                Engine.e.InstantiateEnemyDropTeam(characterAttacking, target);
+                isDead = Engine.e.TakeElementalDamage(target, lastDropChoice.dropPower, lastDropChoice.dropType);
+                activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana -= Mathf.Round(activeParty.activeParty[index].GetComponent<Character>().GetDropChoice().dropCost
+                - (activeParty.activeParty[index].GetComponent<Character>().GetDropChoice().dropCost * activeParty.activeParty[index].GetComponent<Character>().dropCostReduction / 100) + 0.45f);
+                activeParty.activeParty[index].gameObject.GetComponent<Character>().ResetDropChoice();
+                dropAttack = false;
+                hud.displayMana[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana.ToString();
+
             }
         }
     }
@@ -846,6 +952,8 @@ public class BattleSystem : MonoBehaviour
         int index = 0;
         GameObject characterAttacking = null;
         Character characterAttackIndex = null;
+        GameObject characterTarget = null;
+        Enemy enemy = null;
 
         if (currentInQueue == BattleState.CHAR1TURN || currentInQueue == BattleState.CONFCHAR1)
         {
@@ -854,6 +962,27 @@ public class BattleSystem : MonoBehaviour
             characterAttacking = Engine.e.activeParty.gameObject;
             characterAttackIndex = Engine.e.activeParty.activeParty[0].GetComponent<Character>();
 
+            if (!attackingTeam)
+            {
+                enemy = enemies[targetEnemy].GetComponent<Enemy>();
+            }
+            else
+            {
+                if (char1AttackTarget == 0)
+                {
+                    characterTarget = Engine.e.activeParty.gameObject;
+                }
+                if (char1AttackTarget == 1)
+                {
+                    characterTarget = Engine.e.activePartyMember2;
+                }
+                if (char1AttackTarget == 2)
+                {
+                    characterTarget = Engine.e.activePartyMember3;
+                }
+
+                Engine.e.PhysicalDamageCalculation(char1AttackTarget, characterAttackIndex.physicalDamage);
+            }
         }
         if (currentInQueue == BattleState.CHAR2TURN || currentInQueue == BattleState.CONFCHAR2)
         {
@@ -862,17 +991,58 @@ public class BattleSystem : MonoBehaviour
             characterAttacking = Engine.e.activePartyMember2;
             characterAttackIndex = Engine.e.activeParty.activeParty[1].GetComponent<Character>();
 
+            if (!attackingTeam)
+            {
+                enemy = enemies[targetEnemy].GetComponent<Enemy>();
+            }
+            else
+            {
+                if (char2AttackTarget == 0)
+                {
+                    characterTarget = Engine.e.activeParty.gameObject;
+                }
+                if (char2AttackTarget == 1)
+                {
+                    characterTarget = Engine.e.activePartyMember2;
+                }
+                if (char2AttackTarget == 2)
+                {
+                    characterTarget = Engine.e.activePartyMember3;
+                }
 
+                Engine.e.PhysicalDamageCalculation(char2AttackTarget, characterAttackIndex.physicalDamage);
+            }
         }
+
         if (currentInQueue == BattleState.CHAR3TURN || currentInQueue == BattleState.CONFCHAR3)
         {
             index = 2;
             targetEnemy = char3AttackTarget;
             characterAttacking = Engine.e.activePartyMember3;
             characterAttackIndex = Engine.e.activeParty.activeParty[2].GetComponent<Character>();
-        }
 
-        Enemy enemy = enemies[targetEnemy].GetComponent<Enemy>();
+            if (!attackingTeam)
+            {
+                enemy = enemies[targetEnemy].GetComponent<Enemy>();
+            }
+            else
+            {
+                if (char3AttackTarget == 0)
+                {
+                    characterTarget = Engine.e.activeParty.gameObject;
+                }
+                if (char3AttackTarget == 1)
+                {
+                    characterTarget = Engine.e.activePartyMember2;
+                }
+                if (char3AttackTarget == 2)
+                {
+                    characterTarget = Engine.e.activePartyMember3;
+                }
+
+                Engine.e.PhysicalDamageCalculation(char3AttackTarget, characterAttackIndex.physicalDamage);
+            }
+        }
 
         if (targetCheck)
         {
@@ -906,73 +1076,144 @@ public class BattleSystem : MonoBehaviour
             }
 
             enemyGroup.moveToPosition = false;
-            Vector3 targetPos = Vector3.MoveTowards(characterAttacking.GetComponent<Rigidbody2D>().transform.position, enemies[targetEnemy].transform.position, 8f * Time.deltaTime);
 
-            characterAttacking.GetComponent<Rigidbody2D>().MovePosition(targetPos);
-
-            if (Vector3.Distance(characterAttacking.transform.position, enemies[targetEnemy].transform.position) < 1)
+            if (!attackingTeam)
             {
+                Vector3 targetPos = Vector3.MoveTowards(characterAttacking.GetComponent<Rigidbody2D>().transform.position, enemies[targetEnemy].transform.position, 8f * Time.deltaTime);
 
-                charAttacking = false;
-                charAtBattlePos = false;
+                characterAttacking.GetComponent<Rigidbody2D>().MovePosition(targetPos);
 
-                if (!charUsingSkill)
+                if (Vector3.Distance(characterAttacking.transform.position, enemies[targetEnemy].transform.position) < 1)
                 {
-                    enemy.TakePhysicalDamage(targetEnemy, characterAttackIndex.physicalDamage, characterAttackIndex.hitChance);
-                }
-                else
-                {
-                    switch (skillTierChoice)
+
+                    charAttacking = false;
+                    charAtBattlePos = false;
+
+                    if (!charUsingSkill)
                     {
-                        case 0:
-                            enemy.TakeSkillDamage(damageTotal, targetEnemy);
-                            break;
-                        case 10:
-                            enemy.StealAttempt(targetEnemy, characterAttackIndex.stealChance);
-                            break;
-                        case 11:
-                            float hitChanceReduction = 10 + Mathf.Round(characterAttackIndex.skillScale * 10 / 25);
-                            enemy.hitChance -= hitChanceReduction;
-                            break;
-                        case 13:
-                            enemy.TakeSkillDamage(damageTotal, targetEnemy);
-                            enemy.InflictPoisonAttack(index, 10);
-                            break;
-                        case 14:
-                            enemy.InflictDeathAttack();
-                            break;
-                    }
-                }
-
-                if (!dontDisplayDmgPopup)
-                {
-                    GameObject dmgPopup = Instantiate(damagePopup, enemies[targetEnemy].transform.position, Quaternion.identity);
-
-                    if (dodgedAttack == true)
-                    {
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Dodged";
-                        dodgedAttack = false;
-
+                        enemy.TakePhysicalDamage(targetEnemy, characterAttackIndex.physicalDamage, characterAttackIndex.hitChance);
                     }
                     else
                     {
-                        enemies[targetEnemy].GetComponent<SpriteRenderer>().material = damageFlash;
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = enemy.damageTotal.ToString();
-
-                        yield return new WaitForSeconds(0.2f);
-                        enemies[targetEnemy].GetComponent<SpriteRenderer>().material = originalMaterial;
+                        switch (skillTierChoice)
+                        {
+                            case 0:
+                                enemy.TakeSkillDamage(damageTotal, targetEnemy);
+                                break;
+                            case 10:
+                                enemy.StealAttempt(targetEnemy, characterAttackIndex.stealChance);
+                                break;
+                            case 11:
+                                float hitChanceReduction = 10 + Mathf.Round(characterAttackIndex.skillScale * 10 / 25);
+                                enemy.hitChance -= hitChanceReduction;
+                                break;
+                            case 13:
+                                enemy.TakeSkillDamage(damageTotal, targetEnemy);
+                                enemy.InflictPoisonAttack(index, 10);
+                                break;
+                            case 14:
+                                enemy.InflictDeathAttack();
+                                break;
+                        }
                     }
 
-                    Destroy(dmgPopup, 0.8f);
-                }
-                else
-                {
-                    dontDisplayDmgPopup = false;
-                }
-            }
-            hud.displayEnemyHealth[targetEnemy].text = enemies[targetEnemy].gameObject.GetComponent<Enemy>().health.ToString();
-        }
+                    if (!dontDisplayDmgPopup)
+                    {
+                        GameObject dmgPopup = Instantiate(damagePopup, enemies[targetEnemy].transform.position, Quaternion.identity);
 
+                        if (dodgedAttack == true)
+                        {
+                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Dodged";
+                            dodgedAttack = false;
+
+                        }
+                        else
+                        {
+                            enemies[targetEnemy].GetComponent<SpriteRenderer>().material = damageFlash;
+                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = enemy.damageTotal.ToString();
+
+                            yield return new WaitForSeconds(0.2f);
+                            enemies[targetEnemy].GetComponent<SpriteRenderer>().material = originalMaterial;
+                        }
+
+                        Destroy(dmgPopup, 0.8f);
+                    }
+                    else
+                    {
+                        dontDisplayDmgPopup = false;
+                    }
+                }
+                hud.displayEnemyHealth[targetEnemy].text = enemies[targetEnemy].gameObject.GetComponent<Enemy>().health.ToString();
+            }
+            else
+            {
+                Vector3 targetPos = Vector3.MoveTowards(characterAttacking.GetComponent<Rigidbody2D>().transform.position, characterTarget.transform.position, 8f * Time.deltaTime);
+
+                characterAttacking.GetComponent<Rigidbody2D>().MovePosition(targetPos);
+
+                if (Vector3.Distance(characterAttacking.transform.position, characterTarget.transform.position) < 1)
+                {
+
+                    charAttacking = false;
+                    charAtBattlePos = false;
+
+                    if (!charUsingSkill)
+                    {
+                        Engine.e.TakeDamage(targetEnemy, characterAttackIndex.physicalDamage, characterAttackIndex.hitChance);
+                    }
+                    else
+                    {
+                        switch (skillTierChoice)
+                        {
+                            case 0:
+                                enemy.TakeSkillDamage(damageTotal, targetEnemy);
+                                break;
+                            case 10:
+                                enemy.StealAttempt(targetEnemy, characterAttackIndex.stealChance);
+                                break;
+                            case 11:
+                                float hitChanceReduction = 10 + Mathf.Round(characterAttackIndex.skillScale * 10 / 25);
+                                enemy.hitChance -= hitChanceReduction;
+                                break;
+                            case 13:
+                                enemy.TakeSkillDamage(damageTotal, targetEnemy);
+                                enemy.InflictPoisonAttack(index, 10);
+                                break;
+                            case 14:
+                                enemy.InflictDeathAttack();
+                                break;
+                        }
+                    }
+
+                    if (!dontDisplayDmgPopup)
+                    {
+                        GameObject dmgPopup = Instantiate(damagePopup, characterTarget.transform.position, Quaternion.identity);
+
+                        if (dodgedAttack == true)
+                        {
+                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Dodged";
+                            dodgedAttack = false;
+
+                        }
+                        else
+                        {
+                            characterTarget.GetComponent<SpriteRenderer>().material = damageFlash;
+                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = damageTotal.ToString();
+
+                            yield return new WaitForSeconds(0.2f);
+                            characterTarget.GetComponent<SpriteRenderer>().material = originalMaterial;
+                        }
+
+                        Destroy(dmgPopup, 0.8f);
+                    }
+                    else
+                    {
+                        dontDisplayDmgPopup = false;
+                    }
+                }
+                hud.displayHealth[targetEnemy].text = activeParty.activeParty[targetEnemy].gameObject.GetComponent<Character>().currentHealth.ToString();
+            }
+        }
 
         if (!charAttacking && !charAtBattlePos)
         {
@@ -1002,18 +1243,25 @@ public class BattleSystem : MonoBehaviour
 
             if (charAtBattlePos && !charAttacking)
             {
-                if (enemies[targetEnemy].gameObject.GetComponent<Enemy>().health <= 0)
+                if (!attackingTeam)
                 {
-                    enemies[targetEnemy].gameObject.GetComponent<Enemy>().health = 0;
-
-                    isDead = EnemyGroup.enemyGroup.CheckEndBattle();
-
-                    if (isDead)
+                    if (enemies[targetEnemy].gameObject.GetComponent<Enemy>().health <= 0)
                     {
-                        state = BattleState.LEVELUPCHECK;
-                        yield return new WaitForSeconds(2f);
-                        StartCoroutine(LevelUpCheck());
+                        enemies[targetEnemy].gameObject.GetComponent<Enemy>().health = 0;
+
+                        isDead = EnemyGroup.enemyGroup.CheckEndBattle();
+
+                        if (isDead)
+                        {
+                            state = BattleState.LEVELUPCHECK;
+                            yield return new WaitForSeconds(2f);
+                            StartCoroutine(LevelUpCheck());
+                        }
                     }
+                }
+                else
+                {
+                    attackingTeam = false;
                 }
 
                 EndTurn();
@@ -1201,69 +1449,9 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (teamTargetChoice == 0)
                     {
-                        if (lastDropChoice.dps)
-                        {
-                            physicalAttack = false;
-                            if (lastDropChoice.dropType == "Fire")
-                            {
-                                Instantiate(enemyFireDropAnim, character.transform.position, Quaternion.identity);
-                            }
-                            if (lastDropChoice.dropType == "Water")
-                            {
-                                Instantiate(enemyWaterDropAnim, character.transform.position, Quaternion.identity);
-                            }
-                            if (lastDropChoice.dropType == "Lightning")
-                            {
-                                Instantiate(enemyLightningDropAnim, character.transform.position, Quaternion.identity);
-                            }
-                            if (lastDropChoice.dropType == "Shadow")
-                            {
-                                if (lastDropChoice.dropName == "Bio" || lastDropChoice.dropName == "Knockout" || lastDropChoice.dropName == "Blind")
-                                {
-                                    if (lastDropChoice.dropName == "Bio")
-                                    {
-                                        Instantiate(enemyPoisonAnim, character.transform.position, Quaternion.identity);
-                                    }
-                                    if (lastDropChoice.dropName == "Knockout")
-                                    {
-                                        Instantiate(enemySleepAnim, character.transform.position, Quaternion.identity);
-                                    }
-                                    if (lastDropChoice.dropName == "Blind")
-                                    {
-                                        Instantiate(enemyConfuseAnim, character.transform.position, Quaternion.identity);
-                                    }
-                                }
-                                else
-                                    Instantiate(enemyShadowDropAnim, character.transform.position, Quaternion.identity);
-                            }
-                            if (lastDropChoice.dropType == "Ice")
-                            {
-                                Instantiate(enemyIceDropAnim, character.transform.position, Quaternion.identity);
-                            }
-                            if (lastDropChoice.dropType == "Holy")
-                            {
-                                Instantiate(enemyHolyDropAnim, character.transform.position, Quaternion.identity);
-                            }
-
-                            isDead = Engine.e.TakeElementalDamage(target, lastDropChoice.dropPower, lastDropChoice.dropType);
-                            // ActiveCheckNext();
-                        }
-                        else
-                        {
-                            int randTarget = Engine.e.GetRandomRemainingPartyMember();
-                            switch (lastDropChoice.dropName)
-                            {
-                                case "Holy Light":
-                                    Instantiate(holyDropAnim, character.transform.position, Quaternion.identity);
-                                    activeParty.activeParty[index].GetComponent<Character>().HolyLight(lastDropChoice.dropPower, randTarget);
-                                    break;
-
-                            }
-
-
-                            //state = BattleState.ATBCHECK;
-
-                        }
+                        physicalAttack = false;
+                        Engine.e.InstantiateEnemyDropTeam(character, index);
+                        isDead = Engine.e.TakeElementalDamage(target, lastDropChoice.dropPower, lastDropChoice.dropType);
                     }
                     else
                     {
@@ -1306,30 +1494,40 @@ public class BattleSystem : MonoBehaviour
 
 
 
-    public IEnumerator CharSupport(int allyTarget)
+    public IEnumerator CharSupport(int _target)
     {
 
         int index = 0;
         GameObject character = null;
         inBattleMenu = false;
+        bool targetingEnemy = false;
 
         if (currentInQueue == BattleState.CHAR1TURN)
         {
             index = 0;
             character = Engine.e.activeParty.gameObject;
-
+            if (char1TargetingEnemy)
+            {
+                targetingEnemy = true;
+            }
         }
         if (currentInQueue == BattleState.CHAR2TURN)
         {
             index = 1;
             character = Engine.e.activePartyMember2;
-
+            if (char2TargetingEnemy)
+            {
+                targetingEnemy = true;
+            }
         }
         if (currentInQueue == BattleState.CHAR3TURN)
         {
             index = 2;
             character = Engine.e.activePartyMember3;
-
+            if (char3TargetingEnemy)
+            {
+                targetingEnemy = true;
+            }
         }
 
         DeactivateSupportButtons();
@@ -1340,8 +1538,14 @@ public class BattleSystem : MonoBehaviour
         {
             usingItem = false;
 
-            Engine.e.UseItem(allyTarget);
-
+            if (!targetingEnemy)
+            {
+                Engine.e.UseItem(_target);
+            }
+            else
+            {
+                enemies[_target].UseItem();
+            }
             if (index == 0)
             {
                 char1ItemToBeUsed = null;
@@ -1374,10 +1578,9 @@ public class BattleSystem : MonoBehaviour
                     switch (activeParty.activeParty[index].GetComponent<Character>().lastDropChoice.dropName)
                     {
                         case "Holy Light":
-                            if (activeParty.activeParty[allyTarget].GetComponent<Character>().currentHealth > 0)
+                            if (activeParty.activeParty[_target].GetComponent<Character>().currentHealth > 0)
                             {
                                 Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                                activeParty.activeParty[index].GetComponent<Character>().HolyLight(activeParty.activeParty[index].GetComponent<Character>().lastDropChoice.dropPower, allyTarget);
                                 activeParty.activeParty[index].GetComponent<Character>().currentMana -= activeParty.activeParty[index].GetComponent<Character>().lastDropChoice.dropCost;
 
                             }
@@ -1388,10 +1591,10 @@ public class BattleSystem : MonoBehaviour
                             break;
 
                         case "Raise":
-                            if (activeParty.activeParty[allyTarget].GetComponent<Character>().currentHealth <= 0)
+                            if (activeParty.activeParty[_target].GetComponent<Character>().currentHealth <= 0)
                             {
                                 Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                                activeParty.activeParty[index].GetComponent<Character>().Revive(activeParty.activeParty[index].GetComponent<Character>().lastDropChoice.dropPower, allyTarget);
+                                activeParty.activeParty[index].GetComponent<Character>().Revive(activeParty.activeParty[index].GetComponent<Character>().lastDropChoice.dropPower, _target);
                                 activeParty.activeParty[index].GetComponent<Character>().currentMana -= activeParty.activeParty[index].GetComponent<Character>().lastDropChoice.dropCost;
 
                             }
@@ -1419,7 +1622,7 @@ public class BattleSystem : MonoBehaviour
                         case "Repent":
 
                             Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                            activeParty.activeParty[index].GetComponent<Character>().Repent(allyTarget);
+                            activeParty.activeParty[index].GetComponent<Character>().Repent(_target);
                             activeParty.activeParty[index].GetComponent<Character>().currentMana -= activeParty.activeParty[index].GetComponent<Character>().lastDropChoice.dropCost;
                             break;
 
@@ -1765,7 +1968,7 @@ public class BattleSystem : MonoBehaviour
 
         if (skill.selfSupport)
         {
-            DeactivateAttackButtons();
+            DeactivateTargetButtons();
         }
 
 
@@ -1943,13 +2146,13 @@ public class BattleSystem : MonoBehaviour
 
         if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().canUseFireDrops)
         {
-            for (int i = 0; i < Engine.e.activeParty.activeParty[index].GetComponent<Character>().fireDrops.Length; i++)
+            //   for (int i = 0; i < Engine.e.activeParty.activeParty[index].GetComponent<Character>().fireDrops.Length; i++)
             {
-                if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().fireDrops[i] != null)
+                //       if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().fireDrops[i] != null)
                 {
-                    if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().currentMana >= Engine.e.activeParty.activeParty[index].GetComponent<Character>().fireDrops[i].dropCost)
+                    //        if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().currentMana >= Engine.e.activeParty.activeParty[index].GetComponent<Character>().fireDrops[i].dropCost)
                     {
-                        charRandomDropList.Add(Engine.e.activeParty.activeParty[index].GetComponent<Character>().fireDrops[i]);
+                        //              charRandomDropList.Add(Engine.e.activeParty.activeParty[index].GetComponent<Character>().fireDrops[i]);
                     }
                 }
             }
@@ -1957,13 +2160,13 @@ public class BattleSystem : MonoBehaviour
 
         if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().canUseIceDrops)
         {
-            for (int i = 0; i < Engine.e.activeParty.activeParty[index].GetComponent<Character>().iceDrops.Length; i++)
+            //    for (int i = 0; i < Engine.e.activeParty.activeParty[index].GetComponent<Character>().iceDrops.Length; i++)
             {
-                if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().iceDrops[i] != null)
+                //      if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().iceDrops[i] != null)
                 {
-                    if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().currentMana >= Engine.e.activeParty.activeParty[index].GetComponent<Character>().iceDrops[i].dropCost)
+                    //           if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().currentMana >= Engine.e.activeParty.activeParty[index].GetComponent<Character>().iceDrops[i].dropCost)
                     {
-                        charRandomDropList.Add(Engine.e.activeParty.activeParty[index].GetComponent<Character>().iceDrops[i]);
+                        //                charRandomDropList.Add(Engine.e.activeParty.activeParty[index].GetComponent<Character>().iceDrops[i]);
                     }
                 }
             }
@@ -1971,13 +2174,13 @@ public class BattleSystem : MonoBehaviour
 
         if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().canUseLightningDrops)
         {
-            for (int i = 0; i < Engine.e.activeParty.activeParty[index].GetComponent<Character>().lightningDrops.Length; i++)
+            //    for (int i = 0; i < Engine.e.activeParty.activeParty[index].GetComponent<Character>().lightningDrops.Length; i++)
             {
-                if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().lightningDrops[i] != null)
+                //        if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().lightningDrops[i] != null)
                 {
-                    if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().currentMana >= Engine.e.activeParty.activeParty[index].GetComponent<Character>().lightningDrops[i].dropCost)
+                    //         if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().currentMana >= Engine.e.activeParty.activeParty[index].GetComponent<Character>().lightningDrops[i].dropCost)
                     {
-                        charRandomDropList.Add(Engine.e.activeParty.activeParty[index].GetComponent<Character>().lightningDrops[i]);
+                        //               charRandomDropList.Add(Engine.e.activeParty.activeParty[index].GetComponent<Character>().lightningDrops[i]);
                     }
                 }
             }
@@ -1985,13 +2188,13 @@ public class BattleSystem : MonoBehaviour
 
         if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().canUseWaterDrops)
         {
-            for (int i = 0; i < Engine.e.activeParty.activeParty[index].GetComponent<Character>().waterDrops.Length; i++)
+            //     for (int i = 0; i < Engine.e.activeParty.activeParty[index].GetComponent<Character>().waterDrops.Length; i++)
             {
-                if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().waterDrops[i] != null)
+                //         if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().waterDrops[i] != null)
                 {
-                    if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().currentMana >= Engine.e.activeParty.activeParty[index].GetComponent<Character>().waterDrops[i].dropCost)
+                    //         if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().currentMana >= Engine.e.activeParty.activeParty[index].GetComponent<Character>().waterDrops[i].dropCost)
                     {
-                        charRandomDropList.Add(Engine.e.activeParty.activeParty[index].GetComponent<Character>().waterDrops[i]);
+                        //                 charRandomDropList.Add(Engine.e.activeParty.activeParty[index].GetComponent<Character>().waterDrops[i]);
                     }
                 }
             }
@@ -1999,13 +2202,13 @@ public class BattleSystem : MonoBehaviour
 
         if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().canUseShadowDrops)
         {
-            for (int i = 0; i < Engine.e.activeParty.activeParty[index].GetComponent<Character>().shadowDrops.Length; i++)
+            //      for (int i = 0; i < Engine.e.activeParty.activeParty[index].GetComponent<Character>().shadowDrops.Length; i++)
             {
-                if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().shadowDrops[i] != null && Engine.e.activeParty.activeParty[index].GetComponent<Character>().shadowDrops[i].dropName != "Death")
+                //          if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().shadowDrops[i] != null && Engine.e.activeParty.activeParty[index].GetComponent<Character>().shadowDrops[i].dropName != "Death")
                 {
-                    if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().currentMana >= Engine.e.activeParty.activeParty[0].GetComponent<Character>().shadowDrops[i].dropCost)
+                    //         if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().currentMana >= Engine.e.activeParty.activeParty[0].GetComponent<Character>().shadowDrops[i].dropCost)
                     {
-                        charRandomDropList.Add(Engine.e.activeParty.activeParty[index].GetComponent<Character>().shadowDrops[i]);
+                        //                   charRandomDropList.Add(Engine.e.activeParty.activeParty[index].GetComponent<Character>().shadowDrops[i]);
                     }
                 }
             }
@@ -2013,14 +2216,14 @@ public class BattleSystem : MonoBehaviour
 
         if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().canUseHolyDrops)
         {
-            for (int i = 0; i < Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops.Length; i++)
+            //   for (int i = 0; i < Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops.Length; i++)
             {
-                if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops[i] != null && Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops[i].dropName != "Raise"
-                && Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops[i].dropName != "Repent" && Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops[i].dropName != "Dispel")
+                //        if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops[i] != null && Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops[i].dropName != "Raise"
+                //        && Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops[i].dropName != "Repent" && Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops[i].dropName != "Dispel")
                 {
-                    if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().currentMana >= Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops[i].dropCost)
+                    //           if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().currentMana >= Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops[i].dropCost)
                     {
-                        charRandomDropList.Add(Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops[i]);
+                        //               charRandomDropList.Add(Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops[i]);
                     }
                 }
             }
@@ -2088,44 +2291,7 @@ public class BattleSystem : MonoBehaviour
                     enemyAttackDrop = true;
 
                     lastDropChoice = enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice];
-
-                    if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Fire")
-                    {
-                        Instantiate(enemyFireDropAnim, enemies[index].transform.position, Quaternion.identity);
-                    }
-                    if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Water")
-                    {
-                        Instantiate(enemyWaterDropAnim, enemies[index].transform.position, Quaternion.identity);
-                    }
-                    if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Lightning")
-                    {
-                        Instantiate(enemyLightningDropAnim, enemies[index].transform.position, Quaternion.identity);
-                    }
-                    if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Shadow")
-                    {
-                        if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Bio" || enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Knockout"
-                        || enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Blind")
-                        {
-                            if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Bio")
-                            {
-                                Instantiate(enemyPoisonAnim, enemies[index].transform.position, Quaternion.identity);
-                            }
-                            if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Knockout")
-                            {
-                                Instantiate(enemySleepAnim, enemies[index].transform.position, Quaternion.identity);
-                            }
-                            if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Blind")
-                            {
-                                Instantiate(enemyConfuseAnim, enemies[index].transform.position, Quaternion.identity);
-                            }
-                        }
-                        else
-                            Instantiate(enemyShadowDropAnim, enemies[index].transform.position, Quaternion.identity);
-                    }
-                    if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Ice")
-                    {
-                        Instantiate(enemyIceDropAnim, enemies[index].transform.position, Quaternion.identity);
-                    }
+                    Engine.e.InstantiateEnemyDropEnemy(index, enemyDropChoice);
 
                     isDead = Engine.e.TakeElementalDamage(randTarget, enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropPower, enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType);
                     enemies[index].GetComponent<Enemy>().mana -= enemies[index].GetComponent<Enemy>().drops[enemyDropChoice].dropCost;
@@ -2491,43 +2657,7 @@ public class BattleSystem : MonoBehaviour
 
                     if (!attackingTeam)
                     {
-                        if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Fire")
-                        {
-                            Instantiate(enemyFireDropAnim, enemies[index].transform.position, Quaternion.identity);
-                        }
-                        if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Water")
-                        {
-                            Instantiate(enemyWaterDropAnim, enemies[index].transform.position, Quaternion.identity);
-                        }
-                        if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Lightning")
-                        {
-                            Instantiate(enemyLightningDropAnim, enemies[index].transform.position, Quaternion.identity);
-                        }
-                        if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Shadow")
-                        {
-                            if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Bio" || enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Knockout"
-                            || enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Blind")
-                            {
-                                if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Bio")
-                                {
-                                    Instantiate(enemyPoisonAnim, enemies[index].transform.position, Quaternion.identity);
-                                }
-                                if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Knockout")
-                                {
-                                    Instantiate(enemySleepAnim, enemies[index].transform.position, Quaternion.identity);
-                                }
-                                if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Blind")
-                                {
-                                    Instantiate(enemyConfuseAnim, enemies[index].transform.position, Quaternion.identity);
-                                }
-                            }
-                            else
-                                Instantiate(enemyShadowDropAnim, enemies[index].transform.position, Quaternion.identity);
-                        }
-                        if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Ice")
-                        {
-                            Instantiate(enemyIceDropAnim, enemies[index].transform.position, Quaternion.identity);
-                        }
+                        Engine.e.InstantiateEnemyDropEnemy(index, enemyDropChoice);
                         isDead = Engine.e.TakeElementalDamage(randTarget, enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropPower, enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType);
                     }
                     else
@@ -3252,89 +3382,227 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    public void AttackEnemyButton(int enemyTarget)
+    public void TargetTeam()
     {
+        if (!targetingTeam)
+        {
+            targetingTeam = true;
 
+            if (targetingEnemy)
+            {
+                targetingEnemy = false;
+            }
+        }
+    }
+
+    public void TargetEnemy()
+    {
+        if (!targetingEnemy)
+        {
+            targetingEnemy = true;
+
+            if (targetingTeam)
+            {
+                targetingTeam = false;
+            }
+        }
+    }
+
+    public void ClearTarget()
+    {
+        targetingTeam = false;
+        targetingEnemy = false;
+    }
+
+    // To keep track of where we are targeting (for UI navigation)
+    public void SetMenuTargetIndex(float index)
+    {
+        menuTargetIndex = index;
+    }
+
+    public void SetTarget(int _target)
+    {
         if (state == BattleState.CHAR1TURN)
         {
-            char1AttackTarget = enemyTarget;
-            char1PhysicalAttack = true;
-            char1DropAttack = dropAttack;
+            char1AttackTarget = _target;
             char1SkillPhysicalAttack = skillPhysicalAttack;
+            char1TargetingTeam = targetingTeam;
+            char1TargetingEnemy = targetingEnemy;
+            char1DropAttack = dropAttack;
+            char1UsingItem = usingItem;
+            char1Supporting = usingItem;
             char1Attacking = true;
             char1Ready = false;
 
+            targetingTeam = false;
+            targetingEnemy = false;
+
             DeactivateChar1MenuButtons();
+            battleQueue.Enqueue(BattleState.CHAR1TURN);
+
+            if (activeParty.activeParty[1] != null)
+            {
+                if (char2Ready)
+                {
+                    ActivateChar2MenuButtons();
+                }
+            }
+
+            if (activeParty.activeParty[2] != null)
+            {
+                if (char3Ready)
+                {
+                    ActivateChar3MenuButtons();
+                }
+            }
 
         }
 
         if (state == BattleState.CHAR2TURN)
         {
-            char2AttackTarget = enemyTarget;
-            char2PhysicalAttack = true;
+            char2AttackTarget = _target;
             char2DropAttack = dropAttack;
             char2SkillPhysicalAttack = skillPhysicalAttack;
             char2Attacking = true;
             char2Ready = false;
+            char2TargetingTeam = targetingTeam;
+            char2TargetingEnemy = targetingEnemy;
+            char2UsingItem = usingItem;
+            char2Supporting = usingItem;
 
             DeactivateChar2MenuButtons();
+            battleQueue.Enqueue(BattleState.CHAR2TURN);
 
+
+            if (char1Ready)
+            {
+                ActivateChar1MenuButtons();
+            }
+
+
+            if (activeParty.activeParty[2] != null)
+            {
+                if (char3Ready)
+                {
+                    ActivateChar3MenuButtons();
+                }
+            }
         }
         if (state == BattleState.CHAR3TURN)
         {
-            char3AttackTarget = enemyTarget;
-            char3PhysicalAttack = true;
+            char3AttackTarget = _target;
             char3DropAttack = dropAttack;
             char3SkillPhysicalAttack = skillPhysicalAttack;
             char3Attacking = true;
             char3Ready = false;
+            char3TargetingTeam = targetingTeam;
+            char3TargetingEnemy = targetingEnemy;
+            char3UsingItem = usingItem;
+            char3Supporting = usingItem;
 
             DeactivateChar3MenuButtons();
+            battleQueue.Enqueue(BattleState.CHAR3TURN);
+
+            if (char1Ready)
+            {
+                ActivateChar1MenuButtons();
+            }
+
+            if (char2Ready)
+            {
+                ActivateChar3MenuButtons();
+
+            }
 
         }
-
-        if (!Engine.e.battleModeActive)
-        {
-            if (enemies[enemyTarget].gameObject.GetComponent<Enemy>().health > 0)
-            {
-                if (!charMoving && !dropExists && !enemyMoving
-                && state != BattleState.ENEMY1TURN && state != BattleState.ENEMY2TURN
-                && state != BattleState.ENEMY3TURN && state != BattleState.ENEMY4TURN)
-                {
-                    SetPhysicalAttack();
-                    StartCoroutine(CharAttack(enemyTarget));
-                }
-                else
-                {
-                    return;
-                }
-            }
-        }
-        else
-        {
-            if (state == BattleState.CHAR1TURN)
-            {
-                battleQueue.Enqueue(BattleState.CHAR1TURN);
-            }
-
-            if (state == BattleState.CHAR2TURN)
-            {
-                battleQueue.Enqueue(BattleState.CHAR2TURN);
-
-            }
-
-            if (state == BattleState.CHAR3TURN)
-            {
-                battleQueue.Enqueue(BattleState.CHAR3TURN);
-            }
-
-            DeactivateAttackButtons();
-            DeactivateTargetSprite();
-
-
-        }
+        DeactivateTargetButtons();
+        DeactivateTargetSprite();
         state = BattleState.ATBCHECK;
     }
+
+    /* public void AttackEnemyButton(int enemyTarget)
+     {
+
+         if (state == BattleState.CHAR1TURN)
+         {
+             char1AttackTarget = enemyTarget;
+             char1PhysicalAttack = true;
+             char1DropAttack = dropAttack;
+             char1SkillPhysicalAttack = skillPhysicalAttack;
+             char1Attacking = true;
+             char1Ready = false;
+
+             DeactivateChar1MenuButtons();
+
+         }
+
+         if (state == BattleState.CHAR2TURN)
+         {
+             char2AttackTarget = enemyTarget;
+             char2PhysicalAttack = true;
+             char2DropAttack = dropAttack;
+             char2SkillPhysicalAttack = skillPhysicalAttack;
+             char2Attacking = true;
+             char2Ready = false;
+
+             DeactivateChar2MenuButtons();
+
+         }
+         if (state == BattleState.CHAR3TURN)
+         {
+             char3AttackTarget = enemyTarget;
+             char3PhysicalAttack = true;
+             char3DropAttack = dropAttack;
+             char3SkillPhysicalAttack = skillPhysicalAttack;
+             char3Attacking = true;
+             char3Ready = false;
+
+             DeactivateChar3MenuButtons();
+
+         }
+
+         if (!Engine.e.battleModeActive)
+         {
+             if (enemies[enemyTarget].gameObject.GetComponent<Enemy>().health > 0)
+             {
+                 if (!charMoving && !dropExists && !enemyMoving
+                 && state != BattleState.ENEMY1TURN && state != BattleState.ENEMY2TURN
+                 && state != BattleState.ENEMY3TURN && state != BattleState.ENEMY4TURN)
+                 {
+                     SetPhysicalAttack();
+                     StartCoroutine(CharAttack(enemyTarget));
+                 }
+                 else
+                 {
+                     return;
+                 }
+             }
+         }
+         else
+         {
+             if (state == BattleState.CHAR1TURN)
+             {
+                 battleQueue.Enqueue(BattleState.CHAR1TURN);
+             }
+
+             if (state == BattleState.CHAR2TURN)
+             {
+                 battleQueue.Enqueue(BattleState.CHAR2TURN);
+
+             }
+
+             if (state == BattleState.CHAR3TURN)
+             {
+                 battleQueue.Enqueue(BattleState.CHAR3TURN);
+             }
+
+             DeactivateTargetButtons();
+             DeactivateTargetSprite();
+
+
+         }
+         state = BattleState.ATBCHECK;
+     }*/
 
     public void SupportAllyButton(int allyTarget)
     {
@@ -3413,7 +3681,7 @@ public class BattleSystem : MonoBehaviour
         }
 
         inBattleMenu = false;
-        DeactivateAttackButtons();
+        DeactivateTargetButtons();
         DeactivateSupportButtons();
         DeactivateTargetSprite();
         state = BattleState.ATBCHECK;
@@ -3478,7 +3746,7 @@ public class BattleSystem : MonoBehaviour
                 battleQueue.Enqueue(BattleState.CHAR3TURN);
             }
 
-            DeactivateAttackButtons();
+            DeactivateTargetButtons();
             DeactivateTargetSprite();
 
         }
@@ -3800,23 +4068,75 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    public void ActivateAttackButtons()
+    public void SetPhysicalAttack()
+    {
+        if (state == BattleState.CHAR1TURN)
+        {
+            char1PhysicalAttack = true;
+        }
+        if (state == BattleState.CHAR2TURN)
+        {
+            char2PhysicalAttack = true;
+        }
+        if (state == BattleState.CHAR3TURN)
+        {
+            char3PhysicalAttack = true;
+        }
+    }
+
+    public void SetDropAttack()
+    {
+        if (state == BattleState.CHAR1TURN)
+        {
+            char1DropAttack = true;
+        }
+        if (state == BattleState.CHAR2TURN)
+        {
+            char2DropAttack = true;
+        }
+        if (state == BattleState.CHAR3TURN)
+        {
+            char3DropAttack = true;
+        }
+    }
+
+    public void ActivateTargetButtons()
     {
 
-        //  if (!charMoving && !dropExists && !enemyMoving)
-        //{
         inBattleMenu = true;
 
+        for (int i = 0; i < allyTargetButtons.Length; i++)
+        {
+            if (activeParty.activeParty[i] != null)
+            {
+                allyTargetButtons[i].SetActive(true);
+            }
+        }
         for (int i = 0; i < enemies.Length; i++)
         {
             if (enemies[i] != null)
             {
-                targetButtons[i].SetActive(true);
+                enemyTargetButtons[i].SetActive(true);
             }
         }
 
 
         GetComponent<BattleMenuControllerNav>().OpenAttackFirstEnemy();
+
+
+        if (dropAttack)
+        {
+            if (lastDropChoice.dps)
+            {
+                GetComponent<BattleMenuControllerNav>().OpenAttackFirstEnemy();
+            }
+            else
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(allyTargetButtons[0]);
+            }
+        }
+
 
         DeactivateDropsUI();
         DeactivateSkillsUI();
@@ -3994,7 +4314,7 @@ public class BattleSystem : MonoBehaviour
     public void ReturnToCharPanel()
     {
         inBattleMenu = false;
-        DeactivateAttackButtons();
+        DeactivateTargetButtons();
         DeactivateBattleItems();
         DeactivateSkillTargetButtons();
         physicalAttack = false;
@@ -4032,23 +4352,26 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    public void DeactivateAttackButtons()
+    public void DeactivateTargetButtons()
     {
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            if (enemies[i] != null)
-            {
-                targetButtons[i].SetActive(false);
-            }
-        }
 
         for (int i = 0; i < Engine.e.activeParty.activeParty.Length; i++)
         {
             if (Engine.e.activeParty.activeParty[i] != null)
             {
                 returnToPanelButton[i].SetActive(false);
+                allyTargetButtons[i].SetActive(false);
             }
         }
+
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            if (enemies[i] != null)
+            {
+                enemyTargetButtons[i].SetActive(false);
+            }
+        }
+
     }
 
     public void DisplayBattleItems()
@@ -4365,12 +4688,12 @@ public class BattleSystem : MonoBehaviour
         }
 
 
-        if (dropChoice.dropType == "Fire" && Engine.e.activeParty.activeParty[index].GetComponent<Character>().fireDrops[dropChoice.dropIndex] != null
-        || dropChoice.dropType == "Ice" && Engine.e.activeParty.activeParty[index].GetComponent<Character>().iceDrops[dropChoice.dropIndex] != null
-        || dropChoice.dropType == "Lightning" && Engine.e.activeParty.activeParty[index].GetComponent<Character>().lightningDrops[dropChoice.dropIndex] != null
-        || dropChoice.dropType == "Water" && Engine.e.activeParty.activeParty[index].GetComponent<Character>().waterDrops[dropChoice.dropIndex] != null
-        || dropChoice.dropType == "Shadow" && Engine.e.activeParty.activeParty[index].GetComponent<Character>().shadowDrops[dropChoice.dropIndex] != null
-        || dropChoice.dropType == "Holy" && Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops[dropChoice.dropIndex] != null)
+        //  if (dropChoice.dropType == "Fire" && Engine.e.activeParty.activeParty[index].GetComponent<Character>().fireDrops[dropChoice.dropIndex] != null
+        //   || dropChoice.dropType == "Ice" && Engine.e.activeParty.activeParty[index].GetComponent<Character>().iceDrops[dropChoice.dropIndex] != null
+        //   || dropChoice.dropType == "Lightning" && Engine.e.activeParty.activeParty[index].GetComponent<Character>().lightningDrops[dropChoice.dropIndex] != null
+        //   || dropChoice.dropType == "Water" && Engine.e.activeParty.activeParty[index].GetComponent<Character>().waterDrops[dropChoice.dropIndex] != null
+        //   || dropChoice.dropType == "Shadow" && Engine.e.activeParty.activeParty[index].GetComponent<Character>().shadowDrops[dropChoice.dropIndex] != null
+        //   || dropChoice.dropType == "Holy" && Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops[dropChoice.dropIndex] != null)
         {
             //  if (state != BattleState.ENEMY1TURN && state != BattleState.ENEMY2TURN
             //   && state != BattleState.ENEMY3TURN && state != BattleState.ENEMY4TURN)
@@ -4379,8 +4702,8 @@ public class BattleSystem : MonoBehaviour
             {
                 Engine.e.battleSystem.enemyPanel.SetActive(true);
 
-                Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Character>().UseDrop(dropChoice);
                 lastDropChoice = dropChoice;
+                Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Character>().UseDrop(dropChoice);
 
                 if (index == 0)
                 {
@@ -4395,17 +4718,14 @@ public class BattleSystem : MonoBehaviour
                     DeactivateChar3MenuButtons();
                 }
                 DeactivateDropsUI();
+
             }
+            // }
+
             else
             {
                 return;
             }
-        }
-        // }
-
-        else
-        {
-            return;
         }
     }
 
@@ -5235,25 +5555,10 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    public void SetPhysicalAttack()
-    {
-        if (!charMoving)
-        {
-            physicalAttack = true;
-        }
-        else
-        {
-            return;
-        }
-    }
-    public void SetDropAttack(bool setter)
-    {
-        dropAttack = setter;
 
-    }
 
     // General check for enemies, mainly regarding poison and death damage (if they die, should the battle end)
-    bool CheckIsDeadEnemy()
+    public bool CheckIsDeadEnemy()
     {
         if (enemies[3] != null)
         {
@@ -5309,6 +5614,8 @@ public class BattleSystem : MonoBehaviour
 
         if (partyTurn)
         {
+            isDead = CheckIsDeadEnemy();
+
             partyTurn = false;
 
             if (currentInQueue == BattleState.CHAR1TURN || currentInQueue == BattleState.CONFCHAR1)
@@ -5633,6 +5940,7 @@ public class BattleSystem : MonoBehaviour
 
     private void ChangeCharState()
     {
+
         if (!inBattleMenu)
         {
             if (Input.GetKeyDown(KeyCode.D))
@@ -5757,13 +6065,33 @@ public class BattleSystem : MonoBehaviour
         DeactivateBattleItems();
         DeactivateSupportButtons();
         DeactivateSkillTargetButtons();
-        DeactivateAttackButtons();
+        DeactivateTargetButtons();
 
     }
 
     private void Update()
     {
         ChangeCharState();
+        allyTargetButtons[0].transform.position = Engine.e.activeParty.transform.position;
+        allyTargetButtons[1].transform.position = Engine.e.activePartyMember2.transform.position;
+        allyTargetButtons[2].transform.position = Engine.e.activePartyMember3.transform.position;
+
+        if (enemies[0] != null && enemies[0].GetComponent<Enemy>().health > 0)
+        {
+            enemyTargetButtons[0].transform.position = enemies[0].transform.position;
+        }
+        if (enemies[1] != null && enemies[1].GetComponent<Enemy>().health > 0)
+        {
+            enemyTargetButtons[1].transform.position = enemies[1].transform.position;
+        }
+        if (enemies[2] != null && enemies[2].GetComponent<Enemy>().health > 0)
+        {
+            enemyTargetButtons[2].transform.position = enemies[2].transform.position;
+        }
+        if (enemies[3] != null && enemies[3].GetComponent<Enemy>().health > 0)
+        {
+            enemyTargetButtons[3].transform.position = enemies[3].transform.position;
+        }
 
         if (state == BattleState.CHAR1TURN)
         {

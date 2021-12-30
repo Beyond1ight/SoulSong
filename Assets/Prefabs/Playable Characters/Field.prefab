@@ -169,7 +169,7 @@ MonoBehaviour:
   sleepDefense: 1
   confuseDefense: 1
   deathDefense: 0
-  fireDrops:
+  drops:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -180,7 +180,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  iceDrops:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -191,42 +190,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  holyDrops:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  waterDrops:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  lightningDrops:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  shadowDrops:
   - {fileID: 11400000, guid: 3592519a364064da4bc7bbbebcbed1f6, type: 2}
-  - {fileID: 11400000, guid: eaf944b95521b408790e43b275c3e83f, type: 2}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

@@ -68,7 +68,6 @@ public class SavePoint : MonoBehaviour
                     }
                 }
             }
-
             //Debug.Log();
 
         }

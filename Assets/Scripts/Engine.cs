@@ -30,7 +30,7 @@ public class Engine : MonoBehaviour
     AnimationCurve healthCurve, manaCurve, energyCurve, strengthCurve;
 
     // Drops
-    public Drops[] fireDrops, iceDrops, lightningDrops, waterDrops, shadowDrops, holyDrops;
+    public Drops[] gameDrops;
 
     // Skills    
     public Skills[] gameSkills;
@@ -109,7 +109,8 @@ public class Engine : MonoBehaviour
         ClearGameInventoryHeld();
         ClearGameQuests();
         SetParty();
-
+        SetDropIndexes();
+        abilityScreenReference.ClearNodeUnlocked();
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
 
@@ -226,45 +227,52 @@ public class Engine : MonoBehaviour
 
 
 
-        playableCharacters[0].fireDrops = new Drops[10];
-        playableCharacters[0].holyDrops = new Drops[10];
-        playableCharacters[0].waterDrops = new Drops[10];
-        playableCharacters[0].lightningDrops = new Drops[10];
-        playableCharacters[0].shadowDrops = new Drops[10];
-        playableCharacters[0].iceDrops = new Drops[10];
+        /* playableCharacters[0].fireDrops = new Drops[10];
+         playableCharacters[0].holyDrops = new Drops[10];
+         playableCharacters[0].waterDrops = new Drops[10];
+         playableCharacters[0].lightningDrops = new Drops[10];
+         playableCharacters[0].shadowDrops = new Drops[10];
+         playableCharacters[0].iceDrops = new Drops[10];
 
 
 
 
-        playableCharacters[0].fireDrops[0] = fireDrops[0];
-        playableCharacters[0].fireDrops[1] = fireDrops[1];
-        playableCharacters[0].holyDrops[0] = holyDrops[0];
-        playableCharacters[0].holyDrops[1] = holyDrops[1];
-        playableCharacters[0].holyDrops[2] = holyDrops[2];
-        playableCharacters[0].holyDrops[3] = holyDrops[3];
-        playableCharacters[0].waterDrops[0] = waterDrops[0];
-        playableCharacters[0].lightningDrops[0] = lightningDrops[0];
-        playableCharacters[0].shadowDrops[0] = shadowDrops[0];
-        playableCharacters[0].shadowDrops[1] = shadowDrops[1];
-        playableCharacters[0].shadowDrops[2] = shadowDrops[2];
-        playableCharacters[0].shadowDrops[3] = shadowDrops[3];
-        playableCharacters[0].shadowDrops[4] = shadowDrops[4];
-        playableCharacters[0].iceDrops[0] = iceDrops[0];
+         playableCharacters[0].fireDrops[0] = fireDrops[0];
+         playableCharacters[0].fireDrops[1] = fireDrops[1];
+         playableCharacters[0].holyDrops[0] = holyDrops[0];
+         playableCharacters[0].holyDrops[1] = holyDrops[1];
+         playableCharacters[0].holyDrops[2] = holyDrops[2];
+         playableCharacters[0].holyDrops[3] = holyDrops[3];
+         playableCharacters[0].waterDrops[0] = waterDrops[0];
+         playableCharacters[0].lightningDrops[0] = lightningDrops[0];
+         playableCharacters[0].shadowDrops[0] = shadowDrops[0];
+         playableCharacters[0].shadowDrops[1] = shadowDrops[1];
+         playableCharacters[0].shadowDrops[2] = shadowDrops[2];
+         playableCharacters[0].shadowDrops[3] = shadowDrops[3];
+         playableCharacters[0].shadowDrops[4] = shadowDrops[4];
+         playableCharacters[0].iceDrops[0] = iceDrops[0];
+ */
+        // fireDrops[0].isKnown = true;
 
-        fireDrops[0].isKnown = true;
-        fireDrops[1].isKnown = true;
-        holyDrops[0].isKnown = true;
-        holyDrops[1].isKnown = true;
-        holyDrops[2].isKnown = true;
-        holyDrops[3].isKnown = true;
-        waterDrops[0].isKnown = true;
-        lightningDrops[0].isKnown = true;
-        shadowDrops[0].isKnown = true;
-        shadowDrops[1].isKnown = true;
-        shadowDrops[2].isKnown = true;
-        shadowDrops[3].isKnown = true;
-        shadowDrops[4].isKnown = true;
-        iceDrops[0].isKnown = true;
+
+        playableCharacters[0].drops = new Drops[gameDrops.Length];
+
+        playableCharacters[0].drops[0] = gameDrops[0];
+        playableCharacters[0].drops[4] = gameDrops[4];
+        /*playableCharacters[0].drops[5] = gameDrops[5];
+        playableCharacters[0].drops[10] = gameDrops[10];
+        playableCharacters[0].drops[15] = gameDrops[15];
+        playableCharacters[0].drops[20] = gameDrops[20];
+        playableCharacters[0].drops[21] = gameDrops[21];
+        playableCharacters[0].drops[22] = gameDrops[22];
+        playableCharacters[0].drops[23] = gameDrops[23];
+        playableCharacters[0].drops[24] = gameDrops[24];
+        playableCharacters[0].drops[25] = gameDrops[25];
+        playableCharacters[0].drops[26] = gameDrops[26];
+        playableCharacters[0].drops[27] = gameDrops[27];
+        playableCharacters[0].drops[28] = gameDrops[28];
+        playableCharacters[0].drops[29] = gameDrops[29];
+*/
 
         playableCharacters[0].fireDropsLevel = 1f;
         playableCharacters[0].holyDropsLevel = 2f;
@@ -380,22 +388,23 @@ public class Engine : MonoBehaviour
         playableCharacters[1].canUseShadowDrops = false;
         playableCharacters[1].canUseIceDrops = false;
 
+        playableCharacters[1].drops = new Drops[gameDrops.Length];
+
+        playableCharacters[1].drops[10] = gameDrops[10];
+        playableCharacters[1].drops[15] = gameDrops[15];
+        /* playableCharacters[1].fireDrops = new Drops[10];
+         playableCharacters[1].holyDrops = new Drops[10];
+         playableCharacters[1].waterDrops = new Drops[10];
+         playableCharacters[1].lightningDrops = new Drops[10];
+         playableCharacters[1].shadowDrops = new Drops[10];
+         playableCharacters[1].iceDrops = new Drops[10];
 
 
 
-        playableCharacters[1].fireDrops = new Drops[10];
-        playableCharacters[1].holyDrops = new Drops[10];
-        playableCharacters[1].waterDrops = new Drops[10];
-        playableCharacters[1].lightningDrops = new Drops[10];
-        playableCharacters[1].shadowDrops = new Drops[10];
-        playableCharacters[1].iceDrops = new Drops[10];
 
-
-
-
-        playableCharacters[1].waterDrops[0] = waterDrops[0];
-        playableCharacters[1].lightningDrops[0] = lightningDrops[0];
-
+         playableCharacters[1].waterDrops[0] = waterDrops[0];
+         playableCharacters[1].lightningDrops[0] = lightningDrops[0];
+ */
         playableCharacters[1].fireDropsLevel = 1f;
         playableCharacters[1].holyDropsLevel = 1f;
         playableCharacters[1].waterDropsLevel = 2f;
@@ -506,18 +515,21 @@ public class Engine : MonoBehaviour
         playableCharacters[2].canUseIceDrops = false;
 
 
+        playableCharacters[2].drops = new Drops[gameDrops.Length];
 
-        playableCharacters[2].fireDrops = new Drops[10];
-        playableCharacters[2].holyDrops = new Drops[10];
-        playableCharacters[2].waterDrops = new Drops[10];
-        playableCharacters[2].lightningDrops = new Drops[10];
-        playableCharacters[2].shadowDrops = new Drops[10];
-        playableCharacters[2].iceDrops = new Drops[10];
+        playableCharacters[2].drops[20] = gameDrops[20];
+
+        /* playableCharacters[2].fireDrops = new Drops[10];
+         playableCharacters[2].holyDrops = new Drops[10];
+         playableCharacters[2].waterDrops = new Drops[10];
+         playableCharacters[2].lightningDrops = new Drops[10];
+         playableCharacters[2].shadowDrops = new Drops[10];
+         playableCharacters[2].iceDrops = new Drops[10];
 
 
-        playableCharacters[2].shadowDrops[0] = shadowDrops[0];
-        playableCharacters[2].shadowDrops[1] = shadowDrops[1];
-
+         playableCharacters[2].shadowDrops[0] = shadowDrops[0];
+         playableCharacters[2].shadowDrops[1] = shadowDrops[1];
+ */
 
         playableCharacters[2].fireDropsLevel = 1f;
         playableCharacters[2].holyDropsLevel = 1f;
@@ -625,20 +637,23 @@ public class Engine : MonoBehaviour
         playableCharacters[3].canUseShadowDrops = true;
         playableCharacters[3].canUseIceDrops = false;
 
+        playableCharacters[3].drops = new Drops[gameDrops.Length];
+        playableCharacters[3].drops[20] = gameDrops[20];
+        playableCharacters[3].drops[25] = gameDrops[25];
 
 
-        playableCharacters[3].fireDrops = new Drops[10];
-        playableCharacters[3].holyDrops = new Drops[10];
-        playableCharacters[3].waterDrops = new Drops[10];
-        playableCharacters[3].lightningDrops = new Drops[10];
-        playableCharacters[3].shadowDrops = new Drops[10];
-        playableCharacters[3].iceDrops = new Drops[10];
+        /*    playableCharacters[3].fireDrops = new Drops[10];
+            playableCharacters[3].holyDrops = new Drops[10];
+            playableCharacters[3].waterDrops = new Drops[10];
+            playableCharacters[3].lightningDrops = new Drops[10];
+            playableCharacters[3].shadowDrops = new Drops[10];
+            playableCharacters[3].iceDrops = new Drops[10];
 
 
 
-        playableCharacters[3].holyDrops[0] = holyDrops[0];
-        playableCharacters[3].shadowDrops[0] = shadowDrops[0];
-
+            playableCharacters[3].holyDrops[0] = holyDrops[0];
+            playableCharacters[3].shadowDrops[0] = shadowDrops[0];
+    */
 
 
         playableCharacters[3].fireDropsLevel = 1f;
@@ -717,8 +732,8 @@ public class Engine : MonoBehaviour
             {
                 activePartyMember2.GetComponent<SpriteRenderer>().sprite = party[1].GetComponent<SpriteRenderer>().sprite;
                 activePartyMember2.SetActive(true);
-                charAbilityButtons[1].SetActive(true);
-                charSkillTierButtons[1].SetActive(true);
+                //         charAbilityButtons[1].SetActive(true);
+                //                charSkillTierButtons[1].SetActive(true);
 
             }
             if (party[2] != null)
@@ -739,8 +754,8 @@ public class Engine : MonoBehaviour
                 activePartyMember3.GetComponent<SpriteRenderer>().sprite = party[2].GetComponent<SpriteRenderer>().sprite;
                 activePartyMember3.SetActive(true);
                 activeParty.activeParty[2] = party[2].GetComponent<Character>().gameObject;
-                charAbilityButtons[2].SetActive(true);
-                charSkillTierButtons[2].SetActive(true);
+                //      charAbilityButtons[2].SetActive(true);
+                //     charSkillTierButtons[2].SetActive(true);
 
             }
             if (party[3] != null)
@@ -765,8 +780,8 @@ public class Engine : MonoBehaviour
                 playableCharacters[3].maxEnergy = Mathf.Round(energyCurve.Evaluate(playableCharacters[3].lvl) + (energyCurve.Evaluate(playableCharacters[3].lvl) * (playableCharacters[3].energyOffset / 100)));
                 playableCharacters[3].currentEnergy = playableCharacters[3].maxEnergy;
                 playableCharacters[3].physicalDamage = Mathf.Round(strengthCurve.Evaluate(playableCharacters[3].lvl) + +(strengthCurve.Evaluate(playableCharacters[3].lvl) * (playableCharacters[3].strengthOffset / 100)));
-                charAbilityButtons[3].SetActive(true);
-                charSkillTierButtons[3].SetActive(true);
+                //     charAbilityButtons[3].SetActive(true);
+                //     charSkillTierButtons[3].SetActive(true);
 
             }
         }
@@ -1436,331 +1451,331 @@ public class Engine : MonoBehaviour
     }
 
     // Function for "consuming" a Drop item, out of battle. Teaches the targeted character the corresponding Drop.
-    public void UseItemDrop()
-    {
-        int index = characterBeingTargeted;
-
-        switch (itemToBeUsed.itemName)
-        {
-            // Fire Drops
-            case "Fire Blast":
-
-                if (party[index].GetComponent<Character>().fireDrops[0] != null)
-                {
-
-                    break;
-                }
-                else
-                {
-                    if (Engine.e.party[index].GetComponent<Character>().canUseFireDrops == false)
-                    {
-                        Engine.e.party[index].GetComponent<Character>().canUseFireDrops = true;
-                    }
+    /* public void UseItemDrop()
+     {
+         int index = characterBeingTargeted;
+
+         switch (itemToBeUsed.itemName)
+         {
+             // Fire Drops
+             case "Fire Blast":
+
+                 if (party[index].GetComponent<Character>().fireDrops[0] != null)
+                 {
+
+                     break;
+                 }
+                 else
+                 {
+                     if (Engine.e.party[index].GetComponent<Character>().canUseFireDrops == false)
+                     {
+                         Engine.e.party[index].GetComponent<Character>().canUseFireDrops = true;
+                     }
 
-                    party[index].GetComponent<Character>().fireDrops[0] = fireDrops[0];
-
-                    if (!fireDrops[0].isKnown)
-                    {
-                        fireDrops[0].isKnown = true;
-                    }
-
-                    partyInventoryReference.SubtractItemFromInventory(gameFireDrops[0]);
-                    break;
-                }
-
-            // Ice Drops
-            case "Blizzard":
-
-                if (party[index].GetComponent<Character>().iceDrops[0] != null)
-                {
-
-                    break;
-                }
-                else
-                {
-                    if (Engine.e.party[index].GetComponent<Character>().canUseIceDrops == false)
-                    {
-                        Engine.e.party[index].GetComponent<Character>().canUseIceDrops = true;
-                    }
+                     party[index].GetComponent<Character>().fireDrops[0] = fireDrops[0];
+
+                     if (!fireDrops[0].isKnown)
+                     {
+                         fireDrops[0].isKnown = true;
+                     }
+
+                     partyInventoryReference.SubtractItemFromInventory(gameFireDrops[0]);
+                     break;
+                 }
+
+             // Ice Drops
+             case "Blizzard":
+
+                 if (party[index].GetComponent<Character>().iceDrops[0] != null)
+                 {
+
+                     break;
+                 }
+                 else
+                 {
+                     if (Engine.e.party[index].GetComponent<Character>().canUseIceDrops == false)
+                     {
+                         Engine.e.party[index].GetComponent<Character>().canUseIceDrops = true;
+                     }
 
-                    party[index].GetComponent<Character>().iceDrops[0] = iceDrops[0];
+                     party[index].GetComponent<Character>().iceDrops[0] = iceDrops[0];
 
-                    if (!iceDrops[0].isKnown)
-                    {
-                        iceDrops[0].isKnown = true;
-                    }
-
-                    partyInventoryReference.SubtractItemFromInventory(gameIceDrops[0]);
-
-                    break;
-                }
-
-            // Lightning Drops
-            case "Bolt":
-
-                if (party[index].GetComponent<Character>().lightningDrops[0] != null)
-                {
+                     if (!iceDrops[0].isKnown)
+                     {
+                         iceDrops[0].isKnown = true;
+                     }
+
+                     partyInventoryReference.SubtractItemFromInventory(gameIceDrops[0]);
+
+                     break;
+                 }
+
+             // Lightning Drops
+             case "Bolt":
+
+                 if (party[index].GetComponent<Character>().lightningDrops[0] != null)
+                 {
 
-                    break;
-                }
-                else
-                {
-                    if (Engine.e.party[index].GetComponent<Character>().canUseLightningDrops == false)
-                    {
-                        Engine.e.party[index].GetComponent<Character>().canUseLightningDrops = true;
-                    }
+                     break;
+                 }
+                 else
+                 {
+                     if (Engine.e.party[index].GetComponent<Character>().canUseLightningDrops == false)
+                     {
+                         Engine.e.party[index].GetComponent<Character>().canUseLightningDrops = true;
+                     }
 
-                    party[index].GetComponent<Character>().lightningDrops[0] = lightningDrops[0];
+                     party[index].GetComponent<Character>().lightningDrops[0] = lightningDrops[0];
 
-                    if (!lightningDrops[0].isKnown)
-                    {
-                        lightningDrops[0].isKnown = true;
-                    }
+                     if (!lightningDrops[0].isKnown)
+                     {
+                         lightningDrops[0].isKnown = true;
+                     }
 
-                    partyInventoryReference.SubtractItemFromInventory(gameLightningDrops[0]);
+                     partyInventoryReference.SubtractItemFromInventory(gameLightningDrops[0]);
 
-                    break;
-                }
-
-            // Water Drops    
-            case "Bubble":
+                     break;
+                 }
+
+             // Water Drops    
+             case "Bubble":
 
-                if (party[index].GetComponent<Character>().waterDrops[0] != null)
-                {
+                 if (party[index].GetComponent<Character>().waterDrops[0] != null)
+                 {
 
-                    break;
-                }
-                else
-                {
-                    if (Engine.e.party[index].GetComponent<Character>().canUseWaterDrops == false)
-                    {
-                        Engine.e.party[index].GetComponent<Character>().canUseWaterDrops = true;
-                    }
+                     break;
+                 }
+                 else
+                 {
+                     if (Engine.e.party[index].GetComponent<Character>().canUseWaterDrops == false)
+                     {
+                         Engine.e.party[index].GetComponent<Character>().canUseWaterDrops = true;
+                     }
 
-                    party[index].GetComponent<Character>().waterDrops[0] = waterDrops[0];
+                     party[index].GetComponent<Character>().waterDrops[0] = waterDrops[0];
 
-                    if (!waterDrops[0].isKnown)
-                    {
-                        waterDrops[0].isKnown = true;
-                    }
+                     if (!waterDrops[0].isKnown)
+                     {
+                         waterDrops[0].isKnown = true;
+                     }
 
-                    partyInventoryReference.SubtractItemFromInventory(gameWaterDrops[0]);
+                     partyInventoryReference.SubtractItemFromInventory(gameWaterDrops[0]);
 
-                    break;
-                }
+                     break;
+                 }
 
-            // Shadow Drops    
-            case "Dark Embrace":
+             // Shadow Drops    
+             case "Dark Embrace":
 
-                if (party[index].GetComponent<Character>().shadowDrops[0] != null)
-                {
+                 if (party[index].GetComponent<Character>().shadowDrops[0] != null)
+                 {
 
-                    break;
-                }
-                else
-                {
-                    if (Engine.e.party[index].GetComponent<Character>().canUseShadowDrops == false)
-                    {
-                        Engine.e.party[index].GetComponent<Character>().canUseShadowDrops = true;
-                    }
+                     break;
+                 }
+                 else
+                 {
+                     if (Engine.e.party[index].GetComponent<Character>().canUseShadowDrops == false)
+                     {
+                         Engine.e.party[index].GetComponent<Character>().canUseShadowDrops = true;
+                     }
 
-                    party[index].GetComponent<Character>().shadowDrops[0] = shadowDrops[0];
+                     party[index].GetComponent<Character>().shadowDrops[0] = shadowDrops[0];
 
-                    if (!shadowDrops[0].isKnown)
-                    {
-                        shadowDrops[0].isKnown = true;
-                    }
+                     if (!shadowDrops[0].isKnown)
+                     {
+                         shadowDrops[0].isKnown = true;
+                     }
 
-                    partyInventoryReference.SubtractItemFromInventory(gameShadowDrops[0]);
+                     partyInventoryReference.SubtractItemFromInventory(gameShadowDrops[0]);
 
-                    break;
-                }
+                     break;
+                 }
 
-            case "Bio":
+             case "Bio":
 
-                if (party[index].GetComponent<Character>().shadowDrops[1] != null)
-                {
+                 if (party[index].GetComponent<Character>().shadowDrops[1] != null)
+                 {
 
-                    break;
-                }
-                else
-                {
-                    if (Engine.e.party[index].GetComponent<Character>().canUseShadowDrops == false)
-                    {
-                        Engine.e.party[index].GetComponent<Character>().canUseShadowDrops = true;
-                    }
+                     break;
+                 }
+                 else
+                 {
+                     if (Engine.e.party[index].GetComponent<Character>().canUseShadowDrops == false)
+                     {
+                         Engine.e.party[index].GetComponent<Character>().canUseShadowDrops = true;
+                     }
 
-                    party[index].GetComponent<Character>().shadowDrops[1] = shadowDrops[1];
+                     party[index].GetComponent<Character>().shadowDrops[1] = shadowDrops[1];
 
-                    if (!shadowDrops[1].isKnown)
-                    {
-                        shadowDrops[1].isKnown = true;
-                    }
+                     if (!shadowDrops[1].isKnown)
+                     {
+                         shadowDrops[1].isKnown = true;
+                     }
 
-                    partyInventoryReference.SubtractItemFromInventory(gameShadowDrops[1]);
+                     partyInventoryReference.SubtractItemFromInventory(gameShadowDrops[1]);
 
-                    break;
-                }
+                     break;
+                 }
 
-            case "Knockout":
+             case "Knockout":
 
-                if (party[index].GetComponent<Character>().shadowDrops[2] != null)
-                {
+                 if (party[index].GetComponent<Character>().shadowDrops[2] != null)
+                 {
 
-                    break;
-                }
-                else
-                {
-                    if (Engine.e.party[index].GetComponent<Character>().canUseShadowDrops == false)
-                    {
-                        Engine.e.party[index].GetComponent<Character>().canUseShadowDrops = true;
-                    }
+                     break;
+                 }
+                 else
+                 {
+                     if (Engine.e.party[index].GetComponent<Character>().canUseShadowDrops == false)
+                     {
+                         Engine.e.party[index].GetComponent<Character>().canUseShadowDrops = true;
+                     }
 
-                    party[index].GetComponent<Character>().shadowDrops[2] = shadowDrops[2];
+                     party[index].GetComponent<Character>().shadowDrops[2] = shadowDrops[2];
 
-                    if (!shadowDrops[2].isKnown)
-                    {
-                        shadowDrops[2].isKnown = true;
-                    }
+                     if (!shadowDrops[2].isKnown)
+                     {
+                         shadowDrops[2].isKnown = true;
+                     }
 
-                    partyInventoryReference.SubtractItemFromInventory(gameShadowDrops[2]);
+                     partyInventoryReference.SubtractItemFromInventory(gameShadowDrops[2]);
 
-                    break;
-                }
+                     break;
+                 }
 
-            case "Blind":
+             case "Blind":
 
-                if (party[index].GetComponent<Character>().shadowDrops[3] != null)
-                {
+                 if (party[index].GetComponent<Character>().shadowDrops[3] != null)
+                 {
 
-                    break;
-                }
-                else
-                {
-                    if (Engine.e.party[index].GetComponent<Character>().canUseShadowDrops == false)
-                    {
-                        Engine.e.party[index].GetComponent<Character>().canUseShadowDrops = true;
-                    }
+                     break;
+                 }
+                 else
+                 {
+                     if (Engine.e.party[index].GetComponent<Character>().canUseShadowDrops == false)
+                     {
+                         Engine.e.party[index].GetComponent<Character>().canUseShadowDrops = true;
+                     }
 
-                    party[index].GetComponent<Character>().shadowDrops[3] = shadowDrops[3];
+                     party[index].GetComponent<Character>().shadowDrops[3] = shadowDrops[3];
 
-                    if (!shadowDrops[3].isKnown)
-                    {
-                        shadowDrops[3].isKnown = true;
-                    }
+                     if (!shadowDrops[3].isKnown)
+                     {
+                         shadowDrops[3].isKnown = true;
+                     }
 
-                    partyInventoryReference.SubtractItemFromInventory(gameShadowDrops[3]);
+                     partyInventoryReference.SubtractItemFromInventory(gameShadowDrops[3]);
 
-                    break;
-                }
-            // Holy Drops    
-            case "Holy Light":
+                     break;
+                 }
+             // Holy Drops    
+             case "Holy Light":
 
-                if (party[index].GetComponent<Character>().holyDrops[0] != null)
-                {
+                 if (party[index].GetComponent<Character>().holyDrops[0] != null)
+                 {
 
-                    break;
-                }
-                else
-                {
-                    if (Engine.e.party[index].GetComponent<Character>().canUseHolyDrops == false)
-                    {
-                        Engine.e.party[index].GetComponent<Character>().canUseHolyDrops = true;
-                    }
+                     break;
+                 }
+                 else
+                 {
+                     if (Engine.e.party[index].GetComponent<Character>().canUseHolyDrops == false)
+                     {
+                         Engine.e.party[index].GetComponent<Character>().canUseHolyDrops = true;
+                     }
 
-                    party[index].GetComponent<Character>().holyDrops[0] = holyDrops[0];
+                     party[index].GetComponent<Character>().holyDrops[0] = holyDrops[0];
 
-                    if (!holyDrops[0].isKnown)
-                    {
-                        holyDrops[0].isKnown = true;
-                    }
+                     if (!holyDrops[0].isKnown)
+                     {
+                         holyDrops[0].isKnown = true;
+                     }
 
-                    partyInventoryReference.SubtractItemFromInventory(gameHolyDrops[0]);
+                     partyInventoryReference.SubtractItemFromInventory(gameHolyDrops[0]);
 
-                    break;
-                }
+                     break;
+                 }
 
-            case "Raise":
+             case "Raise":
 
-                if (party[index].GetComponent<Character>().holyDrops[1] != null)
-                {
+                 if (party[index].GetComponent<Character>().holyDrops[1] != null)
+                 {
 
-                    break;
-                }
-                else
-                {
-                    if (Engine.e.party[index].GetComponent<Character>().canUseHolyDrops == false)
-                    {
-                        Engine.e.party[index].GetComponent<Character>().canUseHolyDrops = true;
-                    }
+                     break;
+                 }
+                 else
+                 {
+                     if (Engine.e.party[index].GetComponent<Character>().canUseHolyDrops == false)
+                     {
+                         Engine.e.party[index].GetComponent<Character>().canUseHolyDrops = true;
+                     }
 
-                    party[index].GetComponent<Character>().holyDrops[1] = holyDrops[1];
+                     party[index].GetComponent<Character>().holyDrops[1] = holyDrops[1];
 
-                    if (!holyDrops[1].isKnown)
-                    {
-                        holyDrops[1].isKnown = true;
-                    }
+                     if (!holyDrops[1].isKnown)
+                     {
+                         holyDrops[1].isKnown = true;
+                     }
 
-                    partyInventoryReference.SubtractItemFromInventory(gameHolyDrops[1]);
+                     partyInventoryReference.SubtractItemFromInventory(gameHolyDrops[1]);
 
-                    break;
-                }
+                     break;
+                 }
 
-            case "Repent":
+             case "Repent":
 
-                if (party[index].GetComponent<Character>().holyDrops[2] != null)
-                {
+                 if (party[index].GetComponent<Character>().holyDrops[2] != null)
+                 {
 
-                    break;
-                }
-                else
-                {
-                    if (Engine.e.party[index].GetComponent<Character>().canUseHolyDrops == false)
-                    {
-                        Engine.e.party[index].GetComponent<Character>().canUseHolyDrops = true;
-                    }
+                     break;
+                 }
+                 else
+                 {
+                     if (Engine.e.party[index].GetComponent<Character>().canUseHolyDrops == false)
+                     {
+                         Engine.e.party[index].GetComponent<Character>().canUseHolyDrops = true;
+                     }
 
-                    party[index].GetComponent<Character>().holyDrops[2] = holyDrops[2];
+                     party[index].GetComponent<Character>().holyDrops[2] = holyDrops[2];
 
-                    if (!holyDrops[2].isKnown)
-                    {
-                        holyDrops[2].isKnown = true;
-                    }
+                     if (!holyDrops[2].isKnown)
+                     {
+                         holyDrops[2].isKnown = true;
+                     }
 
-                    partyInventoryReference.SubtractItemFromInventory(gameHolyDrops[2]);
+                     partyInventoryReference.SubtractItemFromInventory(gameHolyDrops[2]);
 
-                    break;
-                }
+                     break;
+                 }
 
-            case "Dispel":
+             case "Dispel":
 
-                if (party[index].GetComponent<Character>().holyDrops[3] != null)
-                {
+                 if (party[index].GetComponent<Character>().holyDrops[3] != null)
+                 {
 
-                    break;
-                }
-                else
-                {
-                    if (Engine.e.party[index].GetComponent<Character>().canUseHolyDrops == false)
-                    {
-                        Engine.e.party[index].GetComponent<Character>().canUseHolyDrops = true;
-                    }
+                     break;
+                 }
+                 else
+                 {
+                     if (Engine.e.party[index].GetComponent<Character>().canUseHolyDrops == false)
+                     {
+                         Engine.e.party[index].GetComponent<Character>().canUseHolyDrops = true;
+                     }
 
-                    party[index].GetComponent<Character>().holyDrops[3] = holyDrops[3];
+                     party[index].GetComponent<Character>().holyDrops[3] = holyDrops[3];
 
-                    if (!holyDrops[3].isKnown)
-                    {
-                        holyDrops[3].isKnown = true;
-                    }
+                     if (!holyDrops[3].isKnown)
+                     {
+                         holyDrops[3].isKnown = true;
+                     }
 
-                    partyInventoryReference.SubtractItemFromInventory(gameHolyDrops[3]);
+                     partyInventoryReference.SubtractItemFromInventory(gameHolyDrops[3]);
 
-                    break;
-                }
-        }
+                     break;
+                 }
+         }
 
-        partyInventoryReference.DismissDropConfirm();
-    }
+         partyInventoryReference.DismissDropConfirm();
+     }*/
 
     // Dismisses "character target" buttons, outside of combat.
     public void ItemDismissCharacterUseButtons()
@@ -1924,89 +1939,28 @@ public class Engine : MonoBehaviour
                 party[i].GetComponent<Character>().confuseDefense = gameData.charConfuseDefense[i];
 
 
-                party[i].GetComponent<Character>().fireDrops = new Drops[fireDrops.Length];
-                party[i].GetComponent<Character>().holyDrops = new Drops[holyDrops.Length];
-                party[i].GetComponent<Character>().waterDrops = new Drops[waterDrops.Length];
-                party[i].GetComponent<Character>().lightningDrops = new Drops[lightningDrops.Length];
-                party[i].GetComponent<Character>().shadowDrops = new Drops[shadowDrops.Length];
-                party[i].GetComponent<Character>().iceDrops = new Drops[iceDrops.Length];
+                party[i].GetComponent<Character>().drops = new Drops[gameDrops.Length];
+                //  party[i].GetComponent<Character>().holyDrops = new Drops[holyDrops.Length];
+                // party[i].GetComponent<Character>().waterDrops = new Drops[waterDrops.Length];
+                //  party[i].GetComponent<Character>().lightningDrops = new Drops[lightningDrops.Length];
+                //  party[i].GetComponent<Character>().shadowDrops = new Drops[shadowDrops.Length];
+                //  party[i].GetComponent<Character>().iceDrops = new Drops[iceDrops.Length];
 
 
 
-                // Fire Drops
-                for (int gameFire = 0; gameFire < e.fireDrops.Length; gameFire++)
+                // Drops Drops
+                for (int drops = 0; drops < gameDrops.Length; drops++)
                 {
-                    if (gameData.charFireDrops[i, gameFire] != null)
-                        if (gameData.charFireDrops[i, gameFire] == fireDrops[gameFire].dropName)
-                            party[i].GetComponent<Character>().fireDrops[gameFire] = fireDrops[gameFire];
-
-                    if (fireDrops[gameFire] != null)
+                    if (gameData.charDrops[i, drops] != null)
                     {
-                        fireDrops[gameFire].isKnown = gameData.fireDropsisKnown[gameFire];
+                        if (gameData.charDrops[i, drops] == gameDrops[drops].dropName)
+                        {
+                            party[i].GetComponent<Character>().drops[drops] = gameDrops[drops];
+
+                            gameDrops[drops].isKnown = true;
+                        }
                     }
                 }
-                // Holy Drops
-                for (int gameHoly = 0; gameHoly < e.holyDrops.Length; gameHoly++)
-                {
-                    if (gameData.charHolyDrops[i, gameHoly] != null)
-                        if (gameData.charHolyDrops[i, gameHoly] == holyDrops[gameHoly].dropName)
-                            party[i].GetComponent<Character>().holyDrops[gameHoly] = holyDrops[gameHoly];
-
-                    if (holyDrops[gameHoly] != null)
-                    {
-                        holyDrops[gameHoly].isKnown = gameData.holyDropsisKnown[gameHoly];
-                    }
-                }
-                // Water Drops
-                for (int gameWater = 0; gameWater < e.waterDrops.Length; gameWater++)
-                {
-                    if (gameData.charWaterDrops[i, gameWater] != null)
-                        if (gameData.charWaterDrops[i, gameWater] == waterDrops[gameWater].dropName)
-                            party[i].GetComponent<Character>().waterDrops[gameWater] = waterDrops[gameWater];
-
-                    if (waterDrops[gameWater] != null)
-                    {
-                        waterDrops[gameWater].isKnown = gameData.waterDropsisKnown[gameWater];
-                    }
-                }
-                // Lightning Drops
-                for (int gameLightning = 0; gameLightning < e.lightningDrops.Length; gameLightning++)
-                {
-                    if (gameData.charLightningDrops[i, gameLightning] != null)
-                        if (gameData.charLightningDrops[i, gameLightning] == lightningDrops[gameLightning].dropName)
-                            party[i].GetComponent<Character>().lightningDrops[gameLightning] = lightningDrops[gameLightning];
-
-                    if (lightningDrops[gameLightning] != null)
-                    {
-                        lightningDrops[gameLightning].isKnown = gameData.lightningDropsisKnown[gameLightning];
-                    }
-                }
-                // Shadow Drops
-                for (int gameShadow = 0; gameShadow < e.shadowDrops.Length; gameShadow++)
-                {
-                    if (gameData.charShadowDrops[i, gameShadow] != null)
-                        if (gameData.charShadowDrops[i, gameShadow] == shadowDrops[gameShadow].dropName)
-                            party[i].GetComponent<Character>().shadowDrops[gameShadow] = shadowDrops[gameShadow];
-
-                    if (shadowDrops[gameShadow] != null)
-                    {
-                        shadowDrops[gameShadow].isKnown = gameData.shadowDropsisKnown[gameShadow];
-                    }
-                }
-                // Ice Drops
-                for (int gameIce = 0; gameIce < e.iceDrops.Length; gameIce++)
-                {
-                    if (gameData.charIceDrops[i, gameIce] != null)
-                        if (gameData.charIceDrops[i, gameIce] == iceDrops[gameIce].dropName)
-                            party[i].GetComponent<Character>().iceDrops[gameIce] = iceDrops[gameIce];
-
-                    if (iceDrops[gameIce] != null)
-                    {
-                        iceDrops[gameIce].isKnown = gameData.iceDropsisKnown[gameIce];
-                    }
-                }
-
-
                 if (gameData.activeParty[0] == party[i].GetComponent<Character>().characterName)
                 {
                     activeParty.activeParty[0] = party[i].gameObject;
@@ -2124,6 +2078,34 @@ public class Engine : MonoBehaviour
             }
         }
 
+        // Node Information
+
+        abilityScreenReference.grievePosition = gameData.charNodePositions[0];
+        abilityScreenReference.macPosition = gameData.charNodePositions[1];
+        abilityScreenReference.fieldPosition = gameData.charNodePositions[2];
+        abilityScreenReference.riggsPosition = gameData.charNodePositions[3];
+
+        for (int i = 0; i < abilityScreenReference.nodes.Length; i++)
+        {
+
+            if (gameData.grieveNodes[i] == true)
+            {
+                abilityScreenReference.nodes[i].grieveUnlocked = true;
+            }
+            if (gameData.macNodes[i] == true)
+            {
+                abilityScreenReference.nodes[i].macUnlocked = true;
+            }
+            if (gameData.fieldNodes[i] == true)
+            {
+                abilityScreenReference.nodes[i].fieldUnlocked = true;
+            }
+            if (gameData.riggsNodes[i] == true)
+            {
+                abilityScreenReference.nodes[i].riggsUnlocked = true;
+            }
+        }
+
         // Quests
         for (int i = 0; i < gameQuests.Length; i++)
         {
@@ -2191,7 +2173,7 @@ public class Engine : MonoBehaviour
             activePartyMember2.GetComponent<SpriteRenderer>().sprite = party[1].GetComponent<SpriteRenderer>().sprite;
             activePartyMember2.SetActive(true);
             charAbilityButtons[1].SetActive(true);
-            charSkillTierButtons[1].SetActive(true);
+            //            charSkillTierButtons[1].SetActive(true);
 
         }
         if (party[2] != null)
@@ -2202,14 +2184,14 @@ public class Engine : MonoBehaviour
             activePartyMember3.SetActive(true);
             activeParty.activeParty[2] = party[2].GetComponent<Character>().gameObject;
             charAbilityButtons[2].SetActive(true);
-            charSkillTierButtons[2].SetActive(true);
+            //        charSkillTierButtons[2].SetActive(true);
 
         }
         if (party[3] != null)
         {
             battleSystem.battleSwitchButtons = true;
             charAbilityButtons[3].SetActive(true);
-            charSkillTierButtons[3].SetActive(true);
+            //       charSkillTierButtons[3].SetActive(true);
 
         }
 
@@ -2884,6 +2866,103 @@ public class Engine : MonoBehaviour
         }
         return false;
     }
+    public void InstantiateEnemyDropTeam(GameObject _character, int _index)
+    {
+        if (battleSystem.lastDropChoice.dps)
+        {
+            if (battleSystem.lastDropChoice.dropType == "Fire")
+            {
+                Instantiate(battleSystem.fireDropAnim, _character.transform.position, Quaternion.identity);
+            }
+            if (battleSystem.lastDropChoice.dropType == "Water")
+            {
+                Instantiate(battleSystem.waterDropAnim, _character.transform.position, Quaternion.identity);
+            }
+            if (battleSystem.lastDropChoice.dropType == "Lightning")
+            {
+                Instantiate(battleSystem.lightningDropAnim, _character.transform.position, Quaternion.identity);
+            }
+            if (battleSystem.lastDropChoice.dropType == "Shadow")
+            {
+                if (battleSystem.lastDropChoice.dropName == "Bio" || battleSystem.lastDropChoice.dropName == "Knockout" || battleSystem.lastDropChoice.dropName == "Blind")
+                {
+                    if (battleSystem.lastDropChoice.dropName == "Bio")
+                    {
+                        Instantiate(battleSystem.poisonAnim, _character.transform.position, Quaternion.identity);
+                    }
+                    if (battleSystem.lastDropChoice.dropName == "Knockout")
+                    {
+                        Instantiate(battleSystem.sleepAnim, _character.transform.position, Quaternion.identity);
+                    }
+                    if (battleSystem.lastDropChoice.dropName == "Blind")
+                    {
+                        Instantiate(battleSystem.confuseAnim, _character.transform.position, Quaternion.identity);
+                    }
+                }
+                else
+                    Instantiate(battleSystem.shadowDropAnim, _character.transform.position, Quaternion.identity);
+            }
+            if (battleSystem.lastDropChoice.dropType == "Ice")
+            {
+                Instantiate(battleSystem.iceDropAnim, _character.transform.position, Quaternion.identity);
+            }
+            if (battleSystem.lastDropChoice.dropType == "Holy")
+            {
+                Instantiate(battleSystem.holyDropAnim, _character.transform.position, Quaternion.identity);
+            }
+        }
+        else
+        {
+
+            switch (battleSystem.lastDropChoice.dropName)
+            {
+                case "Holy Light":
+                    Instantiate(battleSystem.holyDropAnim, _character.transform.position, Quaternion.identity);
+                    break;
+            }
+        }
+    }
+
+    public void InstantiateEnemyDropEnemy(int _index, int enemyDropChoice)
+    {
+        if (battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Fire")
+        {
+            Instantiate(battleSystem.fireDropAnim, battleSystem.enemies[_index].transform.position, Quaternion.identity);
+        }
+        if (battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Water")
+        {
+            Instantiate(battleSystem.waterDropAnim, battleSystem.enemies[_index].transform.position, Quaternion.identity);
+        }
+        if (battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Lightning")
+        {
+            Instantiate(battleSystem.lightningDropAnim, battleSystem.enemies[_index].transform.position, Quaternion.identity);
+        }
+        if (battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Shadow")
+        {
+            if (battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Bio" || battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Knockout"
+            || battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Blind")
+            {
+                if (battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Bio")
+                {
+                    Instantiate(battleSystem.poisonAnim, battleSystem.enemies[_index].transform.position, Quaternion.identity);
+                }
+                if (battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Knockout")
+                {
+                    Instantiate(battleSystem.sleepAnim, battleSystem.enemies[_index].transform.position, Quaternion.identity);
+                }
+                if (battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Blind")
+                {
+                    Instantiate(battleSystem.confuseAnim, battleSystem.enemies[_index].transform.position, Quaternion.identity);
+                }
+            }
+            else
+                Instantiate(battleSystem.shadowDropAnim, battleSystem.enemies[_index].transform.position, Quaternion.identity);
+        }
+        if (battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Ice")
+        {
+            Instantiate(battleSystem.iceDropAnim, battleSystem.enemies[_index].transform.position, Quaternion.identity);
+        }
+    }
 
     // Calculates and deals Poison Damage (Shadow Damage) to the 
     // effected character.
@@ -2966,9 +3045,9 @@ public class Engine : MonoBehaviour
 
         if (autoSaveReady && ableToSave && !inBattle && !recentAutoSave)
         {
-            autoSaveReady = false;
-            recentAutoSave = true;
-            SaveGame(3);
+            //  autoSaveReady = false;
+            //  recentAutoSave = true;
+            //  SaveGame(3);
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -2979,6 +3058,7 @@ public class Engine : MonoBehaviour
             //GameManager.gameManager.activeParty.activeParty[0].GetComponent<Grieve>().weapon.GetComponent<GrieveWeapons>().fireAttack += 10;
             partyInventoryReference.AddItemToInventory(gameInventory[0]);
             partyInventoryReference.AddItemToInventory(gameInventory[1]);
+            partyInventoryReference.AddItemToInventory(gameInventory[3]);
 
             // partyInventoryReference.AddItemToInventory(gameInventory[2]);
             //partyInventoryReference.AddItemToInventory(gameInventory[3]);
@@ -3060,6 +3140,17 @@ public class Engine : MonoBehaviour
         partyInventoryReference.riggsWeaponTotal = 0;
         partyInventoryReference.chestArmorTotal = 0;
 
+    }
+
+    void SetDropIndexes()
+    {
+        for (int i = 0; i < gameDrops.Length; i++)
+        {
+            if (gameDrops[i] != null)
+            {
+                gameDrops[i].dropIndex = i;
+            }
+        }
     }
 
     void ClearGameQuests()

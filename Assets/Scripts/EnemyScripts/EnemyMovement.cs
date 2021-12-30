@@ -18,13 +18,13 @@ public class EnemyMovement : MonoBehaviour
         // Debug.Log(rb.position.x);
         if (!Engine.e.inBattle)
         {
-            CheckDistance();
+            // CheckDistance();
         }
         else
         {
             if (GetComponentInParent<EnemyGroup>().groupInBattle == true)
             {
-                CheckDistance();
+                //   CheckDistance();
             }
             //rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
         }

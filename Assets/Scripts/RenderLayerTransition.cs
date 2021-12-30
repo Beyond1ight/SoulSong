@@ -22,7 +22,7 @@ public class RenderLayerTransition : MonoBehaviour
                     movingUp = true;
                     Engine.e.activeParty.GetComponent<SpriteRenderer>().sortingOrder = 2;
                     Engine.e.activeParty.GetComponent<SpriteRenderer>().sortingLayerName = "Layer2";
-                    Engine.e.activeParty.gameObject.transform.position = new Vector3(Engine.e.activeParty.transform.position.x, Engine.e.activeParty.transform.position.y, 2);
+                    // Engine.e.activeParty.gameObject.transform.position = new Vector3(Engine.e.activeParty.transform.position.x, Engine.e.activeParty.transform.position.y, 2);
 
                     Engine.e.aboveLayer = true;
 
@@ -34,30 +34,32 @@ public class RenderLayerTransition : MonoBehaviour
                 {
                     movingDown = true;
                     Engine.e.aboveLayer = false;
-                    Engine.e.activeParty.gameObject.transform.position = new Vector3(Engine.e.activeParty.transform.position.x, Engine.e.activeParty.transform.position.y, 1);
+                    //Engine.e.activeParty.gameObject.transform.position = new Vector3(Engine.e.activeParty.transform.position.x, Engine.e.activeParty.transform.position.y, 1);
 
-                    layer1Collision.SetActive(true);
-                    layer2Collision.SetActive(false);
+                    // layer1Collision.SetActive(true);
+                    //layer2Collision.SetActive(false);
                 }
             }
         }
 
         if (Engine.e.party[1] != null)
         {
-
-            Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().sortingOrder = 2;
-            Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().sortingLayerName = "Layer2";
-            Engine.e.activePartyMember2.transform.position = new Vector3(Engine.e.activePartyMember2.transform.position.x, Engine.e.activePartyMember2.transform.position.y, 2);
-
+            if (Engine.e.activeParty.GetComponent<SpriteRenderer>().sortingOrder == 2)
+            {
+                Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().sortingOrder = 2;
+                Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().sortingLayerName = "Layer2";
+                // Engine.e.activePartyMember2.transform.position = new Vector3(Engine.e.activePartyMember2.transform.position.x, Engine.e.activePartyMember2.transform.position.y, 2);
+            }
 
         }
         if (Engine.e.party[2] != null)
         {
-
-            Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().sortingOrder = 2;
-            Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().sortingLayerName = "Layer2";
-            Engine.e.activePartyMember3.gameObject.transform.position = new Vector3(Engine.e.activePartyMember3.transform.position.x, Engine.e.activePartyMember3.transform.position.y, 2);
-
+            if (Engine.e.activeParty.GetComponent<SpriteRenderer>().sortingOrder == 2)
+            {
+                Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().sortingOrder = 2;
+                Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().sortingLayerName = "Layer2";
+                //  Engine.e.activePartyMember3.gameObject.transform.position = new Vector3(Engine.e.activePartyMember3.transform.position.x, Engine.e.activePartyMember3.transform.position.y, 2);
+            }
         }
     }
 
@@ -75,7 +77,7 @@ public class RenderLayerTransition : MonoBehaviour
                         Engine.e.activeParty.GetComponent<SpriteRenderer>().sortingOrder = 2;
                         Engine.e.activeParty.GetComponent<SpriteRenderer>().sortingLayerName = "Layer2";
                         Engine.e.aboveLayer = true;
-                        Engine.e.activeParty.gameObject.transform.position = new Vector3(Engine.e.activeParty.transform.position.x, Engine.e.activeParty.transform.position.y, 2);
+                        // Engine.e.activeParty.gameObject.transform.position = new Vector3(Engine.e.activeParty.transform.position.x, Engine.e.activeParty.transform.position.y, 2);
 
 
                     }
@@ -84,7 +86,7 @@ public class RenderLayerTransition : MonoBehaviour
                         Engine.e.activeParty.GetComponent<SpriteRenderer>().sortingOrder = 1;
                         Engine.e.activeParty.GetComponent<SpriteRenderer>().sortingLayerName = "Layer1";
                         Engine.e.aboveLayer = false;
-                        Engine.e.activeParty.gameObject.transform.position = new Vector3(Engine.e.activeParty.transform.position.x, Engine.e.activeParty.transform.position.y, 1);
+                        // Engine.e.activeParty.gameObject.transform.position = new Vector3(Engine.e.activeParty.transform.position.x, Engine.e.activeParty.transform.position.y, 1);
 
                         layer1Collision.SetActive(true);
                         layer2Collision.SetActive(false);
@@ -98,14 +100,16 @@ public class RenderLayerTransition : MonoBehaviour
                         Engine.e.activeParty.GetComponent<SpriteRenderer>().sortingOrder = 1;
                         Engine.e.activeParty.GetComponent<SpriteRenderer>().sortingLayerName = "Layer1";
                         Engine.e.aboveLayer = false;
-                        Engine.e.activeParty.gameObject.transform.position = new Vector3(Engine.e.activeParty.transform.position.x, Engine.e.activeParty.transform.position.y, 1);
+                        //  Engine.e.activeParty.gameObject.transform.position = new Vector3(Engine.e.activeParty.transform.position.x, Engine.e.activeParty.transform.position.y, 1);
+                        layer2Collision.SetActive(false);
+                        layer1Collision.SetActive(true);
                     }
                     else
                     {
                         Engine.e.activeParty.GetComponent<SpriteRenderer>().sortingOrder = 2;
                         Engine.e.activeParty.GetComponent<SpriteRenderer>().sortingLayerName = "Layer2";
                         Engine.e.aboveLayer = true;
-                        Engine.e.activeParty.gameObject.transform.position = new Vector3(Engine.e.activeParty.transform.position.x, Engine.e.activeParty.transform.position.y, 2);
+                        //  Engine.e.activeParty.gameObject.transform.position = new Vector3(Engine.e.activeParty.transform.position.x, Engine.e.activeParty.transform.position.y, 2);
                         layer1Collision.SetActive(false);
                         layer2Collision.SetActive(true);
                     }
@@ -126,7 +130,7 @@ public class RenderLayerTransition : MonoBehaviour
 
         if (other.tag == "PartyMember3")
         {
-            Engine.e.activePartyMember3.transform.position = new Vector3(Engine.e.activePartyMember3.transform.position.x, Engine.e.activePartyMember3.transform.position.y, Engine.e.activeParty.gameObject.transform.position.z);
+            // Engine.e.activePartyMember3.transform.position = new Vector3(Engine.e.activePartyMember3.transform.position.x, Engine.e.activePartyMember3.transform.position.y, Engine.e.activeParty.gameObject.transform.position.z);
             Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().sortingOrder = Engine.e.activeParty.GetComponent<SpriteRenderer>().sortingOrder;
             Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().sortingLayerName = Engine.e.activeParty.GetComponent<SpriteRenderer>().sortingLayerName;
 
