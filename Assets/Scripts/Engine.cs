@@ -110,7 +110,7 @@ public class Engine : MonoBehaviour
         ClearGameQuests();
         SetParty();
         SetDropIndexes();
-        abilityScreenReference.ClearNodeUnlocked();
+        //abilityScreenReference.ClearNodeUnlocked();
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
 

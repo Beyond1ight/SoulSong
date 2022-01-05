@@ -12,11 +12,7 @@ public class AbilityStatNode : MonoBehaviour
     public bool grieveUnlocked, macUnlocked, fieldUnlocked, riggsUnlocked;
     public int nodeIndex;
 
-    public void DisplayNodeInformation()
-    {
-        Engine.e.abilityScreenReference.helpReference.text = string.Empty;
-        Engine.e.abilityScreenReference.helpReference.text = node.nodeName + " - " + node.nodeDescription;
-    }
+
 
     public void OnClickEvent()
     {
@@ -119,6 +115,8 @@ public class AbilityStatNode : MonoBehaviour
                             {
                                 Engine.e.party[1].GetComponent<Character>().drops[node.drop.dropIndex] = node.drop;
                             }
+                            Debug.Log("Unlocked!");
+
                         }
                         macUnlocked = true;
                         for (int i = 0; i < connectionLines.Length; i++)

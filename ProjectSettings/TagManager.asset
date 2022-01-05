@@ -9,6 +9,7 @@ TagManager:
   - NewGameSpawnLocation
   - PartyMember2
   - PartyMember3
+  - Grid Node
   layers:
   - Default
   - TransparentFX
@@ -26,7 +27,7 @@ TagManager:
   - Layer3
   - Layer4
   - MiniMap
-  - 
+  - AbilityGrid
   - 
   - 
   - 

@@ -17,36 +17,38 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         rb.MovePosition(rb.position + movement.normalized * speed * Time.fixedDeltaTime);
-
     }
 
 
     // Update is called once per frame
     void Update()
     {
-        if (!Engine.e.inBattle)
+        if (!Engine.e.abilityScreenReference.gridDisplayed)
         {
-            if (!Engine.e.onRamp)
+            if (!Engine.e.inBattle)
             {
-                movement.x = Input.GetAxisRaw("Horizontal") * speed;
-                movement.y = Input.GetAxisRaw("Vertical") * speed;
+                if (!Engine.e.onRamp)
+                {
+                    movement.x = Input.GetAxisRaw("Horizontal") * speed;
+                    movement.y = Input.GetAxisRaw("Vertical") * speed;
+                }
+                else
+                {
+                    movement.x = Input.GetAxisRaw("Horizontal") * speed;
+                    movement.y = Input.GetAxisRaw("Horizontal") * speed;
+
+                }
             }
             else
             {
-                movement.x = Input.GetAxisRaw("Horizontal") * speed;
-                movement.y = Input.GetAxisRaw("Horizontal") * speed;
-
+                movement.x = 0;
+                movement.y = 0;
             }
-        }
-        else
-        {
-            movement.x = 0;
-            movement.y = 0;
-        }
 
-        if (Engine.e.loadTimer)
-        {
-            StartCoroutine(UnloadTimer());
+            if (Engine.e.loadTimer)
+            {
+                StartCoroutine(UnloadTimer());
+            }
         }
     }
 

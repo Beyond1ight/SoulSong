@@ -4,12 +4,12 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Cinemachine;
 
 public class AbilitiesDisplay : MonoBehaviour
 {
     public GameObject[] charSelectionButtons;
-    public TextMeshProUGUI helpReference;
-    public bool grieveScreen, macScreen, fieldScreen, riggsScreen;
+    public bool gridDisplayed, grieveScreen, macScreen, fieldScreen, riggsScreen;
     public GameObject[] skillsButtons, fireDropsButtons, iceDropsButtons, lightningDropsButtons, waterDropsButtons, shadowDropsButtons, holyDropsButtons;
     public bool knowsAllFireDrops = false, knowsAllIceDrops = false, knowsAllLightningDrops = false, knowsAllWaterDrops = false, knowsAllShadowDrops = false, knowsAllHolyDrops = false;
     public GameObject confirmSkillAcquisition;
@@ -17,7 +17,13 @@ public class AbilitiesDisplay : MonoBehaviour
     public TextMeshProUGUI[] apDisplay;
     public AbilityStatNode[] nodes;
     public int tier, grievePosition, macPosition, fieldPosition, riggsPosition;
+    public GameObject cursor, helpReference, helpTextParentObj;
+    public CinemachineVirtualCamera gridPerspective;
 
+    private void Start()
+    {
+        helpReference.transform.SetParent(helpTextParentObj.transform);
+    }
     /*public void UnlockSkillChoiceCheck(int _tier)
     {
         string apCost = string.Empty;
@@ -452,9 +458,14 @@ public class AbilitiesDisplay : MonoBehaviour
             }
         }
 
-        EventSystem.current.SetSelectedGameObject(null);
+        //  EventSystem.current.SetSelectedGameObject(null);
 
-        EventSystem.current.SetSelectedGameObject(nodes[grievePosition].gameObject);
+        //  EventSystem.current.SetSelectedGameObject(nodes[grievePosition].gameObject);
+        cursor.GetComponent<GridCursor>().currentNode = nodes[grievePosition];
+        Vector3 cursorPos = new Vector3(nodes[grievePosition].transform.position.x, nodes[grievePosition].transform.position.y, -5);
+
+        cursor.transform.position = cursorPos;
+        // cursor.GetComponent<GridCursor>().SetDirectionChoices();
         /*for (int i = 0; i < nodes.Length; i++)
         {
                    if (skillsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
@@ -507,21 +518,10 @@ public class AbilitiesDisplay : MonoBehaviour
                 }
             }
         }
-        /* for (int i = 0; i < nodes.Length; i++)
-         {
-             if (skillsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-             {
-                 if (!nodes[i].macUnlocked)
-                 {
-                     skillsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                 }
-                 else
-                 {
-                     skillsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
+        cursor.GetComponent<GridCursor>().currentNode = nodes[macPosition];
+        Vector3 cursorPos = new Vector3(nodes[macPosition].transform.position.x, nodes[macPosition].transform.position.y, -5);
 
-                 }
-             }
-         }*/
+        cursor.transform.position = cursorPos;
     }
 
     public void SetFieldScreen()
@@ -560,21 +560,7 @@ public class AbilitiesDisplay : MonoBehaviour
             }
         }
 
-        /* for (int i = 0; i < nodes.Length; i++)
-         {
-             if (skillsButtons[i].GetComponentInChildren<TMP_Text>().text != "-")
-             {
-                 if (!nodes[i].fieldUnlocked)
-                 {
-                     skillsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.gray;
-                 }
-                 else
-                 {
-                     skillsButtons[i].GetComponentInChildren<TMP_Text>().color = Color.black;
 
-                 }
-             }
-         }*/
     }
 
     public void SetRiggsScreen()
@@ -661,6 +647,16 @@ public class AbilitiesDisplay : MonoBehaviour
         }
     }
 
+    public void DisplayCharSelection()
+    {
+        for (int i = 0; i < Engine.e.party.Length; i++)
+        {
+            if (Engine.e.party[i] != null)
+            {
+                charSelectionButtons[i].SetActive(true);
+            }
+        }
+    }
 
 
     public void DisplayAP()

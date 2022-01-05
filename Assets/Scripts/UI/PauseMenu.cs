@@ -316,25 +316,18 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenAbilitiesMenu()
     {
+        //Engine.e.abilityScreenReference.DisplayCharSelection();
         abilitiesMenu.SetActive(true);
+        Engine.e.abilityScreenReference.gridDisplayed = true;
+        Engine.e.abilityScreenReference.SetMacScreen();
         //Engine.e.abilityScreenReference.GetComponent<AbilitiesDisplay>().SetSkills();
         // Engine.e.abilityScreenReference.GetComponent<AbilitiesDisplay>().SetDrops();
         Engine.e.abilityScreenReference.GetComponent<AbilitiesDisplay>().DisplayAP();
 
         EventSystem.current.SetSelectedGameObject(null);
 
-        EventSystem.current.SetSelectedGameObject(abilitiesFirstButton);
-
-        atPauseMenu = false;
-    }
-
-    public void OpenSkillsMenu()
-    {
-
-        EventSystem.current.SetSelectedGameObject(null);
-
-        EventSystem.current.SetSelectedGameObject(abilityScreenSkillsFirstButton);
-
+        EventSystem.current.SetSelectedGameObject(Engine.e.abilityScreenReference.cursor);
+        Time.timeScale = 1f;
         atPauseMenu = false;
     }
 

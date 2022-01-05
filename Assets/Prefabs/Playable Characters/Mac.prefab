@@ -230,7 +230,7 @@ MonoBehaviour:
   canUseLightningDrops: 1
   canUseShadowDrops: 0
   skills:
-  - {fileID: 11400000, guid: 6e5821a29f25149f19782eeed785f6d3, type: 2}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
