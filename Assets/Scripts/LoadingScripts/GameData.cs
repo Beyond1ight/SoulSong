@@ -359,32 +359,32 @@ public class GameData
         }
 
         // Node Information
-        grieveNodes = new bool[Engine.e.abilityScreenReference.nodes.Length];
-        macNodes = new bool[Engine.e.abilityScreenReference.nodes.Length];
-        fieldNodes = new bool[Engine.e.abilityScreenReference.nodes.Length];
-        riggsNodes = new bool[Engine.e.abilityScreenReference.nodes.Length];
+        grieveNodes = new bool[Engine.e.gridReference.nodes.Length];
+        macNodes = new bool[Engine.e.gridReference.nodes.Length];
+        fieldNodes = new bool[Engine.e.gridReference.nodes.Length];
+        riggsNodes = new bool[Engine.e.gridReference.nodes.Length];
         charNodePositions = new int[Engine.e.party.Length];
 
-        charNodePositions[0] = Engine.e.abilityScreenReference.grievePosition;
-        charNodePositions[1] = Engine.e.abilityScreenReference.macPosition;
-        charNodePositions[2] = Engine.e.abilityScreenReference.fieldPosition;
-        charNodePositions[3] = Engine.e.abilityScreenReference.riggsPosition;
+        charNodePositions[0] = Engine.e.gridReference.grievePosition;
+        charNodePositions[1] = Engine.e.gridReference.macPosition;
+        charNodePositions[2] = Engine.e.gridReference.fieldPosition;
+        charNodePositions[3] = Engine.e.gridReference.riggsPosition;
 
-        for (int i = 0; i < Engine.e.abilityScreenReference.nodes.Length; i++)
+        for (int i = 0; i < Engine.e.gridReference.nodes.Length; i++)
         {
-            if (Engine.e.abilityScreenReference.nodes[i].grieveUnlocked)
+            if (Engine.e.gridReference.nodes[i].grieveUnlocked)
             {
                 grieveNodes[i] = true;
             }
-            if (Engine.e.abilityScreenReference.nodes[i].macUnlocked)
+            if (Engine.e.gridReference.nodes[i].macUnlocked)
             {
                 macNodes[i] = true;
             }
-            if (Engine.e.abilityScreenReference.nodes[i].fieldUnlocked)
+            if (Engine.e.gridReference.nodes[i].fieldUnlocked)
             {
                 fieldNodes[i] = true;
             }
-            if (Engine.e.abilityScreenReference.nodes[i].riggsUnlocked)
+            if (Engine.e.gridReference.nodes[i].riggsUnlocked)
             {
                 riggsNodes[i] = true;
             }

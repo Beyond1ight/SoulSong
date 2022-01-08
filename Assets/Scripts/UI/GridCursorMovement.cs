@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class GridCursorMovement : MonoBehaviour
 {
@@ -27,23 +28,43 @@ public class GridCursorMovement : MonoBehaviour
         if (movement.x != 0 || movement.y != 0)
         {
             isMoving = true;
+
+            if (Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_XDamping != 0
+            && Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_YDamping != 0)
+            {
+                Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 0;
+                Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 0;
+            }
         }
         else
         {
             isMoving = false;
+
+            if (Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_XDamping != 1
+           && Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_YDamping != 1)
+            {
+                Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
+                Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 1;
+            }
         }
         //  if (Engine.e.loadTimer)
         //  {
         //      StartCoroutine(UnloadTimer());
         //   }
 
-        if (Engine.e.abilityScreenReference.gridDisplayed)
+        if (Engine.e.gridReference.gridDisplayed)
         {
             if (Input.GetKeyDown(KeyCode.Z))
             {
                 GetComponent<GridCursor>().SetGridPerspective();
             }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Engine.e.gridReference.CloseGrid();
+            }
         }
+
     }
 
     IEnumerator UnloadTimer()

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using Cinemachine;
 using UnityEngine.EventSystems;
+using UnityEngine.U2D;
 public class Engine : MonoBehaviour
 {
 
@@ -80,7 +81,7 @@ public class Engine : MonoBehaviour
     public EquipDisplay equipMenuReference;
     public FileMenu fileMenuReference;
     public BattleMenu battleMenu;
-    public AbilitiesDisplay abilityScreenReference;
+    public Grid gridReference;
     public GameObject mainMenu, battleSystemMenu;
     public GameObject inventoryMenuReference;
     public GameObject[] pauseMenuCharacterPanels, itemMenuPanels;
@@ -110,6 +111,7 @@ public class Engine : MonoBehaviour
         ClearGameQuests();
         SetParty();
         SetDropIndexes();
+        gridReference.SetupGrid();
         //abilityScreenReference.ClearNodeUnlocked();
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
@@ -2080,29 +2082,31 @@ public class Engine : MonoBehaviour
 
         // Node Information
 
-        abilityScreenReference.grievePosition = gameData.charNodePositions[0];
-        abilityScreenReference.macPosition = gameData.charNodePositions[1];
-        abilityScreenReference.fieldPosition = gameData.charNodePositions[2];
-        abilityScreenReference.riggsPosition = gameData.charNodePositions[3];
+        gridReference.grievePosition = gameData.charNodePositions[0];
+        gridReference.macPosition = gameData.charNodePositions[1];
+        gridReference.fieldPosition = gameData.charNodePositions[2];
+        gridReference.riggsPosition = gameData.charNodePositions[3];
 
-        for (int i = 0; i < abilityScreenReference.nodes.Length; i++)
+        gridReference.ClearGrid(); // Consider removing and manually changing lines to gray by default
+
+        for (int i = 0; i < gridReference.nodes.Length; i++)
         {
 
             if (gameData.grieveNodes[i] == true)
             {
-                abilityScreenReference.nodes[i].grieveUnlocked = true;
+                gridReference.nodes[i].grieveUnlocked = true;
             }
             if (gameData.macNodes[i] == true)
             {
-                abilityScreenReference.nodes[i].macUnlocked = true;
+                gridReference.nodes[i].macUnlocked = true;
             }
             if (gameData.fieldNodes[i] == true)
             {
-                abilityScreenReference.nodes[i].fieldUnlocked = true;
+                gridReference.nodes[i].fieldUnlocked = true;
             }
             if (gameData.riggsNodes[i] == true)
             {
-                abilityScreenReference.nodes[i].riggsUnlocked = true;
+                gridReference.nodes[i].riggsUnlocked = true;
             }
         }
 

@@ -43,6 +43,7 @@ public class PauseMenu : MonoBehaviour
     void Update()
     {
 
+
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown("joystick button 3"))
         {
             if (Engine.e.inBattle == false)
@@ -252,17 +253,17 @@ public class PauseMenu : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(pauseFirstButton);
             atPauseMenu = true;
-            Engine.e.partyInventoryReference.inventoryPointerIndex = 0;
+            //Engine.e.partyInventoryReference.inventoryPointerIndex = 0;
             //Engine.e.partyInventoryReference.inventoryScreenSet = false;
 
-            Engine.e.partyInventoryReference.partyInventoryRectTransform.offsetMax -= new Vector2(0, 0);
+            //Engine.e.partyInventoryReference.partyInventoryRectTransform.offsetMax -= new Vector2(0, 0);
 
-            Engine.e.partyInventoryReference.grieveWeaponsRectTransform.offsetMax -= new Vector2(0, 0);
-            Engine.e.partyInventoryReference.macWeaponsRectTransform.offsetMax -= new Vector2(0, 0);
-            Engine.e.partyInventoryReference.fieldWeaponsRectTransform.offsetMax -= new Vector2(0, 0);
-            Engine.e.partyInventoryReference.riggsWeaponsRectTransform.offsetMax -= new Vector2(0, 0);
+            //Engine.e.partyInventoryReference.grieveWeaponsRectTransform.offsetMax -= new Vector2(0, 0);
+            // Engine.e.partyInventoryReference.macWeaponsRectTransform.offsetMax -= new Vector2(0, 0);
+            // Engine.e.partyInventoryReference.fieldWeaponsRectTransform.offsetMax -= new Vector2(0, 0);
+            // Engine.e.partyInventoryReference.riggsWeaponsRectTransform.offsetMax -= new Vector2(0, 0);
 
-            Engine.e.partyInventoryReference.chestArmorRectTransform.offsetMax -= new Vector2(0, 0);
+            // Engine.e.partyInventoryReference.chestArmorRectTransform.offsetMax -= new Vector2(0, 0);
 
         }
     }
@@ -314,19 +315,20 @@ public class PauseMenu : MonoBehaviour
         Engine.e.adventureLogReference.OpenAdventureLogMenu();
     }
 
-    public void OpenAbilitiesMenu()
+    public void OpenGridMenu()
     {
         //Engine.e.abilityScreenReference.DisplayCharSelection();
         abilitiesMenu.SetActive(true);
-        Engine.e.abilityScreenReference.gridDisplayed = true;
-        Engine.e.abilityScreenReference.SetMacScreen();
+        Engine.e.canvasReference.SetActive(false);
+        Engine.e.gridReference.gridDisplayed = true;
+        Engine.e.gridReference.SetMacScreen();
         //Engine.e.abilityScreenReference.GetComponent<AbilitiesDisplay>().SetSkills();
         // Engine.e.abilityScreenReference.GetComponent<AbilitiesDisplay>().SetDrops();
-        Engine.e.abilityScreenReference.GetComponent<AbilitiesDisplay>().DisplayAP();
+        Engine.e.gridReference.GetComponent<Grid>().DisplayAP();
 
         EventSystem.current.SetSelectedGameObject(null);
 
-        EventSystem.current.SetSelectedGameObject(Engine.e.abilityScreenReference.cursor);
+        EventSystem.current.SetSelectedGameObject(Engine.e.gridReference.cursor);
         Time.timeScale = 1f;
         atPauseMenu = false;
     }

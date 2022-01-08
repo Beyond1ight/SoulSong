@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!Engine.e.abilityScreenReference.gridDisplayed)
+        if (!Engine.e.gridReference.gridDisplayed)
         {
             if (!Engine.e.inBattle)
             {

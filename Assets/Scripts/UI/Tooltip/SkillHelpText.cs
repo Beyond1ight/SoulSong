@@ -100,19 +100,19 @@ public class SkillHelpText : MonoBehaviour
         }
         else
         {
-            if (Engine.e.abilityScreenReference.GetComponent<AbilitiesDisplay>().grieveScreen)
+            if (Engine.e.gridReference.GetComponent<Grid>().grieveScreen)
             {
                 index = 0;
             }
-            if (Engine.e.abilityScreenReference.GetComponent<AbilitiesDisplay>().macScreen)
+            if (Engine.e.gridReference.GetComponent<Grid>().macScreen)
             {
                 index = 1;
             }
-            if (Engine.e.abilityScreenReference.GetComponent<AbilitiesDisplay>().fieldScreen)
+            if (Engine.e.gridReference.GetComponent<Grid>().fieldScreen)
             {
                 index = 2;
             }
-            if (Engine.e.abilityScreenReference.GetComponent<AbilitiesDisplay>().riggsScreen)
+            if (Engine.e.gridReference.GetComponent<Grid>().riggsScreen)
             {
                 index = 3;
             }
@@ -125,7 +125,7 @@ public class SkillHelpText : MonoBehaviour
             {
                 skillCost = Mathf.Round(skill.skillCost - (skill.skillCost * character.skillCostReduction / 100) + 0.45f);
 
-                if (Engine.e.abilityScreenReference.GetComponent<AbilitiesDisplay>().skillsButtons[skillIndex].GetComponentInChildren<TMP_Text>().text == "-")
+                if (Engine.e.gridReference.GetComponent<Grid>().skillsButtons[skillIndex].GetComponentInChildren<TMP_Text>().text == "-")
                 {
                     abilityMenuHelpReference.text = string.Empty;
                 }

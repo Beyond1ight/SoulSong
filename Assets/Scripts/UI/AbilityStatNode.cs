@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.U2D;
 public class AbilityStatNode : MonoBehaviour
 {
     public AbilityStat node;
@@ -16,9 +17,10 @@ public class AbilityStatNode : MonoBehaviour
 
     public void OnClickEvent()
     {
+        Debug.Log("Testing Unlock...");
         bool connectionCheck = false;
 
-        if (Engine.e.abilityScreenReference.grieveScreen)
+        if (Engine.e.gridReference.grieveScreen)
         {
             if (node != null)
             {
@@ -60,12 +62,12 @@ public class AbilityStatNode : MonoBehaviour
 
                         for (int i = 0; i < connectionLines.Length; i++)
                         {
-                            if (connectionLines[i] != null)
+                            if (connectionLines[i] != null && connectionLines[i].GetComponent<SpriteShapeRenderer>().color != Color.cyan)
                             {
-                                connectionLines[i].GetComponent<Image>().color = Color.white;
+                                connectionLines[i].GetComponent<SpriteShapeRenderer>().color = Color.cyan;
                             }
                         }
-                        Engine.e.abilityScreenReference.grievePosition = nodeIndex;
+                        Engine.e.gridReference.grievePosition = nodeIndex;
                     }
                     else
                     {
@@ -79,8 +81,18 @@ public class AbilityStatNode : MonoBehaviour
             }
         }
 
-        if (Engine.e.abilityScreenReference.macScreen)
+        if (Engine.e.gridReference.macScreen)
         {
+            macUnlocked = true;
+            for (int i = 0; i < connectionLines.Length; i++)
+            {
+                if (connectionLines[i] != null && connectionLines[i].GetComponent<SpriteShapeRenderer>().color != Color.blue)
+                {
+                    connectionLines[i].GetComponent<SpriteShapeRenderer>().color = Color.blue;
+                }
+            }
+            Engine.e.gridReference.macPosition = nodeIndex;
+
             if (node != null)
             {
                 if (!macUnlocked)
@@ -121,12 +133,12 @@ public class AbilityStatNode : MonoBehaviour
                         macUnlocked = true;
                         for (int i = 0; i < connectionLines.Length; i++)
                         {
-                            if (connectionLines[i] != null)
+                            if (connectionLines[i] != null && connectionLines[i].GetComponent<SpriteShapeRenderer>().color != Color.blue)
                             {
-                                connectionLines[i].GetComponent<Image>().color = Color.white;
+                                connectionLines[i].GetComponent<SpriteShapeRenderer>().color = Color.blue;
                             }
                         }
-                        Engine.e.abilityScreenReference.macPosition = nodeIndex;
+                        Engine.e.gridReference.macPosition = nodeIndex;
 
                     }
                     else
@@ -141,7 +153,7 @@ public class AbilityStatNode : MonoBehaviour
             }
         }
 
-        if (Engine.e.abilityScreenReference.fieldScreen)
+        if (Engine.e.gridReference.fieldScreen)
         {
             if (node != null)
             {
@@ -183,10 +195,10 @@ public class AbilityStatNode : MonoBehaviour
                         {
                             if (connectionLines[i] != null)
                             {
-                                connectionLines[i].GetComponent<Image>().color = Color.white;
+                                connectionLines[i].GetComponent<SpriteShapeRenderer>().color = Color.white;
                             }
                         }
-                        Engine.e.abilityScreenReference.fieldPosition = nodeIndex;
+                        Engine.e.gridReference.fieldPosition = nodeIndex;
 
                     }
                     else
@@ -200,7 +212,7 @@ public class AbilityStatNode : MonoBehaviour
                 }
             }
 
-            if (Engine.e.abilityScreenReference.riggsScreen)
+            if (Engine.e.gridReference.riggsScreen)
             {
                 if (node != null)
                 {
@@ -242,10 +254,10 @@ public class AbilityStatNode : MonoBehaviour
                             {
                                 if (connectionLines[i] != null)
                                 {
-                                    connectionLines[i].GetComponent<Image>().color = Color.white;
+                                    connectionLines[i].GetComponent<SpriteShapeRenderer>().color = Color.white;
                                 }
                             }
-                            Engine.e.abilityScreenReference.riggsPosition = nodeIndex;
+                            Engine.e.gridReference.riggsPosition = nodeIndex;
 
                         }
                         else
