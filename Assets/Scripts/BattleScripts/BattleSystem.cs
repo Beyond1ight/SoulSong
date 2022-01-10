@@ -14,7 +14,6 @@ public class BattleSystem : MonoBehaviour
     // General Info
     public BattleState state;
     public BattleState currentState;
-    //public BattleState nextInQueue;
     public BattleState currentInQueue;
     public Queue<BattleState> battleQueue;
     public ActiveParty activeParty;
@@ -23,12 +22,28 @@ public class BattleSystem : MonoBehaviour
     public bool hpRestore, mpRestore;
     public bool physicalAttack = false;
     public bool skillPhysicalAttack = false, skillRangedAttack = false, skillTargetSupport = false, skillSelfSupport = false;
-    public bool dropAttack = false;
+    public bool dropAttack, dropSupport = false;
     public bool usingItem = false;
     public float damageTotal;
     public float skillBoostTotal;
-    //int randTarget;
-    // public int target;
+    public int char1Target, char2Target, char3Target;
+    public bool char1Attacking, char1Supporting, char2Attacking, char2Supporting, char3Attacking, char3Supporting;
+    public bool char1UsingItem, char2UsingItem, char3UsingItem;
+    public bool char1DropAttack, char1SkillAttack, char2DropAttack, char2SkillAttack, char3DropAttack, char3SkillAttack,
+    char1DropSupport, char2DropSupport, char3DropSupport;
+    public bool char1TargetingTeam, char1TargetingEnemy, char2TargetingTeam, char2TargetingEnemy, char3TargetingTeam, char3TargetingEnemy;
+    public Drops char1DropChoice, char2DropChoice, char3DropChoice;
+    public Skills char1SkillChoice, char2SkillChoice, char3SkillChoice;
+    public bool char1PhysicalAttack, char1SkillPhysicalAttack, char1SkillRangedAttack, char1SkillSelfSupport, char1SkillTargetSupport, char2PhysicalAttack, char2SkillPhysicalAttack, char2SkillRangedAttack,
+    char2SkillSelfSupport, char2SkillTargetSupport, char3PhysicalAttack, char3SkillPhysicalAttack, char3SkillRangedAttack, char3SkillSelfSupport, char3SkillTargetSupport;
+    public bool char1ConfusedReady, char2ConfusedReady, char3ConfusedReady;
+    public int enemy1AttackTarget, enemy2AttackTarget, enemy3AttackTarget, enemy4AttackTarget;
+    public bool enemy1Ready, enemy2Ready, enemy3Ready, enemy4Ready;
+    public bool checkNextInQueue;
+    public int previousTargetReferenceChar, previousTargetReferenceEnemy; // For HUD and Drop Reference
+    public bool char1Switching, char2Switching, char3Switching;
+    public int char1SwitchToIndex, char2SwitchToIndex, char3SwitchToIndex;
+    public Item char1ItemToBeUsed, char2ItemToBeUsed, char3ItemToBeUsed;
     public bool isDead;
     public float enemyGroupExperiencePoints;
     public bool dropExists = false;
@@ -63,7 +78,6 @@ public class BattleSystem : MonoBehaviour
     public TextMeshProUGUI dialogueText;
 
     public GameObject[] returnToPanelButton;
-    public GameObject[] skillAllyTargetButtons, skillEnemyTargetButtons;
     public GameObject battleItemMenu;
     public BattleItemSlot[] battleItems;
     public GameObject[] char1MenuButtons;
@@ -96,14 +110,13 @@ public class BattleSystem : MonoBehaviour
     public bool battleSwitchButtons = false;
     public bool dontDisplayDmgPopup = false;
     public BattleHUD hud;
+    bool battleFinished = false;
     int currentMoveIndex;
     int enemyDropChoice;
-    int charDropChoice;
     public GameObject damagePopup, levelUpPopup, deathTimerPopup;
     public Material originalMaterial;
     public Material damageFlash;
     public bool failedItemUse = false;
-    public int skillTarget;
     public GameObject spriteTarget;
     int skillTierChoice;
     bool checkingForRandomDrop = false;
@@ -117,23 +130,8 @@ public class BattleSystem : MonoBehaviour
     bool char1MenuButtonsActive = false, char2MenuButtonsActive = false, char3MenuButtonsActive = false;
     bool pressUp, pressDown;
     public int inventoryPointerIndex = 0, vertMove = 0;
+    public TextMeshProUGUI battleHelpReference;
 
-    public int char1AttackTarget, char1SupportTarget, char2AttackTarget, char2SupportTarget, char3AttackTarget, char3SupportTarget;
-    public bool char1Attacking, char1Supporting, char2Attacking, char2Supporting, char3Attacking, char3Supporting;
-    public bool char1UsingItem, char2UsingItem, char3UsingItem;
-    public bool char1DropAttack, char1SkillAttack, char2DropAttack, char2SkillAttack, char3DropAttack, char3SkillAttack;
-    public bool char1TargetingTeam, char1TargetingEnemy, char2TargetingTeam, char2TargetingEnemy, char3TargetingTeam, char3TargetingEnemy;
-    public Skills char1SkillChoice, char2SkillChoice, char3SkillChoice;
-    public bool char1PhysicalAttack, char1SkillPhysicalAttack, char1SkillRangedAttack, char2PhysicalAttack, char2SkillPhysicalAttack, char2SkillRangedAttack,
-    char3PhysicalAttack, char3SkillPhysicalAttack, char3SkillRangedAttack;
-    public bool char1ConfusedReady, char2ConfusedReady, char3ConfusedReady;
-    public int enemy1AttackTarget, enemy2AttackTarget, enemy3AttackTarget, enemy4AttackTarget;
-    public bool enemy1Ready, enemy2Ready, enemy3Ready, enemy4Ready;
-    public bool checkNextInQueue;
-    public int previousTargetReferenceChar, previousTargetReferenceEnemy; // For HUD and Drop Reference
-    public bool char1Switching, char2Switching, char3Switching;
-    public int char1SwitchToIndex, char2SwitchToIndex, char3SwitchToIndex;
-    public Item char1ItemToBeUsed, char2ItemToBeUsed, char3ItemToBeUsed;
     bool partyTurn = false;
     [SerializeField]
     bool grieveStatBoost = false, macStatBoost = false, fieldStatBoost = false, riggsStatBoost, targetingTeam, targetingEnemy, settingTarget;
@@ -159,6 +157,7 @@ public class BattleSystem : MonoBehaviour
         settingTarget = false;
         targetingTeam = false;
         targetingEnemy = false;
+        battleFinished = false;
 
         char1ATB += 80;
         char2ATB = 0;
@@ -167,7 +166,6 @@ public class BattleSystem : MonoBehaviour
         enemy2ATB = 0;
         enemy3ATB = 0;
         enemy4ATB = 0;
-
 
         // enemyTargetButtons[0].transform.position = enemies[0].transform.position;
 
@@ -482,37 +480,50 @@ public class BattleSystem : MonoBehaviour
                     {
                         partyTurn = true;
 
+                        targetingEnemy = char1TargetingEnemy;
+                        targetingTeam = char1TargetingTeam;
+
                         if (char1Attacking)
                         {
-                            physicalAttack = char1PhysicalAttack;
-                            dropAttack = char1DropAttack;
-                            char1PhysicalAttack = false;
+
                             char1Attacking = false;
                             char1Ready = false;
 
-                            if (!char1SkillAttack)
-                            {
+                            physicalAttack = char1PhysicalAttack;
+                            char1PhysicalAttack = false;
 
-                                StartCoroutine(CharAttack(char1AttackTarget));
+                            dropAttack = char1DropAttack;
+                            char1DropAttack = false;
 
-                            }
-                            else
-                            {
-                                char1SkillAttack = false;
-                                CharSkills(char1SkillChoice);
-                            }
+                            skillPhysicalAttack = char1SkillPhysicalAttack;
+                            char1SkillPhysicalAttack = false;
+
+                            skillRangedAttack = char1SkillRangedAttack;
+                            char1SkillRangedAttack = false;
+
+
+                            StartCoroutine(CharAttack(char1Target));
+
+
                         }
 
                         if (char1Supporting)
                         {
+                            char1Supporting = false;
 
                             usingItem = char1UsingItem;
-                            dropAttack = char1DropAttack;
-                            Engine.e.charBeingTargeted = char1SupportTarget;
-                            char1DropAttack = false;
                             char1UsingItem = false;
-                            char1Supporting = false;
-                            StartCoroutine(CharSupport(char1SupportTarget));
+
+                            dropSupport = char1DropSupport;
+                            char1DropSupport = false;
+
+                            skillSelfSupport = char1SkillSelfSupport;
+                            char1SkillSelfSupport = false;
+
+                            skillTargetSupport = char1SkillTargetSupport;
+                            char1SkillTargetSupport = false;
+
+                            StartCoroutine(CharSupport(char1Target));
 
                         }
 
@@ -528,9 +539,6 @@ public class BattleSystem : MonoBehaviour
                         currentInQueue = BattleState.QUEUECHECK;
 
                     }
-
-                    char1TargetingEnemy = false;
-                    char1TargetingTeam = false;
                 }
 
                 if (currentInQueue == BattleState.CHAR2TURN)
@@ -539,50 +547,55 @@ public class BattleSystem : MonoBehaviour
                     {
                         partyTurn = true;
 
-                        if (!activeParty.activeParty[1].GetComponent<Character>().isConfused)
+                        targetingEnemy = char2TargetingEnemy;
+                        targetingTeam = char2TargetingTeam;
+
+                        if (char2Attacking)
                         {
-                            if (char2Attacking)
-                            {
-                                physicalAttack = char2PhysicalAttack;
-                                // skillPhysicalAttack = char2SkillPhysicalAttack;
-                                dropAttack = char2DropAttack;
-                                //char2SkillPhysicalAttack = false;
-                                char2PhysicalAttack = false;
-                                char2Attacking = false;
 
-                                if (!char2SkillAttack)
-                                {
-                                    StartCoroutine(CharAttack(char2AttackTarget));
-                                }
-                                else
-                                {
-                                    char2SkillAttack = false;
-                                    CharSkills(char2SkillChoice);
-                                }
-                            }
-
-
-                            if (char2Supporting)
-                            {
-                                usingItem = char2UsingItem;
-                                dropAttack = char2DropAttack;
-                                Engine.e.charBeingTargeted = char2SupportTarget;
-                                char2DropAttack = false;
-                                char2UsingItem = false;
-                                char2Supporting = false;
-                                StartCoroutine(CharSupport(char2SupportTarget));
-                            }
-
-                            if (char2Switching)
-                            {
-                                char2Switching = false;
-                                StartCoroutine(CharSwitch(char2SwitchToIndex));
-                            }
-                        }
-                        else
-                        {
+                            char2Attacking = false;
                             char2Ready = false;
-                            Char2Turn();
+
+                            physicalAttack = char2PhysicalAttack;
+                            char2PhysicalAttack = false;
+
+                            dropAttack = char2DropAttack;
+                            char2DropAttack = false;
+
+                            skillPhysicalAttack = char2SkillPhysicalAttack;
+                            char2SkillPhysicalAttack = false;
+
+                            skillRangedAttack = char2SkillRangedAttack;
+                            char2SkillRangedAttack = false;
+
+                            StartCoroutine(CharAttack(char2Target));
+
+                        }
+
+                        if (char2Supporting)
+                        {
+                            char2Supporting = false;
+
+                            usingItem = char2UsingItem;
+                            char2UsingItem = false;
+
+                            dropSupport = char2DropSupport;
+                            char2DropSupport = false;
+
+                            skillSelfSupport = char2SkillSelfSupport;
+                            char2SkillSelfSupport = false;
+
+                            skillTargetSupport = char2SkillTargetSupport;
+                            char2SkillTargetSupport = false;
+
+                            StartCoroutine(CharSupport(char2Target));
+
+                        }
+
+                        if (char2Switching)
+                        {
+                            char2Switching = false;
+                            StartCoroutine(CharSwitch(char2SwitchToIndex));
                         }
                     }
                     else
@@ -591,8 +604,6 @@ public class BattleSystem : MonoBehaviour
                         currentInQueue = BattleState.QUEUECHECK;
 
                     }
-                    char2TargetingEnemy = false;
-                    char2TargetingTeam = false;
                 }
 
                 if (currentInQueue == BattleState.CHAR3TURN)
@@ -601,51 +612,54 @@ public class BattleSystem : MonoBehaviour
                     {
                         partyTurn = true;
 
-                        if (!activeParty.activeParty[2].GetComponent<Character>().isConfused)
+                        targetingEnemy = char3TargetingEnemy;
+                        targetingTeam = char3TargetingTeam;
+
+                        if (char3Attacking)
                         {
-                            if (char3Attacking)
-                            {
-                                physicalAttack = char3PhysicalAttack;
-                                skillPhysicalAttack = char3SkillPhysicalAttack;
-                                dropAttack = char3DropAttack;
-                                char3SkillPhysicalAttack = false;
-                                char3PhysicalAttack = false;
-                                char3Attacking = false;
 
-                                if (!char3SkillAttack)
-                                {
-                                    StartCoroutine(CharAttack(char3AttackTarget));
-                                }
-                                else
-                                {
-                                    char3SkillAttack = false;
-                                    CharSkills(char3SkillChoice);
-                                }
-                            }
+                            char3Attacking = false;
+                            char3Ready = false;
 
-                            if (char3Supporting)
-                            {
+                            physicalAttack = char3PhysicalAttack;
+                            char3PhysicalAttack = false;
 
-                                usingItem = char3UsingItem;
-                                dropAttack = char3DropAttack;
-                                Engine.e.charBeingTargeted = char3SupportTarget;
-                                char3DropAttack = false;
-                                char3UsingItem = false;
-                                char3Supporting = false;
-                                StartCoroutine(CharSupport(char3SupportTarget));
-                            }
+                            dropAttack = char3DropAttack;
+                            char3DropAttack = false;
 
-                            if (char3Switching)
-                            {
-                                char3Switching = false;
-                                StartCoroutine(CharSwitch(char3SwitchToIndex));
-                            }
+                            skillPhysicalAttack = char3SkillPhysicalAttack;
+                            char3SkillPhysicalAttack = false;
+
+                            skillRangedAttack = char3SkillRangedAttack;
+                            char3SkillRangedAttack = false;
+
+                            StartCoroutine(CharAttack(char3Target));
+                        }
+
+                        if (char3Supporting)
+                        {
+                            char3Supporting = false;
+
+                            usingItem = char3UsingItem;
+                            char3UsingItem = false;
+
+                            dropSupport = char3DropSupport;
+                            char3DropSupport = false;
+
+                            skillSelfSupport = char3SkillSelfSupport;
+                            char3SkillSelfSupport = false;
+
+                            skillTargetSupport = char3SkillTargetSupport;
+                            char3SkillTargetSupport = false;
+
+                            StartCoroutine(CharSupport(char3Target));
 
                         }
-                        else
+
+                        if (char3Switching)
                         {
-                            char2Ready = false;
-                            Char2Turn();
+                            char3Switching = false;
+                            StartCoroutine(CharSwitch(char3SwitchToIndex));
                         }
                     }
                     else
@@ -654,8 +668,6 @@ public class BattleSystem : MonoBehaviour
                         currentInQueue = BattleState.QUEUECHECK;
 
                     }
-                    char3TargetingEnemy = false;
-                    char3TargetingTeam = false;
                 }
 
                 if (currentInQueue == BattleState.CONFCHAR1 && char1Ready)
@@ -778,18 +790,21 @@ public class BattleSystem : MonoBehaviour
         int index = 0;
         int target = 0;
         GameObject characterAttacking = null;
+        Character _characterAttacking = null;
 
         if (currentInQueue == BattleState.CHAR1TURN)
         {
             index = 0;
             characterAttacking = Engine.e.activeParty.gameObject;
             attackingTeam = char1TargetingTeam;
+            _characterAttacking = activeParty.activeParty[0].GetComponent<Character>();
         }
         if (currentInQueue == BattleState.CHAR2TURN)
         {
             index = 1;
             characterAttacking = Engine.e.activePartyMember2;
             attackingTeam = char2TargetingTeam;
+            _characterAttacking = activeParty.activeParty[1].GetComponent<Character>();
 
         }
         if (currentInQueue == BattleState.CHAR3TURN)
@@ -797,6 +812,7 @@ public class BattleSystem : MonoBehaviour
             index = 2;
             characterAttacking = Engine.e.activePartyMember3;
             attackingTeam = char3TargetingTeam;
+            _characterAttacking = activeParty.activeParty[2].GetComponent<Character>();
 
         }
 
@@ -825,23 +841,128 @@ public class BattleSystem : MonoBehaviour
 
             if (skillPhysicalAttack == true)
             {
+
+                skillPhysicalAttack = false;
+
+                Skills _skillChoice = null;
+
+                if (index == 0)
+                {
+                    _skillChoice = char1SkillChoice;
+                }
+                if (index == 1)
+                {
+                    _skillChoice = char2SkillChoice;
+                }
+                if (index == 2)
+                {
+                    _skillChoice = char3SkillChoice;
+                }
+
+                float skillModifier;
+                skillBoostTotal = 0f;
+
+
+                skillModifier = ((_characterAttacking.skillScale) / 2);
+
+                switch (_skillChoice.skillIndex)
+                {
+                    case 0: // Berserk
+                        damageTotal = _characterAttacking.physicalDamage * 2;
+                        break;
+
+                    case 1:
+
+                        break;
+                    case 10: // Steal
+                        dontDisplayDmgPopup = true;
+                        damageTotal = 0;
+                        break;
+                    case 11: // Daze
+                        dontDisplayDmgPopup = true;
+                        damageTotal = 0;
+                        break;
+                    case 13: // Envenom
+                        damageTotal = Mathf.Round(_skillChoice.skillPower + (_skillChoice.skillPower * _characterAttacking.shadowDropsLevel / 20) * skillModifier);
+                        break;
+                    case 14: // Assassinate
+                        damageTotal = 99999;
+                        break;
+
+                }
+
+
+                _characterAttacking.currentEnergy -= Mathf.Round((_skillChoice.skillCost
+                - _skillChoice.skillCost * _characterAttacking.skillCostReduction / 100) + 0.45f);
+
+
                 charUsingSkill = true;
                 charMoving = true;
                 targetCheck = true;
-
-                skillPhysicalAttack = false;
                 charAttacking = true;
+
+                // Check "AttackMoveToTargetChar()" for more details on each Skill
 
             }
 
             if (skillRangedAttack == true)
             {
+                skillRangedAttack = false;
+
+                Skills _skillChoice = null;
+
+                if (index == 0)
+                {
+                    _skillChoice = char1SkillChoice;
+                }
+                if (index == 1)
+                {
+                    _skillChoice = char2SkillChoice;
+                }
+                if (index == 2)
+                {
+                    _skillChoice = char3SkillChoice;
+                }
+
+                float skillModifier;
+                skillBoostTotal = 0f;
+
+
+                skillModifier = ((_characterAttacking.skillScale) / 2);
+
+                switch (_skillChoice.skillIndex)
+                {
+
+                    case 5:
+                        mpRestore = true;
+                        _characterAttacking.currentMana += (_skillChoice.skillPointReturn + (_skillChoice.skillPointReturn * skillModifier));
+                        skillBoostTotal = (_skillChoice.skillPointReturn + (_skillChoice.skillPointReturn * skillModifier));
+                        Instantiate(siphonAnim, enemies[target].transform.position, Quaternion.identity);
+
+                        if (_characterAttacking.currentMana > _characterAttacking.maxMana)
+                        {
+                            _characterAttacking.currentMana = _characterAttacking.maxMana;
+                        }
+                        damageTotal = skillBoostTotal;
+                        break;
+                    case 16:
+                        //skillRangedAttack = true;
+                        damageTotal = Mathf.Round(_skillChoice.skillPower + (_skillChoice.skillPower * _characterAttacking.holyDropsLevel / 20) * skillModifier);
+                        //Instantiate(lightningDropAnim, characterGameObject.transform.position, Quaternion.identity);
+                        break;
+
+                }
+
+
+                _characterAttacking.currentEnergy -= Mathf.Round((_skillChoice.skillCost
+                - _skillChoice.skillCost * _characterAttacking.skillCostReduction / 100) + 0.45f);
+
                 targetCheck = true;
                 charMoving = false;
                 charAttackDrop = true;
                 skillRangedAttack = false;
                 enemies[_target].GetComponent<Enemy>().TakeSkillDamage(damageTotal, _target);
-                hud.displayMana[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana.ToString();
+                //hud.displayMana[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana.ToString();
 
                 if (enemies[_target].gameObject.GetComponent<Enemy>().health <= 0)
                 {
@@ -850,18 +971,34 @@ public class BattleSystem : MonoBehaviour
                     isDead = EnemyGroup.enemyGroup.CheckEndBattle();
                     yield return new WaitForSeconds(0.1f);
                 }
+
             }
 
             if (dropAttack == true)
             {
+                Drops dropChoice = null;
+
+                if (index == 0)
+                {
+                    dropChoice = char1DropChoice;
+                }
+                if (index == 1)
+                {
+                    dropChoice = char2DropChoice;
+                }
+                if (index == 2)
+                {
+                    dropChoice = char3DropChoice;
+                }
+
                 charMoving = false;
                 targetCheck = true;
 
                 charAttackDrop = true;
 
-                enemies[_target].gameObject.GetComponent<Enemy>().TakeDropDamage(_target, activeParty.activeParty[index].GetComponent<Character>().GetDropChoice());
-                activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana -= Mathf.Round(activeParty.activeParty[index].GetComponent<Character>().GetDropChoice().dropCost
-                - (activeParty.activeParty[index].GetComponent<Character>().GetDropChoice().dropCost * activeParty.activeParty[index].GetComponent<Character>().dropCostReduction / 100) + 0.45f);
+                enemies[_target].gameObject.GetComponent<Enemy>().TakeDropDamage(_target, dropChoice);
+                activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana -= Mathf.Round(dropChoice.dropCost
+                - (dropChoice.dropCost * activeParty.activeParty[index].GetComponent<Character>().dropCostReduction / 100) + 0.45f);
                 activeParty.activeParty[index].gameObject.GetComponent<Character>().ResetDropChoice();
                 dropAttack = false;
                 hud.displayMana[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana.ToString();
@@ -906,17 +1043,145 @@ public class BattleSystem : MonoBehaviour
 
                 skillPhysicalAttack = false;
                 charAttacking = true;
+                skillPhysicalAttack = false;
+
+                Skills _skillChoice = null;
+
+                if (index == 0)
+                {
+                    _skillChoice = char1SkillChoice;
+                }
+                if (index == 1)
+                {
+                    _skillChoice = char2SkillChoice;
+                }
+                if (index == 2)
+                {
+                    _skillChoice = char3SkillChoice;
+                }
+
+                float skillModifier;
+                skillBoostTotal = 0f;
+
+
+                skillModifier = ((_characterAttacking.skillScale) / 2);
+
+                switch (_skillChoice.skillIndex)
+                {
+                    case 0:
+                        damageTotal = _characterAttacking.physicalDamage * 2;
+                        break;
+
+                    case 1:
+
+                        break;
+                    case 10:
+                        dontDisplayDmgPopup = true;
+                        damageTotal = 0;
+                        break;
+                    case 13:
+                        //skillPhysicalAttack = true;
+                        damageTotal = Mathf.Round(_skillChoice.skillPower + (_skillChoice.skillPower * _characterAttacking.shadowDropsLevel / 20) * skillModifier);
+                        break;
+                    case 14:
+                        //skillPhysicalAttack = true;
+                        damageTotal = 99999;
+                        break;
+
+                }
+
+                if (_skillChoice.skillName != "Steal")
+                {
+                    _characterAttacking.currentEnergy -= Mathf.Round((_skillChoice.skillCost
+                    - _skillChoice.skillCost * _characterAttacking.skillCostReduction / 100) + 0.45f);
+                }
+
+                //hud.displayEnergy[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentEnergy.ToString();
 
             }
 
             if (skillRangedAttack == true)
             {
+                skillPhysicalAttack = false;
+
+                Skills _skillChoice = null;
+
+                if (index == 0)
+                {
+                    _skillChoice = char1SkillChoice;
+                }
+                if (index == 1)
+                {
+                    _skillChoice = char2SkillChoice;
+                }
+                if (index == 2)
+                {
+                    _skillChoice = char3SkillChoice;
+                }
+
+                float skillModifier;
+                skillBoostTotal = 0f;
+
+
+                skillModifier = ((_characterAttacking.skillScale) / 2);
+
+                switch (_skillChoice.skillIndex)
+                {
+
+                    case 5:
+                        mpRestore = true;
+                        _characterAttacking.currentMana += (_skillChoice.skillPointReturn + (_skillChoice.skillPointReturn * skillModifier));
+                        skillBoostTotal = (_skillChoice.skillPointReturn + (_skillChoice.skillPointReturn * skillModifier));
+                        GameObject targetGO = null;
+
+                        if (target == 0)
+                        {
+                            targetGO = Engine.e.activeParty.gameObject;
+                        }
+                        if (target == 1)
+                        {
+                            targetGO = Engine.e.activePartyMember2.gameObject;
+                        }
+                        if (target == 2)
+                        {
+                            targetGO = Engine.e.activePartyMember3.gameObject;
+                        }
+
+                        Instantiate(siphonAnim, targetGO.transform.position, Quaternion.identity);
+
+                        if (_characterAttacking.currentMana > _characterAttacking.maxMana)
+                        {
+                            _characterAttacking.currentMana = _characterAttacking.maxMana;
+                        }
+                        damageTotal = skillBoostTotal;
+                        break;
+
+                    case 16:
+                        //skillRangedAttack = true;
+                        damageTotal = Mathf.Round(_skillChoice.skillPower + (_skillChoice.skillPower * _characterAttacking.holyDropsLevel / 20) * skillModifier);
+                        //Instantiate(lightningDropAnim, characterGameObject.transform.position, Quaternion.identity);
+                        break;
+
+                }
+
+
+                _characterAttacking.currentEnergy -= Mathf.Round((_skillChoice.skillCost
+                - _skillChoice.skillCost * _characterAttacking.skillCostReduction / 100) + 0.45f);
+
+                targetCheck = true;
+                charMoving = false;
+                charAttackDrop = true;
+                skillRangedAttack = false;
+
+                Engine.e.TakeDamage(_target, damageTotal, 100);
+                //hud.displayMana[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana.ToString();
+
                 targetCheck = true;
                 charMoving = false;
                 charAttackDrop = true;
                 skillRangedAttack = false;
                 //enemies[enemyTarget].GetComponent<Enemy>().TakeSkillDamage(damageTotal, enemyTarget);
-                hud.displayMana[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana.ToString();
+                //hud.displayMana[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana.ToString();
 
                 // if (enemies[enemyTarget].gameObject.GetComponent<Enemy>().health <= 0)
                 //{
@@ -929,6 +1194,23 @@ public class BattleSystem : MonoBehaviour
 
             if (dropAttack == true)
             {
+                dropAttack = false;
+
+                Drops dropChoice = null;
+
+                if (index == 0)
+                {
+                    dropChoice = char1DropChoice;
+                }
+                if (index == 1)
+                {
+                    dropChoice = char2DropChoice;
+                }
+                if (index == 2)
+                {
+                    dropChoice = char3DropChoice;
+                }
+
                 charMoving = false;
                 targetCheck = true;
 
@@ -936,11 +1218,9 @@ public class BattleSystem : MonoBehaviour
 
                 Engine.e.InstantiateEnemyDropTeam(characterAttacking, target);
                 isDead = Engine.e.TakeElementalDamage(target, lastDropChoice.dropPower, lastDropChoice.dropType);
-                activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana -= Mathf.Round(activeParty.activeParty[index].GetComponent<Character>().GetDropChoice().dropCost
-                - (activeParty.activeParty[index].GetComponent<Character>().GetDropChoice().dropCost * activeParty.activeParty[index].GetComponent<Character>().dropCostReduction / 100) + 0.45f);
-                activeParty.activeParty[index].gameObject.GetComponent<Character>().ResetDropChoice();
-                dropAttack = false;
-                hud.displayMana[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana.ToString();
+                _characterAttacking.currentMana -= Mathf.Round(dropChoice.dropCost
+                - (dropChoice.dropCost * _characterAttacking.dropCostReduction / 100) + 0.45f);
+                //hud.displayMana[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana.ToString();
 
             }
         }
@@ -958,7 +1238,7 @@ public class BattleSystem : MonoBehaviour
         if (currentInQueue == BattleState.CHAR1TURN || currentInQueue == BattleState.CONFCHAR1)
         {
             index = 0;
-            targetEnemy = char1AttackTarget;
+            targetEnemy = char1Target;
             characterAttacking = Engine.e.activeParty.gameObject;
             characterAttackIndex = Engine.e.activeParty.activeParty[0].GetComponent<Character>();
 
@@ -968,26 +1248,26 @@ public class BattleSystem : MonoBehaviour
             }
             else
             {
-                if (char1AttackTarget == 0)
+                if (char1Target == 0)
                 {
                     characterTarget = Engine.e.activeParty.gameObject;
                 }
-                if (char1AttackTarget == 1)
+                if (char1Target == 1)
                 {
                     characterTarget = Engine.e.activePartyMember2;
                 }
-                if (char1AttackTarget == 2)
+                if (char1Target == 2)
                 {
                     characterTarget = Engine.e.activePartyMember3;
                 }
 
-                Engine.e.PhysicalDamageCalculation(char1AttackTarget, characterAttackIndex.physicalDamage);
+                Engine.e.PhysicalDamageCalculation(char1Target, characterAttackIndex.physicalDamage);
             }
         }
         if (currentInQueue == BattleState.CHAR2TURN || currentInQueue == BattleState.CONFCHAR2)
         {
             index = 1;
-            targetEnemy = char2AttackTarget;
+            targetEnemy = char2Target;
             characterAttacking = Engine.e.activePartyMember2;
             characterAttackIndex = Engine.e.activeParty.activeParty[1].GetComponent<Character>();
 
@@ -997,27 +1277,27 @@ public class BattleSystem : MonoBehaviour
             }
             else
             {
-                if (char2AttackTarget == 0)
+                if (char2Target == 0)
                 {
                     characterTarget = Engine.e.activeParty.gameObject;
                 }
-                if (char2AttackTarget == 1)
+                if (char2Target == 1)
                 {
                     characterTarget = Engine.e.activePartyMember2;
                 }
-                if (char2AttackTarget == 2)
+                if (char2Target == 2)
                 {
                     characterTarget = Engine.e.activePartyMember3;
                 }
 
-                Engine.e.PhysicalDamageCalculation(char2AttackTarget, characterAttackIndex.physicalDamage);
+                Engine.e.PhysicalDamageCalculation(char2Target, characterAttackIndex.physicalDamage);
             }
         }
 
         if (currentInQueue == BattleState.CHAR3TURN || currentInQueue == BattleState.CONFCHAR3)
         {
             index = 2;
-            targetEnemy = char3AttackTarget;
+            targetEnemy = char3Target;
             characterAttacking = Engine.e.activePartyMember3;
             characterAttackIndex = Engine.e.activeParty.activeParty[2].GetComponent<Character>();
 
@@ -1027,20 +1307,20 @@ public class BattleSystem : MonoBehaviour
             }
             else
             {
-                if (char3AttackTarget == 0)
+                if (char3Target == 0)
                 {
                     characterTarget = Engine.e.activeParty.gameObject;
                 }
-                if (char3AttackTarget == 1)
+                if (char3Target == 1)
                 {
                     characterTarget = Engine.e.activePartyMember2;
                 }
-                if (char3AttackTarget == 2)
+                if (char3Target == 2)
                 {
                     characterTarget = Engine.e.activePartyMember3;
                 }
 
-                Engine.e.PhysicalDamageCalculation(char3AttackTarget, characterAttackIndex.physicalDamage);
+                Engine.e.PhysicalDamageCalculation(char3Target, characterAttackIndex.physicalDamage);
             }
         }
 
@@ -1095,23 +1375,38 @@ public class BattleSystem : MonoBehaviour
                     }
                     else
                     {
-                        switch (skillTierChoice)
+                        Skills _skillChoice = null;
+
+                        if (index == 0)
                         {
-                            case 0:
+                            _skillChoice = char1SkillChoice;
+                        }
+                        if (index == 1)
+                        {
+                            _skillChoice = char2SkillChoice;
+                        }
+                        if (index == 2)
+                        {
+                            _skillChoice = char3SkillChoice;
+                        }
+
+                        switch (_skillChoice.skillIndex)
+                        {
+                            case 0: // Berserk
                                 enemy.TakeSkillDamage(damageTotal, targetEnemy);
                                 break;
-                            case 10:
+                            case 10: // Steal
                                 enemy.StealAttempt(targetEnemy, characterAttackIndex.stealChance);
                                 break;
-                            case 11:
+                            case 11: // Daze
                                 float hitChanceReduction = 10 + Mathf.Round(characterAttackIndex.skillScale * 10 / 25);
                                 enemy.hitChance -= hitChanceReduction;
                                 break;
-                            case 13:
+                            case 13: // Envenom
                                 enemy.TakeSkillDamage(damageTotal, targetEnemy);
                                 enemy.InflictPoisonAttack(index, 10);
                                 break;
-                            case 14:
+                            case 14: // Assassinate
                                 enemy.InflictDeathAttack();
                                 break;
                         }
@@ -1157,33 +1452,9 @@ public class BattleSystem : MonoBehaviour
                     charAttacking = false;
                     charAtBattlePos = false;
 
-                    if (!charUsingSkill)
-                    {
-                        Engine.e.TakeDamage(targetEnemy, characterAttackIndex.physicalDamage, characterAttackIndex.hitChance);
-                    }
-                    else
-                    {
-                        switch (skillTierChoice)
-                        {
-                            case 0:
-                                enemy.TakeSkillDamage(damageTotal, targetEnemy);
-                                break;
-                            case 10:
-                                enemy.StealAttempt(targetEnemy, characterAttackIndex.stealChance);
-                                break;
-                            case 11:
-                                float hitChanceReduction = 10 + Mathf.Round(characterAttackIndex.skillScale * 10 / 25);
-                                enemy.hitChance -= hitChanceReduction;
-                                break;
-                            case 13:
-                                enemy.TakeSkillDamage(damageTotal, targetEnemy);
-                                enemy.InflictPoisonAttack(index, 10);
-                                break;
-                            case 14:
-                                enemy.InflictDeathAttack();
-                                break;
-                        }
-                    }
+
+                    Engine.e.TakeDamage(targetEnemy, characterAttackIndex.physicalDamage, characterAttackIndex.hitChance);
+
 
                     if (!dontDisplayDmgPopup)
                     {
@@ -1338,6 +1609,7 @@ public class BattleSystem : MonoBehaviour
             //StartCoroutine(CheckNext());
         }
     }
+
     private void EnableButtonInteraction()
     {
         if (char1Ready)
@@ -1393,25 +1665,29 @@ public class BattleSystem : MonoBehaviour
         int index = 0;
         GameObject character = null;
         int target = 0;
+        Character _characterAttacking = null;
 
         if (currentInQueue == BattleState.CONFCHAR1)
         {
             index = 0;
             character = Engine.e.activeParty.gameObject;
-            target = char1AttackTarget;
+            target = char1Target;
+            _characterAttacking = activeParty.activeParty[0].GetComponent<Character>();
         }
         if (currentInQueue == BattleState.CONFCHAR2)
         {
             index = 1;
             character = Engine.e.activePartyMember2;
-            target = char2AttackTarget;
+            target = char2Target;
+            _characterAttacking = activeParty.activeParty[1].GetComponent<Character>();
 
         }
         if (currentInQueue == BattleState.CONFCHAR3)
         {
             index = 2;
             character = Engine.e.activePartyMember3;
-            target = char3AttackTarget;
+            target = char3Target;
+            _characterAttacking = activeParty.activeParty[2].GetComponent<Character>();
 
         }
 
@@ -1492,96 +1768,104 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-
-
     public IEnumerator CharSupport(int _target)
     {
 
         int index = 0;
         GameObject character = null;
         inBattleMenu = false;
-        bool targetingEnemy = false;
 
         if (currentInQueue == BattleState.CHAR1TURN)
         {
             index = 0;
             character = Engine.e.activeParty.gameObject;
-            if (char1TargetingEnemy)
-            {
-                targetingEnemy = true;
-            }
+
         }
         if (currentInQueue == BattleState.CHAR2TURN)
         {
             index = 1;
             character = Engine.e.activePartyMember2;
-            if (char2TargetingEnemy)
-            {
-                targetingEnemy = true;
-            }
+
         }
         if (currentInQueue == BattleState.CHAR3TURN)
         {
             index = 2;
             character = Engine.e.activePartyMember3;
-            if (char3TargetingEnemy)
-            {
-                targetingEnemy = true;
-            }
+
         }
 
-        DeactivateSupportButtons();
-        DeactivateDropsUI();
-        DeactivateSkillsUI();
-
+        // Supporting target via an Item
         if (usingItem)
         {
             usingItem = false;
 
-            if (!targetingEnemy)
-            {
-                Engine.e.UseItem(_target);
-            }
-            else
-            {
-                enemies[_target].UseItem();
-            }
+            Item _itemToBeUsed = null;
+
             if (index == 0)
             {
-                char1ItemToBeUsed = null;
+                _itemToBeUsed = char1ItemToBeUsed;
             }
             if (index == 1)
             {
-                char2ItemToBeUsed = null;
+                _itemToBeUsed = char2ItemToBeUsed;
             }
             if (index == 2)
             {
-                char3ItemToBeUsed = null;
+                _itemToBeUsed = char3ItemToBeUsed;
             }
 
-            EndTurn();
-            yield return new WaitForSeconds(1f);
-            if (!Engine.e.battleModeActive)
+
+            if (!targetingEnemy)
             {
-                state = BattleState.ATBCHECK;
+                Engine.e.UseItemInBattle(_target);
             }
+            else
+            {
+                enemies[_target].UseItem(_itemToBeUsed);
+            }
+
+            // EndTurn();
+            // yield return new WaitForSeconds(1f);
+            // if (!Engine.e.battleModeActive)
+            // {
+            //     state = BattleState.ATBCHECK;
+            // }
         }
 
-        if (dropAttack)
+        // Supporting target via Drop
+        if (dropSupport)
         {
-            dropAttack = false;
-            if (activeParty.activeParty[index].GetComponent<Character>().currentMana >= activeParty.activeParty[index].GetComponent<Character>().lastDropChoice.dropCost)
+
+            Drops _dropChoice = null;
+
+            dropSupport = false;
+
+            if (index == 0)
+            {
+                _dropChoice = char1DropChoice;
+            }
+            if (index == 1)
+            {
+                _dropChoice = char2DropChoice;
+
+            }
+            if (index == 2)
+            {
+                _dropChoice = char3DropChoice;
+
+            }
+
+            if (activeParty.activeParty[index].GetComponent<Character>().currentMana >= _dropChoice.dropCost)
             {
                 {
-                    charAttackDrop = true;
 
-                    switch (activeParty.activeParty[index].GetComponent<Character>().lastDropChoice.dropName)
+                    switch (_dropChoice.dropName)
                     {
                         case "Holy Light":
                             if (activeParty.activeParty[_target].GetComponent<Character>().currentHealth > 0)
                             {
                                 Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                                activeParty.activeParty[index].GetComponent<Character>().currentMana -= activeParty.activeParty[index].GetComponent<Character>().lastDropChoice.dropCost;
+                                activeParty.activeParty[index].GetComponent<Character>().currentMana -= _dropChoice.dropCost;
 
                             }
                             else
@@ -1594,14 +1878,12 @@ public class BattleSystem : MonoBehaviour
                             if (activeParty.activeParty[_target].GetComponent<Character>().currentHealth <= 0)
                             {
                                 Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                                activeParty.activeParty[index].GetComponent<Character>().Revive(activeParty.activeParty[index].GetComponent<Character>().lastDropChoice.dropPower, _target);
-                                activeParty.activeParty[index].GetComponent<Character>().currentMana -= activeParty.activeParty[index].GetComponent<Character>().lastDropChoice.dropCost;
+                                activeParty.activeParty[index].GetComponent<Character>().Revive(_dropChoice.dropPower, _target);
+                                activeParty.activeParty[index].GetComponent<Character>().currentMana -= _dropChoice.dropCost;
 
                             }
                             else
                             {
-
-                                charAttackDrop = false;
 
                                 if (index == 0)
                                 {
@@ -1622,27 +1904,81 @@ public class BattleSystem : MonoBehaviour
                         case "Repent":
 
                             Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                            activeParty.activeParty[index].GetComponent<Character>().Repent(_target);
-                            activeParty.activeParty[index].GetComponent<Character>().currentMana -= activeParty.activeParty[index].GetComponent<Character>().lastDropChoice.dropCost;
+
+                            if (activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel >= 20)
+                            {
+                                if (activeParty.activeParty[_target].GetComponent<Character>().isPoisoned)
+                                {
+                                    activeParty.activeParty[_target].GetComponent<Character>().isPoisoned = false;
+                                }
+                                if (activeParty.activeParty[_target].GetComponent<Character>().isAsleep)
+                                {
+                                    activeParty.activeParty[_target].GetComponent<Character>().isAsleep = false;
+                                }
+                                if (activeParty.activeParty[_target].GetComponent<Character>().isConfused)
+                                {
+                                    activeParty.activeParty[_target].GetComponent<Character>().isConfused = false;
+                                }
+                                if (activeParty.activeParty[_target].GetComponent<Character>().deathInflicted)
+                                {
+                                    activeParty.activeParty[_target].GetComponent<Character>().RemoveDeath();
+                                }
+                                activeParty.activeParty[_target].GetComponent<SpriteRenderer>().color = Color.white;
+
+                            }
+                            else
+                            {
+                                if (activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel >= 10
+                                && activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel < 20)
+                                {
+                                    if (activeParty.activeParty[_target].GetComponent<Character>().isPoisoned)
+                                    {
+                                        activeParty.activeParty[_target].GetComponent<Character>().isPoisoned = false;
+                                        activeParty.activeParty[_target].GetComponent<SpriteRenderer>().color = Color.white;
+
+                                    }
+                                    if (activeParty.activeParty[_target].GetComponent<Character>().isAsleep)
+                                    {
+                                        activeParty.activeParty[_target].GetComponent<Character>().isAsleep = false;
+                                        activeParty.activeParty[_target].GetComponent<SpriteRenderer>().color = Color.white;
+
+                                    }
+
+                                }
+                                else
+                                {
+                                    if (activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel < 10)
+                                    {
+                                        if (activeParty.activeParty[_target].GetComponent<Character>().isAsleep)
+                                        {
+                                            activeParty.activeParty[_target].GetComponent<Character>().isAsleep = false;
+                                            activeParty.activeParty[_target].GetComponent<SpriteRenderer>().color = Color.white;
+
+                                        }
+                                    }
+                                }
+                            }
+
+                            activeParty.activeParty[index].GetComponent<Character>().currentMana -= _dropChoice.dropCost;
+
                             break;
 
                         case "Soothing Rain":
 
                             Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                            activeParty.activeParty[index].GetComponent<Character>().SoothingRain(activeParty.activeParty[index].GetComponent<Character>().lastDropChoice.dropPower);
-                            activeParty.activeParty[index].GetComponent<Character>().currentMana -= activeParty.activeParty[index].GetComponent<Character>().lastDropChoice.dropCost;
+                            activeParty.activeParty[index].GetComponent<Character>().SoothingRain(_dropChoice.dropPower);
+                            activeParty.activeParty[index].GetComponent<Character>().currentMana -= _dropChoice.dropCost;
 
 
                             break;
-
                     }
 
-                    if (lastDropChoice.dropType == "Holy")
+                    if (_dropChoice.dropType == "Holy")
                     {
 
                         if (activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel < 99)
                         {
-                            activeParty.activeParty[index].GetComponent<Character>().holyDropsExperience += lastDropChoice.experiencePoints;
+                            activeParty.activeParty[index].GetComponent<Character>().holyDropsExperience += _dropChoice.experiencePoints;
                             // Level Up
                             if (activeParty.activeParty[index].GetComponent<Character>().holyDropsExperience >= activeParty.activeParty[index].GetComponent<Character>().holyDropsLvlReq)
                             {
@@ -1657,33 +1993,118 @@ public class BattleSystem : MonoBehaviour
                     }
 
                 }
+
             }
             else
             {
                 Debug.Log("Exception Thrown");
             }
-
         }
 
-        if (skillTargetSupport == true)
+        // Supporting self via Skill
+        if (skillSelfSupport)
         {
-            EndTurn();
-        }
+            Skills _skillChoice = null;
+            Character _selfTarget = activeParty.activeParty[index].GetComponent<Character>();
+            skillSelfSupport = false;
 
-        if (skillSelfSupport == true)
+            if (index == 0)
+            {
+                _skillChoice = char1SkillChoice;
+            }
+            if (index == 1)
+            {
+                _skillChoice = char2SkillChoice;
+
+            }
+            if (index == 2)
+            {
+                _skillChoice = char3SkillChoice;
+
+            }
+
+            float skillModifier;
+            skillBoostTotal = 0f;
+
+
+            skillModifier = ((_selfTarget.skillScale) / 2);
+
+            if (_selfTarget.currentEnergy >= _skillChoice.skillCost)
+            {
+                {
+
+                    switch (_skillChoice.skillIndex)
+                    {
+                        case 15:
+
+                            //Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
+                            //activeParty.activeParty[index].GetComponent<Character>().
+                            _selfTarget.currentEnergy -= _skillChoice.skillCost;
+
+                            switch (_selfTarget.characterName)
+                            {
+                                case "Grieve":
+                                    if (grievePhysicalBoost == 0)
+                                    {
+                                        grieveStatBoost = true;
+                                        grievePhysicalBoost = Mathf.Round(_selfTarget.physicalDamage + (_selfTarget.skillScale * 10 / 25));
+                                        _selfTarget.physicalDamage += grievePhysicalBoost;
+                                    }
+
+                                    break;
+
+                                case "Mac":
+                                    if (macPhysicalBoost == 0)
+                                    {
+                                        macStatBoost = true;
+                                        macPhysicalBoost = Mathf.Round(_selfTarget.physicalDamage + (_selfTarget.skillScale * 10 / 25));
+                                        _selfTarget.physicalDamage += macPhysicalBoost;
+                                    }
+
+                                    break;
+
+                                case "Field":
+                                    if (fieldPhysicalBoost == 0)
+                                    {
+                                        fieldStatBoost = true;
+                                        fieldPhysicalBoost = Mathf.Round(_selfTarget.physicalDamage + (_selfTarget.skillScale * 10 / 25));
+                                        _selfTarget.physicalDamage += fieldPhysicalBoost;
+                                    }
+                                    break;
+
+                                case "Riggs":
+                                    if (riggsPhysicalBoost == 0)
+                                    {
+                                        riggsStatBoost = true;
+                                        riggsPhysicalBoost = Mathf.Round(_selfTarget.physicalDamage + (_selfTarget.skillScale * 10 / 25));
+                                        _selfTarget.physicalDamage += riggsPhysicalBoost;
+
+                                    }
+                                    break;
+
+                            }
+                            break;
+                    }
+
+                }
+
+                // Supporting target via Skill
+                if (skillTargetSupport)
+                {
+
+                }
+
+            }
+        }
+        EndTurn();
+        yield return new WaitForSeconds(1f);
+        if (!Engine.e.battleModeActive)
         {
-            charAttackDrop = true;
-            Engine.e.charBeingTargeted = 0;
-            Instantiate(holyDropAnim, character.transform.position, Quaternion.identity);
-
+            state = BattleState.ATBCHECK;
         }
-
-
-
-
-        yield return new WaitForSeconds(0.1f);
-
     }
+
+
     public IEnumerator CharSwitch(int index)
     {
 
@@ -1752,251 +2173,6 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    void CharSkills(Skills skill)
-    {
-        int index = 0;
-        Character character = Engine.e.activeParty.activeParty[index].GetComponent<Character>();
-        GameObject characterGameObject = null;
-        int target = 0;
-        DeactivateSkillTargetButtons();
-
-        if (currentInQueue == BattleState.CHAR1TURN)
-        {
-            index = 0;
-            characterGameObject = Engine.e.activeParty.gameObject;
-            target = char1AttackTarget;
-        }
-        if (currentInQueue == BattleState.CHAR2TURN)
-        {
-            index = 1;
-            characterGameObject = Engine.e.activePartyMember2;
-            target = char2AttackTarget;
-
-        }
-        if (currentInQueue == BattleState.CHAR3TURN)
-        {
-            index = 2;
-            characterGameObject = Engine.e.activePartyMember3;
-            target = char3AttackTarget;
-
-        }
-
-        characterDropTarget = characterGameObject;
-
-        float skillModifier;
-        skillBoostTotal = 0f;
-
-
-        skillModifier = ((character.skillScale) / 2);
-
-        switch (skillTierChoice)
-        {
-            case 0:
-                skillPhysicalAttack = true;
-                damageTotal = character.physicalDamage * 2;
-                break;
-
-            case 1:
-
-                break;
-
-            case 5:
-                skillPhysicalAttack = true;
-                skillRangedAttack = true;
-                mpRestore = true;
-                character.currentMana += (skill.skillPointReturn + (skill.skillPointReturn * skillModifier));
-                skillBoostTotal = (skill.skillPointReturn + (skill.skillPointReturn * skillModifier));
-                Instantiate(siphonAnim, enemies[target].transform.position, Quaternion.identity);
-
-                if (character.currentMana > character.maxMana)
-                {
-                    character.currentMana = character.maxMana;
-                }
-                damageTotal = skillBoostTotal;
-                break;
-
-            case 10:
-                skillPhysicalAttack = true;
-                dontDisplayDmgPopup = true;
-                damageTotal = 0;
-                break;
-            case 11:
-                skillPhysicalAttack = true;
-                dontDisplayDmgPopup = true;
-                damageTotal = 0;
-                break;
-            case 12:
-                switch (character.characterName)
-                {
-                    case "Grieve":
-                        if (grieveDodgeBoost == 0)
-                        {
-                            grieveStatBoost = true;
-                            grieveDodgeBoost = 10f;
-                            character.dodgeChance += grieveDodgeBoost;
-                        }
-                        else
-                        {
-                            Debug.Log("Doesn't Stack bitch");
-                        }
-                        break;
-
-                    case "Mac":
-                        if (macDodgeBoost == 0)
-                        {
-                            macStatBoost = true;
-                            macDodgeBoost = 10f;
-                            character.dodgeChance += macDodgeBoost;
-                        }
-                        else
-                        {
-                            Debug.Log("Doesn't Stack bitch");
-                        }
-                        break;
-
-                    case "Field":
-                        if (fieldDodgeBoost == 0)
-                        {
-                            fieldStatBoost = true;
-                            fieldDodgeBoost = 10f;
-                            character.dodgeChance += fieldDodgeBoost;
-                        }
-                        else
-                        {
-                            Debug.Log("Doesn't Stack bitch");
-                        }
-                        break;
-
-                    case "Riggs":
-                        if (riggsDodgeBoost == 0)
-                        {
-                            riggsStatBoost = true;
-                            riggsDodgeBoost = 10f;
-                            character.dodgeChance += riggsDodgeBoost;
-                        }
-                        else
-                        {
-                            Debug.Log("Doesn't Stack bitch");
-                        }
-                        break;
-                }
-
-                skillSelfSupport = true;
-                damageTotal = 0;
-                break;
-            case 13:
-                skillPhysicalAttack = true;
-                damageTotal = Mathf.Round(skill.skillPower + (skill.skillPower * character.shadowDropsLevel / 20) * skillModifier);
-                break;
-            case 14:
-                skillPhysicalAttack = true;
-                damageTotal = 99999;
-                break;
-            case 15:
-                switch (character.characterName)
-                {
-                    case "Grieve":
-                        if (grievePhysicalBoost == 0)
-                        {
-                            grieveStatBoost = true;
-                            grievePhysicalBoost = Mathf.Round(character.physicalDamage + (character.skillScale * 10 / 25));
-                            character.physicalDamage += grievePhysicalBoost;
-                        }
-                        else
-                        {
-                            Debug.Log("Doesn't Stack bitch");
-                        }
-                        break;
-
-                    case "Mac":
-                        if (macPhysicalBoost == 0)
-                        {
-                            macStatBoost = true;
-                            macPhysicalBoost = Mathf.Round(character.physicalDamage + (character.skillScale * 10 / 25));
-                            character.physicalDamage += macPhysicalBoost;
-                        }
-                        else
-                        {
-                            Debug.Log("Doesn't Stack bitch");
-                        }
-                        break;
-
-                    case "Field":
-                        if (fieldPhysicalBoost == 0)
-                        {
-                            fieldStatBoost = true;
-                            fieldPhysicalBoost = Mathf.Round(character.physicalDamage + (character.skillScale * 10 / 25));
-                            character.physicalDamage += fieldPhysicalBoost;
-                        }
-                        else
-                        {
-                            Debug.Log("Doesn't Stack bitch");
-                        }
-                        break;
-
-                    case "Riggs":
-                        if (riggsPhysicalBoost == 0)
-                        {
-                            riggsStatBoost = true;
-                            riggsPhysicalBoost = Mathf.Round(character.physicalDamage + (character.skillScale * 10 / 25));
-                            character.physicalDamage += riggsPhysicalBoost;
-                        }
-                        else
-                        {
-                            Debug.Log("Doesn't Stack bitch");
-                        }
-                        break;
-                }
-                skillSelfSupport = true;
-                damageTotal = 0;
-                break;
-            case 16:
-                skillRangedAttack = true;
-                damageTotal = Mathf.Round(skill.skillPower + (skill.skillPower * character.holyDropsLevel / 20) * skillModifier);
-                Instantiate(lightningDropAnim, characterGameObject.transform.position, Quaternion.identity);
-                break;
-
-        }
-
-        if (skill.skillName != "Steal")
-        {
-            activeParty.activeParty[index].GetComponent<Character>().currentEnergy -= Mathf.Round((skill.skillCost
-            - skill.skillCost * activeParty.activeParty[index].GetComponent<Character>().skillCostReduction / 100) + 0.45f);
-        }
-        hud.displayEnergy[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentEnergy.ToString();
-        DeactivateSkillsUI();
-
-        if (skill.selfSupport)
-        {
-            DeactivateTargetButtons();
-        }
-
-
-        if (skillPhysicalAttack || skillRangedAttack)
-        {
-            StartCoroutine(CharAttack(target));
-        }
-        if (skillSelfSupport)
-        {
-            StartCoroutine(CharSupport(index));
-        }
-        if (skillTargetSupport)
-        {
-            StartCoroutine(CharSupport(target));
-        }
-
-        char1BattlePanel.SetActive(true);
-
-        if (Engine.e.activeParty.activeParty[1] != null)
-        {
-            char2BattlePanel.SetActive(true);
-        }
-        if (Engine.e.activeParty.activeParty[2] != null)
-        {
-            char3BattlePanel.SetActive(true);
-        }
-    }
-
     public IEnumerator ConfuseAttackMoveToTargetChar()
     {
 
@@ -2009,19 +2185,19 @@ public class BattleSystem : MonoBehaviour
         {
             index = 0;
             character = Engine.e.activeParty.gameObject;
-            target = char1AttackTarget;
+            target = char1Target;
         }
         if (currentInQueue == BattleState.CHAR2TURN || currentInQueue == BattleState.CONFCHAR2)
         {
             index = 1;
             character = Engine.e.activePartyMember2;
-            target = char2AttackTarget;
+            target = char2Target;
         }
         if (currentInQueue == BattleState.CHAR3TURN || currentInQueue == BattleState.CONFCHAR3)
         {
             index = 2;
             character = Engine.e.activePartyMember3;
-            target = char3AttackTarget;
+            target = char3Target;
         }
 
         if (target == 0)
@@ -3277,18 +3453,18 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (currentInQueue == BattleState.CONFCHAR1)
                     {
-                        char1AttackTarget = Engine.e.GetRandomRemainingPartyMember();
-                        randTarget = char1AttackTarget;
+                        char1Target = Engine.e.GetRandomRemainingPartyMember();
+                        randTarget = char1Target;
                     }
                     if (currentInQueue == BattleState.CONFCHAR2)
                     {
-                        char2AttackTarget = Engine.e.GetRandomRemainingPartyMember();
-                        randTarget = char2AttackTarget;
+                        char2Target = Engine.e.GetRandomRemainingPartyMember();
+                        randTarget = char2Target;
                     }
                     if (currentInQueue == BattleState.CONFCHAR3)
                     {
-                        char3AttackTarget = Engine.e.GetRandomRemainingPartyMember();
-                        randTarget = char3AttackTarget;
+                        char3Target = Engine.e.GetRandomRemainingPartyMember();
+                        randTarget = char3Target;
                     }
 
                     Engine.e.PhysicalDamageCalculation(randTarget, Engine.e.activeParty.activeParty[index].GetComponent<Character>().physicalDamage);
@@ -3299,18 +3475,18 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (currentInQueue == BattleState.CONFCHAR1)
                     {
-                        char1AttackTarget = enemyGroup.GetRandomRemainingEnemy();
-                        randTarget = char1AttackTarget;
+                        char1Target = enemyGroup.GetRandomRemainingEnemy();
+                        randTarget = char1Target;
                     }
                     if (currentInQueue == BattleState.CONFCHAR2)
                     {
-                        char2AttackTarget = enemyGroup.GetRandomRemainingEnemy();
-                        randTarget = char2AttackTarget;
+                        char2Target = enemyGroup.GetRandomRemainingEnemy();
+                        randTarget = char2Target;
                     }
                     if (currentInQueue == BattleState.CONFCHAR3)
                     {
-                        char3AttackTarget = enemyGroup.GetRandomRemainingEnemy();
-                        randTarget = char3AttackTarget;
+                        char3Target = enemyGroup.GetRandomRemainingEnemy();
+                        randTarget = char3Target;
                     }
                 }
 
@@ -3384,26 +3560,60 @@ public class BattleSystem : MonoBehaviour
 
     public void TargetTeam()
     {
-        if (!targetingTeam)
+        if (state == BattleState.CHAR1TURN)
         {
-            targetingTeam = true;
-
-            if (targetingEnemy)
+            if (!char1TargetingTeam)
             {
-                targetingEnemy = false;
+                char1TargetingTeam = true;
+                char1TargetingEnemy = false;
+            }
+        }
+
+        if (state == BattleState.CHAR2TURN)
+        {
+            if (!char2TargetingTeam)
+            {
+                char2TargetingTeam = true;
+                char2TargetingEnemy = false;
+            }
+        }
+
+        if (state == BattleState.CHAR3TURN)
+        {
+            if (!char3TargetingTeam)
+            {
+                char3TargetingTeam = true;
+                char3TargetingEnemy = false;
             }
         }
     }
 
     public void TargetEnemy()
     {
-        if (!targetingEnemy)
+        if (state == BattleState.CHAR1TURN)
         {
-            targetingEnemy = true;
-
-            if (targetingTeam)
+            if (!char1TargetingEnemy)
             {
-                targetingTeam = false;
+                char1TargetingEnemy = true;
+                char1TargetingTeam = false;
+            }
+        }
+
+        if (state == BattleState.CHAR2TURN)
+        {
+            if (!char2TargetingEnemy)
+            {
+                char2TargetingEnemy = true;
+                char2TargetingTeam = false;
+            }
+        }
+
+        if (state == BattleState.CHAR3TURN)
+        {
+            if (!char3TargetingEnemy)
+            {
+                char3TargetingEnemy = true;
+                char3TargetingTeam = false;
             }
         }
     }
@@ -3422,20 +3632,16 @@ public class BattleSystem : MonoBehaviour
 
     public void SetTarget(int _target)
     {
+
         if (state == BattleState.CHAR1TURN)
         {
-            char1AttackTarget = _target;
-            char1SkillPhysicalAttack = skillPhysicalAttack;
-            char1TargetingTeam = targetingTeam;
-            char1TargetingEnemy = targetingEnemy;
-            char1DropAttack = dropAttack;
-            char1UsingItem = usingItem;
-            char1Supporting = usingItem;
-            char1Attacking = true;
-            char1Ready = false;
+            if (char1PhysicalAttack)
+            {
+                char1Attacking = true;
+            }
 
-            targetingTeam = false;
-            targetingEnemy = false;
+            char1Target = _target;
+            char1Ready = false;
 
             DeactivateChar1MenuButtons();
             battleQueue.Enqueue(BattleState.CHAR1TURN);
@@ -3460,15 +3666,13 @@ public class BattleSystem : MonoBehaviour
 
         if (state == BattleState.CHAR2TURN)
         {
-            char2AttackTarget = _target;
-            char2DropAttack = dropAttack;
-            char2SkillPhysicalAttack = skillPhysicalAttack;
-            char2Attacking = true;
+            if (char2PhysicalAttack)
+            {
+                char2Attacking = true;
+            }
+
+            char2Target = _target;
             char2Ready = false;
-            char2TargetingTeam = targetingTeam;
-            char2TargetingEnemy = targetingEnemy;
-            char2UsingItem = usingItem;
-            char2Supporting = usingItem;
 
             DeactivateChar2MenuButtons();
             battleQueue.Enqueue(BattleState.CHAR2TURN);
@@ -3488,17 +3692,16 @@ public class BattleSystem : MonoBehaviour
                 }
             }
         }
+
         if (state == BattleState.CHAR3TURN)
         {
-            char3AttackTarget = _target;
-            char3DropAttack = dropAttack;
-            char3SkillPhysicalAttack = skillPhysicalAttack;
-            char3Attacking = true;
+            if (char3PhysicalAttack)
+            {
+                char3Attacking = true;
+            }
+
+            char3Target = _target;
             char3Ready = false;
-            char3TargetingTeam = targetingTeam;
-            char3TargetingEnemy = targetingEnemy;
-            char3UsingItem = usingItem;
-            char3Supporting = usingItem;
 
             DeactivateChar3MenuButtons();
             battleQueue.Enqueue(BattleState.CHAR3TURN);
@@ -3510,247 +3713,18 @@ public class BattleSystem : MonoBehaviour
 
             if (char2Ready)
             {
-                ActivateChar3MenuButtons();
-
-            }
-
-        }
-        DeactivateTargetButtons();
-        DeactivateTargetSprite();
-        state = BattleState.ATBCHECK;
-    }
-
-    /* public void AttackEnemyButton(int enemyTarget)
-     {
-
-         if (state == BattleState.CHAR1TURN)
-         {
-             char1AttackTarget = enemyTarget;
-             char1PhysicalAttack = true;
-             char1DropAttack = dropAttack;
-             char1SkillPhysicalAttack = skillPhysicalAttack;
-             char1Attacking = true;
-             char1Ready = false;
-
-             DeactivateChar1MenuButtons();
-
-         }
-
-         if (state == BattleState.CHAR2TURN)
-         {
-             char2AttackTarget = enemyTarget;
-             char2PhysicalAttack = true;
-             char2DropAttack = dropAttack;
-             char2SkillPhysicalAttack = skillPhysicalAttack;
-             char2Attacking = true;
-             char2Ready = false;
-
-             DeactivateChar2MenuButtons();
-
-         }
-         if (state == BattleState.CHAR3TURN)
-         {
-             char3AttackTarget = enemyTarget;
-             char3PhysicalAttack = true;
-             char3DropAttack = dropAttack;
-             char3SkillPhysicalAttack = skillPhysicalAttack;
-             char3Attacking = true;
-             char3Ready = false;
-
-             DeactivateChar3MenuButtons();
-
-         }
-
-         if (!Engine.e.battleModeActive)
-         {
-             if (enemies[enemyTarget].gameObject.GetComponent<Enemy>().health > 0)
-             {
-                 if (!charMoving && !dropExists && !enemyMoving
-                 && state != BattleState.ENEMY1TURN && state != BattleState.ENEMY2TURN
-                 && state != BattleState.ENEMY3TURN && state != BattleState.ENEMY4TURN)
-                 {
-                     SetPhysicalAttack();
-                     StartCoroutine(CharAttack(enemyTarget));
-                 }
-                 else
-                 {
-                     return;
-                 }
-             }
-         }
-         else
-         {
-             if (state == BattleState.CHAR1TURN)
-             {
-                 battleQueue.Enqueue(BattleState.CHAR1TURN);
-             }
-
-             if (state == BattleState.CHAR2TURN)
-             {
-                 battleQueue.Enqueue(BattleState.CHAR2TURN);
-
-             }
-
-             if (state == BattleState.CHAR3TURN)
-             {
-                 battleQueue.Enqueue(BattleState.CHAR3TURN);
-             }
-
-             DeactivateTargetButtons();
-             DeactivateTargetSprite();
-
-
-         }
-         state = BattleState.ATBCHECK;
-     }*/
-
-    public void SupportAllyButton(int allyTarget)
-    {
-        if (state == BattleState.CHAR1TURN)
-        {
-            char1SupportTarget = allyTarget;
-            char1UsingItem = usingItem;
-            char1DropAttack = dropAttack;
-            char1Supporting = true;
-
-            if (activeParty.activeParty[1] != null)
-            {
-                if (char2Ready)
-                {
-                    ActivateChar2MenuButtons();
-                }
-            }
-
-            if (activeParty.activeParty[2] != null)
-            {
-                if (char3Ready)
-                {
-                    ActivateChar3MenuButtons();
-                }
-            }
-
-            battleQueue.Enqueue(BattleState.CHAR1TURN);
-
-        }
-        if (state == BattleState.CHAR2TURN)
-        {
-            char2SupportTarget = allyTarget;
-            char2UsingItem = usingItem;
-            char2DropAttack = dropAttack;
-
-            char2Supporting = true;
-
-            if (char1Ready)
-            {
-                ActivateChar1MenuButtons();
-
-            }
-
-            if (activeParty.activeParty[2] != null)
-            {
-                if (char3Ready)
-                {
-                    ActivateChar3MenuButtons();
-                }
-            }
-
-            battleQueue.Enqueue(BattleState.CHAR2TURN);
-
-        }
-        if (state == BattleState.CHAR3TURN)
-        {
-            char3SupportTarget = allyTarget;
-            char3UsingItem = usingItem;
-            char3Supporting = true;
-            char3DropAttack = dropAttack;
-
-            if (char1Ready)
-            {
-                ActivateChar1MenuButtons();
-
-            }
-
-            if (char2Ready)
-            {
                 ActivateChar2MenuButtons();
 
             }
 
-            battleQueue.Enqueue(BattleState.CHAR3TURN);
-
         }
 
-        inBattleMenu = false;
         DeactivateTargetButtons();
-        DeactivateSupportButtons();
         DeactivateTargetSprite();
         state = BattleState.ATBCHECK;
 
     }
 
-    public void SkillTargetEnemyButton(int enemyTarget)
-    {
-        if (state == BattleState.CHAR1TURN || currentState == BattleState.CHAR1TURN)
-        {
-            char1AttackTarget = enemyTarget;
-            char1SkillChoice = lastSkillChoice;
-            char1Attacking = true;
-            char1SkillAttack = true;
-        }
-        if (state == BattleState.CHAR2TURN || currentState == BattleState.CHAR2TURN)
-        {
-            char2AttackTarget = enemyTarget;
-            char2Attacking = true;
-            char2SkillChoice = lastSkillChoice;
-            char2SkillAttack = true;
-
-        }
-        if (state == BattleState.CHAR3TURN || currentState == BattleState.CHAR3TURN)
-        {
-            char3AttackTarget = enemyTarget;
-            char3Attacking = true;
-            char3SkillChoice = lastSkillChoice;
-            char3SkillAttack = true;
-        }
-
-        if (!Engine.e.battleModeActive)
-        {
-            if (enemies[enemyTarget].gameObject.GetComponent<Enemy>().health > 0)
-            {
-                if (!charMoving && !dropExists && !enemyMoving
-                && state != BattleState.ENEMY1TURN && state != BattleState.ENEMY2TURN
-                && state != BattleState.ENEMY3TURN && state != BattleState.ENEMY4TURN)
-                {
-                    SetPhysicalAttack();
-                    StartCoroutine(CharAttack(enemyTarget));
-                }
-                else
-                {
-                    return;
-                }
-            }
-        }
-        else
-        {
-            if (state == BattleState.CHAR1TURN || currentState == BattleState.CHAR1TURN)
-            {
-                battleQueue.Enqueue(BattleState.CHAR1TURN);
-            }
-            if (state == BattleState.CHAR2TURN || currentState == BattleState.CHAR2TURN)
-            {
-                battleQueue.Enqueue(BattleState.CHAR2TURN);
-
-            }
-            if (state == BattleState.CHAR3TURN || currentState == BattleState.CHAR3TURN)
-            {
-                battleQueue.Enqueue(BattleState.CHAR3TURN);
-            }
-
-            DeactivateTargetButtons();
-            DeactivateTargetSprite();
-
-        }
-    }
     public void DisplayAvailableCharBattle()
     {
         if (state == BattleState.CHAR1TURN)
@@ -3956,22 +3930,6 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.ATBCHECK;
     }
 
-
-    public void SkillSupportAlly1Button()
-    {
-        Engine.e.charBeingTargeted = 0;
-    }
-
-    public void SkillSupportAlly2Button()
-    {
-        Engine.e.charBeingTargeted = 1;
-    }
-
-    public void SkillSupportAlly3Button()
-    {
-        Engine.e.charBeingTargeted = 2;
-    }
-
     public void ActivateChar1MenuButtons()
     {
         if (!isDead)
@@ -4084,59 +4042,113 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    public void SetDropAttack()
-    {
-        if (state == BattleState.CHAR1TURN)
-        {
-            char1DropAttack = true;
-        }
-        if (state == BattleState.CHAR2TURN)
-        {
-            char2DropAttack = true;
-        }
-        if (state == BattleState.CHAR3TURN)
-        {
-            char3DropAttack = true;
-        }
-    }
-
     public void ActivateTargetButtons()
     {
 
         inBattleMenu = true;
 
-        for (int i = 0; i < allyTargetButtons.Length; i++)
+        if (!skillSelfSupport && !char1SkillAttack
+        && !char2SkillAttack && !char3SkillAttack)
         {
-            if (activeParty.activeParty[i] != null)
+            for (int i = 0; i < allyTargetButtons.Length; i++)
             {
-                allyTargetButtons[i].SetActive(true);
+                if (activeParty.activeParty[i] != null)
+                {
+                    allyTargetButtons[i].SetActive(true);
+                }
+            }
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                if (enemies[i] != null)
+                {
+                    if (enemies[i].health > 0)
+                    {
+                        enemyTargetButtons[i].SetActive(true);
+                    }
+                }
+            }
+
+
+            GetComponent<BattleMenuControllerNav>().OpenAttackFirstEnemy();
+
+            if (state == BattleState.CHAR1TURN)
+            {
+                if (char1Attacking || char1PhysicalAttack)
+                {
+                    GetComponent<BattleMenuControllerNav>().OpenAttackFirstEnemy();
+                }
+                else
+                {
+                    EventSystem.current.SetSelectedGameObject(null);
+                    EventSystem.current.SetSelectedGameObject(allyTargetButtons[0]);
+                }
+            }
+            if (state == BattleState.CHAR2TURN)
+            {
+                if (char2Attacking || char2PhysicalAttack)
+                {
+                    GetComponent<BattleMenuControllerNav>().OpenAttackFirstEnemy();
+                }
+                else
+                {
+                    EventSystem.current.SetSelectedGameObject(null);
+                    EventSystem.current.SetSelectedGameObject(allyTargetButtons[0]);
+                }
+
+            }
+            if (state == BattleState.CHAR3TURN)
+            {
+                if (char3Attacking || char3PhysicalAttack)
+                {
+                    GetComponent<BattleMenuControllerNav>().OpenAttackFirstEnemy();
+                }
+                else
+                {
+                    EventSystem.current.SetSelectedGameObject(null);
+                    EventSystem.current.SetSelectedGameObject(allyTargetButtons[0]);
+                }
             }
         }
-        for (int i = 0; i < enemies.Length; i++)
+        else
         {
-            if (enemies[i] != null)
+            if (skillSelfSupport)
             {
-                enemyTargetButtons[i].SetActive(true);
+                if (state == BattleState.CHAR1TURN)
+                {
+                    allyTargetButtons[0].SetActive(true);
+                    EventSystem.current.SetSelectedGameObject(null);
+                    EventSystem.current.SetSelectedGameObject(allyTargetButtons[0]);
+                }
+                if (state == BattleState.CHAR2TURN)
+                {
+                    allyTargetButtons[1].SetActive(true);
+                    EventSystem.current.SetSelectedGameObject(null);
+                    EventSystem.current.SetSelectedGameObject(allyTargetButtons[1]);
+                }
+                if (state == BattleState.CHAR3TURN)
+                {
+                    allyTargetButtons[2].SetActive(true);
+                    EventSystem.current.SetSelectedGameObject(null);
+                    EventSystem.current.SetSelectedGameObject(allyTargetButtons[2]);
+                }
             }
-        }
 
-
-        GetComponent<BattleMenuControllerNav>().OpenAttackFirstEnemy();
-
-
-        if (dropAttack)
-        {
-            if (lastDropChoice.dps)
+            if (char1SkillAttack || char2SkillAttack || char3SkillAttack)
             {
+                for (int i = 0; i < enemies.Length; i++)
+                {
+                    if (enemies[i] != null)
+                    {
+                        if (enemies[i].health > 0)
+                        {
+                            enemyTargetButtons[i].SetActive(true);
+                        }
+                    }
+                }
+
                 GetComponent<BattleMenuControllerNav>().OpenAttackFirstEnemy();
             }
-            else
-            {
-                EventSystem.current.SetSelectedGameObject(null);
-                EventSystem.current.SetSelectedGameObject(allyTargetButtons[0]);
-            }
         }
-
 
         DeactivateDropsUI();
         DeactivateSkillsUI();
@@ -4156,76 +4168,11 @@ public class BattleSystem : MonoBehaviour
         {
             returnToPanelButton[2].SetActive(true);
         }
-        // }
-        // else
-        // {
-        //     return;
-        // }
     }
 
-    public void ActivateSkillTargetButtons()
-    {
-        if (lastSkillChoice.dps)
-        {
-            for (int i = 0; i < enemies.Length; i++)
-            {
-                if (enemies[i] != null)
-                    skillEnemyTargetButtons[i].SetActive(true);
-
-            }
-        }
-
-        if (lastSkillChoice.targetSupport)
-        {
-            {
-                for (int i = 0; i < activeParty.activeParty.Length; i++)
-                {
-                    if (activeParty.activeParty[i] != null)
-                        skillAllyTargetButtons[i].SetActive(true);
-                }
-            }
-        }
-
-        GetComponent<BattleMenuControllerNav>().OpenSkillTarget();
-
-        if (lastSkillChoice.selfSupport)
-
-        {
-            CharSkills(lastSkillChoice);
-
-        }
 
 
-        if (state == BattleState.CHAR1TURN)
-        {
-            DeactivateDropsUI();
-            DeactivateChar1MenuButtons();
-            if (!lastSkillChoice.selfSupport)
-            {
-                returnToPanelButton[0].SetActive(true);
-            }
-        }
-        if (state == BattleState.CHAR2TURN)
-        {
-            DeactivateDropsUI();
-            DeactivateChar2MenuButtons();
-            if (!lastSkillChoice.selfSupport)
-            {
-                returnToPanelButton[1].SetActive(true);
-            }
-        }
-        if (state == BattleState.CHAR3TURN)
-        {
-            DeactivateDropsUI();
-            DeactivateChar3MenuButtons();
-            if (!lastSkillChoice.selfSupport)
-            {
-                returnToPanelButton[2].SetActive(true);
-            }
-        }
-    }
-
-    public void DeactivateSkillTargetButtons()
+    /*public void DeactivateSkillTargetButtons()
     {
         if (lastSkillChoice != null)
         {
@@ -4259,7 +4206,7 @@ public class BattleSystem : MonoBehaviour
                 }
             }
         }
-    }
+    }*/
     public void ActivateAllyTargetSprite(int index)
     {
         if (index == 0)
@@ -4316,14 +4263,66 @@ public class BattleSystem : MonoBehaviour
         inBattleMenu = false;
         DeactivateTargetButtons();
         DeactivateBattleItems();
-        DeactivateSkillTargetButtons();
-        physicalAttack = false;
-        dropAttack = false;
-        skillPhysicalAttack = false;
-        skillRangedAttack = false;
-        skillTargetSupport = false;
-        skillSelfSupport = false;
-        usingItem = false;
+
+        if (state == BattleState.CHAR1TURN)
+        {
+            char1PhysicalAttack = false;
+            char1DropSupport = false;
+            char1DropAttack = false;
+            char1UsingItem = false;
+            char1TargetingEnemy = false;
+            char1TargetingTeam = false;
+            char1SkillPhysicalAttack = false;
+            char1SkillRangedAttack = false;
+            char1SkillSelfSupport = false;
+            char1SkillTargetSupport = false;
+            char1SkillAttack = false;
+            char1Attacking = false;
+            char1Supporting = false;
+            char1Switching = false;
+            //char1DropChoice = null;
+            //char1SkillChoice = null;
+        }
+
+        if (state == BattleState.CHAR2TURN)
+        {
+            char2PhysicalAttack = false;
+            char2DropSupport = false;
+            char2DropAttack = false;
+            char2UsingItem = false;
+            char2TargetingEnemy = false;
+            char2TargetingTeam = false;
+            char2SkillPhysicalAttack = false;
+            char2SkillRangedAttack = false;
+            char2SkillSelfSupport = false;
+            char2SkillTargetSupport = false;
+            char2SkillAttack = false;
+            char2Attacking = false;
+            char2Supporting = false;
+            char2Switching = false;
+            //char2DropChoice = null;
+            //char2SkillChoice = null;
+        }
+
+        if (state == BattleState.CHAR3TURN)
+        {
+            char3PhysicalAttack = false;
+            char3DropSupport = false;
+            char3DropAttack = false;
+            char3UsingItem = false;
+            char3TargetingEnemy = false;
+            char3TargetingTeam = false;
+            char3SkillPhysicalAttack = false;
+            char3SkillRangedAttack = false;
+            char3SkillSelfSupport = false;
+            char3SkillTargetSupport = false;
+            char3SkillAttack = false;
+            char3Attacking = false;
+            char3Supporting = false;
+            char3Switching = false;
+            //char3DropChoice = null;
+            //char3SkillChoice = null;
+        }
 
         if (char1ATB >= 100)
         {
@@ -4569,36 +4568,12 @@ public class BattleSystem : MonoBehaviour
 
     public void ActivateCharSkillsUI()
     {
-        int index = 0;
-
-        if (state == BattleState.CHAR1TURN)
+        for (int i = 0; i < skillButtons.Length; i++)
         {
-            index = 0;
-        }
-        if (state == BattleState.CHAR2TURN)
-        {
-            index = 1;
-        }
-        if (state == BattleState.CHAR3TURN)
-        {
-            index = 2;
-        }
-
-        if (Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Character>().characterName == "Grieve")
-        {
-            Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Grieve>().ActivateGrieveSkillsUI();
-        }
-        if (Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Character>().characterName == "Mac")
-        {
-            Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Mac>().ActivateMacSkillsUI();
-        }
-        if (Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Character>().characterName == "Field")
-        {
-            Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Field>().ActivateFieldSkillsUI();
-        }
-        if (Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Character>().characterName == "Riggs")
-        {
-            Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Riggs>().ActivateRiggsSkillsUI();
+            if (skillButtons[i].GetComponent<BattleSkillsUIHolder>().skill != null)
+            {
+                skillButtons[i].GetComponent<BattleSkillsUIHolder>().SetSkillText();
+            }
         }
     }
 
@@ -4626,36 +4601,12 @@ public class BattleSystem : MonoBehaviour
 
     public void ActivateCharDropsUI()
     {
-        int index = 0;
-
-        if (state == BattleState.CHAR1TURN)
+        for (int i = 0; i < dropsButtons.Length; i++)
         {
-            index = 0;
-        }
-        if (state == BattleState.CHAR2TURN)
-        {
-            index = 1;
-        }
-        if (state == BattleState.CHAR3TURN)
-        {
-            index = 2;
-        }
-
-        if (Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Character>().characterName == "Grieve")
-        {
-            Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Grieve>().ActivateGrieveDropsUI();
-        }
-        if (Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Character>().characterName == "Mac")
-        {
-            Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Mac>().ActivateMacDropsUI();
-        }
-        if (Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Character>().characterName == "Field")
-        {
-            Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Field>().ActivateFieldDropsUI();
-        }
-        if (Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Character>().characterName == "Riggs")
-        {
-            Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Riggs>().ActivateRiggsDropsUI();
+            if (dropsButtons[i].GetComponent<BattleDropsUIHolder>().drop != null)
+            {
+                dropsButtons[i].GetComponent<BattleDropsUIHolder>().SetDropText();
+            }
         }
     }
 
@@ -4688,49 +4639,41 @@ public class BattleSystem : MonoBehaviour
         }
 
 
-        //  if (dropChoice.dropType == "Fire" && Engine.e.activeParty.activeParty[index].GetComponent<Character>().fireDrops[dropChoice.dropIndex] != null
-        //   || dropChoice.dropType == "Ice" && Engine.e.activeParty.activeParty[index].GetComponent<Character>().iceDrops[dropChoice.dropIndex] != null
-        //   || dropChoice.dropType == "Lightning" && Engine.e.activeParty.activeParty[index].GetComponent<Character>().lightningDrops[dropChoice.dropIndex] != null
-        //   || dropChoice.dropType == "Water" && Engine.e.activeParty.activeParty[index].GetComponent<Character>().waterDrops[dropChoice.dropIndex] != null
-        //   || dropChoice.dropType == "Shadow" && Engine.e.activeParty.activeParty[index].GetComponent<Character>().shadowDrops[dropChoice.dropIndex] != null
-        //   || dropChoice.dropType == "Holy" && Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops[dropChoice.dropIndex] != null)
+        if (Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana >= dropChoice.dropCost)
         {
-            //  if (state != BattleState.ENEMY1TURN && state != BattleState.ENEMY2TURN
-            //   && state != BattleState.ENEMY3TURN && state != BattleState.ENEMY4TURN)
-            // {
-            if (Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana >= dropChoice.dropCost)
+            lastDropChoice = dropChoice;
+            Engine.e.battleSystem.enemyPanel.SetActive(true);
+
+            Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Character>().UseDrop(dropChoice);
+            if (index == 0)
             {
-                Engine.e.battleSystem.enemyPanel.SetActive(true);
-
-                lastDropChoice = dropChoice;
-                Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Character>().UseDrop(dropChoice);
-
-                if (index == 0)
-                {
-                    DeactivateChar1MenuButtons();
-                }
-                if (index == 1)
-                {
-                    DeactivateChar2MenuButtons();
-                }
-                if (index == 2)
-                {
-                    DeactivateChar3MenuButtons();
-                }
-                DeactivateDropsUI();
-
+                char1DropChoice = dropChoice;
+                DeactivateChar1MenuButtons();
             }
-            // }
-
-            else
+            if (index == 1)
             {
-                return;
+                char2DropChoice = dropChoice;
+                DeactivateChar2MenuButtons();
             }
+            if (index == 2)
+            {
+                char3DropChoice = dropChoice;
+                DeactivateChar3MenuButtons();
+            }
+            DeactivateDropsUI();
+
         }
+        // }
+
+        else
+        {
+            return;
+        }
+
     }
 
 
-    public void SkillChoice(int tier)
+    public void SkillChoice(Skills skillChoice)
     {
         int index = 0;
 
@@ -4748,56 +4691,38 @@ public class BattleSystem : MonoBehaviour
         }
 
 
-        if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().skills[tier] != null)
+        if (Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Character>().currentEnergy >= skillChoice.skillCost)
         {
-            if (state != BattleState.ENEMY1TURN && state != BattleState.ENEMY2TURN
-            && state != BattleState.ENEMY3TURN && state != BattleState.ENEMY4TURN)
+            lastSkillChoice = skillChoice;
 
+            Engine.e.battleSystem.enemyPanel.SetActive(true);
+
+            Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Character>().UseSkill(skillChoice);
+
+            if (index == 0)
             {
-                if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().currentEnergy >= Engine.e.gameSkills[tier].skillCost)
-                {
-
-                    lastSkillChoice = Engine.e.gameSkills[tier];
-                    skillTierChoice = tier;
-
-                    if (index == 0)
-                    {
-                        DeactivateChar1MenuButtons();
-                        char1SkillChoice = lastSkillChoice;
-                    }
-                    if (index == 1)
-                    {
-                        DeactivateChar2MenuButtons();
-                        char2SkillChoice = lastSkillChoice;
-
-                    }
-                    if (index == 2)
-                    {
-                        DeactivateChar3MenuButtons();
-                        char3SkillChoice = lastSkillChoice;
-
-                    }
-
-
-                    DeactivateDropsUI();
-                    DeactivateSkillsUI();
-                    ActivateSkillTargetButtons();
-
-                }
-                else
-                    return;
-
+                char1SkillChoice = skillChoice;
+                DeactivateChar1MenuButtons();
             }
-            else
+            if (index == 1)
             {
-                return;
-
+                char2SkillChoice = skillChoice;
+                DeactivateChar2MenuButtons();
             }
+            if (index == 2)
+            {
+                char3SkillChoice = skillChoice;
+                DeactivateChar3MenuButtons();
+            }
+
+            DeactivateSkillsUI();
+
         }
         else
         {
             return;
         }
+
     }
 
     // For non-ATB battlesystem
@@ -5621,20 +5546,41 @@ public class BattleSystem : MonoBehaviour
             if (currentInQueue == BattleState.CHAR1TURN || currentInQueue == BattleState.CONFCHAR1)
             {
                 index = 0;
-                characterAttacking = Engine.e.activeParty.gameObject;
 
-                char1Attacking = false;
-                char1ConfusedReady = false;
-                char1DropAttack = false;
                 char1PhysicalAttack = false;
-                char1Ready = false;
-                char1SkillAttack = false;
+                char1DropSupport = false;
+                char1DropAttack = false;
+                char1UsingItem = false;
+                char1TargetingEnemy = false;
+                char1TargetingTeam = false;
                 char1SkillPhysicalAttack = false;
                 char1SkillRangedAttack = false;
+                char1SkillSelfSupport = false;
+                char1SkillTargetSupport = false;
+                char1SkillAttack = false;
+                char1Attacking = false;
                 char1Supporting = false;
-                char1UsingItem = false;
+                char1Ready = false;
+                char1ConfusedReady = false;
                 char1Switching = false;
+
+                char1ItemToBeUsed = null;
+
                 confuseAttack = false;
+
+                physicalAttack = false;
+                dropAttack = false;
+                dropSupport = false;
+                skillPhysicalAttack = false;
+                skillRangedAttack = false;
+                skillSelfSupport = false;
+                skillTargetSupport = false;
+                charUsingSkill = false;
+
+                targetingTeam = false;
+                targetingEnemy = false;
+                //char1DropChoice = null;
+                //char1SkillChoice = null;
 
                 char1ATB = 0;
                 char1ATBGuage.value = char1ATB;
@@ -5643,21 +5589,37 @@ public class BattleSystem : MonoBehaviour
             if (currentInQueue == BattleState.CHAR2TURN || currentInQueue == BattleState.CONFCHAR2)
             {
                 index = 1;
-                characterAttacking = Engine.e.activePartyMember2.gameObject;
 
-                char2Attacking = false;
-                char2ConfusedReady = false;
-                char2DropAttack = false;
                 char2PhysicalAttack = false;
-                char2Ready = false;
-                char2SkillAttack = false;
+                char2DropSupport = false;
+                char2DropAttack = false;
+                char2UsingItem = false;
+                char2TargetingEnemy = false;
+                char2TargetingTeam = false;
                 char2SkillPhysicalAttack = false;
                 char2SkillRangedAttack = false;
+                char2SkillSelfSupport = false;
+                char2SkillTargetSupport = false;
+                char2SkillAttack = false;
+                char2Attacking = false;
                 char2Supporting = false;
-                char2UsingItem = false;
+                char2Ready = false;
+                char2ConfusedReady = false;
                 char2Switching = false;
-                confuseAttack = false;
 
+                char2ItemToBeUsed = null;
+
+                physicalAttack = false;
+                dropAttack = false;
+                dropSupport = false;
+                skillPhysicalAttack = false;
+                skillRangedAttack = false;
+                skillSelfSupport = false;
+                skillTargetSupport = false;
+                charUsingSkill = false;
+
+                targetingTeam = false;
+                targetingEnemy = false;
                 char2ATB = 0;
                 char2ATBGuage.value = char1ATB;
             }
@@ -5665,20 +5627,37 @@ public class BattleSystem : MonoBehaviour
             if (currentInQueue == BattleState.CHAR3TURN || currentInQueue == BattleState.CONFCHAR3)
             {
                 index = 2;
-                characterAttacking = Engine.e.activePartyMember3.gameObject;
 
-                char3Attacking = false;
-                char3ConfusedReady = false;
-                char3DropAttack = false;
                 char3PhysicalAttack = false;
-                char3Ready = false;
-                char3SkillAttack = false;
+                char3DropSupport = false;
+                char3DropAttack = false;
+                char3UsingItem = false;
+                char3TargetingEnemy = false;
+                char3TargetingTeam = false;
                 char3SkillPhysicalAttack = false;
                 char3SkillRangedAttack = false;
+                char3SkillSelfSupport = false;
+                char3SkillTargetSupport = false;
+                char3SkillAttack = false;
+                char3Attacking = false;
                 char3Supporting = false;
-                char3UsingItem = false;
+                char3Ready = false;
+                char3ConfusedReady = false;
                 char3Switching = false;
-                confuseAttack = false;
+
+                char3ItemToBeUsed = null;
+
+                physicalAttack = false;
+                dropAttack = false;
+                dropSupport = false;
+                skillPhysicalAttack = false;
+                skillRangedAttack = false;
+                skillSelfSupport = false;
+                skillTargetSupport = false;
+                charUsingSkill = false;
+
+                targetingTeam = false;
+                targetingEnemy = false;
 
                 char3ATB = 0;
                 char3ATBGuage.value = char3ATB;
@@ -5949,7 +5928,7 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (activeParty.activeParty[2] != null)
                     {
-                        if (char2Ready && char3Ready)
+                        if (char2Ready)
                         {
                             DeactivateSkillsUI();
                             DeactivateDropsUI();
@@ -5957,7 +5936,7 @@ public class BattleSystem : MonoBehaviour
                         }
                         else
                         {
-                            if (!char2Ready && char3Ready)
+                            if (char3Ready)
                             {
                                 DeactivateSkillsUI();
                                 DeactivateDropsUI();
@@ -5977,7 +5956,6 @@ public class BattleSystem : MonoBehaviour
                 }
                 else
                 {
-
                     if (state == BattleState.CHAR2TURN)
                     {
                         if (activeParty.activeParty[2] != null)
@@ -5999,7 +5977,7 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (state == BattleState.CHAR3TURN)
                     {
-                        if (char2Ready && char1Ready)
+                        if (char2Ready)
                         {
                             DeactivateSkillsUI();
                             DeactivateDropsUI();
@@ -6007,7 +5985,7 @@ public class BattleSystem : MonoBehaviour
                         }
                         else
                         {
-                            if (!char2Ready && char1Ready)
+                            if (char1Ready)
                             {
                                 DeactivateSkillsUI();
                                 DeactivateDropsUI();
@@ -6017,20 +5995,21 @@ public class BattleSystem : MonoBehaviour
                     }
                     else
                     {
-                        if (char1Ready)
+                        if (state == BattleState.CHAR2TURN)
                         {
-                            DeactivateSkillsUI();
-                            DeactivateDropsUI();
-                            Char1Turn();
+                            if (char1Ready)
+                            {
+                                DeactivateSkillsUI();
+                                DeactivateDropsUI();
+                                Char1Turn();
+                            }
                         }
                     }
                 }
                 else
                 {
-
                     if (state == BattleState.CHAR2TURN)
                     {
-
                         if (char1Ready)
                         {
                             DeactivateSkillsUI();
@@ -6064,7 +6043,6 @@ public class BattleSystem : MonoBehaviour
         DeactivateSkillsUI();
         DeactivateBattleItems();
         DeactivateSupportButtons();
-        DeactivateSkillTargetButtons();
         DeactivateTargetButtons();
 
     }
@@ -6145,7 +6123,7 @@ public class BattleSystem : MonoBehaviour
 
         if (Engine.e.battleModeActive)
         {
-            if (isDead)
+            if (isDead && state != BattleState.LEVELUPCHECK && state != BattleState.LEVELUP && state != BattleState.WON && state != BattleState.LOST)
             {
                 DeactivateTargetSprite();
                 DeactivateChar1MenuButtons();
@@ -6159,16 +6137,24 @@ public class BattleSystem : MonoBehaviour
                     DeactivateChar3MenuButtons();
                 }
 
-                if (!dropExists && !charMoving)
+
+                if (activeParty.activeParty[2] != null)
                 {
-
-                    isDead = false;
-
-
-                    if (activeParty.activeParty[2] != null)
+                    if (activeParty.activeParty[0].GetComponent<Character>().currentHealth <= 0 && activeParty.activeParty[1].GetComponent<Character>().currentHealth <= 0
+                    && activeParty.activeParty[2].GetComponent<Character>().currentHealth <= 0)
                     {
-                        if (activeParty.activeParty[0].GetComponent<Character>().currentHealth <= 0 && activeParty.activeParty[1].GetComponent<Character>().currentHealth <= 0
-                        && activeParty.activeParty[2].GetComponent<Character>().currentHealth <= 0)
+                        state = BattleState.LOST;
+                    }
+                    else
+                    {
+                        state = BattleState.LEVELUPCHECK;
+                    }
+                }
+                else
+                {
+                    if (activeParty.activeParty[1] != null)
+                    {
+                        if (activeParty.activeParty[0].GetComponent<Character>().currentHealth <= 0 && activeParty.activeParty[1].GetComponent<Character>().currentHealth <= 0)
                         {
                             state = BattleState.LOST;
                         }
@@ -6179,40 +6165,27 @@ public class BattleSystem : MonoBehaviour
                     }
                     else
                     {
-                        if (activeParty.activeParty[1] != null)
+                        if (activeParty.activeParty[0].GetComponent<Character>().currentHealth <= 0)
                         {
-                            if (activeParty.activeParty[0].GetComponent<Character>().currentHealth <= 0 && activeParty.activeParty[1].GetComponent<Character>().currentHealth <= 0)
-                            {
-                                state = BattleState.LOST;
-                            }
-                            else
-                            {
-                                state = BattleState.LEVELUPCHECK;
-                            }
+                            state = BattleState.LOST;
                         }
                         else
                         {
-                            if (activeParty.activeParty[0].GetComponent<Character>().currentHealth <= 0)
-                            {
-                                state = BattleState.LOST;
-                            }
-                            else
-                            {
-                                state = BattleState.LEVELUPCHECK;
+                            state = BattleState.LEVELUPCHECK;
 
-                            }
                         }
                     }
-
-                    if (state == BattleState.LEVELUPCHECK)
-                    {
-                        StartCoroutine(LevelUpCheck());
-                    }
-                    if (state == BattleState.LOST)
-                    {
-                        StartCoroutine(EndBattle());
-                    }
                 }
+
+                if (state == BattleState.LEVELUPCHECK)
+                {
+                    StartCoroutine(LevelUpCheck());
+                }
+                if (state == BattleState.LOST)
+                {
+                    StartCoroutine(EndBattle());
+                }
+
             }
         }
 
@@ -6752,11 +6725,7 @@ public class BattleSystem : MonoBehaviour
             }
             else
             {
-
                 HandleQueue();
-
-
-
             }
         }
 

@@ -19,7 +19,7 @@ public class DropMovement : MonoBehaviour
         {
             teamAttack = true;
             teamTarget = Engine.e.battleSystem.char1TargetingTeam;
-            target = Engine.e.battleSystem.char1AttackTarget;
+            target = Engine.e.battleSystem.char1Target;
             currentGO = Engine.e.activeParty.activeParty[0].gameObject;
 
             if (!teamTarget)
@@ -47,7 +47,7 @@ public class DropMovement : MonoBehaviour
         {
             teamAttack = true;
             teamTarget = Engine.e.battleSystem.char2TargetingTeam;
-            target = Engine.e.battleSystem.char2AttackTarget;
+            target = Engine.e.battleSystem.char2Target;
             currentGO = Engine.e.activeParty.activeParty[1].gameObject;
 
             if (!teamTarget)
@@ -74,7 +74,7 @@ public class DropMovement : MonoBehaviour
         {
             teamAttack = true;
             teamTarget = Engine.e.battleSystem.char3TargetingTeam;
-            target = Engine.e.battleSystem.char3AttackTarget;
+            target = Engine.e.battleSystem.char3Target;
             currentGO = Engine.e.activeParty.activeParty[2].gameObject;
 
             if (!teamTarget)
@@ -353,7 +353,7 @@ public class DropMovement : MonoBehaviour
                         }
                         if (Engine.e.battleSystem.lastDropChoice.dropType == "Water")
                         {
-                            if (targetGO.GetComponent<Enemy>().waterDefense > 100 || targetGO.GetComponent<Character>().waterDefense > 100)
+                            if (Engine.e.battleSystem.enemies[target].GetComponent<Enemy>().waterDefense > 100)
                             {
                                 dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = string.Empty;
                                 float dmgTotal = (Engine.e.battleSystem.damageTotal * -1);

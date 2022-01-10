@@ -67,56 +67,56 @@ public class BattleMenuControllerNav : MonoBehaviour
 
     }
 
-    public void OpenSkillTarget()
-    {
-        if (Engine.e.battleSystem.lastSkillChoice.dps)
-        {
-            if (Engine.e.battleSystem.enemies[0].GetComponent<Enemy>().health > 0)
-            {
-                EventSystem.current.SetSelectedGameObject(null);
-                EventSystem.current.SetSelectedGameObject(battleSkillAttackFirstEnemy);
-            }
-            else
-            {
-                if (Engine.e.battleSystem.enemies[1] != null)
-                {
-                    if (Engine.e.battleSystem.enemies[1].GetComponent<Enemy>().health > 0)
-                    {
-                        EventSystem.current.SetSelectedGameObject(null);
-                        EventSystem.current.SetSelectedGameObject(battleSkillAttackFirstEnemy);
-                    }
-                }
-                else
-                {
-                    if (Engine.e.battleSystem.enemies[2] != null)
-                    {
-                        if (Engine.e.battleSystem.enemies[2].GetComponent<Enemy>().health > 0)
-                        {
-                            EventSystem.current.SetSelectedGameObject(null);
-                            EventSystem.current.SetSelectedGameObject(battleSkillAttackFirstEnemy);
-                        }
-                    }
-                    else
-                    {
-                        if (Engine.e.battleSystem.enemies[3] != null)
-                        {
-                            if (Engine.e.battleSystem.enemies[3].GetComponent<Enemy>().health > 0)
-                            {
-                                EventSystem.current.SetSelectedGameObject(null);
-                                EventSystem.current.SetSelectedGameObject(battleSkillAttackFirstEnemy);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        else
-        {
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(battleSkillAlly1Target);
-        }
-    }
-
+    /* public void OpenSkillTarget()
+     {
+         if (Engine.e.battleSystem.lastSkillChoice.dps)
+         {
+             if (Engine.e.battleSystem.enemies[0].GetComponent<Enemy>().health > 0)
+             {
+                 EventSystem.current.SetSelectedGameObject(null);
+                 EventSystem.current.SetSelectedGameObject(battleSkillAttackFirstEnemy);
+             }
+             else
+             {
+                 if (Engine.e.battleSystem.enemies[1] != null)
+                 {
+                     if (Engine.e.battleSystem.enemies[1].GetComponent<Enemy>().health > 0)
+                     {
+                         EventSystem.current.SetSelectedGameObject(null);
+                         EventSystem.current.SetSelectedGameObject(battleSkillAttackFirstEnemy);
+                     }
+                 }
+                 else
+                 {
+                     if (Engine.e.battleSystem.enemies[2] != null)
+                     {
+                         if (Engine.e.battleSystem.enemies[2].GetComponent<Enemy>().health > 0)
+                         {
+                             EventSystem.current.SetSelectedGameObject(null);
+                             EventSystem.current.SetSelectedGameObject(battleSkillAttackFirstEnemy);
+                         }
+                     }
+                     else
+                     {
+                         if (Engine.e.battleSystem.enemies[3] != null)
+                         {
+                             if (Engine.e.battleSystem.enemies[3].GetComponent<Enemy>().health > 0)
+                             {
+                                 EventSystem.current.SetSelectedGameObject(null);
+                                 EventSystem.current.SetSelectedGameObject(battleSkillAttackFirstEnemy);
+                             }
+                         }
+                     }
+                 }
+             }
+         }
+         else
+         {
+             EventSystem.current.SetSelectedGameObject(null);
+             EventSystem.current.SetSelectedGameObject(battleSkillAlly1Target);
+         }
+     }
+ */
     public void OpenDropSupportTarget()
     {
 

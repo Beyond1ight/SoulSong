@@ -346,13 +346,16 @@ public class InventorySlot : MonoBehaviour
             {
                 if (Engine.e.partyInventoryReference.inventoryScreenSet)
                 {
-                    if (item.itemType == "Item" || item.itemType == "Drop")
+                    if (item.useableOutOfBattle)
                     {
-                        item.UseItemCheck();
-                    }
-                    else
-                    {
-                        return;
+                        if (item.itemType == "Item" || item.itemType == "Drop")
+                        {
+                            item.UseItemCheck();
+                        }
+                        else
+                        {
+                            return;
+                        }
                     }
                 }
                 else

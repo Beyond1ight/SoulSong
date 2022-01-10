@@ -17,7 +17,6 @@ public class AbilityStatNode : MonoBehaviour
 
     public void OnClickEvent()
     {
-        Debug.Log("Testing Unlock...");
         bool connectionCheck = false;
 
         if (Engine.e.gridReference.grieveScreen)
@@ -46,7 +45,7 @@ public class AbilityStatNode : MonoBehaviour
                         {
                             if (!Engine.e.party[0].GetComponent<Character>().KnowsSkill(node.skill))
                             {
-                                Engine.e.party[0].GetComponent<Character>().skills[node.skill.index] = node.skill;
+                                Engine.e.party[0].GetComponent<Character>().skills[node.skill.skillIndex] = node.skill;
                             }
                         }
 
@@ -83,14 +82,7 @@ public class AbilityStatNode : MonoBehaviour
 
         if (Engine.e.gridReference.macScreen)
         {
-            macUnlocked = true;
-            for (int i = 0; i < connectionLines.Length; i++)
-            {
-                if (connectionLines[i] != null && connectionLines[i].GetComponent<SpriteShapeRenderer>().color != Color.blue)
-                {
-                    connectionLines[i].GetComponent<SpriteShapeRenderer>().color = Color.blue;
-                }
-            }
+
             Engine.e.gridReference.macPosition = nodeIndex;
 
             if (node != null)
@@ -117,7 +109,7 @@ public class AbilityStatNode : MonoBehaviour
                         {
                             if (!Engine.e.party[1].GetComponent<Character>().KnowsSkill(node.skill))
                             {
-                                Engine.e.party[1].GetComponent<Character>().skills[node.skill.index] = node.skill;
+                                Engine.e.party[1].GetComponent<Character>().skills[node.skill.skillIndex] = node.skill;
                             }
                         }
 
@@ -179,7 +171,7 @@ public class AbilityStatNode : MonoBehaviour
                         {
                             if (!Engine.e.party[2].GetComponent<Character>().KnowsSkill(node.skill))
                             {
-                                Engine.e.party[2].GetComponent<Character>().skills[node.skill.index] = node.skill;
+                                Engine.e.party[2].GetComponent<Character>().skills[node.skill.skillIndex] = node.skill;
                             }
                         }
 
@@ -195,7 +187,7 @@ public class AbilityStatNode : MonoBehaviour
                         {
                             if (connectionLines[i] != null)
                             {
-                                connectionLines[i].GetComponent<SpriteShapeRenderer>().color = Color.white;
+                                connectionLines[i].GetComponent<SpriteShapeRenderer>().color = Color.green;
                             }
                         }
                         Engine.e.gridReference.fieldPosition = nodeIndex;
@@ -238,7 +230,7 @@ public class AbilityStatNode : MonoBehaviour
                             {
                                 if (!Engine.e.party[3].GetComponent<Character>().KnowsSkill(node.skill))
                                 {
-                                    Engine.e.party[3].GetComponent<Character>().skills[node.skill.index] = node.skill;
+                                    Engine.e.party[3].GetComponent<Character>().skills[node.skill.skillIndex] = node.skill;
                                 }
                             }
 
@@ -254,7 +246,7 @@ public class AbilityStatNode : MonoBehaviour
                             {
                                 if (connectionLines[i] != null)
                                 {
-                                    connectionLines[i].GetComponent<SpriteShapeRenderer>().color = Color.white;
+                                    connectionLines[i].GetComponent<SpriteShapeRenderer>().color = Color.yellow;
                                 }
                             }
                             Engine.e.gridReference.riggsPosition = nodeIndex;

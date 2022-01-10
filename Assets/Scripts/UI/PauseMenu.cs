@@ -8,28 +8,24 @@ public class PauseMenu : MonoBehaviour
 {
     public bool isPaused = false;
     public GameObject pauseMenuUI;
-    public TextMeshProUGUI textReference;
-    public bool mainMenu;
     public bool atPauseMenu;
     public TextMeshProUGUI[] activePartyMembersText;
-    public TextMeshProUGUI pauseMenuTextReference;
     public TextMeshProUGUI[] partyPauseMenuNamesTextReference;
-    public TextMeshProUGUI[] partyPauseMenuHPStatsTextReference, partyPauseMenuMPStatsTextReference, partyPauseMenuENRStatsTextReference, itemMenuPartyStatsHPTextReference, partyPauseMenuAPStatsTextReference;
-    public GameObject[] pauseMenuButtons;
+    public TextMeshProUGUI[] partyPauseMenuHPStatsTextReference, partyPauseMenuMPStatsTextReference, partyPauseMenuENRStatsTextReference, partyPauseMenuAPStatsTextReference;
     public GameObject grieveWeaponFirstButton, grieveWeaponSelection, macWeaponFirstButton, macWeaponSelection, fieldWeaponFirstButton, fieldWeaponSelection, riggsWeaponFirstButton, riggsWeaponSelection;
     public TextMeshProUGUI partyMoneyDisplay;
     public TextMeshProUGUI timeOfDayDisplay;
     public TextMeshProUGUI partyLocationDisplay;
-    public GameObject pauseMenu, equipMenu, inventoryMenu, mainMenuScreen, dropsMenu, itemMenu, abilitiesMenu, adventureLogMenu, fileMenu;
-    public GameObject chestArmorSelection, chestArmorFirstButton;
+    public GameObject pauseMenu, equipMenu, mainMenuScreen, abilitiesMenu, adventureLogMenu, fileMenu;
 
     // Controller Support UI
     // Menu(s) First Choice
-    public GameObject pauseFirstButton, equipFirstButton, mainMenuFirstButton, inventoryFirstButton, itemInventoryFirstButton, dropsInventoryFirstButton, abilitiesFirstButton, abilityScreenSkillsFirstButton;
+    public GameObject pauseFirstButton, equipFirstButton, mainMenuFirstButton;
     public GameObject arrangeIndex1Grieve,
     arrangeIndex2Grieve, arrangeIndex2Mac,
     arrangeIndex3Grieve, arrangeIndex3Mac, arrangeIndex3Field;
-    public GameObject equipWeaponFirst, equipChestArmorFirst, equipChestArmorCharFirst;
+    public GameObject[] gridCharSelect;
+    public GameObject equipWeaponFirst, equipChestArmorCharFirst;
     public bool shoppingArmor = false, shoppingWeapons = false, shoppingDrops = false, shoppingItems = false;
     public TextMeshProUGUI battleModeReference;
 
@@ -42,8 +38,6 @@ public class PauseMenu : MonoBehaviour
     }
     void Update()
     {
-
-
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown("joystick button 3"))
         {
             if (Engine.e.inBattle == false)
@@ -315,16 +309,35 @@ public class PauseMenu : MonoBehaviour
         Engine.e.adventureLogReference.OpenAdventureLogMenu();
     }
 
-    public void OpenGridMenu()
+    public void OpenGridMenuCharSelect()
     {
-        //Engine.e.abilityScreenReference.DisplayCharSelection();
+        for (int i = 0; i < Engine.e.party.Length; i++)
+        {
+            if (Engine.e.party[i] != null)
+            {
+                gridCharSelect[i].SetActive(true);
+            }
+        }
+
+        EventSystem.current.SetSelectedGameObject(null);
+
+        EventSystem.current.SetSelectedGameObject(gridCharSelect[0].gameObject);
+    }
+
+    public void OpenGridMenuGrieve()
+    {
+        for (int i = 0; i < gridCharSelect.Length; i++)
+        {
+            gridCharSelect[i].SetActive(false);
+        }
+
         abilitiesMenu.SetActive(true);
+        Engine.e.gridReference.SetGrieveScreen();
+        //Engine.e.abilityScreenReference.DisplayCharSelection();
         Engine.e.canvasReference.SetActive(false);
         Engine.e.gridReference.gridDisplayed = true;
-        Engine.e.gridReference.SetMacScreen();
         //Engine.e.abilityScreenReference.GetComponent<AbilitiesDisplay>().SetSkills();
         // Engine.e.abilityScreenReference.GetComponent<AbilitiesDisplay>().SetDrops();
-        Engine.e.gridReference.GetComponent<Grid>().DisplayAP();
 
         EventSystem.current.SetSelectedGameObject(null);
 
@@ -333,6 +346,85 @@ public class PauseMenu : MonoBehaviour
         atPauseMenu = false;
     }
 
+    public void OpenGridMenuMac()
+    {
+        for (int i = 0; i < gridCharSelect.Length; i++)
+        {
+            gridCharSelect[i].SetActive(false);
+        }
+
+        Engine.e.gridReference.SetMacScreen();
+
+        abilitiesMenu.SetActive(true);
+        Engine.e.canvasReference.SetActive(false);
+        Engine.e.gridReference.gridDisplayed = true;
+
+        EventSystem.current.SetSelectedGameObject(null);
+
+        EventSystem.current.SetSelectedGameObject(Engine.e.gridReference.cursor);
+        Time.timeScale = 1f;
+        atPauseMenu = false;
+    }
+
+    public void OpenGridMenuField()
+    {
+        for (int i = 0; i < gridCharSelect.Length; i++)
+        {
+            gridCharSelect[i].SetActive(false);
+        }
+
+        Engine.e.gridReference.SetFieldScreen();
+
+        abilitiesMenu.SetActive(true);
+        Engine.e.canvasReference.SetActive(false);
+        Engine.e.gridReference.gridDisplayed = true;
+
+        EventSystem.current.SetSelectedGameObject(null);
+
+        EventSystem.current.SetSelectedGameObject(Engine.e.gridReference.cursor);
+        Time.timeScale = 1f;
+        atPauseMenu = false;
+    }
+
+    public void OpenGridMenuRiggs()
+    {
+        for (int i = 0; i < gridCharSelect.Length; i++)
+        {
+            gridCharSelect[i].SetActive(false);
+        }
+
+        Engine.e.gridReference.SetRiggsScreen();
+
+        abilitiesMenu.SetActive(true);
+        Engine.e.canvasReference.SetActive(false);
+        Engine.e.gridReference.gridDisplayed = true;
+
+        EventSystem.current.SetSelectedGameObject(null);
+
+        EventSystem.current.SetSelectedGameObject(Engine.e.gridReference.cursor);
+        Time.timeScale = 1f;
+        atPauseMenu = false;
+    }
+
+    public void OpenGridMenuSolace()
+    {
+        for (int i = 0; i < gridCharSelect.Length; i++)
+        {
+            gridCharSelect[i].SetActive(false);
+        }
+
+        //Engine.e.gridReference.SetSolaceScreen();
+
+        abilitiesMenu.SetActive(true);
+        Engine.e.canvasReference.SetActive(false);
+        Engine.e.gridReference.gridDisplayed = true;
+
+        EventSystem.current.SetSelectedGameObject(null);
+
+        EventSystem.current.SetSelectedGameObject(Engine.e.gridReference.cursor);
+        Time.timeScale = 1f;
+        atPauseMenu = false;
+    }
     public void OpenGrieveWeaponSelection()
     {
         grieveWeaponSelection.SetActive(true);

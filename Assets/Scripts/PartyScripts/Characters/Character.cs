@@ -41,8 +41,9 @@ public class Character : MonoBehaviour
     public float deathDefense;
 
 
-    // Drops
+    // Drops & Skills
     public Drops[] drops;
+    public Skills[] skills;
 
     public float dropCostReduction = 0f;
     public float skillCostReduction = 0f;
@@ -73,9 +74,6 @@ public class Character : MonoBehaviour
     public bool canUseLightningDrops = false;
     public bool canUseShadowDrops = false;
 
-
-    // Skills
-    public Skills[] skills;
     public float spellPower;
     public float skillPower;
     public Drops lastDropChoice;
@@ -102,14 +100,138 @@ public class Character : MonoBehaviour
 
     public void UseDrop(Drops dropChoice)
     {
+        if (Engine.e.inBattle)
+        {
+            if (Engine.e.battleSystem.state == BattleState.CHAR1TURN)
+            {
+                if (dropChoice.dps)
+                {
+                    Engine.e.battleSystem.char1DropAttack = true;
+                    Engine.e.battleSystem.char1Attacking = true;
+                }
+                else
+                {
+                    Engine.e.battleSystem.char1DropSupport = true;
+                    Engine.e.battleSystem.char1Supporting = true;
+                }
+            }
 
-        lastDropChoice = dropChoice;
+            if (Engine.e.battleSystem.state == BattleState.CHAR2TURN)
+            {
+                if (dropChoice.dps)
+                {
+                    Engine.e.battleSystem.char2DropAttack = true;
+                    Engine.e.battleSystem.char2Attacking = true;
+                }
+                else
+                {
+                    Engine.e.battleSystem.char2DropSupport = true;
+                    Engine.e.battleSystem.char2Supporting = true;
+                }
+            }
 
+            if (Engine.e.battleSystem.state == BattleState.CHAR3TURN)
+            {
+                if (dropChoice.dps)
+                {
+                    Engine.e.battleSystem.char3DropAttack = true;
+                    Engine.e.battleSystem.char3Attacking = true;
+                }
+                else
+                {
+                    Engine.e.battleSystem.char3DropSupport = true;
+                    Engine.e.battleSystem.char3Supporting = true;
+                }
+            }
 
-        Engine.e.battleSystem.dropAttack = true;
-        Engine.e.battleSystem.ActivateTargetButtons();
+            Engine.e.battleSystem.ActivateTargetButtons();
+        }
+    }
 
+    public void UseSkill(Skills skillChoice)
+    {
+        if (Engine.e.inBattle)
+        {
+            if (Engine.e.battleSystem.state == BattleState.CHAR1TURN)
+            {
+                if (skillChoice.physicalDps)
+                {
+                    Engine.e.battleSystem.char1SkillPhysicalAttack = true;
+                    Engine.e.battleSystem.char1SkillAttack = true;
+                    Engine.e.battleSystem.char1Attacking = true;
+                }
+                if (skillChoice.rangedDps)
+                {
+                    Engine.e.battleSystem.char1SkillRangedAttack = true;
+                    Engine.e.battleSystem.char1SkillAttack = true;
+                    Engine.e.battleSystem.char1Attacking = true;
+                }
+                if (skillChoice.selfSupport)
+                {
+                    Engine.e.battleSystem.char1SkillSelfSupport = true;
+                    Engine.e.battleSystem.char1Supporting = true;
+                }
+                if (skillChoice.targetSupport)
+                {
+                    Engine.e.battleSystem.char1SkillTargetSupport = true;
+                    Engine.e.battleSystem.char1Supporting = true;
+                }
+            }
 
+            if (Engine.e.battleSystem.state == BattleState.CHAR2TURN)
+            {
+                if (skillChoice.physicalDps)
+                {
+                    Engine.e.battleSystem.char2SkillPhysicalAttack = true;
+                    Engine.e.battleSystem.char2SkillAttack = true;
+                    Engine.e.battleSystem.char2Attacking = true;
+                }
+                if (skillChoice.rangedDps)
+                {
+                    Engine.e.battleSystem.char2SkillRangedAttack = true;
+                    Engine.e.battleSystem.char2SkillAttack = true;
+                    Engine.e.battleSystem.char2Attacking = true;
+                }
+                if (skillChoice.selfSupport)
+                {
+                    Engine.e.battleSystem.char2SkillSelfSupport = true;
+                    Engine.e.battleSystem.char2Supporting = true;
+                }
+                if (skillChoice.targetSupport)
+                {
+                    Engine.e.battleSystem.char2SkillTargetSupport = true;
+                    Engine.e.battleSystem.char2Supporting = true;
+                }
+            }
+
+            if (Engine.e.battleSystem.state == BattleState.CHAR3TURN)
+            {
+                if (skillChoice.physicalDps)
+                {
+                    Engine.e.battleSystem.char3SkillPhysicalAttack = true;
+                    Engine.e.battleSystem.char3SkillAttack = true;
+                    Engine.e.battleSystem.char3Attacking = true;
+                }
+                if (skillChoice.rangedDps)
+                {
+                    Engine.e.battleSystem.char3SkillRangedAttack = true;
+                    Engine.e.battleSystem.char3SkillAttack = true;
+                    Engine.e.battleSystem.char3Attacking = true;
+                }
+                if (skillChoice.selfSupport)
+                {
+                    Engine.e.battleSystem.char3SkillSelfSupport = true;
+                    Engine.e.battleSystem.char3Supporting = true;
+                }
+                if (skillChoice.targetSupport)
+                {
+                    Engine.e.battleSystem.char3SkillTargetSupport = true;
+                    Engine.e.battleSystem.char3Supporting = true;
+                }
+            }
+
+            Engine.e.battleSystem.ActivateTargetButtons();
+        }
     }
 
     public void Revive(float healPower, int target)
@@ -122,62 +244,6 @@ public class Character : MonoBehaviour
             if (Engine.e.activeParty.activeParty[target].GetComponent<Character>().currentHealth > Engine.e.activeParty.activeParty[target].GetComponent<Character>().maxHealth)
             {
                 Engine.e.activeParty.activeParty[target].GetComponent<Character>().currentHealth = Engine.e.activeParty.activeParty[target].GetComponent<Character>().maxHealth;
-            }
-        }
-    }
-
-    public void Repent(int target)
-    {
-        if (holyDropsLevel >= 20)
-        {
-            if (Engine.e.activeParty.activeParty[target].GetComponent<Character>().isPoisoned)
-            {
-                Engine.e.activeParty.activeParty[target].GetComponent<Character>().isPoisoned = false;
-            }
-            if (Engine.e.activeParty.activeParty[target].GetComponent<Character>().isAsleep)
-            {
-                Engine.e.activeParty.activeParty[target].GetComponent<Character>().isAsleep = false;
-            }
-            if (Engine.e.activeParty.activeParty[target].GetComponent<Character>().isConfused)
-            {
-                Engine.e.activeParty.activeParty[target].GetComponent<Character>().isConfused = false;
-            }
-            if (Engine.e.activeParty.activeParty[target].GetComponent<Character>().deathInflicted)
-            {
-                Engine.e.activeParty.activeParty[target].GetComponent<Character>().RemoveDeath();
-            }
-            Engine.e.activeParty.activeParty[target].GetComponent<SpriteRenderer>().color = Color.white;
-
-        }
-        else
-        {
-            if (holyDropsLevel >= 10 && holyDropsLevel < 20)
-            {
-                if (Engine.e.activeParty.activeParty[target].GetComponent<Character>().isPoisoned)
-                {
-                    Engine.e.activeParty.activeParty[target].GetComponent<Character>().isPoisoned = false;
-                    Engine.e.activeParty.activeParty[target].GetComponent<SpriteRenderer>().color = Color.white;
-
-                }
-                if (Engine.e.activeParty.activeParty[target].GetComponent<Character>().isAsleep)
-                {
-                    Engine.e.activeParty.activeParty[target].GetComponent<Character>().isAsleep = false;
-                    Engine.e.activeParty.activeParty[target].GetComponent<SpriteRenderer>().color = Color.white;
-
-                }
-
-            }
-            else
-            {
-                if (holyDropsLevel < 10)
-                {
-                    if (Engine.e.activeParty.activeParty[target].GetComponent<Character>().isAsleep)
-                    {
-                        Engine.e.activeParty.activeParty[target].GetComponent<Character>().isAsleep = false;
-                        Engine.e.activeParty.activeParty[target].GetComponent<SpriteRenderer>().color = Color.white;
-
-                    }
-                }
             }
         }
     }
@@ -352,5 +418,10 @@ public class Character : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public void TeachDrop(Drops _drop)
+    {
+        drops[_drop.dropIndex] = _drop;
     }
 }

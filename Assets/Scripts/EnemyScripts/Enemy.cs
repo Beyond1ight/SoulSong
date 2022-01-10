@@ -594,71 +594,47 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void UseItem()
+    public void UseItem(Item item)
     {
         bool failedItemUse = false;
 
-        if (Engine.e.inBattle)
+        if (item.numberHeld == 0)
         {
-            if (battleSystem.currentInQueue == BattleState.CHAR1TURN)
-            {
-                Engine.e.itemToBeUsed = battleSystem.char1ItemToBeUsed;
-            }
-            if (battleSystem.currentInQueue == BattleState.CHAR2TURN)
-            {
-                Engine.e.itemToBeUsed = battleSystem.char2ItemToBeUsed;
-            }
-            if (battleSystem.currentInQueue == BattleState.CHAR3TURN)
-            {
-                Engine.e.itemToBeUsed = battleSystem.char3ItemToBeUsed;
-            }
-
-            if (Engine.e.itemToBeUsed.numberHeld == 0)
-            {
-                failedItemUse = true;
-            }
+            failedItemUse = true;
         }
 
-        switch (Engine.e.itemToBeUsed.itemName)
+
+        switch (item.itemName)
         {
             case "Health Potion":
 
                 if (health == maxHealth || health == 0)
                 {
-                    if (Engine.e.inBattle)
-                    {
-                        failedItemUse = true;
-                        Engine.e.partyInventoryReference.OpenInventoryMenu();
-                        break;
-                    }
-                    else
-                        break;
+                    failedItemUse = true;
+                    break;
                 }
                 else
                 {
                     if (!failedItemUse)
                     {
-                        if (Engine.e.inBattle)
+
+                        GameObject healthSprite = Instantiate(Engine.e.gameInventory[item.itemIndex].GetComponent<Item>().anim, transform.position, Quaternion.identity);
+                        GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, transform.position, Quaternion.identity);
+                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = item.itemPower.ToString();
+                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
+                        Destroy(dmgPopup, 1f);
+                        Destroy(healthSprite, 1f);
+
+
+                        health += item.itemPower;
+
+                        if (health > maxHealth)
                         {
-
-                            GameObject healthSprite = Instantiate(Engine.e.gameInventory[Engine.e.itemToBeUsed.itemIndex].GetComponent<Item>().anim, transform.position, Quaternion.identity);
-                            GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, transform.position, Quaternion.identity);
-                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = Engine.e.itemToBeUsed.itemPower.ToString();
-                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
-                            Destroy(dmgPopup, 1f);
-                            Destroy(healthSprite, 1f);
-
-
-                            health += Engine.e.itemToBeUsed.itemPower;
-
-                            if (health > maxHealth)
-                            {
-                                health = maxHealth;
-                            }
-
-                            Engine.e.partyInventoryReference.SubtractItemFromInventory(Engine.e.itemToBeUsed);
-                            break;
+                            health = maxHealth;
                         }
+
+                        Engine.e.partyInventoryReference.SubtractItemFromInventory(item);
+                        break;
                     }
                     break;
                 }
@@ -667,30 +643,27 @@ public class Enemy : MonoBehaviour
 
                 if (mana == maxMana)
                 {
-                    if (Engine.e.inBattle)
-                    {
-                        failedItemUse = true;
-                        Engine.e.partyInventoryReference.OpenInventoryMenu();
 
-                        break;
-                    }
+                    failedItemUse = true;
                     break;
-                }
 
-                if (!failedItemUse)
+                }
+                else
                 {
-                    if (Engine.e.inBattle)
+
+                    if (!failedItemUse)
                     {
 
-                        GameObject manaSprite = Instantiate(Engine.e.gameInventory[Engine.e.itemToBeUsed.itemIndex].GetComponent<Item>().anim, transform.position, Quaternion.identity);
+
+                        GameObject manaSprite = Instantiate(Engine.e.gameInventory[item.itemIndex].GetComponent<Item>().anim, transform.position, Quaternion.identity);
                         GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, transform.position, Quaternion.identity);
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = Engine.e.itemToBeUsed.itemPower.ToString();
+                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = item.itemPower.ToString();
                         dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 54, 255, 255);
                         Destroy(dmgPopup, 1f);
                         Destroy(manaSprite, 1f);
 
 
-                        mana += Engine.e.itemToBeUsed.itemPower;
+                        mana += item.itemPower;
 
                         if (mana > maxMana)
                         {
@@ -698,12 +671,13 @@ public class Enemy : MonoBehaviour
                         }
 
 
-                        Engine.e.partyInventoryReference.SubtractItemFromInventory(Engine.e.itemToBeUsed);
+                        Engine.e.partyInventoryReference.SubtractItemFromInventory(item);
                         break;
 
                     }
+                    break;
                 }
-                break;
+
             case "Ashes":
                 // Zombie status effect instant kill?
                 break;
@@ -712,49 +686,43 @@ public class Enemy : MonoBehaviour
 
                 if (!isPoisoned)
                 {
-                    if (Engine.e.inBattle)
-                    {
-                        failedItemUse = true;
-                        Engine.e.partyInventoryReference.OpenInventoryMenu();
 
-                        break;
+                    failedItemUse = true;
+                    Engine.e.partyInventoryReference.OpenInventoryMenu();
 
-                    }
-                    else
-                        break;
+                    break;
                 }
 
                 if (!failedItemUse)
                 {
-                    if (Engine.e.inBattle)
+
+
+
+                    if (poisonDefense > 100)
                     {
+                        health -= 100;
 
-                        Engine.e.activeParty.GetComponent<SpriteRenderer>().color = Color.white;
-
-                        if (poisonDefense > 100)
+                        if (health < 0)
                         {
-                            health -= 100;
+                            health = 0;
 
-                            if (health < 0)
-                            {
-                                health = 0;
-
-                                Engine.e.battleSystem.CheckIsDeadEnemy();
-                            }
-
+                            Engine.e.battleSystem.CheckIsDeadEnemy();
                         }
-                        else
-                        {
-                            GameObject antidote = Instantiate(Engine.e.gameInventory[Engine.e.itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                            GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activeParty.transform.position, Quaternion.identity);
-                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Cured";
-                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
-                            Destroy(dmgPopup, 1f);
-                            Destroy(antidote, 1f);
-                            isPoisoned = false;
-                            inflicted = false;
-                        }
+
                     }
+                    else
+                    {
+                        GetComponent<SpriteRenderer>().color = Color.white;
+                        GameObject antidote = Instantiate(Engine.e.gameInventory[item.itemIndex].GetComponent<Item>().anim, Engine.e.activeParty.transform.position, Quaternion.identity);
+                        GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activeParty.transform.position, Quaternion.identity);
+                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Cured";
+                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
+                        Destroy(dmgPopup, 1f);
+                        Destroy(antidote, 1f);
+                        isPoisoned = false;
+                        inflicted = false;
+                    }
+
 
                     break;
 

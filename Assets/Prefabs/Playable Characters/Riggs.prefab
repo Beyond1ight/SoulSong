@@ -96,22 +96,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: Riggs
-  maxHealth: 200
-  currentHealth: 200
-  maxMana: 50
-  currentMana: 50
-  maxEnergy: 20
-  currentEnergy: 20
+  maxHealth: 177
+  currentHealth: 177
+  maxMana: 52
+  currentMana: 52
+  maxEnergy: 24
+  currentEnergy: 24
   healthCapped: 1
   manaCapped: 1
   energyCapped: 1
   haste: 15
   experiencePoints: 0
   levelUpReq: 100
-  lvl: 5
+  lvl: 2
   baseDamage: 20
-  physicalDamage: 20
-  isInParty: 0
+  physicalDamage: 13
+  isInParty: 1
   isInActiveParty: 0
   isLeader: 0
   canUseMagic: 1
@@ -162,6 +162,37 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  skills:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 5d841bb340d9e4141b22095059732c3a, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   dropCostReduction: 0
   skillCostReduction: 0
   fireDropsLevel: 1
@@ -198,37 +229,6 @@ MonoBehaviour:
   canUseWaterDrops: 0
   canUseLightningDrops: 0
   canUseShadowDrops: 1
-  skills:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 11400000, guid: 5d841bb340d9e4141b22095059732c3a, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   spellPower: 0
   skillPower: 0
   lastDropChoice: {fileID: 11400000, guid: 877fa2c092b4e40128e3db11707ac684, type: 2}

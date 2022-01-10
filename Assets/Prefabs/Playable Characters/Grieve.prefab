@@ -172,11 +172,42 @@ MonoBehaviour:
   confuseDefense: 1
   deathDefense: 0
   drops:
-  - {fileID: 11400000, guid: 6aaf764512c964247a1ab6f74e0e27b7, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 11400000, guid: 1227ecefb6f5e4a1c9a406e55a2cc35d, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 8c550a8dffde3433db125665c63f91f8, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  skills:
+  - {fileID: 11400000, guid: 6e5821a29f25149f19782eeed785f6d3, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -219,7 +250,7 @@ MonoBehaviour:
   waterDropsLvlReq: 50
   waterPhysicalAttackBonus: 0
   waterDropAttackBonus: 0
-  lightningDropsLevel: 1
+  lightningDropsLevel: 5
   lightningDropsExperience: 0
   lightningDropsLvlReq: 50
   lightningPhysicalAttackBonus: 0
@@ -238,41 +269,10 @@ MonoBehaviour:
   canUseWaterDrops: 1
   canUseLightningDrops: 1
   canUseShadowDrops: 1
-  skills:
-  - {fileID: 11400000, guid: 6e5821a29f25149f19782eeed785f6d3, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   spellPower: 0
   skillPower: 0
-  lastDropChoice: {fileID: 11400000, guid: f7911b3b316a64289b089119b0194868, type: 2}
-  lastSkillChoice: {fileID: 0}
+  lastDropChoice: {fileID: 11400000, guid: 8c550a8dffde3433db125665c63f91f8, type: 2}
+  lastSkillChoice: {fileID: 11400000, guid: 6e5821a29f25149f19782eeed785f6d3, type: 2}
   skillScale: 1
   stealChance: 60
   hitChance: 99

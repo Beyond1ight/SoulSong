@@ -175,6 +175,11 @@ public class PartyInventory : MonoBehaviour
             }
 
         }
+        if (Engine.e.inBattle)
+        {
+            if (item.itemType == "Item")
+                AddStolenItemToBattleInventory(item);
+        }
     }
 
     public void AddItemsToBattleInventory()
@@ -192,15 +197,52 @@ public class PartyInventory : MonoBehaviour
         }
     }
 
-    public void ConfirmDropCheck(int index)
+    public void AddStolenItemToBattleInventory(Item _item)
     {
-        Engine.e.characterBeingTargeted = index;
+        for (int i = 0; i < Engine.e.battleSystem.battleItems.Length; i++)
+        {
+            if (Engine.e.battleSystem.battleItems[i].item == _item)
+            {
+                if (Engine.e.battleSystem.battleItems[i].item.numberHeld < 99)
+                {
+                    Engine.e.battleSystem.battleItems[i].item.numberHeld++;
+                    Engine.e.battleSystem.battleItems[i].UpdateHeld();
+                    break;
+                }
+                else
+                {
+                    Engine.e.battleSystem.battleHelpReference.text = "Carrying too many " + _item.itemName + "'s!";
+                    break;
+                }
+            }
+            else
+            {
+                if (Engine.e.battleSystem.battleItems[i].item == null)
+                {
+                    Engine.e.battleSystem.battleItems[i].AddItem(_item);
+                    break;
+                }
+            }
+        }
+    }
+
+    public void ReturnToInventory()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(itemInventorySlots[inventoryPointerIndex].gameObject);
+        }
+    }
+
+    public void ConfirmDropCheck()
+    {
         confirmDropCheck.SetActive(true);
 
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(confirmDropYesButton);
 
-        Engine.e.helpText.text = "Teach " + Engine.e.playableCharacters[index].GetComponent<Character>().characterName + " " + Engine.e.itemToBeUsed.itemName + "?";
+        Engine.e.helpText.text = "Teach " + Engine.e.playableCharacters[Engine.e.characterBeingTargeted].GetComponent<Character>().characterName + " " + Engine.e.itemToBeUsed.itemName + "?";
     }
 
     public void DismissDropConfirm()

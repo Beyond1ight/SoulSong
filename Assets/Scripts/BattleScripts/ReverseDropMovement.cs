@@ -17,16 +17,16 @@ public class ReverseDropMovement : MonoBehaviour
 
         if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR1TURN)
         {
-            enemyTarget = Engine.e.battleSystem.char1AttackTarget;
+            enemyTarget = Engine.e.battleSystem.char1Target;
         }
         if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR2TURN)
         {
-            enemyTarget = Engine.e.battleSystem.char2AttackTarget;
+            enemyTarget = Engine.e.battleSystem.char2Target;
 
         }
         if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR3TURN)
         {
-            enemyTarget = Engine.e.battleSystem.char3AttackTarget;
+            enemyTarget = Engine.e.battleSystem.char3Target;
 
         }
 
