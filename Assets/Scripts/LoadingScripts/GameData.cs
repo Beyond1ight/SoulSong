@@ -35,7 +35,7 @@ public class GameData
 
 
 
-    public string[,] charDrops;
+    public string[,] charDrops, charSkills;
 
 
     public float[] charFireDropLevel, charWaterDropLevel, charLightningDropLevel, charShadowDropLevel, charIceDropLevel, charHolyDropLevel;
@@ -139,6 +139,8 @@ public class GameData
         charHaste = new float[gameManager.party.Length];
 
         charDrops = new string[Engine.e.party.Length, Engine.e.gameDrops.Length];
+        charSkills = new string[Engine.e.party.Length, Engine.e.gameSkills.Length];
+
         /*charFireDrops = new string[gameManager.party.Length, gameManager.fireDrops.Length];
         charHolyDrops = new string[gameManager.party.Length, gameManager.holyDrops.Length];
         charWaterDrops = new string[gameManager.party.Length, gameManager.waterDrops.Length];
@@ -227,6 +229,17 @@ public class GameData
                         if (Engine.e.party[i].GetComponent<Character>().drops[f] = Engine.e.gameDrops[f])
                         {
                             charDrops[i, f] = Engine.e.gameDrops[f].dropName;
+                        }
+                    }
+                }
+
+                for (int f = 0; f < Engine.e.party[i].GetComponent<Character>().skills.Length; f++)
+                {
+                    if (Engine.e.party[i].GetComponent<Character>().skills[f] != null)
+                    {
+                        if (Engine.e.party[i].GetComponent<Character>().skills[f] = Engine.e.gameSkills[f])
+                        {
+                            charSkills[i, f] = Engine.e.gameSkills[f].skillName;
                         }
                     }
                 }

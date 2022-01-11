@@ -158,6 +158,7 @@ MonoBehaviour:
   waterDefense: 2
   lightningDefense: 2
   shadowDefense: 1
+  holyDefense: 0
   poisonDefense: 1
   sleepDefense: 1
   confuseDefense: 1
@@ -254,6 +255,8 @@ MonoBehaviour:
   holyDropsLevel: 1
   holyDropsExperience: 0
   holyDropsLvlReq: 50
+  holyPhysicalAttackBonus: 0
+  holyDropAttackBonus: 0
   canUseFireDrops: 0
   canUseIceDrops: 0
   canUseHolyDrops: 0

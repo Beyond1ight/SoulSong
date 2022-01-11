@@ -46,7 +46,7 @@ public class BattleSystem : MonoBehaviour
     public Item char1ItemToBeUsed, char2ItemToBeUsed, char3ItemToBeUsed;
     public bool isDead;
     public float enemyGroupExperiencePoints;
-    public bool dropExists = false;
+    public bool animExists = false;
     public bool enemyMoving = false, charMoving = false;
     public Vector3 leaderPos, activeParty2Pos, activeParty3Pos;
     public GameObject[] availableChar1Buttons, availableChar2Buttons, availableChar3Buttons;
@@ -110,7 +110,6 @@ public class BattleSystem : MonoBehaviour
     public bool battleSwitchButtons = false;
     public bool dontDisplayDmgPopup = false;
     public BattleHUD hud;
-    bool battleFinished = false;
     int currentMoveIndex;
     int enemyDropChoice;
     public GameObject damagePopup, levelUpPopup, deathTimerPopup;
@@ -157,7 +156,6 @@ public class BattleSystem : MonoBehaviour
         settingTarget = false;
         targetingTeam = false;
         targetingEnemy = false;
-        battleFinished = false;
 
         char1ATB += 80;
         char2ATB = 0;
@@ -167,6 +165,8 @@ public class BattleSystem : MonoBehaviour
         enemy3ATB = 0;
         enemy4ATB = 0;
 
+        lastDropChoice = null;
+        lastSkillChoice = null;
         // enemyTargetButtons[0].transform.position = enemies[0].transform.position;
 
         for (int i = 0; i < activeParty.activeParty.Length; i++)
@@ -999,9 +999,7 @@ public class BattleSystem : MonoBehaviour
                 enemies[_target].gameObject.GetComponent<Enemy>().TakeDropDamage(_target, dropChoice);
                 activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana -= Mathf.Round(dropChoice.dropCost
                 - (dropChoice.dropCost * activeParty.activeParty[index].GetComponent<Character>().dropCostReduction / 100) + 0.45f);
-                activeParty.activeParty[index].gameObject.GetComponent<Character>().ResetDropChoice();
                 dropAttack = false;
-                hud.displayMana[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana.ToString();
 
                 if (enemies[_target].gameObject.GetComponent<Enemy>().health <= 0)
                 {
@@ -1559,7 +1557,7 @@ public class BattleSystem : MonoBehaviour
     IEnumerator CharDropAttack()
     {
 
-        if (!dropExists)
+        if (!animExists)
         {
             charAttackDrop = false;
             // currentInQueue = nextInQueue;
@@ -1580,7 +1578,7 @@ public class BattleSystem : MonoBehaviour
                 //state = currentState;
             }
         }
-        if (!dropExists && !charAttackDrop)
+        if (!animExists && !charAttackDrop)
         {
 
             EndTurn();
@@ -1697,7 +1695,7 @@ public class BattleSystem : MonoBehaviour
         Debug.Log("entered CharConfuseAttack");
 
         int choiceAttack = Random.Range(0, 100);
-
+        Debug.Log(choiceAttack);
         if (choiceAttack < 70)
         {
             charMoving = true;
@@ -1750,9 +1748,8 @@ public class BattleSystem : MonoBehaviour
                 confuseAttack = false;
                 Debug.Log("Cost: " + lastDropChoice.dropCost);
 
-                activeParty.activeParty[index].GetComponent<Character>().currentMana = Mathf.Round(activeParty.activeParty[index].GetComponent<Character>().GetDropChoice().dropCost
-            - (activeParty.activeParty[index].GetComponent<Character>().GetDropChoice().dropCost * activeParty.activeParty[index].GetComponent<Character>().dropCostReduction / 100) + 0.45f);
-                activeParty.activeParty[index].GetComponent<Character>().ResetDropChoice();
+                activeParty.activeParty[index].GetComponent<Character>().currentMana -= Mathf.Round(lastDropChoice.dropCost
+            - (lastDropChoice.dropCost * activeParty.activeParty[index].GetComponent<Character>().dropCostReduction / 100) + 0.45f);
 
                 confuseAttack = false;
             }
@@ -1855,149 +1852,168 @@ public class BattleSystem : MonoBehaviour
 
             }
 
-            if (activeParty.activeParty[index].GetComponent<Character>().currentMana >= _dropChoice.dropCost)
+            if (targetingTeam)
             {
+                if (activeParty.activeParty[index].GetComponent<Character>().currentMana >= _dropChoice.dropCost)
                 {
-
-                    switch (_dropChoice.dropName)
                     {
-                        case "Holy Light":
-                            if (activeParty.activeParty[_target].GetComponent<Character>().currentHealth > 0)
-                            {
-                                Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                                activeParty.activeParty[index].GetComponent<Character>().currentMana -= _dropChoice.dropCost;
 
-                            }
-                            else
-                            {
-                                //  yield return this;
-                            }
-                            break;
-
-                        case "Raise":
-                            if (activeParty.activeParty[_target].GetComponent<Character>().currentHealth <= 0)
-                            {
-                                Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                                activeParty.activeParty[index].GetComponent<Character>().Revive(_dropChoice.dropPower, _target);
-                                activeParty.activeParty[index].GetComponent<Character>().currentMana -= _dropChoice.dropCost;
-
-                            }
-                            else
-                            {
-
-                                if (index == 0)
+                        switch (_dropChoice.dropName)
+                        {
+                            case "Holy Light":
+                                if (activeParty.activeParty[_target].GetComponent<Character>().currentHealth > 0)
                                 {
-                                    Char1Turn();
-                                }
-                                if (index == 1)
-                                {
-                                    Char2Turn();
-                                }
-                                if (index == 2)
-                                {
-                                    Char3Turn();
-                                }
-                            }
-
-                            break;
-
-                        case "Repent":
-
-                            Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
-
-                            if (activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel >= 20)
-                            {
-                                if (activeParty.activeParty[_target].GetComponent<Character>().isPoisoned)
-                                {
-                                    activeParty.activeParty[_target].GetComponent<Character>().isPoisoned = false;
-                                }
-                                if (activeParty.activeParty[_target].GetComponent<Character>().isAsleep)
-                                {
-                                    activeParty.activeParty[_target].GetComponent<Character>().isAsleep = false;
-                                }
-                                if (activeParty.activeParty[_target].GetComponent<Character>().isConfused)
-                                {
-                                    activeParty.activeParty[_target].GetComponent<Character>().isConfused = false;
-                                }
-                                if (activeParty.activeParty[_target].GetComponent<Character>().deathInflicted)
-                                {
-                                    activeParty.activeParty[_target].GetComponent<Character>().RemoveDeath();
-                                }
-                                activeParty.activeParty[_target].GetComponent<SpriteRenderer>().color = Color.white;
-
-                            }
-                            else
-                            {
-                                if (activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel >= 10
-                                && activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel < 20)
-                                {
-                                    if (activeParty.activeParty[_target].GetComponent<Character>().isPoisoned)
-                                    {
-                                        activeParty.activeParty[_target].GetComponent<Character>().isPoisoned = false;
-                                        activeParty.activeParty[_target].GetComponent<SpriteRenderer>().color = Color.white;
-
-                                    }
-                                    if (activeParty.activeParty[_target].GetComponent<Character>().isAsleep)
-                                    {
-                                        activeParty.activeParty[_target].GetComponent<Character>().isAsleep = false;
-                                        activeParty.activeParty[_target].GetComponent<SpriteRenderer>().color = Color.white;
-
-                                    }
+                                    Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
+                                    activeParty.activeParty[index].GetComponent<Character>().currentMana -= _dropChoice.dropCost;
 
                                 }
                                 else
                                 {
-                                    if (activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel < 10)
+                                    //  yield return this;
+                                }
+                                break;
+
+                            case "Raise":
+                                if (activeParty.activeParty[_target].GetComponent<Character>().currentHealth <= 0)
+                                {
+                                    Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
+                                    activeParty.activeParty[index].GetComponent<Character>().Revive(_dropChoice.dropPower, _target);
+                                    activeParty.activeParty[index].GetComponent<Character>().currentMana -= _dropChoice.dropCost;
+
+                                }
+                                else
+                                {
+
+                                    if (index == 0)
                                     {
+                                        Char1Turn();
+                                    }
+                                    if (index == 1)
+                                    {
+                                        Char2Turn();
+                                    }
+                                    if (index == 2)
+                                    {
+                                        Char3Turn();
+                                    }
+                                }
+
+                                break;
+
+                            case "Repent":
+
+                                Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
+
+                                if (activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel >= 20)
+                                {
+                                    if (activeParty.activeParty[_target].GetComponent<Character>().isPoisoned)
+                                    {
+                                        activeParty.activeParty[_target].GetComponent<Character>().isPoisoned = false;
+                                    }
+                                    if (activeParty.activeParty[_target].GetComponent<Character>().isAsleep)
+                                    {
+                                        activeParty.activeParty[_target].GetComponent<Character>().isAsleep = false;
+                                    }
+                                    if (activeParty.activeParty[_target].GetComponent<Character>().isConfused)
+                                    {
+                                        activeParty.activeParty[_target].GetComponent<Character>().isConfused = false;
+                                    }
+                                    if (activeParty.activeParty[_target].GetComponent<Character>().deathInflicted)
+                                    {
+                                        activeParty.activeParty[_target].GetComponent<Character>().RemoveDeath();
+                                    }
+                                    activeParty.activeParty[_target].GetComponent<SpriteRenderer>().color = Color.white;
+
+                                }
+                                else
+                                {
+                                    if (activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel >= 10
+                                    && activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel < 20)
+                                    {
+                                        if (activeParty.activeParty[_target].GetComponent<Character>().isPoisoned)
+                                        {
+                                            activeParty.activeParty[_target].GetComponent<Character>().isPoisoned = false;
+                                            activeParty.activeParty[_target].GetComponent<SpriteRenderer>().color = Color.white;
+
+                                        }
                                         if (activeParty.activeParty[_target].GetComponent<Character>().isAsleep)
                                         {
                                             activeParty.activeParty[_target].GetComponent<Character>().isAsleep = false;
                                             activeParty.activeParty[_target].GetComponent<SpriteRenderer>().color = Color.white;
 
                                         }
+
+                                    }
+                                    else
+                                    {
+                                        if (activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel < 10)
+                                        {
+                                            if (activeParty.activeParty[_target].GetComponent<Character>().isAsleep)
+                                            {
+                                                activeParty.activeParty[_target].GetComponent<Character>().isAsleep = false;
+                                                activeParty.activeParty[_target].GetComponent<SpriteRenderer>().color = Color.white;
+
+                                            }
+                                        }
                                     }
                                 }
-                            }
 
-                            activeParty.activeParty[index].GetComponent<Character>().currentMana -= _dropChoice.dropCost;
+                                activeParty.activeParty[index].GetComponent<Character>().currentMana -= _dropChoice.dropCost;
 
-                            break;
+                                break;
 
-                        case "Soothing Rain":
+                            case "Soothing Rain":
 
-                            Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                            activeParty.activeParty[index].GetComponent<Character>().SoothingRain(_dropChoice.dropPower);
-                            activeParty.activeParty[index].GetComponent<Character>().currentMana -= _dropChoice.dropCost;
+                                Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
+                                activeParty.activeParty[index].GetComponent<Character>().SoothingRain(_dropChoice.dropPower);
+                                activeParty.activeParty[index].GetComponent<Character>().currentMana -= _dropChoice.dropCost;
 
 
-                            break;
-                    }
+                                break;
+                        }
 
-                    if (_dropChoice.dropType == "Holy")
-                    {
-
-                        if (activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel < 99)
+                        if (_dropChoice.dropType == "Holy")
                         {
-                            activeParty.activeParty[index].GetComponent<Character>().holyDropsExperience += _dropChoice.experiencePoints;
-                            // Level Up
-                            if (activeParty.activeParty[index].GetComponent<Character>().holyDropsExperience >= activeParty.activeParty[index].GetComponent<Character>().holyDropsLvlReq)
+
+                            if (activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel < 99)
                             {
-                                activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel += 1f;
-                                activeParty.activeParty[index].GetComponent<Character>().holyDropsExperience -= activeParty.activeParty[index].GetComponent<Character>().holyDropsLvlReq;
-                                activeParty.activeParty[index].GetComponent<Character>().holyDropsLvlReq = (activeParty.activeParty[index].GetComponent<Character>().holyDropsLvlReq * 3 / 2);
-                                GameObject levelUp = Instantiate(levelUpPopup, character.transform.position, Quaternion.identity);
-                                levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Holy Lvl Up (Lvl: " + activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel + ")";
-                                Destroy(levelUp, 2f);
+                                activeParty.activeParty[index].GetComponent<Character>().holyDropsExperience += _dropChoice.experiencePoints;
+                                // Level Up
+                                if (activeParty.activeParty[index].GetComponent<Character>().holyDropsExperience >= activeParty.activeParty[index].GetComponent<Character>().holyDropsLvlReq)
+                                {
+                                    activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel += 1f;
+                                    activeParty.activeParty[index].GetComponent<Character>().holyDropsExperience -= activeParty.activeParty[index].GetComponent<Character>().holyDropsLvlReq;
+                                    activeParty.activeParty[index].GetComponent<Character>().holyDropsLvlReq = (activeParty.activeParty[index].GetComponent<Character>().holyDropsLvlReq * 3 / 2);
+                                    GameObject levelUp = Instantiate(levelUpPopup, character.transform.position, Quaternion.identity);
+                                    levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Holy Lvl Up (Lvl: " + activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel + ")";
+                                    Destroy(levelUp, 2f);
+                                }
                             }
                         }
+
                     }
 
                 }
-
+                else
+                {
+                    Debug.Log("Exception Thrown");
+                }
             }
             else
             {
-                Debug.Log("Exception Thrown");
+                enemies[_target].TakeDropDamage(index, _dropChoice);
+
+                activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana -= Mathf.Round(_dropChoice.dropCost
+                - (_dropChoice.dropCost * activeParty.activeParty[index].GetComponent<Character>().dropCostReduction / 100) + 0.45f);
+                dropAttack = false;
+
+                if (enemies[_target].gameObject.GetComponent<Enemy>().health <= 0)
+                {
+                    enemies[_target].gameObject.GetComponent<Enemy>().health = 0;
+
+                    isDead = EnemyGroup.enemyGroup.CheckEndBattle();
+                    yield return new WaitForSeconds(0.1f);
+                }
             }
         }
 
@@ -2320,92 +2336,15 @@ public class BattleSystem : MonoBehaviour
 
         charRandomDropList = new List<Drops>();
 
-        if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().canUseFireDrops)
+        for (int i = 0; i < activeParty.activeParty[index].GetComponent<Character>().drops.Length; i++)
         {
-            //   for (int i = 0; i < Engine.e.activeParty.activeParty[index].GetComponent<Character>().fireDrops.Length; i++)
+            if (activeParty.activeParty[index].GetComponent<Character>().drops[i] != null)
             {
-                //       if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().fireDrops[i] != null)
-                {
-                    //        if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().currentMana >= Engine.e.activeParty.activeParty[index].GetComponent<Character>().fireDrops[i].dropCost)
-                    {
-                        //              charRandomDropList.Add(Engine.e.activeParty.activeParty[index].GetComponent<Character>().fireDrops[i]);
-                    }
-                }
+                charRandomDropList.Add(activeParty.activeParty[index].GetComponent<Character>().drops[i]);
             }
         }
 
-        if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().canUseIceDrops)
-        {
-            //    for (int i = 0; i < Engine.e.activeParty.activeParty[index].GetComponent<Character>().iceDrops.Length; i++)
-            {
-                //      if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().iceDrops[i] != null)
-                {
-                    //           if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().currentMana >= Engine.e.activeParty.activeParty[index].GetComponent<Character>().iceDrops[i].dropCost)
-                    {
-                        //                charRandomDropList.Add(Engine.e.activeParty.activeParty[index].GetComponent<Character>().iceDrops[i]);
-                    }
-                }
-            }
-        }
-
-        if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().canUseLightningDrops)
-        {
-            //    for (int i = 0; i < Engine.e.activeParty.activeParty[index].GetComponent<Character>().lightningDrops.Length; i++)
-            {
-                //        if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().lightningDrops[i] != null)
-                {
-                    //         if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().currentMana >= Engine.e.activeParty.activeParty[index].GetComponent<Character>().lightningDrops[i].dropCost)
-                    {
-                        //               charRandomDropList.Add(Engine.e.activeParty.activeParty[index].GetComponent<Character>().lightningDrops[i]);
-                    }
-                }
-            }
-        }
-
-        if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().canUseWaterDrops)
-        {
-            //     for (int i = 0; i < Engine.e.activeParty.activeParty[index].GetComponent<Character>().waterDrops.Length; i++)
-            {
-                //         if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().waterDrops[i] != null)
-                {
-                    //         if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().currentMana >= Engine.e.activeParty.activeParty[index].GetComponent<Character>().waterDrops[i].dropCost)
-                    {
-                        //                 charRandomDropList.Add(Engine.e.activeParty.activeParty[index].GetComponent<Character>().waterDrops[i]);
-                    }
-                }
-            }
-        }
-
-        if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().canUseShadowDrops)
-        {
-            //      for (int i = 0; i < Engine.e.activeParty.activeParty[index].GetComponent<Character>().shadowDrops.Length; i++)
-            {
-                //          if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().shadowDrops[i] != null && Engine.e.activeParty.activeParty[index].GetComponent<Character>().shadowDrops[i].dropName != "Death")
-                {
-                    //         if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().currentMana >= Engine.e.activeParty.activeParty[0].GetComponent<Character>().shadowDrops[i].dropCost)
-                    {
-                        //                   charRandomDropList.Add(Engine.e.activeParty.activeParty[index].GetComponent<Character>().shadowDrops[i]);
-                    }
-                }
-            }
-        }
-
-        if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().canUseHolyDrops)
-        {
-            //   for (int i = 0; i < Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops.Length; i++)
-            {
-                //        if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops[i] != null && Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops[i].dropName != "Raise"
-                //        && Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops[i].dropName != "Repent" && Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops[i].dropName != "Dispel")
-                {
-                    //           if (Engine.e.activeParty.activeParty[index].GetComponent<Character>().currentMana >= Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops[i].dropCost)
-                    {
-                        //               charRandomDropList.Add(Engine.e.activeParty.activeParty[index].GetComponent<Character>().holyDrops[i]);
-                    }
-                }
-            }
-        }
-
-        randomDropIndex = Random.Range(0, charRandomDropList.Count);
+        int randomDropIndex = Random.Range(0, charRandomDropList.Count);
 
         lastDropChoice = charRandomDropList[randomDropIndex];
     }
@@ -2725,7 +2664,7 @@ public class BattleSystem : MonoBehaviour
     IEnumerator EnemyDropAttack()
     {
 
-        if (!dropExists)
+        if (!animExists)
         {
             enemyAttackDrop = false;
             // currentInQueue = nextInQueue;
@@ -2737,7 +2676,7 @@ public class BattleSystem : MonoBehaviour
                 state = BattleState.ATBCHECK;
         }
 
-        if (!dropExists && !enemyAttackDrop)
+        if (!animExists && !enemyAttackDrop)
         {
             EndTurn();
             yield return new WaitForSeconds(0.3f);
@@ -6210,7 +6149,7 @@ public class BattleSystem : MonoBehaviour
 
         // if ()
 
-        if (!dropExists)
+        if (!animExists)
         {
             if (Engine.e.battleSystem.hud.displayHealth[0].text != Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentHealth.ToString())
             {
@@ -6247,7 +6186,7 @@ public class BattleSystem : MonoBehaviour
                 activeParty.activeParty[0].GetComponent<Character>().inflicted = true;
             }
 
-            if (activeParty.activeParty[0].GetComponent<SpriteRenderer>().color == Color.white && !dropExists)
+            if (activeParty.activeParty[0].GetComponent<SpriteRenderer>().color == Color.white && !animExists)
             {
                 activeParty.activeParty[0].GetComponent<SpriteRenderer>().color = Color.grey;
 
@@ -6261,7 +6200,7 @@ public class BattleSystem : MonoBehaviour
                 activeParty.activeParty[0].GetComponent<Character>().inflicted = true;
             }
 
-            if (activeParty.activeParty[0].GetComponent<SpriteRenderer>().color == Color.white && !dropExists)
+            if (activeParty.activeParty[0].GetComponent<SpriteRenderer>().color == Color.white && !animExists)
             {
                 activeParty.activeParty[0].GetComponent<SpriteRenderer>().color = Color.green;
             }
@@ -6277,7 +6216,7 @@ public class BattleSystem : MonoBehaviour
 
         if (activeParty.activeParty[1] != null)
         {
-            if (!dropExists)
+            if (!animExists)
             {
                 if (Engine.e.battleSystem.hud.displayHealth[1].text != Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentHealth.ToString())
                 {
@@ -6314,7 +6253,7 @@ public class BattleSystem : MonoBehaviour
                     activeParty.activeParty[1].GetComponent<Character>().inflicted = true;
                 }
 
-                if (activeParty.activeParty[1].GetComponent<SpriteRenderer>().color == Color.white && !dropExists)
+                if (activeParty.activeParty[1].GetComponent<SpriteRenderer>().color == Color.white && !animExists)
                 {
                     activeParty.activeParty[1].GetComponent<SpriteRenderer>().color = Color.grey;
                 }
@@ -6327,7 +6266,7 @@ public class BattleSystem : MonoBehaviour
                     activeParty.activeParty[1].GetComponent<Character>().inflicted = true;
                 }
 
-                if (activeParty.activeParty[1].GetComponent<SpriteRenderer>().color == Color.white && !dropExists)
+                if (activeParty.activeParty[1].GetComponent<SpriteRenderer>().color == Color.white && !animExists)
                 {
                     activeParty.activeParty[1].GetComponent<SpriteRenderer>().color = Color.green;
                 }
@@ -6345,7 +6284,7 @@ public class BattleSystem : MonoBehaviour
 
         if (activeParty.activeParty[2] != null)
         {
-            if (!dropExists)
+            if (!animExists)
             {
                 if (Engine.e.battleSystem.hud.displayHealth[2].text != Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth.ToString())
                 {
@@ -6381,7 +6320,7 @@ public class BattleSystem : MonoBehaviour
                     activeParty.activeParty[2].GetComponent<Character>().inflicted = true;
                 }
 
-                if (activeParty.activeParty[2].GetComponent<SpriteRenderer>().color == Color.white && !dropExists)
+                if (activeParty.activeParty[2].GetComponent<SpriteRenderer>().color == Color.white && !animExists)
                 {
                     activeParty.activeParty[2].GetComponent<SpriteRenderer>().color = Color.grey;
                 }
@@ -6394,7 +6333,7 @@ public class BattleSystem : MonoBehaviour
                     activeParty.activeParty[2].GetComponent<Character>().inflicted = true;
                 }
 
-                if (activeParty.activeParty[2].GetComponent<SpriteRenderer>().color == Color.white && !dropExists)
+                if (activeParty.activeParty[2].GetComponent<SpriteRenderer>().color == Color.white && !animExists)
                 {
                     activeParty.activeParty[2].GetComponent<SpriteRenderer>().color = Color.green;
                 }
@@ -6421,7 +6360,7 @@ public class BattleSystem : MonoBehaviour
             Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().color = activeParty.activeParty[2].GetComponent<SpriteRenderer>().color;
         }
 
-        if (!dropExists)
+        if (!animExists)
         {
             if (Engine.e.battleSystem.hud.displayEnemyHealth[0].text != enemies[0].GetComponent<Enemy>().health.ToString())
             {
@@ -6437,7 +6376,7 @@ public class BattleSystem : MonoBehaviour
                 enemies[0].GetComponent<Enemy>().inflicted = true;
             }
 
-            if (enemies[0].GetComponent<SpriteRenderer>().color == Color.white && !dropExists)
+            if (enemies[0].GetComponent<SpriteRenderer>().color == Color.white && !animExists)
             {
                 enemies[0].GetComponent<SpriteRenderer>().color = Color.grey;
             }
@@ -6450,7 +6389,7 @@ public class BattleSystem : MonoBehaviour
                 enemies[0].GetComponent<Enemy>().inflicted = true;
             }
 
-            if (enemies[0].GetComponent<SpriteRenderer>().color == Color.white && !dropExists)
+            if (enemies[0].GetComponent<SpriteRenderer>().color == Color.white && !animExists)
             {
                 enemies[0].GetComponent<SpriteRenderer>().color = Color.green;
             }
@@ -6466,7 +6405,7 @@ public class BattleSystem : MonoBehaviour
 
         if (enemies[1] != null)
         {
-            if (!dropExists)
+            if (!animExists)
             {
                 if (Engine.e.battleSystem.hud.displayEnemyHealth[1].text != enemies[1].GetComponent<Enemy>().health.ToString())
                 {
@@ -6482,7 +6421,7 @@ public class BattleSystem : MonoBehaviour
                     enemies[1].GetComponent<Enemy>().inflicted = true;
                 }
 
-                if (enemies[1].GetComponent<SpriteRenderer>().color == Color.white && !dropExists)
+                if (enemies[1].GetComponent<SpriteRenderer>().color == Color.white && !animExists)
                 {
                     enemies[1].GetComponent<SpriteRenderer>().color = Color.grey;
                 }
@@ -6495,7 +6434,7 @@ public class BattleSystem : MonoBehaviour
                     enemies[1].GetComponent<Enemy>().inflicted = true;
                 }
 
-                if (enemies[1].GetComponent<SpriteRenderer>().color == Color.white && !dropExists)
+                if (enemies[1].GetComponent<SpriteRenderer>().color == Color.white && !animExists)
                 {
                     enemies[1].GetComponent<SpriteRenderer>().color = Color.green;
                 }
@@ -6512,7 +6451,7 @@ public class BattleSystem : MonoBehaviour
 
         if (enemies[2] != null)
         {
-            if (!dropExists)
+            if (!animExists)
             {
                 if (Engine.e.battleSystem.hud.displayEnemyHealth[2].text != enemies[2].GetComponent<Enemy>().health.ToString())
                 {
@@ -6528,7 +6467,7 @@ public class BattleSystem : MonoBehaviour
                     enemies[2].GetComponent<Enemy>().inflicted = true;
                 }
 
-                if (enemies[2].GetComponent<SpriteRenderer>().color == Color.white && !dropExists)
+                if (enemies[2].GetComponent<SpriteRenderer>().color == Color.white && !animExists)
                 {
                     enemies[2].GetComponent<SpriteRenderer>().color = Color.grey;
                 }
@@ -6541,7 +6480,7 @@ public class BattleSystem : MonoBehaviour
                     enemies[2].GetComponent<Enemy>().inflicted = true;
                 }
 
-                if (enemies[2].GetComponent<SpriteRenderer>().color == Color.white && !dropExists)
+                if (enemies[2].GetComponent<SpriteRenderer>().color == Color.white && !animExists)
                 {
                     enemies[2].GetComponent<SpriteRenderer>().color = Color.green;
                 }
@@ -6558,7 +6497,7 @@ public class BattleSystem : MonoBehaviour
 
         if (enemies[3] != null)
         {
-            if (!dropExists)
+            if (!animExists)
             {
                 if (Engine.e.battleSystem.hud.displayEnemyHealth[3].text != enemies[3].GetComponent<Enemy>().health.ToString())
                 {
@@ -6574,7 +6513,7 @@ public class BattleSystem : MonoBehaviour
                     enemies[3].GetComponent<Enemy>().inflicted = true;
                 }
 
-                if (enemies[3].GetComponent<SpriteRenderer>().color == Color.white && !dropExists)
+                if (enemies[3].GetComponent<SpriteRenderer>().color == Color.white && !animExists)
                 {
                     enemies[3].GetComponent<SpriteRenderer>().color = Color.grey;
                 }
@@ -6587,7 +6526,7 @@ public class BattleSystem : MonoBehaviour
                     enemies[3].GetComponent<Enemy>().inflicted = true;
                 }
 
-                if (enemies[3].GetComponent<SpriteRenderer>().color == Color.white && !dropExists)
+                if (enemies[3].GetComponent<SpriteRenderer>().color == Color.white && !animExists)
                 {
                     enemies[3].GetComponent<SpriteRenderer>().color = Color.green;
                 }

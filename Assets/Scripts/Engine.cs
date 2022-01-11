@@ -80,6 +80,7 @@ public class Engine : MonoBehaviour
     public AdventureLog adventureLogReference;
     public EquipDisplay equipMenuReference;
     public FileMenu fileMenuReference;
+    public Status statusMenuReference;
     public BattleMenu battleMenu;
     public Grid gridReference;
     public GameObject mainMenu, battleSystemMenu;
@@ -109,9 +110,9 @@ public class Engine : MonoBehaviour
     {
         ClearGameInventoryHeld();
         ClearGameQuests();
-        SetParty();
         SetDropIndexes();
         SetSkillIndexes();
+        SetParty();
         gridReference.SetupGrid();
         //abilityScreenReference.ClearNodeUnlocked();
         //Cursor.lockState = CursorLockMode.Locked;
@@ -261,6 +262,7 @@ public class Engine : MonoBehaviour
         playableCharacters[0].drops = new Drops[gameDrops.Length];
 
         playableCharacters[0].drops[10] = gameDrops[10];
+        gameDrops[10].isKnown = true;
         //playableCharacters[0].drops[4] = gameDrops[4];
         /*playableCharacters[0].drops[5] = gameDrops[5];
         playableCharacters[0].drops[10] = gameDrops[10];
@@ -321,6 +323,7 @@ public class Engine : MonoBehaviour
         playableCharacters[0].skillScale = 1f;
         playableCharacters[0].availableSkillPoints = 0;
         playableCharacters[0].skills[0] = gameSkills[0];
+        gameSkills[0].isKnown = true;
 
         playableCharacters[0].stealChance = 60f;
 
@@ -641,7 +644,6 @@ public class Engine : MonoBehaviour
         playableCharacters[3].canUseIceDrops = false;
 
         playableCharacters[3].drops = new Drops[gameDrops.Length];
-        playableCharacters[3].drops[20] = gameDrops[20];
         playableCharacters[3].drops[25] = gameDrops[25];
 
 
@@ -735,6 +737,9 @@ public class Engine : MonoBehaviour
             {
                 activePartyMember2.GetComponent<SpriteRenderer>().sprite = party[1].GetComponent<SpriteRenderer>().sprite;
                 activePartyMember2.SetActive(true);
+                gameDrops[15].isKnown = true;
+                gameSkills[5].isKnown = true;
+
                 //         charAbilityButtons[1].SetActive(true);
                 //                charSkillTierButtons[1].SetActive(true);
 
@@ -759,6 +764,8 @@ public class Engine : MonoBehaviour
                 activeParty.activeParty[2] = party[2].GetComponent<Character>().gameObject;
                 //      charAbilityButtons[2].SetActive(true);
                 //     charSkillTierButtons[2].SetActive(true);
+                gameDrops[20].isKnown = true;
+                gameSkills[10].isKnown = true;
 
             }
             if (party[3] != null)
@@ -785,6 +792,8 @@ public class Engine : MonoBehaviour
                 playableCharacters[3].physicalDamage = Mathf.Round(strengthCurve.Evaluate(playableCharacters[3].lvl) + +(strengthCurve.Evaluate(playableCharacters[3].lvl) * (playableCharacters[3].strengthOffset / 100)));
                 //     charAbilityButtons[3].SetActive(true);
                 //     charSkillTierButtons[3].SetActive(true);
+                gameDrops[25].isKnown = true;
+                gameSkills[15].isKnown = true;
 
             }
         }
@@ -1678,6 +1687,8 @@ public class Engine : MonoBehaviour
 
 
                 party[i].GetComponent<Character>().drops = new Drops[gameDrops.Length];
+                party[i].GetComponent<Character>().skills = new Skills[gameSkills.Length];
+
                 //  party[i].GetComponent<Character>().holyDrops = new Drops[holyDrops.Length];
                 // party[i].GetComponent<Character>().waterDrops = new Drops[waterDrops.Length];
                 //  party[i].GetComponent<Character>().lightningDrops = new Drops[lightningDrops.Length];
@@ -1686,19 +1697,34 @@ public class Engine : MonoBehaviour
 
 
 
-                // Drops Drops
-                for (int drops = 0; drops < gameDrops.Length; drops++)
+                // Drops
+                for (int _drops = 0; _drops < gameDrops.Length; _drops++)
                 {
-                    if (gameData.charDrops[i, drops] != null)
+                    if (gameData.charDrops[i, _drops] != null)
                     {
-                        if (gameData.charDrops[i, drops] == gameDrops[drops].dropName)
+                        if (gameData.charDrops[i, _drops] == gameDrops[_drops].dropName)
                         {
-                            party[i].GetComponent<Character>().drops[drops] = gameDrops[drops];
+                            party[i].GetComponent<Character>().drops[_drops] = gameDrops[_drops];
 
-                            gameDrops[drops].isKnown = true;
+                            gameDrops[_drops].isKnown = true;
                         }
                     }
                 }
+
+                // Skills
+                for (int _skills = 0; _skills < gameSkills.Length; _skills++)
+                {
+                    if (gameData.charSkills[i, _skills] != null)
+                    {
+                        if (gameData.charSkills[i, _skills] == gameSkills[_skills].skillName)
+                        {
+                            party[i].GetComponent<Character>().skills[_skills] = gameSkills[_skills];
+
+                            gameSkills[_skills].isKnown = true;
+                        }
+                    }
+                }
+
                 if (gameData.activeParty[0] == party[i].GetComponent<Character>().characterName)
                 {
                     activeParty.activeParty[0] = party[i].gameObject;
@@ -1713,35 +1739,6 @@ public class Engine : MonoBehaviour
                 }
             }
 
-        }
-
-        for (int i = 0; i <= party[0].GetComponent<Grieve>().skillIndex; i++)
-        {
-            party[0].GetComponent<Grieve>().skills[i] = gameSkills[i];
-        }
-
-        if (party[1] != null)
-        {
-            for (int i = 0; i <= party[1].GetComponent<Mac>().skillIndex; i++)
-            {
-                party[1].GetComponent<Mac>().skills[i] = gameSkills[i];
-            }
-        }
-
-        if (party[2] != null)
-        {
-            for (int i = 0; i <= party[2].GetComponent<Field>().skillIndex; i++)
-            {
-                party[2].GetComponent<Field>().skills[i] = gameSkills[i];
-            }
-        }
-
-        if (party[3] != null)
-        {
-            for (int i = 0; i <= party[3].GetComponent<Riggs>().skillIndex; i++)
-            {
-                party[3].GetComponent<Riggs>().skills[i] = gameSkills[i];
-            }
         }
 
         for (int i = 0; i < gameData.partyInvNames.Length; i++)
@@ -2885,22 +2882,28 @@ public class Engine : MonoBehaviour
 
     void SetDropIndexes()
     {
+        battleSystem.lastDropChoice = null;
+
         for (int i = 0; i < gameDrops.Length; i++)
         {
             if (gameDrops[i] != null)
             {
                 gameDrops[i].dropIndex = i;
+                gameDrops[i].isKnown = false;
             }
         }
     }
 
     void SetSkillIndexes()
     {
+        battleSystem.lastSkillChoice = null;
+
         for (int i = 0; i < gameSkills.Length; i++)
         {
             if (gameSkills[i] != null)
             {
                 gameSkills[i].skillIndex = i;
+                gameSkills[i].isKnown = false;
             }
         }
     }

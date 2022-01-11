@@ -92,22 +92,33 @@ public class GridCursor : MonoBehaviour
             {
                 if (currentNode.node.nodeName == string.Empty)
                 {
-                    helpText.GetComponentInChildren<TextMeshProUGUI>().text = "Name not set.";
+                    if (helpText.GetComponentInChildren<TextMeshProUGUI>().text != "Name not set.")
+                        helpText.GetComponentInChildren<TextMeshProUGUI>().text = "Name not set.";
                 }
                 else
                 {
-                    helpText.GetComponentInChildren<TextMeshProUGUI>().text = currentNode.node.nodeName + " - " + currentNode.node.nodeDescription;
+                    if (helpText.GetComponentInChildren<TextMeshProUGUI>().text != currentNode.node.nodeName + " - " + currentNode.node.nodeDescription)
+                        helpText.GetComponentInChildren<TextMeshProUGUI>().text = currentNode.node.nodeName + " - " + currentNode.node.nodeDescription;
                 }
             }
             else
             {
-                helpText.GetComponentInChildren<TextMeshProUGUI>().text = "Node not set.";
+                if (helpText.GetComponentInChildren<TextMeshProUGUI>().text != "Node not set.")
+                    helpText.GetComponentInChildren<TextMeshProUGUI>().text = "Node not set.";
             }
+        }
+    }
+
+    public void ClearNodeInformation()
+    {
+        if (currentNode == null && helpText.GetComponentInChildren<TextMeshProUGUI>().text != string.Empty)
+        {
+            helpText.GetComponentInChildren<TextMeshProUGUI>().text = string.Empty;
         }
     }
     public void OnClickEvent()
     {
-        if (currentNode != null)
+        if (currentNode != null && !Engine.e.gridReference.abilitiesListDisplayed)
         {
             currentNode.OnClickEvent();
         }

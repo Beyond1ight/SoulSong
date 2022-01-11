@@ -15,5 +15,6 @@ public class Skills : ScriptableObject
     public bool selfSupport;
     public bool targetSupport;
     public int skillIndex;
+    public bool isKnown;
 
 }

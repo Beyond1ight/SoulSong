@@ -14,6 +14,23 @@ public class AbilityStatNode : MonoBehaviour
     public int nodeIndex;
 
 
+    private void Start()
+    {
+        if (node != null)
+        {
+            if (node.skill != null)
+            {
+                node.nodeName = node.skill.skillName;
+                node.nodeDescription = node.skill.skillDescription;
+            }
+
+            if (node.drop != null)
+            {
+                node.nodeName = node.drop.dropName;
+                node.nodeDescription = node.drop.dropDescription;
+            }
+        }
+    }
 
     public void OnClickEvent()
     {

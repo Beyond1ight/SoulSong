@@ -35,6 +35,7 @@ public class Character : MonoBehaviour
     public float waterDefense;
     public float lightningDefense;
     public float shadowDefense;
+    public float holyDefense;
     public float poisonDefense;
     public float sleepDefense;
     public float confuseDefense;
@@ -66,6 +67,9 @@ public class Character : MonoBehaviour
     public float shadowDropAttackBonus;
 
     public float holyDropsLevel, holyDropsExperience, holyDropsLvlReq;
+    public float holyPhysicalAttackBonus;
+    public float holyDropAttackBonus;
+
 
     public bool canUseFireDrops = false;
     public bool canUseIceDrops = false;
@@ -423,5 +427,11 @@ public class Character : MonoBehaviour
     public void TeachDrop(Drops _drop)
     {
         drops[_drop.dropIndex] = _drop;
+        _drop.isKnown = true;
+    }
+    public void TeachSkill(Skills _skill)
+    {
+        skills[_skill.skillIndex] = _skill;
+        _skill.isKnown = true;
     }
 }

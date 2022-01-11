@@ -30,7 +30,7 @@ public class ReverseDropMovement : MonoBehaviour
 
         }
 
-        Engine.e.battleSystem.dropExists = true;
+        Engine.e.battleSystem.animExists = true;
         GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.battleSystem.enemies[enemyTarget].transform.position, Quaternion.identity);
         dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = Engine.e.battleSystem.skillBoostTotal.ToString();
         Destroy(dmgPopup, 1f);
@@ -78,7 +78,7 @@ public class ReverseDropMovement : MonoBehaviour
             yield return new WaitForSeconds(1.0f);
 
             Engine.e.battleSystem.mpRestore = false;
-            Engine.e.battleSystem.dropExists = false;
+            Engine.e.battleSystem.animExists = false;
 
 
             Destroy(this.gameObject);

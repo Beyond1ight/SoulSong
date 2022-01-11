@@ -16,7 +16,7 @@ public class PauseMenu : MonoBehaviour
     public TextMeshProUGUI partyMoneyDisplay;
     public TextMeshProUGUI timeOfDayDisplay;
     public TextMeshProUGUI partyLocationDisplay;
-    public GameObject pauseMenu, equipMenu, mainMenuScreen, abilitiesMenu, adventureLogMenu, fileMenu;
+    public GameObject pauseMenu, equipMenu, mainMenuScreen, gridMenu, adventureLogMenu, fileMenu, statusMenu;
 
     // Controller Support UI
     // Menu(s) First Choice
@@ -309,6 +309,23 @@ public class PauseMenu : MonoBehaviour
         Engine.e.adventureLogReference.OpenAdventureLogMenu();
     }
 
+    public void OpenStatusMenu()
+    {
+        statusMenu.SetActive(true);
+
+        for (int i = 0; i < Engine.e.party.Length; i++)
+        {
+            if (Engine.e.party[i] != null)
+            {
+                Engine.e.statusMenuReference.charSelectionButtons[i].SetActive(true);
+            }
+        }
+
+        EventSystem.current.SetSelectedGameObject(null);
+
+        EventSystem.current.SetSelectedGameObject(Engine.e.statusMenuReference.charSelectionButtons[0]);
+    }
+
     public void OpenGridMenuCharSelect()
     {
         for (int i = 0; i < Engine.e.party.Length; i++)
@@ -318,6 +335,34 @@ public class PauseMenu : MonoBehaviour
                 gridCharSelect[i].SetActive(true);
             }
         }
+
+        /*for (int i = 0; i < Engine.e.gridReference.dropsButtons.Length; i++)
+        {
+            if (Engine.e.gridReference.dropsButtons[i].GetComponent<PauseMenuDropsUIHolder>().drop != null)
+            {
+                if (Engine.e.gridReference.dropsButtons[i].GetComponent<PauseMenuDropsUIHolder>().drop.isKnown)
+                {
+                    if (Engine.e.gridReference.dropsButtons[i].GetComponentInChildren<TextMeshProUGUI>().text != Engine.e.gridReference.dropsButtons[i].GetComponent<PauseMenuDropsUIHolder>().drop.dropName)
+                    {
+                        Engine.e.gridReference.dropsButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = Engine.e.gridReference.dropsButtons[i].GetComponent<PauseMenuDropsUIHolder>().drop.dropName;
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < Engine.e.gridReference.skillButtons.Length; i++)
+        {
+            if (Engine.e.gridReference.skillButtons[i].GetComponent<PauseMenuSkillsUIHolder>().skill != null)
+            {
+                if (Engine.e.gridReference.skillButtons[i].GetComponent<PauseMenuSkillsUIHolder>().skill.isKnown)
+                {
+                    if (Engine.e.gridReference.skillButtons[i].GetComponentInChildren<TextMeshProUGUI>().text != Engine.e.gridReference.skillButtons[i].GetComponent<PauseMenuSkillsUIHolder>().skill.skillName)
+                    {
+                        Engine.e.gridReference.skillButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = Engine.e.gridReference.skillButtons[i].GetComponent<PauseMenuSkillsUIHolder>().skill.skillName;
+                    }
+                }
+            }
+        }*/
 
         EventSystem.current.SetSelectedGameObject(null);
 
@@ -331,7 +376,7 @@ public class PauseMenu : MonoBehaviour
             gridCharSelect[i].SetActive(false);
         }
 
-        abilitiesMenu.SetActive(true);
+        gridMenu.SetActive(true);
         Engine.e.gridReference.SetGrieveScreen();
         //Engine.e.abilityScreenReference.DisplayCharSelection();
         Engine.e.canvasReference.SetActive(false);
@@ -355,7 +400,7 @@ public class PauseMenu : MonoBehaviour
 
         Engine.e.gridReference.SetMacScreen();
 
-        abilitiesMenu.SetActive(true);
+        gridMenu.SetActive(true);
         Engine.e.canvasReference.SetActive(false);
         Engine.e.gridReference.gridDisplayed = true;
 
@@ -375,7 +420,7 @@ public class PauseMenu : MonoBehaviour
 
         Engine.e.gridReference.SetFieldScreen();
 
-        abilitiesMenu.SetActive(true);
+        gridMenu.SetActive(true);
         Engine.e.canvasReference.SetActive(false);
         Engine.e.gridReference.gridDisplayed = true;
 
@@ -395,7 +440,7 @@ public class PauseMenu : MonoBehaviour
 
         Engine.e.gridReference.SetRiggsScreen();
 
-        abilitiesMenu.SetActive(true);
+        gridMenu.SetActive(true);
         Engine.e.canvasReference.SetActive(false);
         Engine.e.gridReference.gridDisplayed = true;
 
@@ -415,7 +460,7 @@ public class PauseMenu : MonoBehaviour
 
         //Engine.e.gridReference.SetSolaceScreen();
 
-        abilitiesMenu.SetActive(true);
+        gridMenu.SetActive(true);
         Engine.e.canvasReference.SetActive(false);
         Engine.e.gridReference.gridDisplayed = true;
 

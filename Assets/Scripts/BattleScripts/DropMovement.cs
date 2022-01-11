@@ -204,7 +204,7 @@ public class DropMovement : MonoBehaviour
             }
         }
 
-        Engine.e.battleSystem.dropExists = true;
+        Engine.e.battleSystem.animExists = true;
 
         if (Engine.e.timeOfDay < 300 || Engine.e.timeOfDay > 700)
         {
@@ -549,7 +549,7 @@ public class DropMovement : MonoBehaviour
                 }
             }
             yield return new WaitForSeconds(1.0f);
-            Engine.e.battleSystem.dropExists = false;
+            Engine.e.battleSystem.animExists = false;
             Destroy(this.gameObject);
         }
     }

@@ -513,8 +513,55 @@ public class Enemy : MonoBehaviour
                 }
 
                 Instantiate(battleSystem.holyDropAnim, characterLocation.transform.position, Quaternion.identity);
+            }
 
+            if (dropChoice.dropName == "Repent")
+            {
+                if (character.holyDropsLevel >= 20)
+                {
+                    if (isAsleep)
+                    {
+                        isAsleep = false;
+                    }
+                    if (isPoisoned)
+                    {
+                        isPoisoned = false;
+                    }
+                    if (isConfused)
+                    {
+                        isConfused = false;
+                        confuseTimer = 0;
+                    }
+                    if (deathInflicted)
+                    {
+                        deathInflicted = false;
+                        deathTimer = 3;
+                        //deathTimerPopup.SetActive(false);
+                    }
+                }
+                else
+                {
+                    if (character.holyDropsLevel < 20 && character.holyDropsLevel >= 10)
+                    {
+                        if (isAsleep)
+                        {
+                            isAsleep = false;
+                        }
+                        if (isPoisoned)
+                        {
+                            isPoisoned = false;
+                        }
+                    }
+                    else
+                    {
+                        if (isAsleep)
+                        {
+                            isAsleep = false;
+                        }
+                    }
+                }
 
+                inflicted = false;
             }
         }
 
@@ -527,6 +574,7 @@ public class Enemy : MonoBehaviour
                 isAsleep = false;
                 isConfused = false;
                 inflicted = false;
+
                 if (GetComponent<EnemyMovement>() != null)
                 {
                     GetComponent<EnemyMovement>().enabled = true;
@@ -570,7 +618,7 @@ public class Enemy : MonoBehaviour
             health = maxHealth;
         }
 
-        if (!battleSystem.dropExists)
+        if (!battleSystem.animExists)
         {
             if (battleSystem.enemies[index].gameObject.GetComponent<Enemy>().health <= 0)
             {
@@ -880,7 +928,7 @@ public class Enemy : MonoBehaviour
             health = maxHealth;
         }
 
-        if (!battleSystem.dropExists)
+        if (!battleSystem.animExists)
         {
             if (battleSystem.enemies[index].gameObject.GetComponent<Enemy>().health <= 0)
             {
@@ -965,7 +1013,7 @@ public class Enemy : MonoBehaviour
             inflicted = true;
             float poisonDmgCalculation = Mathf.Round(_poisonDmg + (character.shadowDropsLevel * 6) / 2);
             poisonDmg = ((poisonDmgCalculation) - (poisonDmgCalculation * poisonDefense / 100));
-            if (!Engine.e.battleSystem.dropExists)
+            if (!Engine.e.battleSystem.animExists)
             {
                 GetComponent<SpriteRenderer>().color = Color.green;
             }
