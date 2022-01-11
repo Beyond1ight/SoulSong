@@ -11,15 +11,11 @@ public class Grid : MonoBehaviour
 {
     public AbilityStatNode[] nodes;
     public GameObject[] connectionLines;
-    public bool gridDisplayed, grieveScreen, macScreen, fieldScreen, riggsScreen;
-    public GameObject[] skillsButtons, fireDropsButtons, iceDropsButtons, lightningDropsButtons, waterDropsButtons, shadowDropsButtons, holyDropsButtons;
-    public bool knowsAllFireDrops = false, knowsAllIceDrops = false, knowsAllLightningDrops = false, knowsAllWaterDrops = false, knowsAllShadowDrops = false, knowsAllHolyDrops = false;
-    public GameObject confirmSkillAcquisition;
-    public TextMeshProUGUI confirmSkillSentence;
-    public TextMeshProUGUI[] apDisplay;
-    public int tier, grievePosition, macPosition, fieldPosition, riggsPosition;
-    public GameObject cursor, helpReference, helpTextParentObj;
+    public bool gridDisplayed, abilitiesListDisplayed, grieveScreen, macScreen, fieldScreen, riggsScreen;
+    public int grievePosition, macPosition, fieldPosition, riggsPosition;
+    public GameObject cursor, helpReference, helpTextParentObj, abilitiesList;
     public CinemachineVirtualCamera gridPerspective, centerOfGridPerspective;
+    public GameObject[] dropsButtons, skillButtons;
 
     private void Start()
     {
@@ -35,14 +31,47 @@ public class Grid : MonoBehaviour
 
         for (int i = 0; i < nodes.Length; i++)
         {
-            if (nodes[i].grieveUnlocked)
+            if (nodes[i].node != null)
             {
-                for (int k = 0; k < nodes[i].connectionLines.Length; k++)
+                if (nodes[i].grieveUnlocked)
                 {
-                    if (nodes[i].connectionLines[k] != null)
+                    for (int k = 0; k < nodes[i].connectionLines.Length; k++)
                     {
-                        nodes[i].connectionLines[k].GetComponent<SpriteShapeRenderer>().color = Color.cyan;
+                        if (nodes[i].connectionLines[k] != null)
+                        {
+                            nodes[i].connectionLines[k].GetComponent<SpriteShapeRenderer>().color = Color.cyan;
+                        }
                     }
+                }
+            }
+        }
+
+        for (int i = 0; i < dropsButtons.Length; i++)
+        {
+            if (dropsButtons[i].GetComponent<PauseMenuDropsUIHolder>().drop != null)
+            {
+                if (Engine.e.party[0].GetComponent<Character>().KnowsDrop(dropsButtons[i].GetComponent<PauseMenuDropsUIHolder>().drop))
+                {
+                    dropsButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                }
+                else
+                {
+                    dropsButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.gray;
+                }
+            }
+        }
+
+        for (int i = 0; i < skillButtons.Length; i++)
+        {
+            if (skillButtons[i].GetComponent<PauseMenuSkillsUIHolder>().skill != null)
+            {
+                if (Engine.e.party[0].GetComponent<Character>().KnowsSkill(skillButtons[i].GetComponent<PauseMenuSkillsUIHolder>().skill))
+                {
+                    skillButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                }
+                else
+                {
+                    skillButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.gray;
                 }
             }
         }
@@ -88,18 +117,50 @@ public class Grid : MonoBehaviour
 
         for (int i = 0; i < nodes.Length; i++)
         {
-            if (nodes[i].macUnlocked)
+            if (nodes[i].node != null)
             {
-                for (int k = 0; k < nodes[i].connectionLines.Length; k++)
+                if (nodes[i].macUnlocked)
                 {
-                    if (nodes[i].connectionLines[k] != null)
+                    for (int k = 0; k < nodes[i].connectionLines.Length; k++)
                     {
-                        nodes[i].connectionLines[k].GetComponent<SpriteShapeRenderer>().color = Color.blue;
+                        if (nodes[i].connectionLines[k] != null)
+                        {
+                            nodes[i].connectionLines[k].GetComponent<SpriteShapeRenderer>().color = Color.blue;
+                        }
                     }
                 }
             }
         }
 
+        for (int i = 0; i < dropsButtons.Length; i++)
+        {
+            if (dropsButtons[i].GetComponent<PauseMenuDropsUIHolder>().drop != null)
+            {
+                if (Engine.e.party[1].GetComponent<Character>().KnowsDrop(dropsButtons[i].GetComponent<PauseMenuDropsUIHolder>().drop))
+                {
+                    dropsButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                }
+                else
+                {
+                    dropsButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.gray;
+                }
+            }
+        }
+
+        for (int i = 0; i < skillButtons.Length; i++)
+        {
+            if (skillButtons[i].GetComponent<PauseMenuSkillsUIHolder>().skill != null)
+            {
+                if (Engine.e.party[1].GetComponent<Character>().KnowsSkill(skillButtons[i].GetComponent<PauseMenuSkillsUIHolder>().skill))
+                {
+                    skillButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                }
+                else
+                {
+                    skillButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.gray;
+                }
+            }
+        }
         //cursor.GetComponent<GridCursorMovement>().isMoving = false;
         cursor.GetComponent<GridCursor>().currentNode = nodes[macPosition];
         Vector3 cursorPos = new Vector3(nodes[macPosition].transform.position.x, nodes[macPosition].transform.position.y, -5);
@@ -120,14 +181,47 @@ public class Grid : MonoBehaviour
 
         for (int i = 0; i < nodes.Length; i++)
         {
-            if (nodes[i].fieldUnlocked)
+            if (nodes[i].node != null)
             {
-                for (int k = 0; k < nodes[i].connectionLines.Length; k++)
+                if (nodes[i].fieldUnlocked)
                 {
-                    if (nodes[i].connectionLines[k] != null)
+                    for (int k = 0; k < nodes[i].connectionLines.Length; k++)
                     {
-                        nodes[i].connectionLines[k].GetComponent<SpriteShapeRenderer>().color = Color.green;
+                        if (nodes[i].connectionLines[k] != null)
+                        {
+                            nodes[i].connectionLines[k].GetComponent<SpriteShapeRenderer>().color = Color.green;
+                        }
                     }
+                }
+            }
+        }
+
+        for (int i = 0; i < dropsButtons.Length; i++)
+        {
+            if (dropsButtons[i].GetComponent<PauseMenuDropsUIHolder>().drop != null)
+            {
+                if (Engine.e.party[2].GetComponent<Character>().KnowsDrop(dropsButtons[i].GetComponent<PauseMenuDropsUIHolder>().drop))
+                {
+                    dropsButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                }
+                else
+                {
+                    dropsButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.gray;
+                }
+            }
+        }
+
+        for (int i = 0; i < skillButtons.Length; i++)
+        {
+            if (skillButtons[i].GetComponent<PauseMenuSkillsUIHolder>().skill != null)
+            {
+                if (Engine.e.party[2].GetComponent<Character>().KnowsSkill(skillButtons[i].GetComponent<PauseMenuSkillsUIHolder>().skill))
+                {
+                    skillButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                }
+                else
+                {
+                    skillButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.gray;
                 }
             }
         }
@@ -151,18 +245,50 @@ public class Grid : MonoBehaviour
 
         for (int i = 0; i < nodes.Length; i++)
         {
-            if (nodes[i].riggsUnlocked)
+            if (nodes[i].node != null)
             {
-                for (int k = 0; k < nodes[i].connectionLines.Length; k++)
+                if (nodes[i].riggsUnlocked)
                 {
-                    if (nodes[i].connectionLines[k] != null)
+                    for (int k = 0; k < nodes[i].connectionLines.Length; k++)
                     {
-                        nodes[i].connectionLines[k].GetComponent<SpriteShapeRenderer>().color = Color.yellow;
+                        if (nodes[i].connectionLines[k] != null)
+                        {
+                            nodes[i].connectionLines[k].GetComponent<SpriteShapeRenderer>().color = Color.yellow;
+                        }
                     }
                 }
             }
         }
 
+        for (int i = 0; i < dropsButtons.Length; i++)
+        {
+            if (dropsButtons[i].GetComponent<PauseMenuDropsUIHolder>().drop != null)
+            {
+                if (Engine.e.party[3].GetComponent<Character>().KnowsDrop(dropsButtons[i].GetComponent<PauseMenuDropsUIHolder>().drop))
+                {
+                    dropsButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                }
+                else
+                {
+                    dropsButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.gray;
+                }
+            }
+        }
+
+        for (int i = 0; i < skillButtons.Length; i++)
+        {
+            if (skillButtons[i].GetComponent<PauseMenuSkillsUIHolder>().skill != null)
+            {
+                if (Engine.e.party[3].GetComponent<Character>().KnowsSkill(skillButtons[i].GetComponent<PauseMenuSkillsUIHolder>().skill))
+                {
+                    skillButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                }
+                else
+                {
+                    skillButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.gray;
+                }
+            }
+        }
         //cursor.GetComponent<GridCursorMovement>().isMoving = false;
         cursor.GetComponent<GridCursor>().currentNode = nodes[riggsPosition];
         Vector3 cursorPos = new Vector3(nodes[riggsPosition].transform.position.x, nodes[riggsPosition].transform.position.y, -5);
@@ -188,6 +314,21 @@ public class Grid : MonoBehaviour
         }
     }
 
+    public void DisplayAbilitiesList()
+    {
+        abilitiesList.SetActive(true);
+        abilitiesListDisplayed = true;
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(dropsButtons[0]);
+    }
+
+    public void CloseAbilitiesList()
+    {
+        abilitiesList.SetActive(false);
+        abilitiesListDisplayed = false;
+
+    }
+
     public void CloseGrid()
     {
         Engine.e.canvasReference.SetActive(true);
@@ -198,6 +339,7 @@ public class Grid : MonoBehaviour
         Engine.e.canvasReference.GetComponent<PauseMenu>().OpenPauseMenu();
         Engine.e.gridReference.gameObject.SetActive(false);
         gridDisplayed = false;
+        abilitiesListDisplayed = false;
 
         Time.timeScale = 0f;
 
@@ -206,11 +348,20 @@ public class Grid : MonoBehaviour
         fieldScreen = false;
         riggsScreen = false;
 
+        ClearConnectionLines();
+    }
+
+    // Sets lines to gray, mainly for character switching, as well as returning to the Pause Menu
+    public void ClearConnectionLines()
+    {
         for (int i = 0; i < connectionLines.Length; i++)
         {
             if (connectionLines[i] != null)
             {
-                connectionLines[i].GetComponent<SpriteShapeRenderer>().color = Color.gray;
+                if (connectionLines[i].GetComponent<SpriteShapeRenderer>().color != Color.gray)
+                {
+                    connectionLines[i].GetComponent<SpriteShapeRenderer>().color = Color.gray;
+                }
             }
         }
     }
@@ -219,6 +370,7 @@ public class Grid : MonoBehaviour
     public void SetupGrid()
     {
         gridDisplayed = false;
+
         for (int i = 0; i < connectionLines.Length; i++)
         {
             if (connectionLines[i] != null)
@@ -281,6 +433,52 @@ public class Grid : MonoBehaviour
                             nodes[i].riggsUnlocked = true;
                             break;
                     }
+                }
+            }
+        }
+    }
+
+    public void WarpToDropNode(Drops _drop)
+    {
+        for (int i = 0; i < nodes.Length; i++)
+        {
+            if (nodes[i].node != null && nodes[i].node.drop != null)
+            {
+                if (nodes[i].node.drop == _drop)
+                {
+                    cursor.GetComponent<GridCursor>().currentNode = nodes[i];
+                    Vector3 cursorPos = new Vector3(nodes[i].transform.position.x, nodes[i].transform.position.y, -5);
+
+                    cursor.transform.position = cursorPos;
+                    Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
+                    Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 1;
+
+                    cursor.GetComponent<GridCursor>().DisplayNodeInformation();
+
+                    break;
+                }
+            }
+        }
+    }
+
+    public void WarpToSkillNode(Skills _skill)
+    {
+        for (int i = 0; i < nodes.Length; i++)
+        {
+            if (nodes[i].node != null && nodes[i].node.skill != null)
+            {
+                if (nodes[i].node.skill == _skill)
+                {
+                    cursor.GetComponent<GridCursor>().currentNode = nodes[i];
+                    Vector3 cursorPos = new Vector3(nodes[i].transform.position.x, nodes[i].transform.position.y, -5);
+
+                    cursor.transform.position = cursorPos;
+                    Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
+                    Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 1;
+
+                    cursor.GetComponent<GridCursor>().DisplayNodeInformation();
+
+                    break;
                 }
             }
         }
