@@ -387,7 +387,7 @@ public class DropMovement : MonoBehaviour
 
                         }
 
-                        if (targetGO.GetComponent<Enemy>().health <= 0)
+                        if (targetGO.GetComponent<Enemy>().currentHealth <= 0)
                         {
 
                             if (targetGO.GetComponent<EnemyMovement>())
@@ -584,11 +584,11 @@ public class DropMovement : MonoBehaviour
 
         if (targetSupport.GetComponent<Enemy>())
         {
-            targetSupport.GetComponent<Enemy>().health += healAmount;
+            targetSupport.GetComponent<Enemy>().currentHealth += healAmount;
             Engine.e.battleSystem.damageTotal = healAmount;
-            if (targetSupport.GetComponent<Enemy>().health > targetSupport.GetComponent<Enemy>().maxHealth)
+            if (targetSupport.GetComponent<Enemy>().currentHealth > targetSupport.GetComponent<Enemy>().maxHealth)
             {
-                targetSupport.GetComponent<Enemy>().health = targetSupport.GetComponent<Enemy>().maxHealth;
+                targetSupport.GetComponent<Enemy>().currentHealth = targetSupport.GetComponent<Enemy>().maxHealth;
             }
         }
     }

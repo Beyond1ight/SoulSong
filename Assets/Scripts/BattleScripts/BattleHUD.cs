@@ -83,7 +83,7 @@ public class BattleHUD : MonoBehaviour
                 enemyNames[i] = Engine.e.battleSystem.enemies[i].gameObject.GetComponent<Enemy>().enemyName;
                 displayEnemyNames[i].text = enemyNames[i];
 
-                enemyHealth[i] = Engine.e.battleSystem.enemies[i].GetComponent<Enemy>().health;
+                enemyHealth[i] = Engine.e.battleSystem.enemies[i].GetComponent<Enemy>().currentHealth;
                 displayEnemyHealth[i].text = enemyHealth[i].ToString();
 
             }
@@ -103,7 +103,7 @@ public class BattleHUD : MonoBehaviour
                 enemyNames[i] = enemy.gameObject.GetComponent<Enemy>().enemyName;
                 displayEnemyNames[i].text = enemyNames[i];
 
-                enemyHealth[i] = enemy.gameObject.GetComponent<Enemy>().health;
+                enemyHealth[i] = enemy.gameObject.GetComponent<Enemy>().currentHealth;
                 displayEnemyHealth[i].text = enemyHealth[i].ToString();
 
 

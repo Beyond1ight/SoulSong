@@ -28,7 +28,7 @@ public class EnemyInformation : MonoBehaviour
         Debug.Log("Creating Information...");
 
         informationName = _enemy.enemyName;
-        informationHealth = _enemy.health;
+        informationHealth = _enemy.currentHealth;
         informationLvl = _enemy.lvl;
         informationDmg = _enemy.damage;
         informationPos = _enemy.enemyPos;

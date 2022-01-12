@@ -913,7 +913,7 @@ public class Engine : MonoBehaviour
 
                         party[i].GetComponent<Character>().skillScale += 1f;
 
-                        if (party[i].GetComponent<Character>().lvl <= 20)
+                        /*if (party[i].GetComponent<Character>().lvl <= 20)
                         {
                             if (party[i].GetComponent<Character>().lvl % 5 == 0)
                             {
@@ -946,7 +946,7 @@ public class Engine : MonoBehaviour
                             {
                                 party[i].GetComponent<Character>().availableSkillPoints++;
                             }
-                        }
+                        }*/
 
                         if (party[i] == activeParty.activeParty[0])
                         {
@@ -958,89 +958,91 @@ public class Engine : MonoBehaviour
                             char1LevelUpPanelReference[4].text = "Physical Damage + " + gainedStrength.ToString();
                             char1LevelUpPanelReference[5].text = "Physical Defense + 0.5%";
 
-                            if (activeParty.activeParty[0].GetComponent<Character>().lvl <= 20)
+                            /* if (activeParty.activeParty[0].GetComponent<Character>().lvl <= 20)
+                             {
+                                 if (gameSkills[activeParty.activeParty[0].GetComponent<Character>().skillIndex] != null)
+                                 {
+                                     if (activeParty.activeParty[0].GetComponent<Character>().lvl % 5 == 0)
+                                     {
+                                         char1LevelUpPanelReference[6].text = gameSkills[activeParty.activeParty[0].GetComponent<Character>().skillIndex].skillName + " learned!";
+                                     }
+                                     else
+                                     {
+                                         char1LevelUpPanelReference[6].text = string.Empty;
+                                     }
+                                 }
+                             }
+                             else
+                             {
+                                 if (activeParty.activeParty[0].GetComponent<Character>().lvl % 3 == 0)
+                                 {
+                                     char1LevelUpPanelReference[6].text = "Skill Point earned!";
+                                 }
+                             }
+                         }*/
+
+                            if (party[i] == activeParty.activeParty[1] && activeParty.activeParty[1] != null)
                             {
-                                if (gameSkills[activeParty.activeParty[0].GetComponent<Character>().skillIndex] != null)
+                                char2LevelUp = true;
+                                char2LevelUpPanelReference[0].text = activeParty.activeParty[1].GetComponent<Character>().characterName;
+                                char2LevelUpPanelReference[1].text = "HP + " + gainedHealth.ToString();
+                                char2LevelUpPanelReference[2].text = "MP + " + gainedMana.ToString();
+                                char2LevelUpPanelReference[3].text = "ENR + " + gainedEnergy.ToString();
+                                char2LevelUpPanelReference[4].text = "Physical Damage + " + gainedStrength.ToString();
+                                char2LevelUpPanelReference[5].text = "Physical Defense + 0.5%";
+
+                                /* if (activeParty.activeParty[1].GetComponent<Character>().lvl <= 25)
+                                 {
+                                     if (gameSkills[activeParty.activeParty[1].GetComponent<Character>().skillIndex] != null)
+                                     {
+                                         if (activeParty.activeParty[1].GetComponent<Character>().lvl % 5 == 0)
+                                         {
+                                             char2LevelUpPanelReference[6].text = gameSkills[activeParty.activeParty[1].GetComponent<Character>().skillIndex].skillName + " learned!";
+                                         }
+                                         else
+                                         {
+                                             char2LevelUpPanelReference[6].text = string.Empty;
+                                         }
+                                     }
+                                 }
+                                 else
+                                 {
+
+                                     if (activeParty.activeParty[1].GetComponent<Character>().lvl % 3 == 0)
+                                     {
+                                         char2LevelUpPanelReference[6].text = "Skill Point earned!";
+                                     }
+                                 }
+                             }*/
+
+                                if (party[i] == activeParty.activeParty[2] && activeParty.activeParty[2] != null)
                                 {
-                                    if (activeParty.activeParty[0].GetComponent<Character>().lvl % 5 == 0)
+                                    char3LevelUp = true;
+                                    char3LevelUpPanelReference[0].text = activeParty.activeParty[2].GetComponent<Character>().characterName;
+                                    char3LevelUpPanelReference[1].text = "HP + " + gainedHealth.ToString();
+                                    char3LevelUpPanelReference[2].text = "MP + " + gainedMana.ToString();
+                                    char3LevelUpPanelReference[3].text = "ENR + " + gainedEnergy.ToString(); ;
+                                    char3LevelUpPanelReference[4].text = "Physical Damage + " + gainedStrength.ToString();
+                                    char3LevelUpPanelReference[5].text = "Physical Defense + 0.5%";
+
+                                    if (activeParty.activeParty[2].GetComponent<Character>().lvl <= 25)
                                     {
-                                        char1LevelUpPanelReference[6].text = gameSkills[activeParty.activeParty[0].GetComponent<Character>().skillIndex].skillName + " learned!";
+                                        if (activeParty.activeParty[2].GetComponent<Character>().lvl % 5 == 0)
+                                        {
+                                            char3LevelUpPanelReference[6].text = gameSkills[activeParty.activeParty[2].GetComponent<Character>().skillIndex].skillName + " learned!";
+                                        }
+                                        else
+                                        {
+                                            char3LevelUpPanelReference[6].text = string.Empty;
+                                        }
                                     }
                                     else
                                     {
-                                        char1LevelUpPanelReference[6].text = string.Empty;
+                                        if (activeParty.activeParty[2].GetComponent<Character>().lvl % 3 == 0)
+                                        {
+                                            char3LevelUpPanelReference[6].text = "Skill Point earned!";
+                                        }
                                     }
-                                }
-                            }
-                            else
-                            {
-                                if (activeParty.activeParty[0].GetComponent<Character>().lvl % 3 == 0)
-                                {
-                                    char1LevelUpPanelReference[6].text = "Skill Point earned!";
-                                }
-                            }
-                        }
-
-                        if (party[i] == activeParty.activeParty[1] && activeParty.activeParty[1] != null)
-                        {
-                            char2LevelUp = true;
-                            char2LevelUpPanelReference[0].text = activeParty.activeParty[1].GetComponent<Character>().characterName;
-                            char2LevelUpPanelReference[1].text = "HP + " + gainedHealth.ToString();
-                            char2LevelUpPanelReference[2].text = "MP + " + gainedMana.ToString();
-                            char2LevelUpPanelReference[3].text = "ENR + " + gainedEnergy.ToString();
-                            char2LevelUpPanelReference[4].text = "Physical Damage + " + gainedStrength.ToString();
-                            char2LevelUpPanelReference[5].text = "Physical Defense + 0.5%";
-
-                            if (activeParty.activeParty[1].GetComponent<Character>().lvl <= 25)
-                            {
-                                if (gameSkills[activeParty.activeParty[1].GetComponent<Character>().skillIndex] != null)
-                                {
-                                    if (activeParty.activeParty[1].GetComponent<Character>().lvl % 5 == 0)
-                                    {
-                                        char2LevelUpPanelReference[6].text = gameSkills[activeParty.activeParty[1].GetComponent<Character>().skillIndex].skillName + " learned!";
-                                    }
-                                    else
-                                    {
-                                        char2LevelUpPanelReference[6].text = string.Empty;
-                                    }
-                                }
-                            }
-                            else
-                            {
-
-                                if (activeParty.activeParty[1].GetComponent<Character>().lvl % 3 == 0)
-                                {
-                                    char2LevelUpPanelReference[6].text = "Skill Point earned!";
-                                }
-                            }
-                        }
-
-                        if (party[i] == activeParty.activeParty[2] && activeParty.activeParty[2] != null)
-                        {
-                            char3LevelUp = true;
-                            char3LevelUpPanelReference[0].text = activeParty.activeParty[2].GetComponent<Character>().characterName;
-                            char3LevelUpPanelReference[1].text = "HP + " + gainedHealth.ToString();
-                            char3LevelUpPanelReference[2].text = "MP + " + gainedMana.ToString();
-                            char3LevelUpPanelReference[3].text = "ENR + " + gainedEnergy.ToString(); ;
-                            char3LevelUpPanelReference[4].text = "Physical Damage + " + gainedStrength.ToString();
-                            char3LevelUpPanelReference[5].text = "Physical Defense + 0.5%";
-
-                            if (activeParty.activeParty[2].GetComponent<Character>().lvl <= 25)
-                            {
-                                if (activeParty.activeParty[2].GetComponent<Character>().lvl % 5 == 0)
-                                {
-                                    char3LevelUpPanelReference[6].text = gameSkills[activeParty.activeParty[2].GetComponent<Character>().skillIndex].skillName + " learned!";
-                                }
-                                else
-                                {
-                                    char3LevelUpPanelReference[6].text = string.Empty;
-                                }
-                            }
-                            else
-                            {
-                                if (activeParty.activeParty[2].GetComponent<Character>().lvl % 3 == 0)
-                                {
-                                    char3LevelUpPanelReference[6].text = "Skill Point earned!";
                                 }
                             }
                         }
@@ -1157,41 +1159,6 @@ public class Engine : MonoBehaviour
 
 
                         party[i].GetComponent<Character>().skillScale += 1f;
-
-                        if (party[i].GetComponent<Character>().lvl <= 20)
-                        {
-                            if (party[i].GetComponent<Character>().lvl % 5 == 0)
-                            {
-                                party[i].GetComponent<Character>().skillIndex++;
-                                party[i].GetComponent<Character>().skillTotal++;
-
-                                switch (party[i].GetComponent<Character>().characterName)
-                                {
-                                    case "Grieve":
-                                        party[i].GetComponent<Grieve>().skills[party[i].GetComponent<Grieve>().skillIndex] = gameSkills[party[i].GetComponent<Grieve>().skillIndex];
-                                        break;
-
-                                    case "Mac":
-                                        party[i].GetComponent<Mac>().skills[party[i].GetComponent<Mac>().skillIndex] = gameSkills[party[i].GetComponent<Mac>().skillIndex];
-                                        break;
-
-                                    case "Field":
-                                        party[i].GetComponent<Field>().skills[party[i].GetComponent<Field>().skillIndex] = gameSkills[party[i].GetComponent<Field>().skillIndex];
-                                        break;
-
-                                    case "Riggs":
-                                        party[i].GetComponent<Riggs>().skills[party[i].GetComponent<Riggs>().skillIndex] = gameSkills[party[i].GetComponent<Riggs>().skillIndex];
-                                        break;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (party[i].GetComponent<Character>().lvl % 3 == 0)
-                            {
-                                party[i].GetComponent<Character>().availableSkillPoints++;
-                            }
-                        }
 
                     }
                 }

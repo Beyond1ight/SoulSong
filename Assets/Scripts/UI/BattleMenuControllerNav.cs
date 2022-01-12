@@ -268,7 +268,7 @@ public class BattleMenuControllerNav : MonoBehaviour
 
     public void OpenAttackFirstEnemy()
     {
-        if (Engine.e.battleSystem.enemies[0].GetComponent<Enemy>().health > 0)
+        if (Engine.e.battleSystem.enemies[0].GetComponent<Enemy>().currentHealth > 0)
         {
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(battlePhysicalAttackFirstEnemy);
@@ -277,7 +277,7 @@ public class BattleMenuControllerNav : MonoBehaviour
         {
             if (Engine.e.battleSystem.enemies[1] != null)
             {
-                if (Engine.e.battleSystem.enemies[1].GetComponent<Enemy>().health > 0)
+                if (Engine.e.battleSystem.enemies[1].GetComponent<Enemy>().currentHealth > 0)
                 {
                     EventSystem.current.SetSelectedGameObject(null);
                     EventSystem.current.SetSelectedGameObject(battlePhysicalAttackSecondEnemy);
@@ -287,7 +287,7 @@ public class BattleMenuControllerNav : MonoBehaviour
                 {
                     if (Engine.e.battleSystem.enemies[2] != null)
                     {
-                        if (Engine.e.battleSystem.enemies[2].GetComponent<Enemy>().health > 0)
+                        if (Engine.e.battleSystem.enemies[2].GetComponent<Enemy>().currentHealth > 0)
                         {
                             EventSystem.current.SetSelectedGameObject(null);
                             EventSystem.current.SetSelectedGameObject(battlePhysicalAttackThirdEnemy);
@@ -297,7 +297,7 @@ public class BattleMenuControllerNav : MonoBehaviour
                         {
                             if (Engine.e.battleSystem.enemies[3] != null)
                             {
-                                if (Engine.e.battleSystem.enemies[3].GetComponent<Enemy>().health > 0)
+                                if (Engine.e.battleSystem.enemies[3].GetComponent<Enemy>().currentHealth > 0)
                                 {
                                     EventSystem.current.SetSelectedGameObject(null);
                                     EventSystem.current.SetSelectedGameObject(battlePhysicalAttackFourthEnemy);

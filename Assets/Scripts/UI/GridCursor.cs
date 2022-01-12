@@ -41,27 +41,27 @@ public class GridCursor : MonoBehaviour
 
     public void SetGridPerspective()
     {
-        if (Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize == 30)
+        if (Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize == 150f)
         {
-            Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize = 65;
-            GetComponent<GridCursorMovement>().speed = 48f;
+            Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize = 200f;
+            GetComponent<GridCursorMovement>().speed = 200f;
         }
         else
         {
-            if (Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize == 65)
+            if (Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize == 200f)
             {
-                Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize = 100;
-                GetComponent<GridCursorMovement>().speed = 78f;
+                Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize = 300f;
+                GetComponent<GridCursorMovement>().speed = 300f;
             }
             else
             {
-                if (Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize == 100)
+                if (Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize == 300f)
                 {
                     Engine.e.gridReference.centerOfGridPerspective.gameObject.SetActive(true);
-                    Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize = 101;
-                    if (Engine.e.gridReference.centerOfGridPerspective.m_Lens.OrthographicSize != 300)
+                    Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize = 301f;
+                    if (Engine.e.gridReference.centerOfGridPerspective.m_Lens.OrthographicSize != 2000f)
                     {
-                        Engine.e.gridReference.centerOfGridPerspective.m_Lens.OrthographicSize = 300;
+                        Engine.e.gridReference.centerOfGridPerspective.m_Lens.OrthographicSize = 2000f;
                     }
                     cursorSprite.SetActive(false);
                     Engine.e.gridReference.helpTextParentObj.SetActive(false);
@@ -69,11 +69,11 @@ public class GridCursor : MonoBehaviour
                 }
                 else
                 {
-                    if (Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize == 101)
+                    if (Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize == 301f)
                     {
-                        Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize = 30;
+                        Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize = 150f;
                         Engine.e.gridReference.centerOfGridPerspective.gameObject.SetActive(false);
-                        GetComponent<GridCursorMovement>().speed = 28f;
+                        GetComponent<GridCursorMovement>().speed = 100f;
                         cursorSprite.SetActive(true);
                         Engine.e.gridReference.helpTextParentObj.SetActive(true);
 

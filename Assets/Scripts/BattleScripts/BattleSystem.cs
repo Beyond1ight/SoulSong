@@ -55,8 +55,8 @@ public class BattleSystem : MonoBehaviour
     bool charAtBattlePos = true;
     bool charAttacking = false;
     bool enemyAtBattlePos = true;
-    bool enemyAttacking = false;
-    bool charAttackDrop = false, enemyAttackDrop = false;
+    public bool enemyAttacking = false;
+    public bool charAttackDrop = false, enemyAttackDrop = false;
     bool confuseAttack = false;
     public Drops lastDropChoice;
     public Skills lastSkillChoice;
@@ -111,7 +111,7 @@ public class BattleSystem : MonoBehaviour
     public bool dontDisplayDmgPopup = false;
     public BattleHUD hud;
     int currentMoveIndex;
-    int enemyDropChoice;
+    public int enemyDropChoice;
     public GameObject damagePopup, levelUpPopup, deathTimerPopup;
     public Material originalMaterial;
     public Material damageFlash;
@@ -120,7 +120,7 @@ public class BattleSystem : MonoBehaviour
     int skillTierChoice;
     bool checkingForRandomDrop = false;
     int randomDropIndex;
-    bool partyCheckNext = false;
+    public bool partyCheckNext, targetingTeam, targetingEnemy = false;
     List<Drops> charRandomDropList;
     public bool char1Ready = false, char2Ready = false, char3Ready = false;
     bool targetCheck = false;
@@ -133,7 +133,7 @@ public class BattleSystem : MonoBehaviour
 
     bool partyTurn = false;
     [SerializeField]
-    bool grieveStatBoost = false, macStatBoost = false, fieldStatBoost = false, riggsStatBoost, targetingTeam, targetingEnemy, settingTarget;
+    bool grieveStatBoost = false, macStatBoost = false, fieldStatBoost = false, riggsStatBoost, settingTarget;
     [SerializeField]
     float grievePhysicalBoost, grieveHealthBoost, grieveManaBoost, grieveEnergyBoost, grieveDodgeBoost, macPhysicalBoost, macHealthBoost,
     macManaBoost, macEnergyBoost, macDodgeBoost, fieldPhysicalBoost, fieldHealthBoost, fieldManaBoost, fieldEnergyBoost, fieldDodgeBoost,
@@ -377,7 +377,7 @@ public class BattleSystem : MonoBehaviour
 
             if (!battleQueue.Contains(BattleState.ENEMY1TURN))
             {
-                if (enemies[0].GetComponent<Enemy>().health > 0 && !enemies[0].GetComponent<Enemy>().isAsleep)
+                if (enemies[0].GetComponent<Enemy>().currentHealth > 0 && !enemies[0].GetComponent<Enemy>().isAsleep)
                 {
                     if (enemy1ATB < ATBReady)
                     {
@@ -397,7 +397,7 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (enemies[1] != null)
                     {
-                        if (enemies[1].GetComponent<Enemy>().health > 0 && !enemies[1].GetComponent<Enemy>().isAsleep)
+                        if (enemies[1].GetComponent<Enemy>().currentHealth > 0 && !enemies[1].GetComponent<Enemy>().isAsleep)
                         {
                             if (enemy2ATB < ATBReady)
                             {
@@ -420,7 +420,7 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (enemies[2] != null)
                     {
-                        if (enemies[2].GetComponent<Enemy>().health > 0 && !enemies[2].GetComponent<Enemy>().isAsleep)
+                        if (enemies[2].GetComponent<Enemy>().currentHealth > 0 && !enemies[2].GetComponent<Enemy>().isAsleep)
                         {
                             if (enemy3ATB < ATBReady)
                             {
@@ -442,7 +442,7 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (enemies[3] != null)
                     {
-                        if (enemies[3].GetComponent<Enemy>().health > 0 && !enemies[3].GetComponent<Enemy>().isAsleep)
+                        if (enemies[3].GetComponent<Enemy>().currentHealth > 0 && !enemies[3].GetComponent<Enemy>().isAsleep)
                         {
                             if (enemy4ATB < ATBReady)
                             {
@@ -720,7 +720,7 @@ public class BattleSystem : MonoBehaviour
 
                 if (currentInQueue == BattleState.ENEMY1TURN && enemy1Ready)
                 {
-                    if (enemies[0].GetComponent<Enemy>().health > 0 && !enemies[0].GetComponent<Enemy>().isAsleep)
+                    if (enemies[0].GetComponent<Enemy>().currentHealth > 0 && !enemies[0].GetComponent<Enemy>().isAsleep)
                     {
                         partyTurn = false;
 
@@ -735,7 +735,7 @@ public class BattleSystem : MonoBehaviour
                 }
                 if (currentInQueue == BattleState.ENEMY2TURN && enemy2Ready)
                 {
-                    if (enemies[1].GetComponent<Enemy>().health > 0 && !enemies[1].GetComponent<Enemy>().isAsleep)
+                    if (enemies[1].GetComponent<Enemy>().currentHealth > 0 && !enemies[1].GetComponent<Enemy>().isAsleep)
                     {
                         partyTurn = false;
 
@@ -750,7 +750,7 @@ public class BattleSystem : MonoBehaviour
                 }
                 if (currentInQueue == BattleState.ENEMY3TURN && enemy3Ready)
                 {
-                    if (enemies[2].GetComponent<Enemy>().health > 0 && !enemies[2].GetComponent<Enemy>().isAsleep)
+                    if (enemies[2].GetComponent<Enemy>().currentHealth > 0 && !enemies[2].GetComponent<Enemy>().isAsleep)
                     {
                         partyTurn = false;
 
@@ -765,7 +765,7 @@ public class BattleSystem : MonoBehaviour
                 }
                 if (currentInQueue == BattleState.ENEMY4TURN && enemy4Ready)
                 {
-                    if (enemies[3].GetComponent<Enemy>().health > 0 && !enemies[3].GetComponent<Enemy>().isAsleep)
+                    if (enemies[3].GetComponent<Enemy>().currentHealth > 0 && !enemies[3].GetComponent<Enemy>().isAsleep)
                     {
                         partyTurn = false;
 
@@ -818,7 +818,7 @@ public class BattleSystem : MonoBehaviour
 
         if (!attackingTeam)
         {
-            if (enemies[_target].GetComponent<Enemy>().health <= 0)
+            if (enemies[_target].GetComponent<Enemy>().currentHealth <= 0)
             {
                 target = enemyGroup.GetRandomRemainingEnemy();
             }
@@ -964,9 +964,9 @@ public class BattleSystem : MonoBehaviour
                 enemies[_target].GetComponent<Enemy>().TakeSkillDamage(damageTotal, _target);
                 //hud.displayMana[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana.ToString();
 
-                if (enemies[_target].gameObject.GetComponent<Enemy>().health <= 0)
+                if (enemies[_target].gameObject.GetComponent<Enemy>().currentHealth <= 0)
                 {
-                    enemies[_target].gameObject.GetComponent<Enemy>().health = 0;
+                    enemies[_target].gameObject.GetComponent<Enemy>().currentHealth = 0;
 
                     isDead = EnemyGroup.enemyGroup.CheckEndBattle();
                     yield return new WaitForSeconds(0.1f);
@@ -996,14 +996,18 @@ public class BattleSystem : MonoBehaviour
 
                 charAttackDrop = true;
 
-                enemies[_target].gameObject.GetComponent<Enemy>().TakeDropDamage(_target, dropChoice);
+                InstantiateDropAnim(characterAttacking, dropChoice);
+
+                enemies[_target].GetComponent<Enemy>().DropEffect(dropChoice);
+
                 activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana -= Mathf.Round(dropChoice.dropCost
                 - (dropChoice.dropCost * activeParty.activeParty[index].GetComponent<Character>().dropCostReduction / 100) + 0.45f);
+
                 dropAttack = false;
 
-                if (enemies[_target].gameObject.GetComponent<Enemy>().health <= 0)
+                if (enemies[_target].gameObject.GetComponent<Enemy>().currentHealth <= 0)
                 {
-                    enemies[_target].gameObject.GetComponent<Enemy>().health = 0;
+                    enemies[_target].gameObject.GetComponent<Enemy>().currentHealth = 0;
 
                     isDead = EnemyGroup.enemyGroup.CheckEndBattle();
                     yield return new WaitForSeconds(0.1f);
@@ -1033,163 +1037,6 @@ public class BattleSystem : MonoBehaviour
                 charAttacking = true;
             }
 
-            if (skillPhysicalAttack == true)
-            {
-                charUsingSkill = true;
-                charMoving = true;
-                targetCheck = true;
-
-                skillPhysicalAttack = false;
-                charAttacking = true;
-                skillPhysicalAttack = false;
-
-                Skills _skillChoice = null;
-
-                if (index == 0)
-                {
-                    _skillChoice = char1SkillChoice;
-                }
-                if (index == 1)
-                {
-                    _skillChoice = char2SkillChoice;
-                }
-                if (index == 2)
-                {
-                    _skillChoice = char3SkillChoice;
-                }
-
-                float skillModifier;
-                skillBoostTotal = 0f;
-
-
-                skillModifier = ((_characterAttacking.skillScale) / 2);
-
-                switch (_skillChoice.skillIndex)
-                {
-                    case 0:
-                        damageTotal = _characterAttacking.physicalDamage * 2;
-                        break;
-
-                    case 1:
-
-                        break;
-                    case 10:
-                        dontDisplayDmgPopup = true;
-                        damageTotal = 0;
-                        break;
-                    case 13:
-                        //skillPhysicalAttack = true;
-                        damageTotal = Mathf.Round(_skillChoice.skillPower + (_skillChoice.skillPower * _characterAttacking.shadowDropsLevel / 20) * skillModifier);
-                        break;
-                    case 14:
-                        //skillPhysicalAttack = true;
-                        damageTotal = 99999;
-                        break;
-
-                }
-
-                if (_skillChoice.skillName != "Steal")
-                {
-                    _characterAttacking.currentEnergy -= Mathf.Round((_skillChoice.skillCost
-                    - _skillChoice.skillCost * _characterAttacking.skillCostReduction / 100) + 0.45f);
-                }
-
-                //hud.displayEnergy[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentEnergy.ToString();
-
-            }
-
-            if (skillRangedAttack == true)
-            {
-                skillPhysicalAttack = false;
-
-                Skills _skillChoice = null;
-
-                if (index == 0)
-                {
-                    _skillChoice = char1SkillChoice;
-                }
-                if (index == 1)
-                {
-                    _skillChoice = char2SkillChoice;
-                }
-                if (index == 2)
-                {
-                    _skillChoice = char3SkillChoice;
-                }
-
-                float skillModifier;
-                skillBoostTotal = 0f;
-
-
-                skillModifier = ((_characterAttacking.skillScale) / 2);
-
-                switch (_skillChoice.skillIndex)
-                {
-
-                    case 5:
-                        mpRestore = true;
-                        _characterAttacking.currentMana += (_skillChoice.skillPointReturn + (_skillChoice.skillPointReturn * skillModifier));
-                        skillBoostTotal = (_skillChoice.skillPointReturn + (_skillChoice.skillPointReturn * skillModifier));
-                        GameObject targetGO = null;
-
-                        if (target == 0)
-                        {
-                            targetGO = Engine.e.activeParty.gameObject;
-                        }
-                        if (target == 1)
-                        {
-                            targetGO = Engine.e.activePartyMember2.gameObject;
-                        }
-                        if (target == 2)
-                        {
-                            targetGO = Engine.e.activePartyMember3.gameObject;
-                        }
-
-                        Instantiate(siphonAnim, targetGO.transform.position, Quaternion.identity);
-
-                        if (_characterAttacking.currentMana > _characterAttacking.maxMana)
-                        {
-                            _characterAttacking.currentMana = _characterAttacking.maxMana;
-                        }
-                        damageTotal = skillBoostTotal;
-                        break;
-
-                    case 16:
-                        //skillRangedAttack = true;
-                        damageTotal = Mathf.Round(_skillChoice.skillPower + (_skillChoice.skillPower * _characterAttacking.holyDropsLevel / 20) * skillModifier);
-                        //Instantiate(lightningDropAnim, characterGameObject.transform.position, Quaternion.identity);
-                        break;
-
-                }
-
-
-                _characterAttacking.currentEnergy -= Mathf.Round((_skillChoice.skillCost
-                - _skillChoice.skillCost * _characterAttacking.skillCostReduction / 100) + 0.45f);
-
-                targetCheck = true;
-                charMoving = false;
-                charAttackDrop = true;
-                skillRangedAttack = false;
-
-                Engine.e.TakeDamage(_target, damageTotal, 100);
-                //hud.displayMana[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana.ToString();
-
-                targetCheck = true;
-                charMoving = false;
-                charAttackDrop = true;
-                skillRangedAttack = false;
-                //enemies[enemyTarget].GetComponent<Enemy>().TakeSkillDamage(damageTotal, enemyTarget);
-                //hud.displayMana[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana.ToString();
-
-                // if (enemies[enemyTarget].gameObject.GetComponent<Enemy>().health <= 0)
-                //{
-                //    enemies[enemyTarget].gameObject.GetComponent<Enemy>().health = 0;
-
-                //     isDead = EnemyGroup.enemyGroup.CheckEndBattle();
-                //      yield return new WaitForSeconds(0.1f);
-                //  }
-            }
-
             if (dropAttack == true)
             {
                 dropAttack = false;
@@ -1214,7 +1061,7 @@ public class BattleSystem : MonoBehaviour
 
                 charAttackDrop = true;
 
-                Engine.e.InstantiateEnemyDropTeam(characterAttacking, target);
+                //Engine.e.InstantiateEnemyDropTeam(characterAttacking, target);
                 isDead = Engine.e.TakeElementalDamage(target, lastDropChoice.dropPower, lastDropChoice.dropType);
                 _characterAttacking.currentMana -= Mathf.Round(dropChoice.dropCost
                 - (dropChoice.dropCost * _characterAttacking.dropCostReduction / 100) + 0.45f);
@@ -1436,7 +1283,7 @@ public class BattleSystem : MonoBehaviour
                         dontDisplayDmgPopup = false;
                     }
                 }
-                hud.displayEnemyHealth[targetEnemy].text = enemies[targetEnemy].gameObject.GetComponent<Enemy>().health.ToString();
+                hud.displayEnemyHealth[targetEnemy].text = enemies[targetEnemy].gameObject.GetComponent<Enemy>().currentHealth.ToString();
             }
             else
             {
@@ -1514,9 +1361,9 @@ public class BattleSystem : MonoBehaviour
             {
                 if (!attackingTeam)
                 {
-                    if (enemies[targetEnemy].gameObject.GetComponent<Enemy>().health <= 0)
+                    if (enemies[targetEnemy].gameObject.GetComponent<Enemy>().currentHealth <= 0)
                     {
-                        enemies[targetEnemy].gameObject.GetComponent<Enemy>().health = 0;
+                        enemies[targetEnemy].gameObject.GetComponent<Enemy>().currentHealth = 0;
 
                         isDead = EnemyGroup.enemyGroup.CheckEndBattle();
 
@@ -1730,11 +1577,11 @@ public class BattleSystem : MonoBehaviour
                     else
                     {
 
-                        enemies[target].gameObject.GetComponent<Enemy>().TakeDropDamage(target, lastDropChoice);
+                        enemies[target].gameObject.GetComponent<Enemy>().DropEffect(lastDropChoice);
 
-                        if (enemies[target].gameObject.GetComponent<Enemy>().health <= 0)
+                        if (enemies[target].gameObject.GetComponent<Enemy>().currentHealth <= 0)
                         {
-                            enemies[target].gameObject.GetComponent<Enemy>().health = 0;
+                            enemies[target].gameObject.GetComponent<Enemy>().currentHealth = 0;
 
                             isDead = EnemyGroup.enemyGroup.CheckEndBattle();
 
@@ -1769,70 +1616,194 @@ public class BattleSystem : MonoBehaviour
     {
 
         int index = 0;
-        GameObject character = null;
+        GameObject _characterLoc = null;
+
         inBattleMenu = false;
 
         if (currentInQueue == BattleState.CHAR1TURN)
         {
             index = 0;
-            character = Engine.e.activeParty.gameObject;
+            _characterLoc = Engine.e.activeParty.gameObject;
 
         }
         if (currentInQueue == BattleState.CHAR2TURN)
         {
             index = 1;
-            character = Engine.e.activePartyMember2;
+            _characterLoc = Engine.e.activePartyMember2;
 
         }
         if (currentInQueue == BattleState.CHAR3TURN)
         {
             index = 2;
-            character = Engine.e.activePartyMember3;
+            _characterLoc = Engine.e.activePartyMember3;
 
         }
 
-        // Supporting target via an Item
-        if (usingItem)
+        if (targetingTeam) // Most of the time this should be the case
         {
-            usingItem = false;
-
-            Item _itemToBeUsed = null;
-
-            if (index == 0)
+            // Supporting target via an Item
+            if (usingItem)
             {
-                _itemToBeUsed = char1ItemToBeUsed;
-            }
-            if (index == 1)
-            {
-                _itemToBeUsed = char2ItemToBeUsed;
-            }
-            if (index == 2)
-            {
-                _itemToBeUsed = char3ItemToBeUsed;
-            }
+                usingItem = false;
+
+                Item _itemToBeUsed = null;
+
+                if (index == 0)
+                {
+                    _itemToBeUsed = char1ItemToBeUsed;
+                }
+                if (index == 1)
+                {
+                    _itemToBeUsed = char2ItemToBeUsed;
+                }
+                if (index == 2)
+                {
+                    _itemToBeUsed = char3ItemToBeUsed;
+                }
 
 
-            if (!targetingEnemy)
-            {
+
                 Engine.e.UseItemInBattle(_target);
+
+
+                // EndTurn();
+                // yield return new WaitForSeconds(1f);
+                // if (!Engine.e.battleModeActive)
+                // {
+                //     state = BattleState.ATBCHECK;
+                // }
             }
-            else
+
+            // Supporting target via Drop
+            if (dropSupport)
             {
-                enemies[_target].UseItem(_itemToBeUsed);
+                Drops _dropChoice = null;
+
+                dropSupport = false;
+
+                if (index == 0)
+                {
+                    _dropChoice = char1DropChoice;
+                }
+                if (index == 1)
+                {
+                    _dropChoice = char2DropChoice;
+
+                }
+                if (index == 2)
+                {
+                    _dropChoice = char3DropChoice;
+
+                }
+
+                InstantiateDropAnim(_characterLoc, _dropChoice);
+
+
+                activeParty.activeParty[_target].GetComponent<Character>().DropEffect(_dropChoice);
+
+                activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana -= Mathf.Round(_dropChoice.dropCost
+                                - (_dropChoice.dropCost * activeParty.activeParty[index].GetComponent<Character>().dropCostReduction / 100) + 0.45f);
+                dropAttack = false;
+
             }
 
-            // EndTurn();
-            // yield return new WaitForSeconds(1f);
-            // if (!Engine.e.battleModeActive)
-            // {
-            //     state = BattleState.ATBCHECK;
-            // }
+            // Supporting self via Skill
+            if (skillSelfSupport)
+            {
+                Skills _skillChoice = null;
+                Character _selfTarget = activeParty.activeParty[index].GetComponent<Character>();
+                skillSelfSupport = false;
+
+                if (index == 0)
+                {
+                    _skillChoice = char1SkillChoice;
+                }
+                if (index == 1)
+                {
+                    _skillChoice = char2SkillChoice;
+
+                }
+                if (index == 2)
+                {
+                    _skillChoice = char3SkillChoice;
+
+                }
+
+                float skillModifier;
+                skillBoostTotal = 0f;
+
+
+                skillModifier = ((_selfTarget.skillScale) / 2);
+
+                if (_selfTarget.currentEnergy >= _skillChoice.skillCost)
+                {
+                    {
+
+                        switch (_skillChoice.skillIndex)
+                        {
+                            case 15:
+
+                                //Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
+                                //activeParty.activeParty[index].GetComponent<Character>().
+                                _selfTarget.currentEnergy -= _skillChoice.skillCost;
+
+                                switch (_selfTarget.characterName)
+                                {
+                                    case "Grieve":
+                                        if (grievePhysicalBoost == 0)
+                                        {
+                                            grieveStatBoost = true;
+                                            grievePhysicalBoost = Mathf.Round(_selfTarget.physicalDamage + (_selfTarget.skillScale * 10 / 25));
+                                            _selfTarget.physicalDamage += grievePhysicalBoost;
+                                        }
+
+                                        break;
+
+                                    case "Mac":
+                                        if (macPhysicalBoost == 0)
+                                        {
+                                            macStatBoost = true;
+                                            macPhysicalBoost = Mathf.Round(_selfTarget.physicalDamage + (_selfTarget.skillScale * 10 / 25));
+                                            _selfTarget.physicalDamage += macPhysicalBoost;
+                                        }
+
+                                        break;
+
+                                    case "Field":
+                                        if (fieldPhysicalBoost == 0)
+                                        {
+                                            fieldStatBoost = true;
+                                            fieldPhysicalBoost = Mathf.Round(_selfTarget.physicalDamage + (_selfTarget.skillScale * 10 / 25));
+                                            _selfTarget.physicalDamage += fieldPhysicalBoost;
+                                        }
+                                        break;
+
+                                    case "Riggs":
+                                        if (riggsPhysicalBoost == 0)
+                                        {
+                                            riggsStatBoost = true;
+                                            riggsPhysicalBoost = Mathf.Round(_selfTarget.physicalDamage + (_selfTarget.skillScale * 10 / 25));
+                                            _selfTarget.physicalDamage += riggsPhysicalBoost;
+
+                                        }
+                                        break;
+
+                                }
+                                break;
+                        }
+
+                    }
+
+                    // Supporting target via Skill
+                    if (skillTargetSupport)
+                    {
+
+                    }
+                }
+            }
         }
-
-        // Supporting target via Drop
-        if (dropSupport)
+        else // Targeting enemy
         {
-
             Drops _dropChoice = null;
 
             dropSupport = false;
@@ -1852,266 +1823,26 @@ public class BattleSystem : MonoBehaviour
 
             }
 
-            if (targetingTeam)
+            InstantiateDropAnim(_characterLoc, _dropChoice);
+
+
+            enemies[_target].DropEffect(_dropChoice);
+
+            activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana -= Mathf.Round(_dropChoice.dropCost
+            - (_dropChoice.dropCost * activeParty.activeParty[index].GetComponent<Character>().dropCostReduction / 100) + 0.45f);
+            dropAttack = false;
+
+            if (enemies[_target].gameObject.GetComponent<Enemy>().currentHealth <= 0)
             {
-                if (activeParty.activeParty[index].GetComponent<Character>().currentMana >= _dropChoice.dropCost)
-                {
-                    {
+                enemies[_target].gameObject.GetComponent<Enemy>().currentHealth = 0;
 
-                        switch (_dropChoice.dropName)
-                        {
-                            case "Holy Light":
-                                if (activeParty.activeParty[_target].GetComponent<Character>().currentHealth > 0)
-                                {
-                                    Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                                    activeParty.activeParty[index].GetComponent<Character>().currentMana -= _dropChoice.dropCost;
-
-                                }
-                                else
-                                {
-                                    //  yield return this;
-                                }
-                                break;
-
-                            case "Raise":
-                                if (activeParty.activeParty[_target].GetComponent<Character>().currentHealth <= 0)
-                                {
-                                    Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                                    activeParty.activeParty[index].GetComponent<Character>().Revive(_dropChoice.dropPower, _target);
-                                    activeParty.activeParty[index].GetComponent<Character>().currentMana -= _dropChoice.dropCost;
-
-                                }
-                                else
-                                {
-
-                                    if (index == 0)
-                                    {
-                                        Char1Turn();
-                                    }
-                                    if (index == 1)
-                                    {
-                                        Char2Turn();
-                                    }
-                                    if (index == 2)
-                                    {
-                                        Char3Turn();
-                                    }
-                                }
-
-                                break;
-
-                            case "Repent":
-
-                                Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
-
-                                if (activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel >= 20)
-                                {
-                                    if (activeParty.activeParty[_target].GetComponent<Character>().isPoisoned)
-                                    {
-                                        activeParty.activeParty[_target].GetComponent<Character>().isPoisoned = false;
-                                    }
-                                    if (activeParty.activeParty[_target].GetComponent<Character>().isAsleep)
-                                    {
-                                        activeParty.activeParty[_target].GetComponent<Character>().isAsleep = false;
-                                    }
-                                    if (activeParty.activeParty[_target].GetComponent<Character>().isConfused)
-                                    {
-                                        activeParty.activeParty[_target].GetComponent<Character>().isConfused = false;
-                                    }
-                                    if (activeParty.activeParty[_target].GetComponent<Character>().deathInflicted)
-                                    {
-                                        activeParty.activeParty[_target].GetComponent<Character>().RemoveDeath();
-                                    }
-                                    activeParty.activeParty[_target].GetComponent<SpriteRenderer>().color = Color.white;
-
-                                }
-                                else
-                                {
-                                    if (activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel >= 10
-                                    && activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel < 20)
-                                    {
-                                        if (activeParty.activeParty[_target].GetComponent<Character>().isPoisoned)
-                                        {
-                                            activeParty.activeParty[_target].GetComponent<Character>().isPoisoned = false;
-                                            activeParty.activeParty[_target].GetComponent<SpriteRenderer>().color = Color.white;
-
-                                        }
-                                        if (activeParty.activeParty[_target].GetComponent<Character>().isAsleep)
-                                        {
-                                            activeParty.activeParty[_target].GetComponent<Character>().isAsleep = false;
-                                            activeParty.activeParty[_target].GetComponent<SpriteRenderer>().color = Color.white;
-
-                                        }
-
-                                    }
-                                    else
-                                    {
-                                        if (activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel < 10)
-                                        {
-                                            if (activeParty.activeParty[_target].GetComponent<Character>().isAsleep)
-                                            {
-                                                activeParty.activeParty[_target].GetComponent<Character>().isAsleep = false;
-                                                activeParty.activeParty[_target].GetComponent<SpriteRenderer>().color = Color.white;
-
-                                            }
-                                        }
-                                    }
-                                }
-
-                                activeParty.activeParty[index].GetComponent<Character>().currentMana -= _dropChoice.dropCost;
-
-                                break;
-
-                            case "Soothing Rain":
-
-                                Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                                activeParty.activeParty[index].GetComponent<Character>().SoothingRain(_dropChoice.dropPower);
-                                activeParty.activeParty[index].GetComponent<Character>().currentMana -= _dropChoice.dropCost;
+                isDead = EnemyGroup.enemyGroup.CheckEndBattle();
+                yield return new WaitForSeconds(0.1f);
 
 
-                                break;
-                        }
-
-                        if (_dropChoice.dropType == "Holy")
-                        {
-
-                            if (activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel < 99)
-                            {
-                                activeParty.activeParty[index].GetComponent<Character>().holyDropsExperience += _dropChoice.experiencePoints;
-                                // Level Up
-                                if (activeParty.activeParty[index].GetComponent<Character>().holyDropsExperience >= activeParty.activeParty[index].GetComponent<Character>().holyDropsLvlReq)
-                                {
-                                    activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel += 1f;
-                                    activeParty.activeParty[index].GetComponent<Character>().holyDropsExperience -= activeParty.activeParty[index].GetComponent<Character>().holyDropsLvlReq;
-                                    activeParty.activeParty[index].GetComponent<Character>().holyDropsLvlReq = (activeParty.activeParty[index].GetComponent<Character>().holyDropsLvlReq * 3 / 2);
-                                    GameObject levelUp = Instantiate(levelUpPopup, character.transform.position, Quaternion.identity);
-                                    levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Holy Lvl Up (Lvl: " + activeParty.activeParty[index].GetComponent<Character>().holyDropsLevel + ")";
-                                    Destroy(levelUp, 2f);
-                                }
-                            }
-                        }
-
-                    }
-
-                }
-                else
-                {
-                    Debug.Log("Exception Thrown");
-                }
-            }
-            else
-            {
-                enemies[_target].TakeDropDamage(index, _dropChoice);
-
-                activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana -= Mathf.Round(_dropChoice.dropCost
-                - (_dropChoice.dropCost * activeParty.activeParty[index].GetComponent<Character>().dropCostReduction / 100) + 0.45f);
-                dropAttack = false;
-
-                if (enemies[_target].gameObject.GetComponent<Enemy>().health <= 0)
-                {
-                    enemies[_target].gameObject.GetComponent<Enemy>().health = 0;
-
-                    isDead = EnemyGroup.enemyGroup.CheckEndBattle();
-                    yield return new WaitForSeconds(0.1f);
-                }
             }
         }
 
-        // Supporting self via Skill
-        if (skillSelfSupport)
-        {
-            Skills _skillChoice = null;
-            Character _selfTarget = activeParty.activeParty[index].GetComponent<Character>();
-            skillSelfSupport = false;
-
-            if (index == 0)
-            {
-                _skillChoice = char1SkillChoice;
-            }
-            if (index == 1)
-            {
-                _skillChoice = char2SkillChoice;
-
-            }
-            if (index == 2)
-            {
-                _skillChoice = char3SkillChoice;
-
-            }
-
-            float skillModifier;
-            skillBoostTotal = 0f;
-
-
-            skillModifier = ((_selfTarget.skillScale) / 2);
-
-            if (_selfTarget.currentEnergy >= _skillChoice.skillCost)
-            {
-                {
-
-                    switch (_skillChoice.skillIndex)
-                    {
-                        case 15:
-
-                            //Instantiate(holyDropAnim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                            //activeParty.activeParty[index].GetComponent<Character>().
-                            _selfTarget.currentEnergy -= _skillChoice.skillCost;
-
-                            switch (_selfTarget.characterName)
-                            {
-                                case "Grieve":
-                                    if (grievePhysicalBoost == 0)
-                                    {
-                                        grieveStatBoost = true;
-                                        grievePhysicalBoost = Mathf.Round(_selfTarget.physicalDamage + (_selfTarget.skillScale * 10 / 25));
-                                        _selfTarget.physicalDamage += grievePhysicalBoost;
-                                    }
-
-                                    break;
-
-                                case "Mac":
-                                    if (macPhysicalBoost == 0)
-                                    {
-                                        macStatBoost = true;
-                                        macPhysicalBoost = Mathf.Round(_selfTarget.physicalDamage + (_selfTarget.skillScale * 10 / 25));
-                                        _selfTarget.physicalDamage += macPhysicalBoost;
-                                    }
-
-                                    break;
-
-                                case "Field":
-                                    if (fieldPhysicalBoost == 0)
-                                    {
-                                        fieldStatBoost = true;
-                                        fieldPhysicalBoost = Mathf.Round(_selfTarget.physicalDamage + (_selfTarget.skillScale * 10 / 25));
-                                        _selfTarget.physicalDamage += fieldPhysicalBoost;
-                                    }
-                                    break;
-
-                                case "Riggs":
-                                    if (riggsPhysicalBoost == 0)
-                                    {
-                                        riggsStatBoost = true;
-                                        riggsPhysicalBoost = Mathf.Round(_selfTarget.physicalDamage + (_selfTarget.skillScale * 10 / 25));
-                                        _selfTarget.physicalDamage += riggsPhysicalBoost;
-
-                                    }
-                                    break;
-
-                            }
-                            break;
-                    }
-
-                }
-
-                // Supporting target via Skill
-                if (skillTargetSupport)
-                {
-
-                }
-
-            }
-        }
         EndTurn();
         yield return new WaitForSeconds(1f);
         if (!Engine.e.battleModeActive)
@@ -2385,49 +2116,8 @@ public class BattleSystem : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
+        enemies[index].GetComponent<Enemy>().BattleLogic(enemies[index], randTarget);
 
-        if (enemies[index].GetComponent<Enemy>().drops[0] != null)
-        {
-            int choiceAttack = Random.Range(0, 100);
-
-            if (enemies[index].GetComponent<Enemy>().choiceAttack < choiceAttack)
-            {
-                enemyMoving = true;
-                enemyAttacking = true;
-                Engine.e.PhysicalDamageCalculation(randTarget, enemies[index].gameObject.GetComponent<Enemy>().damage);
-
-            }
-            else
-            {
-                enemyDropChoice = Random.Range(0, enemies[index].GetComponent<Enemy>().drops.Length);
-
-                if (enemies[index].GetComponent<Enemy>().mana >= enemies[index].GetComponent<Enemy>().drops[enemyDropChoice].dropCost)
-                {
-                    enemyAttackDrop = true;
-
-                    lastDropChoice = enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice];
-                    Engine.e.InstantiateEnemyDropEnemy(index, enemyDropChoice);
-
-                    isDead = Engine.e.TakeElementalDamage(randTarget, enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropPower, enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType);
-                    enemies[index].GetComponent<Enemy>().mana -= enemies[index].GetComponent<Enemy>().drops[enemyDropChoice].dropCost;
-
-                    enemyAttacking = false;
-
-                }
-                else
-                {
-                    enemyMoving = true;
-                    enemyAttacking = true;
-                    Engine.e.PhysicalDamageCalculation(randTarget, enemies[index].gameObject.GetComponent<Enemy>().damage);
-                }
-            }
-        }
-        else
-        {
-            enemyMoving = true;
-            enemyAttacking = true;
-            Engine.e.PhysicalDamageCalculation(randTarget, enemies[index].gameObject.GetComponent<Enemy>().damage);
-        }
         partyCheckNext = false;
     }
 
@@ -2761,7 +2451,7 @@ public class BattleSystem : MonoBehaviour
             {
                 enemyDropChoice = Random.Range(0, enemies[index].GetComponent<Enemy>().drops.Length);
 
-                if (enemies[index].GetComponent<Enemy>().mana >= enemies[index].GetComponent<Enemy>().drops[enemyDropChoice].dropCost)
+                if (enemies[index].GetComponent<Enemy>().currentMana >= enemies[index].GetComponent<Enemy>().drops[enemyDropChoice].dropCost)
                 {
                     physicalAttack = false;
                     confuseAttack = false;
@@ -2837,7 +2527,7 @@ public class BattleSystem : MonoBehaviour
                             enemy4ATB = 0;
                         }
 
-                        enemies[index].GetComponent<Enemy>().mana -= enemies[index].GetComponent<Enemy>().drops[enemyDropChoice].dropCost;
+                        enemies[index].GetComponent<Enemy>().currentMana -= enemies[index].GetComponent<Enemy>().drops[enemyDropChoice].dropCost;
 
                         if (enemies[index].GetComponent<EnemyMovement>() != null)
                         {
@@ -4000,7 +3690,7 @@ public class BattleSystem : MonoBehaviour
             {
                 if (enemies[i] != null)
                 {
-                    if (enemies[i].health > 0)
+                    if (enemies[i].currentHealth > 0)
                     {
                         enemyTargetButtons[i].SetActive(true);
                     }
@@ -4078,7 +3768,7 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (enemies[i] != null)
                     {
-                        if (enemies[i].health > 0)
+                        if (enemies[i].currentHealth > 0)
                         {
                             enemyTargetButtons[i].SetActive(true);
                         }
@@ -4776,9 +4466,9 @@ public class BattleSystem : MonoBehaviour
                 {
                     enemies[currentIndex].GetComponent<Enemy>().TakeDeathDamage();
                 }
-                if (enemies[currentIndex].gameObject.GetComponent<Enemy>().health <= 0)
+                if (enemies[currentIndex].gameObject.GetComponent<Enemy>().currentHealth <= 0)
                 {
-                    enemies[currentIndex].gameObject.GetComponent<Enemy>().health = 0;
+                    enemies[currentIndex].gameObject.GetComponent<Enemy>().currentHealth = 0;
 
                     isDead = EnemyGroup.enemyGroup.CheckEndBattle();
 
@@ -4975,7 +4665,7 @@ public class BattleSystem : MonoBehaviour
 
                 if (currentIndex == 2)
                 {
-                    if (enemies[nextIndex].gameObject.GetComponent<Enemy>().health > 0 && !enemies[nextIndex].GetComponent<Enemy>().isAsleep)
+                    if (enemies[nextIndex].gameObject.GetComponent<Enemy>().currentHealth > 0 && !enemies[nextIndex].GetComponent<Enemy>().isAsleep)
                     {
                         state = BattleState.ENEMY1TURN;
                         Enemy1Turn();
@@ -5023,7 +4713,7 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (enemies[nextIndex] != null)
                     {
-                        if (enemies[nextIndex].gameObject.GetComponent<Enemy>().health > 0)
+                        if (enemies[nextIndex].gameObject.GetComponent<Enemy>().currentHealth > 0)
                         {
                             if (!enemies[nextIndex].gameObject.GetComponent<Enemy>().isAsleep)
                             {
@@ -5426,8 +5116,8 @@ public class BattleSystem : MonoBehaviour
     {
         if (enemies[3] != null)
         {
-            if (enemies[3].GetComponent<Enemy>().health == 0 && enemies[2].GetComponent<Enemy>().health == 0
-            && enemies[1].GetComponent<Enemy>().health == 0 && enemies[0].GetComponent<Enemy>().health == 0)
+            if (enemies[3].GetComponent<Enemy>().currentHealth == 0 && enemies[2].GetComponent<Enemy>().currentHealth == 0
+            && enemies[1].GetComponent<Enemy>().currentHealth == 0 && enemies[0].GetComponent<Enemy>().currentHealth == 0)
             {
                 return true;
             }
@@ -5437,8 +5127,8 @@ public class BattleSystem : MonoBehaviour
         {
             if (enemies[2] != null)
             {
-                if (enemies[2].GetComponent<Enemy>().health == 0 && enemies[1].GetComponent<Enemy>().health == 0
-                && enemies[0].GetComponent<Enemy>().health == 0)
+                if (enemies[2].GetComponent<Enemy>().currentHealth == 0 && enemies[1].GetComponent<Enemy>().currentHealth == 0
+                && enemies[0].GetComponent<Enemy>().currentHealth == 0)
                 {
                     return true;
                 }
@@ -5449,7 +5139,7 @@ public class BattleSystem : MonoBehaviour
         {
             if (enemies[1] != null)
             {
-                if (enemies[1].GetComponent<Enemy>().health == 0 && enemies[0].GetComponent<Enemy>().health == 0)
+                if (enemies[1].GetComponent<Enemy>().currentHealth == 0 && enemies[0].GetComponent<Enemy>().currentHealth == 0)
                 {
                     return true;
                 }
@@ -5458,7 +5148,7 @@ public class BattleSystem : MonoBehaviour
         if (enemies[3] == null && enemies[2] == null && enemies[1] == null)
         {
 
-            if (enemies[0].GetComponent<Enemy>().health == 0)
+            if (enemies[0].GetComponent<Enemy>().currentHealth == 0)
             {
                 return true;
             }
@@ -5993,19 +5683,19 @@ public class BattleSystem : MonoBehaviour
         allyTargetButtons[1].transform.position = Engine.e.activePartyMember2.transform.position;
         allyTargetButtons[2].transform.position = Engine.e.activePartyMember3.transform.position;
 
-        if (enemies[0] != null && enemies[0].GetComponent<Enemy>().health > 0)
+        if (enemies[0] != null && enemies[0].GetComponent<Enemy>().currentHealth > 0)
         {
             enemyTargetButtons[0].transform.position = enemies[0].transform.position;
         }
-        if (enemies[1] != null && enemies[1].GetComponent<Enemy>().health > 0)
+        if (enemies[1] != null && enemies[1].GetComponent<Enemy>().currentHealth > 0)
         {
             enemyTargetButtons[1].transform.position = enemies[1].transform.position;
         }
-        if (enemies[2] != null && enemies[2].GetComponent<Enemy>().health > 0)
+        if (enemies[2] != null && enemies[2].GetComponent<Enemy>().currentHealth > 0)
         {
             enemyTargetButtons[2].transform.position = enemies[2].transform.position;
         }
-        if (enemies[3] != null && enemies[3].GetComponent<Enemy>().health > 0)
+        if (enemies[3] != null && enemies[3].GetComponent<Enemy>().currentHealth > 0)
         {
             enemyTargetButtons[3].transform.position = enemies[3].transform.position;
         }
@@ -6362,9 +6052,9 @@ public class BattleSystem : MonoBehaviour
 
         if (!animExists)
         {
-            if (Engine.e.battleSystem.hud.displayEnemyHealth[0].text != enemies[0].GetComponent<Enemy>().health.ToString())
+            if (Engine.e.battleSystem.hud.displayEnemyHealth[0].text != enemies[0].GetComponent<Enemy>().currentHealth.ToString())
             {
-                Engine.e.battleSystem.hud.displayEnemyHealth[0].text = enemies[0].GetComponent<Enemy>().health.ToString();
+                Engine.e.battleSystem.hud.displayEnemyHealth[0].text = enemies[0].GetComponent<Enemy>().currentHealth.ToString();
             }
         }
 
@@ -6407,9 +6097,9 @@ public class BattleSystem : MonoBehaviour
         {
             if (!animExists)
             {
-                if (Engine.e.battleSystem.hud.displayEnemyHealth[1].text != enemies[1].GetComponent<Enemy>().health.ToString())
+                if (Engine.e.battleSystem.hud.displayEnemyHealth[1].text != enemies[1].GetComponent<Enemy>().currentHealth.ToString())
                 {
-                    Engine.e.battleSystem.hud.displayEnemyHealth[1].text = enemies[1].GetComponent<Enemy>().health.ToString();
+                    Engine.e.battleSystem.hud.displayEnemyHealth[1].text = enemies[1].GetComponent<Enemy>().currentHealth.ToString();
                 }
             }
 
@@ -6453,9 +6143,9 @@ public class BattleSystem : MonoBehaviour
         {
             if (!animExists)
             {
-                if (Engine.e.battleSystem.hud.displayEnemyHealth[2].text != enemies[2].GetComponent<Enemy>().health.ToString())
+                if (Engine.e.battleSystem.hud.displayEnemyHealth[2].text != enemies[2].GetComponent<Enemy>().currentHealth.ToString())
                 {
-                    Engine.e.battleSystem.hud.displayEnemyHealth[2].text = enemies[2].GetComponent<Enemy>().health.ToString();
+                    Engine.e.battleSystem.hud.displayEnemyHealth[2].text = enemies[2].GetComponent<Enemy>().currentHealth.ToString();
                 }
             }
 
@@ -6499,9 +6189,9 @@ public class BattleSystem : MonoBehaviour
         {
             if (!animExists)
             {
-                if (Engine.e.battleSystem.hud.displayEnemyHealth[3].text != enemies[3].GetComponent<Enemy>().health.ToString())
+                if (Engine.e.battleSystem.hud.displayEnemyHealth[3].text != enemies[3].GetComponent<Enemy>().currentHealth.ToString())
                 {
-                    Engine.e.battleSystem.hud.displayEnemyHealth[3].text = enemies[3].GetComponent<Enemy>().health.ToString();
+                    Engine.e.battleSystem.hud.displayEnemyHealth[3].text = enemies[3].GetComponent<Enemy>().currentHealth.ToString();
                 }
             }
 
@@ -6599,7 +6289,7 @@ public class BattleSystem : MonoBehaviour
                         }
                     }
 
-                    if (enemies[0].GetComponent<Enemy>().health > 0)
+                    if (enemies[0].GetComponent<Enemy>().currentHealth > 0)
                     {
                         if (enemy1ATB < ATBReady)
                         {
@@ -6614,7 +6304,7 @@ public class BattleSystem : MonoBehaviour
 
                     if (enemies[1] != null)
                     {
-                        if (enemies[1].GetComponent<Enemy>().health > 0)
+                        if (enemies[1].GetComponent<Enemy>().currentHealth > 0)
                         {
                             if (enemy2ATB < ATBReady)
                             {
@@ -6631,7 +6321,7 @@ public class BattleSystem : MonoBehaviour
 
                     if (enemies[2] != null)
                     {
-                        if (enemies[2].GetComponent<Enemy>().health > 0)
+                        if (enemies[2].GetComponent<Enemy>().currentHealth > 0)
                         {
                             if (enemy3ATB < ATBReady)
                             {
@@ -6647,7 +6337,7 @@ public class BattleSystem : MonoBehaviour
 
                     if (enemies[3] != null)
                     {
-                        if (enemies[3].GetComponent<Enemy>().health > 0)
+                        if (enemies[3].GetComponent<Enemy>().currentHealth > 0)
                         {
                             if (enemy4ATB < ATBReady)
                             {
@@ -6740,6 +6430,11 @@ public class BattleSystem : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void InstantiateDropAnim(GameObject _spawnLoc, Drops _drop)
+    {
+        Instantiate(_drop.dropAnim, _spawnLoc.transform.position, Quaternion.identity);
     }
 
     void PressDown()

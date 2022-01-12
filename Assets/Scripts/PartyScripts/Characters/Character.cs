@@ -434,4 +434,510 @@ public class Character : MonoBehaviour
         skills[_skill.skillIndex] = _skill;
         _skill.isKnown = true;
     }
+
+    public void DropEffect(Drops dropChoice)
+    {
+        float dropValueOutcome = 0;
+        int currentIndex = 0;
+        Character characterAttacking = null;
+        Enemy enemyAttacking = null;
+        bool teamAttack = false; // If "false," an active party member is attacking 
+        float damageTotal = 0;
+
+        if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR1TURN || Engine.e.battleSystem.currentInQueue == BattleState.CONFCHAR1)
+        {
+            currentIndex = 0;
+            characterAttacking = Engine.e.activeParty.activeParty[0].GetComponent<Character>();
+            teamAttack = true;
+        }
+        if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR2TURN || Engine.e.battleSystem.currentInQueue == BattleState.CONFCHAR2)
+        {
+            currentIndex = 1;
+            characterAttacking = Engine.e.activeParty.activeParty[1].GetComponent<Character>();
+            teamAttack = true;
+        }
+        if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR3TURN || Engine.e.battleSystem.currentInQueue == BattleState.CONFCHAR3)
+        {
+            currentIndex = 2;
+            characterAttacking = Engine.e.activeParty.activeParty[2].GetComponent<Character>();
+            teamAttack = true;
+        }
+
+        if (Engine.e.battleSystem.currentInQueue == BattleState.ENEMY1TURN)
+        {
+            currentIndex = 0;
+        }
+
+        if (Engine.e.battleSystem.currentInQueue == BattleState.ENEMY2TURN)
+        {
+            currentIndex = 1;
+        }
+
+        if (Engine.e.battleSystem.currentInQueue == BattleState.ENEMY3TURN)
+        {
+            currentIndex = 2;
+        }
+
+        if (Engine.e.battleSystem.currentInQueue == BattleState.ENEMY4TURN)
+        {
+            currentIndex = 3;
+        }
+
+        if (teamAttack)
+        {
+            characterAttacking = Engine.e.activeParty.activeParty[currentIndex].GetComponent<Character>();
+        }
+        else
+        {
+            enemyAttacking = Engine.e.battleSystem.enemies[currentIndex].GetComponent<Enemy>();
+        }
+
+        if (dropChoice.dropType == "Fire")
+        {
+            if (teamAttack)
+            {
+                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.fireDropsLevel / 2)) + characterAttacking.fireDropAttackBonus);
+                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * fireDefense / 100));
+                currentHealth -= Mathf.Round(damageTotal);
+                characterAttacking.GetDropExperience(dropChoice);
+            }
+            else
+            {
+                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.fireDropsLevel / 2)));
+                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * fireDefense / 100));
+                currentHealth -= Mathf.Round(damageTotal);
+            }
+        }
+
+        if (dropChoice.dropType == "Ice")
+        {
+            if (teamAttack)
+            {
+                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.iceDropsLevel / 2)) + characterAttacking.iceDropAttackBonus);
+                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * iceDefense / 100));
+                currentHealth -= Mathf.Round(damageTotal);
+                characterAttacking.GetDropExperience(dropChoice);
+            }
+            else
+            {
+                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.iceDropsLevel / 2)));
+                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * iceDefense / 100));
+                currentHealth -= Mathf.Round(damageTotal);
+            }
+        }
+
+        if (dropChoice.dropType == "Lightning")
+        {
+            // Instantiate(battleSystem.fireDropAnim, currentLocation.transform.position, Quaternion.identity);
+
+            if (teamAttack)
+            {
+                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.lightningDropsLevel / 2)) + characterAttacking.lightningDropAttackBonus);
+                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * lightningDefense / 100));
+                currentHealth -= Mathf.Round(damageTotal);
+                characterAttacking.GetDropExperience(dropChoice);
+            }
+            else
+            {
+                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.lightningDropsLevel / 2)));
+                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * lightningDefense / 100));
+                currentHealth -= Mathf.Round(damageTotal);
+            }
+        }
+
+        if (dropChoice.dropType == "Water")
+        {
+            if (teamAttack)
+            {
+                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.waterDropsLevel / 2)) + characterAttacking.waterDropAttackBonus);
+                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
+                currentHealth -= Mathf.Round(damageTotal);
+                characterAttacking.GetDropExperience(dropChoice);
+            }
+            else
+            {
+                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.waterDropsLevel / 2)));
+                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
+                currentHealth -= Mathf.Round(damageTotal);
+            }
+        }
+
+        if (dropChoice.dropType == "Shadow")
+        {
+            if (teamAttack)
+            {
+                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.shadowDropsLevel / 2)) + characterAttacking.shadowDropAttackBonus);
+                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * shadowDefense / 100));
+                currentHealth -= Mathf.Round(damageTotal);
+                characterAttacking.GetDropExperience(dropChoice);
+            }
+            else
+            {
+                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.shadowDropsLevel / 2)));
+                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * shadowDefense / 100));
+                currentHealth -= Mathf.Round(damageTotal);
+            }
+
+            switch (dropChoice.dropName)
+            {
+                case "Bio":
+
+                    //InflictPoisonAttack(currentIndex, battleSystem.lastDropChoice.dotDmg);
+
+                    break;
+                case "Knockout":
+                    if (!isAsleep)
+                    {
+                        float sleepChance = Random.Range(0, 100);
+
+                        if (sleepDefense < sleepChance)
+                        {
+                            isAsleep = true;
+                            sleepTimer = 0;
+                        }
+                    }
+                    break;
+                case "Blind":
+                    if (!isConfused)
+                    {
+                        float confuseChance = Random.Range(0, 100);
+
+                        if (confuseDefense < confuseChance)
+                        {
+                            isConfused = true;
+                            confuseTimer = 0;
+                        }
+                    }
+                    break;
+            }
+        }
+
+        if (dropChoice.dropType == "Holy")
+        {
+            if (teamAttack)
+            {
+                characterAttacking.GetDropExperience(dropChoice);
+
+                switch (dropChoice.dropName)
+                {
+                    case "Holy Light":
+                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.holyDropsLevel / 2)));
+                        damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * holyDefense / 100));
+                        currentHealth += damageTotal;
+
+                        if (currentHealth >= maxHealth)
+                        {
+                            currentHealth = maxHealth;
+                        }
+
+                        break;
+                    case "Repent":
+
+                        if (characterAttacking.holyDropsLevel >= 20)
+                        {
+                            if (isAsleep)
+                            {
+                                isAsleep = false;
+                            }
+                            if (isPoisoned)
+                            {
+                                isPoisoned = false;
+                            }
+                            if (isConfused)
+                            {
+                                isConfused = false;
+                                confuseTimer = 0;
+                            }
+                            if (deathInflicted)
+                            {
+                                deathInflicted = false;
+                                deathTimer = 3;
+                                //deathTimerPopup.SetActive(false);
+                            }
+                        }
+                        else
+                        {
+                            if (characterAttacking.holyDropsLevel < 20 && characterAttacking.holyDropsLevel >= 10)
+                            {
+                                if (isAsleep)
+                                {
+                                    isAsleep = false;
+                                }
+                                if (isPoisoned)
+                                {
+                                    isPoisoned = false;
+                                }
+                            }
+                            else
+                            {
+                                if (isAsleep)
+                                {
+                                    isAsleep = false;
+                                }
+                            }
+                        }
+                        inflicted = false;
+
+                        break;
+
+                }
+            }
+            else
+            {
+                switch (dropChoice.dropName)
+                {
+                    case "Holy Light":
+                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.holyDropsLevel / 2)));
+                        damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * holyDefense / 100));
+
+                        currentHealth += damageTotal;
+
+                        if (currentHealth >= maxHealth)
+                        {
+                            currentHealth = maxHealth;
+                        }
+
+                        break;
+                    case "Repent":
+                        if (enemyAttacking.holyDropsLevel >= 20)
+                        {
+                            if (isAsleep)
+                            {
+                                isAsleep = false;
+                            }
+                            if (isPoisoned)
+                            {
+                                isPoisoned = false;
+                            }
+                            if (isConfused)
+                            {
+                                isConfused = false;
+                                confuseTimer = 0;
+                            }
+                            if (deathInflicted)
+                            {
+                                deathInflicted = false;
+                                deathTimer = 3;
+                                //deathTimerPopup.SetActive(false);
+                            }
+                        }
+                        else
+                        {
+                            if (enemyAttacking.holyDropsLevel < 20 && enemyAttacking.holyDropsLevel >= 10)
+                            {
+                                if (isAsleep)
+                                {
+                                    isAsleep = false;
+                                }
+                                if (isPoisoned)
+                                {
+                                    isPoisoned = false;
+                                }
+                            }
+                            else
+                            {
+                                if (isAsleep)
+                                {
+                                    isAsleep = false;
+                                }
+                            }
+                        }
+
+                        inflicted = false;
+                        break;
+                }
+            }
+        }
+
+
+        Engine.e.battleSystem.damageTotal = damageTotal;
+
+        if (isAsleep)
+        {
+            if (dropChoice.dropName != "Knockout" && dropChoice.dropName != "Bio" && dropChoice.dropName != "Blind")
+            {
+                isAsleep = false;
+                isConfused = false;
+                inflicted = false;
+
+                if (GetComponent<EnemyMovement>() != null)
+                {
+                    GetComponent<EnemyMovement>().enabled = true;
+                }
+                GetComponent<SpriteRenderer>().color = Color.grey;
+            }
+        }
+
+        if (isConfused)
+        {
+            int snapoutChance = Random.Range(0, 100);
+            if (confuseDefense > snapoutChance)
+            {
+                isConfused = false;
+                inflicted = false;
+                confuseTimer = 0;
+
+                if (GetComponent<EnemyMovement>() != null)
+                {
+                    GetComponent<EnemyMovement>().enabled = true;
+                }
+                GetComponent<SpriteRenderer>().color = Color.white;
+            }
+
+            if (dropChoice.dropName == "Knockout")
+            {
+                isAsleep = true;
+                isConfused = false;
+                if (GetComponent<EnemyMovement>() != null)
+                {
+                    GetComponent<EnemyMovement>().enabled = false;
+                }
+
+
+                GetComponent<SpriteRenderer>().color = Color.grey;
+            }
+        }
+
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
+
+        if (!Engine.e.battleSystem.animExists)
+        {
+            if (currentHealth <= 0)
+            {
+
+                isPoisoned = false;
+                isConfused = false;
+                isAsleep = false;
+                deathInflicted = false;
+                inflicted = false;
+                poisonDmg = 0;
+            }
+        }
+    }
+
+    public void GetDropExperience(Drops _dropChoice)
+    {
+        if (_dropChoice.dropType == "Fire")
+        {
+            if (fireDropsLevel < 99)
+            {
+                fireDropsExperience += _dropChoice.experiencePoints;
+                // Level Up
+                if (fireDropsExperience >= fireDropsLvlReq)
+                {
+                    fireDropsLevel += 1f;
+                    fireDropsExperience -= fireDropsLvlReq;
+                    fireDropsLvlReq = (fireDropsLvlReq * 3 / 2);
+                    fireDefense += 0.5f;
+                    GameObject levelUp = Instantiate(Engine.e.battleSystem.levelUpPopup, transform.position, Quaternion.identity);
+                    levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Fire Lvl Up! (Lvl: " + fireDropsLevel + ")";
+                    //levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(212, 1, 1, 255);
+                    Destroy(levelUp, 2f);
+                }
+            }
+        }
+
+        if (_dropChoice.dropType == "Ice")
+        {
+            if (iceDropsLevel < 99)
+            {
+                iceDropsExperience += _dropChoice.experiencePoints;
+                // Level Up
+                if (iceDropsExperience >= iceDropsLvlReq)
+                {
+                    iceDropsLevel += 1f;
+                    iceDropsExperience -= iceDropsLvlReq;
+                    iceDropsLvlReq = (iceDropsLvlReq * 3 / 2);
+                    iceDefense += 0.5f;
+                    GameObject levelUp = Instantiate(Engine.e.battleSystem.levelUpPopup, transform.position, Quaternion.identity);
+                    levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Ice Lvl Up! (Lvl: " + iceDropsLevel + ")";
+                    //levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(212, 1, 1, 255);
+                    Destroy(levelUp, 2f);
+                }
+            }
+        }
+
+        if (_dropChoice.dropType == "Lightning")
+        {
+            if (lightningDropsLevel < 99)
+            {
+                lightningDropsExperience += _dropChoice.experiencePoints;
+                // Level Up
+                if (lightningDropsExperience >= lightningDropsLvlReq)
+                {
+                    lightningDropsLevel += 1f;
+                    lightningDropsExperience -= fireDropsLvlReq;
+                    lightningDropsLvlReq = (fireDropsLvlReq * 3 / 2);
+                    lightningDefense += 0.5f;
+                    GameObject levelUp = Instantiate(Engine.e.battleSystem.levelUpPopup, transform.position, Quaternion.identity);
+                    levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Lightning Lvl Up! (Lvl: " + lightningDropsLevel + ")";
+                    //levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(212, 1, 1, 255);
+                    Destroy(levelUp, 2f);
+                }
+            }
+        }
+
+        if (_dropChoice.dropType == "Water")
+        {
+            if (waterDropsLevel < 99)
+            {
+                waterDropsExperience += _dropChoice.experiencePoints;
+                // Level Up
+                if (waterDropsExperience >= waterDropsLvlReq)
+                {
+                    waterDropsLevel += 1f;
+                    waterDropsExperience -= waterDropsLvlReq;
+                    waterDropsLvlReq = (waterDropsLvlReq * 3 / 2);
+                    waterDefense += 0.5f;
+                    GameObject levelUp = Instantiate(Engine.e.battleSystem.levelUpPopup, transform.position, Quaternion.identity);
+                    levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Water Lvl Up! (Lvl: " + waterDropsLevel + ")";
+                    //levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(212, 1, 1, 255);
+                    Destroy(levelUp, 2f);
+                }
+            }
+        }
+
+        if (_dropChoice.dropType == "Shadow")
+        {
+            if (shadowDropsLevel < 99)
+            {
+                shadowDropsExperience += _dropChoice.experiencePoints;
+                // Level Up
+                if (shadowDropsExperience >= shadowDropsLvlReq)
+                {
+                    shadowDropsLevel += 1f;
+                    shadowDropsExperience -= shadowDropsLvlReq;
+                    shadowDropsLvlReq = (shadowDropsLvlReq * 3 / 2);
+                    shadowDefense += 0.5f;
+                    GameObject levelUp = Instantiate(Engine.e.battleSystem.levelUpPopup, transform.position, Quaternion.identity);
+                    levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Shadow Lvl Up! (Lvl: " + shadowDropsLevel + ")";
+                    //levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(212, 1, 1, 255);
+                    Destroy(levelUp, 2f);
+                }
+            }
+        }
+
+        if (_dropChoice.dropType == "Holy")
+        {
+            if (holyDropsLevel < 99)
+            {
+                holyDropsExperience += _dropChoice.experiencePoints;
+                // Level Up
+                if (holyDropsExperience >= holyDropsLvlReq)
+                {
+                    holyDropsLevel += 1f;
+                    holyDropsExperience -= holyDropsLvlReq;
+                    holyDropsLvlReq = (holyDropsLvlReq * 3 / 2);
+                    holyDefense += 0.5f;
+                    GameObject levelUp = Instantiate(Engine.e.battleSystem.levelUpPopup, transform.position, Quaternion.identity);
+                    levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Holy Lvl Up! (Lvl: " + holyDropsLevel + ")";
+                    //levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(212, 1, 1, 255);
+                    Destroy(levelUp, 2f);
+                }
+            }
+        }
+    }
 }

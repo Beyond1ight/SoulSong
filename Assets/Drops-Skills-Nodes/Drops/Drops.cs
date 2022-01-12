@@ -16,6 +16,7 @@ public class Drops : ScriptableObject
     public bool support;
     public int dropValue;
     public int dropIndex;
+    public GameObject dropAnim;
     public bool isKnown = false;
 
     public float GetDropPower()

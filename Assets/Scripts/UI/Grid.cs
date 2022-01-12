@@ -408,6 +408,10 @@ public class Grid : MonoBehaviour
         // Not sure why this needs to happen, but it does
         Engine.e.gridReference.gameObject.SetActive(true);
         Engine.e.gridReference.gameObject.SetActive(false);
+
+        gridPerspective.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 150f;
+        centerOfGridPerspective.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 2000f;
+
     }
 
     public void ActivateDropNode(int partyMember, Drops _drop)

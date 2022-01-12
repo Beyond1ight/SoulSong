@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using TMPro;
+using System.Linq;
 
 public class EnemyGroup : MonoBehaviour
 {
@@ -155,7 +156,7 @@ public class EnemyGroup : MonoBehaviour
     {
         if (battleSystem.enemies[0] != null && battleSystem.enemies[1] == null && battleSystem.enemies[2] == null && battleSystem.enemies[3] == null)
         {
-            if (battleSystem.enemies[0].gameObject.GetComponent<Enemy>().health <= 0)
+            if (battleSystem.enemies[0].gameObject.GetComponent<Enemy>().currentHealth <= 0)
             {
                 return true;
             }
@@ -167,8 +168,8 @@ public class EnemyGroup : MonoBehaviour
 
         if (battleSystem.enemies[1] != null && battleSystem.enemies[2] == null && battleSystem.enemies[3] == null)
         {
-            if (battleSystem.enemies[0].gameObject.GetComponent<Enemy>().health <= 0
-            && battleSystem.enemies[1].gameObject.GetComponent<Enemy>().health <= 0)
+            if (battleSystem.enemies[0].gameObject.GetComponent<Enemy>().currentHealth <= 0
+            && battleSystem.enemies[1].gameObject.GetComponent<Enemy>().currentHealth <= 0)
             {
                 return true;
             }
@@ -180,9 +181,9 @@ public class EnemyGroup : MonoBehaviour
 
         if (battleSystem.enemies[1] != null && battleSystem.enemies[2] != null && battleSystem.enemies[3] == null)
         {
-            if (battleSystem.enemies[0].gameObject.GetComponent<Enemy>().health <= 0
-            && battleSystem.enemies[1].gameObject.GetComponent<Enemy>().health <= 0
-            && battleSystem.enemies[2].gameObject.GetComponent<Enemy>().health <= 0)
+            if (battleSystem.enemies[0].gameObject.GetComponent<Enemy>().currentHealth <= 0
+            && battleSystem.enemies[1].gameObject.GetComponent<Enemy>().currentHealth <= 0
+            && battleSystem.enemies[2].gameObject.GetComponent<Enemy>().currentHealth <= 0)
             {
                 return true;
             }
@@ -194,10 +195,10 @@ public class EnemyGroup : MonoBehaviour
 
         if (battleSystem.enemies[1] != null && battleSystem.enemies[2] != null && battleSystem.enemies[3] != null)
         {
-            if (battleSystem.enemies[0].gameObject.GetComponent<Enemy>().health <= 0
-            && battleSystem.enemies[1].gameObject.GetComponent<Enemy>().health <= 0
-            && battleSystem.enemies[2].gameObject.GetComponent<Enemy>().health <= 0
-            && battleSystem.enemies[3].gameObject.GetComponent<Enemy>().health <= 0)
+            if (battleSystem.enemies[0].gameObject.GetComponent<Enemy>().currentHealth <= 0
+            && battleSystem.enemies[1].gameObject.GetComponent<Enemy>().currentHealth <= 0
+            && battleSystem.enemies[2].gameObject.GetComponent<Enemy>().currentHealth <= 0
+            && battleSystem.enemies[3].gameObject.GetComponent<Enemy>().currentHealth <= 0)
             {
                 return true;
             }
@@ -243,7 +244,7 @@ public class EnemyGroup : MonoBehaviour
         {
             if (enemies[i] != null)
             {
-                if (enemies[i].GetComponent<Enemy>().health > 0)
+                if (enemies[i].GetComponent<Enemy>().currentHealth > 0)
                 {
                     remainingEnemies.Add(enemies[i].GetComponent<Enemy>().groupIndex);
                 }
@@ -298,7 +299,7 @@ public class EnemyGroup : MonoBehaviour
             {
                 if (enemies[i] != null)
                 {
-                    if (enemies[i].GetComponent<Enemy>().health > 0 && !enemies[i].GetComponent<Enemy>().isAsleep)
+                    if (enemies[i].GetComponent<Enemy>().currentHealth > 0 && !enemies[i].GetComponent<Enemy>().isAsleep)
                     {
                         nextRemainingEnemyIndex = remainingEnemies[i];
                         break;
@@ -312,7 +313,7 @@ public class EnemyGroup : MonoBehaviour
             {
                 if (enemies[i] != null)
                 {
-                    if (enemies[i].GetComponent<Enemy>().health > 0 && !enemies[i].GetComponent<Enemy>().isAsleep)
+                    if (enemies[i].GetComponent<Enemy>().currentHealth > 0 && !enemies[i].GetComponent<Enemy>().isAsleep)
                     {
                         nextRemainingEnemyIndex = remainingEnemies[i];
                         break;
@@ -325,7 +326,7 @@ public class EnemyGroup : MonoBehaviour
 
             if (enemies[3] != null)
             {
-                if (enemies[3].GetComponent<Enemy>().health > 0 && !enemies[3].GetComponent<Enemy>().isAsleep)
+                if (enemies[3].GetComponent<Enemy>().currentHealth > 0 && !enemies[3].GetComponent<Enemy>().isAsleep)
                 {
                     nextRemainingEnemyIndex = remainingEnemies[3];
                 }
@@ -339,7 +340,7 @@ public class EnemyGroup : MonoBehaviour
             {
                 if (enemies[i] != null)
                 {
-                    if (enemies[i].GetComponent<Enemy>().health > 0 && !enemies[i].GetComponent<Enemy>().isAsleep)
+                    if (enemies[i].GetComponent<Enemy>().currentHealth > 0 && !enemies[i].GetComponent<Enemy>().isAsleep)
                     {
                         nextRemainingEnemyIndex = remainingEnemies[i];
                         break;
@@ -358,7 +359,7 @@ public class EnemyGroup : MonoBehaviour
             MoveToPosition();
     }
 
-    public List<Enemy> GetEnemiesInGroup()
+    public List<Enemy> GetRemainingEnemiesInGroup()
     {
         List<Enemy> enemiesInGroup = new List<Enemy>();
 
@@ -370,6 +371,18 @@ public class EnemyGroup : MonoBehaviour
             }
         }
         return enemiesInGroup;
+    }
+
+    public int GetLowestHealthEnemy()
+    {
+
+        List<Enemy> enemyList = new List<Enemy>();
+
+        enemyList = GetRemainingEnemiesInGroup();
+
+        enemyList = enemyList.OrderBy(enemy => enemy.currentHealth).ToList();
+
+        return enemyList[0].groupIndex;
     }
 
     public List<Enemy> GetEnemyInGroup(string _enemyName)
@@ -386,22 +399,27 @@ public class EnemyGroup : MonoBehaviour
         return enemiesInGroup;
     }
 
-    public void GetEnemyIndex(Enemy enemy)
+    public int GetEnemyIndex(Enemy _enemy)
     {
+        int _index = 0;
+
         for (int i = 0; i < enemies.Length; i++)
         {
             if (enemies[i] != null)
             {
-                if (enemies[i].GetComponent<Enemy>().name == enemy.name)
+                if (enemies[i].GetComponent<Enemy>().name == _enemy.name)
                 {
                     if (enemies[i].GetComponent<Enemy>().groupIndex == -1)
                     {
                         enemies[i].GetComponent<Enemy>().groupIndex = i;
+                        _index = i;
                         break;
                     }
                 }
             }
         }
+
+        return _index;
     }
 }
 

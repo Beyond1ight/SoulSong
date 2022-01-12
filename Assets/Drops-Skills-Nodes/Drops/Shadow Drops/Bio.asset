@@ -23,4 +23,5 @@ MonoBehaviour:
   support: 0
   dropValue: 2500
   dropIndex: 22
-  isKnown: 1
+  dropAnim: {fileID: 6770587134714657783, guid: c5efc32239b854a068ac7b3ae00c7ba1, type: 3}
+  isKnown: 0

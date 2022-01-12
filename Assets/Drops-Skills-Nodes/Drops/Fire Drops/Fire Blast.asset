@@ -17,7 +17,11 @@ MonoBehaviour:
   dropDescription: Basic fire attack
   dropCost: 10
   dropPower: 15
+  dotDmg: 0
   experiencePoints: 5
   dps: 1
   support: 0
   dropValue: 1000
+  dropIndex: 0
+  dropAnim: {fileID: 6908659498548326663, guid: 08f714558dfc5448fba87b26186fc6e9, type: 3}
+  isKnown: 0
