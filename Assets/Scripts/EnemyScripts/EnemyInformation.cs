@@ -30,7 +30,7 @@ public class EnemyInformation : MonoBehaviour
         informationName = _enemy.enemyName;
         informationHealth = _enemy.currentHealth;
         informationLvl = _enemy.lvl;
-        informationDmg = _enemy.damage;
+        informationDmg = _enemy.physicalDamage;
         informationPos = _enemy.enemyPos;
         informationIsDead = true;
         informationWorldZone = _enemy.worldZone;

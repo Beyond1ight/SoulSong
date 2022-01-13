@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Cinemachine;
 public class PlayerController : MonoBehaviour
 {
     public float speed;
@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public Vector2 movement;
     Vector2 partyPosition;
     Character character;
+    public bool isMoving;
     ActiveParty activeParty;
     void Awake()
     {
@@ -48,6 +49,41 @@ public class PlayerController : MonoBehaviour
             if (Engine.e.loadTimer)
             {
                 StartCoroutine(UnloadTimer());
+            }
+
+            if (movement.x != 0 || movement.y != 0)
+            {
+                isMoving = true;
+
+
+                //Engine.e.mainCamera.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 0.20f;
+                // Engine.e.mainCamera.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 0.20f;
+
+            }
+            else
+            {
+                isMoving = false;
+
+                if (Engine.e.mainCamera.GetCinemachineComponent<CinemachineTransposer>().m_XDamping != 0)
+                {
+                    Engine.e.mainCamera.GetCinemachineComponent<CinemachineTransposer>().m_XDamping -= 0.05f;
+                }
+                if (Engine.e.mainCamera.GetCinemachineComponent<CinemachineTransposer>().m_YDamping != 0)
+                {
+                    Engine.e.mainCamera.GetCinemachineComponent<CinemachineTransposer>().m_YDamping -= 0.05f;
+                }
+
+                if (Engine.e.mainCamera.GetCinemachineComponent<CinemachineTransposer>().m_XDamping < 0)
+                {
+                    Engine.e.mainCamera.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 0;
+                }
+
+                if (Engine.e.mainCamera.GetCinemachineComponent<CinemachineTransposer>().m_YDamping < 0)
+                {
+                    Engine.e.mainCamera.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 0;
+                }
+
+
             }
         }
     }

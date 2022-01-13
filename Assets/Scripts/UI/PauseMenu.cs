@@ -20,7 +20,8 @@ public class PauseMenu : MonoBehaviour
 
     // Controller Support UI
     // Menu(s) First Choice
-    public GameObject pauseFirstButton, equipFirstButton, mainMenuFirstButton;
+    public GameObject[] mainMenuButtons;
+    public GameObject pauseFirstButton, equipFirstButton;
     public GameObject arrangeIndex1Grieve,
     arrangeIndex2Grieve, arrangeIndex2Mac,
     arrangeIndex3Grieve, arrangeIndex3Mac, arrangeIndex3Field;
@@ -532,7 +533,16 @@ public class PauseMenu : MonoBehaviour
         mainMenuScreen.SetActive(true);
 
         EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(mainMenuFirstButton);
+
+        if (Engine.e.saveExists)
+        {
+            EventSystem.current.SetSelectedGameObject(mainMenuButtons[1]);
+        }
+        else
+        {
+            EventSystem.current.SetSelectedGameObject(mainMenuButtons[0]);
+
+        }
         atPauseMenu = false;
     }
     public void ArrangeButton1()

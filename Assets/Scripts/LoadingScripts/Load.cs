@@ -73,17 +73,17 @@ public class Load : MonoBehaviour
                     }
 
                     Engine.e.activeParty.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
-                    Engine.e.activeParty.GetComponent<PlayerController>().speed = 4.5f;
+                    Engine.e.activeParty.GetComponent<PlayerController>().speed = 5.5f;
                     if (Engine.e.activeParty.activeParty[1] != null)
                     {
-                        Engine.e.activePartyMember2.GetComponent<APFollow>().speed = 4.5f;
+                        Engine.e.activePartyMember2.GetComponent<APFollow>().speed = 5.5f;
                         Engine.e.activePartyMember2.GetComponent<APFollow>().distance = 1.25f;
                         Engine.e.activePartyMember2.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
 
                     }
                     if (Engine.e.activeParty.activeParty[2] != null)
                     {
-                        Engine.e.activePartyMember3.GetComponent<APFollow>().speed = 4.5f;
+                        Engine.e.activePartyMember3.GetComponent<APFollow>().speed = 5.5f;
                         Engine.e.activePartyMember3.GetComponent<APFollow>().distance = 1.25f;
                         Engine.e.activePartyMember3.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
 
@@ -166,17 +166,17 @@ public class Load : MonoBehaviour
                         }
 
                         Engine.e.activeParty.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
-                        Engine.e.activeParty.GetComponent<PlayerController>().speed = 4.5f;
+                        Engine.e.activeParty.GetComponent<PlayerController>().speed = 5.5f;
                         if (Engine.e.activeParty.activeParty[1] != null)
                         {
-                            Engine.e.activePartyMember2.GetComponent<APFollow>().speed = 4.5f;
+                            Engine.e.activePartyMember2.GetComponent<APFollow>().speed = 5.5f;
                             Engine.e.activePartyMember2.GetComponent<APFollow>().distance = 1.25f;
                             Engine.e.activePartyMember2.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
 
                         }
                         if (Engine.e.activeParty.activeParty[2] != null)
                         {
-                            Engine.e.activePartyMember3.GetComponent<APFollow>().speed = 4.5f;
+                            Engine.e.activePartyMember3.GetComponent<APFollow>().speed = 5.5f;
                             Engine.e.activePartyMember3.GetComponent<APFollow>().distance = 1.25f;
                             Engine.e.activePartyMember3.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
 

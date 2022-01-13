@@ -14,13 +14,13 @@ public class EnemyGroup : MonoBehaviour
     public List<Item> itemDrops;
     public Item item;
     public BattleSystem battleSystem;
-    public int groupExperienceLevel = 0;
+    public float groupExperienceLevel = 0;
     public CinemachineVirtualCamera battleCamera;
     public List<string> enemyLootReferenceText;
     public bool moveToPosition = false;
     public GameObject char1SwitchPos, char2SwitchPos, char3SwitchPos;
     public bool groupInBattle = false;
-    public List<int> remainingEnemies;
+    public List<Enemy> remainingEnemies;
     int randomEnemyIndex;
     int nextRemainingEnemyIndex;
     public bool inWorld;
@@ -29,6 +29,7 @@ public class EnemyGroup : MonoBehaviour
     {
 
         GetComponent<EnemyGroupGenerator>().GenerateEnemyGroup();
+        SetGroupIndexes(); // Consider moving into GenerateEnemyGroup()
 
         if (inWorld)
         {
@@ -57,8 +58,6 @@ public class EnemyGroup : MonoBehaviour
                         battleSystem.enemies[i] = enemies[i];
                 }
             }
-
-
             //GetComponent<Teleport>().OnTriggerEnter2D(other);
 
             Engine.e.battleSystem.hud.SetEnemyGroupHUD();
@@ -76,7 +75,7 @@ public class EnemyGroup : MonoBehaviour
     }
 
 
-    public int GroupExperienceValue()
+    public float GroupExperienceValue()
     {
         for (int i = 0; i < enemies.Length; i++)
         {
@@ -100,9 +99,9 @@ public class EnemyGroup : MonoBehaviour
                 Engine.e.enemyLootReferenceExp.text = "Exp Gained: " + groupExperienceLevel;
 
                 // Money
-                Engine.e.partyMoney += enemies[i].GetComponent<Enemy>().moneyDropAmount;
+                Engine.e.partyMoney += enemies[i].GetComponent<Enemy>().moneyLootAmount;
                 Engine.e.enemyLootReferenceG.text = string.Empty;
-                Engine.e.enemyLootReferenceG.text = "G: " + enemies[i].GetComponent<Enemy>().moneyDropAmount;
+                Engine.e.enemyLootReferenceG.text = "G: " + enemies[i].GetComponent<Enemy>().moneyLootAmount;
 
                 //Items
                 for (int j = 0; j < enemies[i].gameObject.GetComponent<Enemy>().itemDrops.Length; j++)
@@ -236,9 +235,20 @@ public class EnemyGroup : MonoBehaviour
         }
     }
 
+    public void SetGroupIndexes()
+    {
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            if (enemies[i] != null)
+            {
+                enemies[i].groupIndex = i;
+            }
+        }
+    }
+
     public int GetRandomRemainingEnemy()
     {
-        remainingEnemies = new List<int>();
+        remainingEnemies = new List<Enemy>();
 
         for (int i = 0; i < enemies.Length; i++)
         {
@@ -246,111 +256,110 @@ public class EnemyGroup : MonoBehaviour
             {
                 if (enemies[i].GetComponent<Enemy>().currentHealth > 0)
                 {
+                    remainingEnemies.Add(enemies[i]);
+                }
+            }
+        }
+
+        int randomEnemyIndex = Random.Range(0, remainingEnemies.Count);
+        return remainingEnemies[randomEnemyIndex].groupIndex;
+    }
+    /*
+        public int GetNextRemainingEnemy()
+        {
+            remainingEnemies = new List<int>();
+
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                if (enemies[i] != null)
+                {
                     remainingEnemies.Add(enemies[i].GetComponent<Enemy>().groupIndex);
-                }
-            }
-        }
-
-        Engine.e.randomIndex = new System.Random();
-        randomEnemyIndex = Engine.e.randomIndex.Next(remainingEnemies.Count);
-        return remainingEnemies[randomEnemyIndex];
-    }
-
-    public int GetNextRemainingEnemy()
-    {
-        remainingEnemies = new List<int>();
-
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            if (enemies[i] != null)
-            {
-                remainingEnemies.Add(enemies[i].GetComponent<Enemy>().groupIndex);
-                if (enemies[i].GetComponent<Enemy>().isAsleep)
-                {
-                    enemies[i].GetComponent<Enemy>().sleepTimer++;
-                    if (enemies[i].GetComponent<Enemy>().sleepTimer == 3)
+                    if (enemies[i].GetComponent<Enemy>().isAsleep)
                     {
-                        enemies[i].GetComponent<Enemy>().isAsleep = false;
-                        enemies[i].GetComponent<Enemy>().sleepTimer = 0;
-                        if (enemies[i].GetComponent<EnemyMovement>() != null)
+                        enemies[i].GetComponent<Enemy>().sleepTimer++;
+                        if (enemies[i].GetComponent<Enemy>().sleepTimer == 3)
                         {
-                            enemies[i].GetComponent<EnemyMovement>().enabled = true;
+                            enemies[i].GetComponent<Enemy>().isAsleep = false;
+                            enemies[i].GetComponent<Enemy>().sleepTimer = 0;
+                            if (enemies[i].GetComponent<EnemyMovement>() != null)
+                            {
+                                enemies[i].GetComponent<EnemyMovement>().enabled = true;
+                            }
+                            enemies[i].GetComponent<SpriteRenderer>().color = Color.white;
+
                         }
-                        enemies[i].GetComponent<SpriteRenderer>().color = Color.white;
+                        if (enemies[i].GetComponent<Enemy>().isPoisoned)
+                        {
+                            enemies[i].GetComponent<Enemy>().TakePoisonDamage(i, enemies[i].GetComponent<Enemy>().poisonDmg);
+                        }
 
-                    }
-                    if (enemies[i].GetComponent<Enemy>().isPoisoned)
-                    {
-                        enemies[i].GetComponent<Enemy>().TakePoisonDamage(i, enemies[i].GetComponent<Enemy>().poisonDmg);
-                    }
-
-                    if (enemies[i].GetComponent<Enemy>().deathInflicted)
-                    {
-                        enemies[i].GetComponent<Enemy>().TakeDeathDamage();
+                        if (enemies[i].GetComponent<Enemy>().deathInflicted)
+                        {
+                            enemies[i].GetComponent<Enemy>().TakeDeathDamage();
+                        }
                     }
                 }
             }
-        }
 
 
-        if (Engine.e.battleSystem.state == BattleState.ENEMY1TURN)
-        {
-            for (int i = 1; i < remainingEnemies.Count; i++)
+            if (Engine.e.battleSystem.state == BattleState.ENEMY1TURN)
             {
-                if (enemies[i] != null)
+                for (int i = 1; i < remainingEnemies.Count; i++)
                 {
-                    if (enemies[i].GetComponent<Enemy>().currentHealth > 0 && !enemies[i].GetComponent<Enemy>().isAsleep)
+                    if (enemies[i] != null)
                     {
-                        nextRemainingEnemyIndex = remainingEnemies[i];
-                        break;
+                        if (enemies[i].GetComponent<Enemy>().currentHealth > 0 && !enemies[i].GetComponent<Enemy>().isAsleep)
+                        {
+                            nextRemainingEnemyIndex = remainingEnemies[i];
+                            break;
+                        }
                     }
                 }
             }
-        }
-        if (Engine.e.battleSystem.state == BattleState.ENEMY2TURN)
-        {
-            for (int i = 2; i < remainingEnemies.Count; i++)
+            if (Engine.e.battleSystem.state == BattleState.ENEMY2TURN)
             {
-                if (enemies[i] != null)
+                for (int i = 2; i < remainingEnemies.Count; i++)
                 {
-                    if (enemies[i].GetComponent<Enemy>().currentHealth > 0 && !enemies[i].GetComponent<Enemy>().isAsleep)
+                    if (enemies[i] != null)
                     {
-                        nextRemainingEnemyIndex = remainingEnemies[i];
-                        break;
+                        if (enemies[i].GetComponent<Enemy>().currentHealth > 0 && !enemies[i].GetComponent<Enemy>().isAsleep)
+                        {
+                            nextRemainingEnemyIndex = remainingEnemies[i];
+                            break;
+                        }
                     }
                 }
             }
-        }
-        if (Engine.e.battleSystem.state == BattleState.ENEMY3TURN)
-        {
+            if (Engine.e.battleSystem.state == BattleState.ENEMY3TURN)
+            {
 
-            if (enemies[3] != null)
-            {
-                if (enemies[3].GetComponent<Enemy>().currentHealth > 0 && !enemies[3].GetComponent<Enemy>().isAsleep)
+                if (enemies[3] != null)
                 {
-                    nextRemainingEnemyIndex = remainingEnemies[3];
-                }
-            }
-        }
-
-        if (Engine.e.battleSystem.state == BattleState.ENEMY4TURN || Engine.e.battleSystem.state == BattleState.CHAR1TURN || Engine.e.battleSystem.state == BattleState.CHAR2TURN ||
-        Engine.e.battleSystem.state == BattleState.CHAR3TURN)
-        {
-            for (int i = 0; i < remainingEnemies.Count; i++)
-            {
-                if (enemies[i] != null)
-                {
-                    if (enemies[i].GetComponent<Enemy>().currentHealth > 0 && !enemies[i].GetComponent<Enemy>().isAsleep)
+                    if (enemies[3].GetComponent<Enemy>().currentHealth > 0 && !enemies[3].GetComponent<Enemy>().isAsleep)
                     {
-                        nextRemainingEnemyIndex = remainingEnemies[i];
-                        break;
+                        nextRemainingEnemyIndex = remainingEnemies[3];
                     }
                 }
             }
-        }
-        Debug.Log(nextRemainingEnemyIndex);
-        return nextRemainingEnemyIndex;
-    }
+
+            if (Engine.e.battleSystem.state == BattleState.ENEMY4TURN || Engine.e.battleSystem.state == BattleState.CHAR1TURN || Engine.e.battleSystem.state == BattleState.CHAR2TURN ||
+            Engine.e.battleSystem.state == BattleState.CHAR3TURN)
+            {
+                for (int i = 0; i < remainingEnemies.Count; i++)
+                {
+                    if (enemies[i] != null)
+                    {
+                        if (enemies[i].GetComponent<Enemy>().currentHealth > 0 && !enemies[i].GetComponent<Enemy>().isAsleep)
+                        {
+                            nextRemainingEnemyIndex = remainingEnemies[i];
+                            break;
+                        }
+                    }
+                }
+            }
+            Debug.Log(nextRemainingEnemyIndex);
+            return nextRemainingEnemyIndex;
+        }*/
 
 
     private void FixedUpdate()
@@ -382,6 +391,7 @@ public class EnemyGroup : MonoBehaviour
 
         enemyList = enemyList.OrderBy(enemy => enemy.currentHealth).ToList();
 
+        Debug.Log(enemyList[0].groupIndex);
         return enemyList[0].groupIndex;
     }
 

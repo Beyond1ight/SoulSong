@@ -7,63 +7,18 @@ using TMPro;
 public class Enemy : MonoBehaviour
 {
     public string enemyName;
-    public float currentHealth;
-    public float maxHealth;
-    public float currentMana;
-    public float maxMana;
-    public int lvl;
-    public int experiencePoints;
-    public int damage;
-    public int groupIndex = -1;
-    public int moneyDropAmount;
-    public GameObject[] enemies;
+    public float currentHealth, maxHealth, currentMana, maxMana, haste, experiencePoints, choiceAttack, damageTotal, hitChance, poisonDmg;
+    public int lvl, physicalDamage, groupIndex, moneyLootAmount, sleepTimer, confuseTimer, deathTimer = 3;
     public Drops[] drops;
-
-    // The higher the number [0-100], the more likely the enemy will use a Drop attack.
-    public float choiceAttack;
-    public float damageTotal;
-    public float hitChance = 99f;
-    public bool isPoisoned;
-    public bool isConfused;
-    public bool isAsleep;
-    public bool deathInflicted;
-    public bool inflicted;
-    public float poisonDmg;
-    public int sleepTimer;
-    public int confuseTimer;
-    public int deathTimer = 3;
+    public bool isPoisoned, isConfused, isAsleep, deathInflicted, inflicted;
     public GameObject deathTimerPopup;
-    public float haste;
-
-    public float fireDropsLevel, iceDropsLevel, lightningDropsLevel, waterDropsLevel, shadowDropsLevel, holyDropsLevel;
-    public float dodgeChance;
-    public float physicalDefense;
-    public float fireDefense;
-    public float iceDefense;
-    public float waterDefense;
-    public float holyDefense;
-    public float lightningDefense;
-    public float shadowDefense;
-    public float poisonDefense;
-    public float sleepDefense;
-    public float confuseDefense;
-    public float deathDefense;
-
+    public float physicalDefense, dodgeChance, fireDefense, iceDefense, lightningDefense, waterDefense, shadowDefense, holyDefense, poisonDefense, sleepDefense, confuseDefense, deathDefense,
+    fireDropsLevel, iceDropsLevel, lightningDropsLevel, waterDropsLevel, shadowDropsLevel, holyDropsLevel, stealChance;
 
     public Item[] itemDrops;
     public Item stealableItem;
-    public float stealChance;
-    public GrieveWeapons[] grieveWeaponDrops;
-    public MacWeapons[] macWeaponDrops;
-    public FieldWeapons[] fieldWeaponDrops;
-    public RiggsWeapons[] riggsWeaponDrops;
-    public ChestArmor[] chestArmorDrops;
-
     public int itemDropChance;
-    public int weaponDropChance;
-    public int armorDropChance;
 
-    public EnemyInformation enemyInformation;
     public BattleSystem battleSystem;
     public Transform enemyPos;
     public string worldZone;
@@ -95,50 +50,33 @@ public class Enemy : MonoBehaviour
 
     public void GenericMoveSet(int target)
     {
-        int enemyPos = 0;
 
-        if (Engine.e.battleSystem.currentInQueue == BattleState.ENEMY1TURN)
-        {
-            enemyPos = 0;
-        }
-
-        if (Engine.e.battleSystem.currentInQueue == BattleState.ENEMY2TURN)
-        {
-            enemyPos = 1;
-        }
-        if (Engine.e.battleSystem.currentInQueue == BattleState.ENEMY3TURN)
-        {
-            enemyPos = 2;
-        }
-        if (Engine.e.battleSystem.currentInQueue == BattleState.ENEMY4TURN)
-        {
-            enemyPos = 3;
-        }
-
-        if (GetComponent<Enemy>().drops[0] != null)
+        if (drops[0] != null)
         {
             int _choiceAttack = Random.Range(0, 100);
 
-            if (GetComponent<Enemy>().choiceAttack < _choiceAttack)
+
+            if (choiceAttack < _choiceAttack) // The higher the number (of choiceAttack)[0-100], the more likely the enemy will use a Drop attack.
             {
                 Engine.e.battleSystem.enemyMoving = true;
                 Engine.e.battleSystem.enemyAttacking = true;
-                Engine.e.PhysicalDamageCalculation(target, GetComponent<Enemy>().damage);
+                Engine.e.battleSystem.isDead = Engine.e.activeParty.activeParty[target].GetComponent<Character>().TakePhysicalDamage(target, physicalDamage);
 
             }
             else
             {
-                int enemyDropChoice = Random.Range(0, GetComponent<Enemy>().drops.Length);
+                int enemyDropChoice = Random.Range(0, drops.Length);
 
-                if (GetComponent<Enemy>().currentMana >= GetComponent<Enemy>().drops[enemyDropChoice].dropCost)
+                if (currentMana >= drops[enemyDropChoice].dropCost)
                 {
                     Engine.e.battleSystem.enemyAttackDrop = true;
 
-                    Engine.e.battleSystem.lastDropChoice = GetComponent<Enemy>().drops[enemyDropChoice];
-                    Engine.e.InstantiateEnemyDropEnemy(enemyPos, enemyDropChoice);
+                    Engine.e.battleSystem.lastDropChoice = drops[enemyDropChoice];
+                    Engine.e.battleSystem.InstantiateDropAnim(this.gameObject, drops[enemyDropChoice]);
 
-                    Engine.e.battleSystem.isDead = Engine.e.TakeElementalDamage(target, GetComponent<Enemy>().drops[enemyDropChoice].dropPower, GetComponent<Enemy>().drops[enemyDropChoice].dropType);
-                    GetComponent<Enemy>().currentMana -= GetComponent<Enemy>().drops[enemyDropChoice].dropCost;
+                    Engine.e.activeParty.activeParty[target].GetComponent<Character>().DropEffect(drops[enemyDropChoice]);
+
+                    currentMana -= GetComponent<Enemy>().drops[enemyDropChoice].dropCost;
 
                     Engine.e.battleSystem.enemyAttacking = false;
 
@@ -147,7 +85,7 @@ public class Enemy : MonoBehaviour
                 {
                     Engine.e.battleSystem.enemyMoving = true;
                     Engine.e.battleSystem.enemyAttacking = true;
-                    Engine.e.PhysicalDamageCalculation(target, GetComponent<Enemy>().damage);
+                    Engine.e.battleSystem.isDead = Engine.e.activeParty.activeParty[target].GetComponent<Character>().TakePhysicalDamage(target, GetComponent<Enemy>().physicalDamage);
                 }
             }
         }
@@ -155,7 +93,7 @@ public class Enemy : MonoBehaviour
         {
             Engine.e.battleSystem.enemyMoving = true;
             Engine.e.battleSystem.enemyAttacking = true;
-            Engine.e.PhysicalDamageCalculation(target, GetComponent<Enemy>().damage);
+            Engine.e.battleSystem.isDead = Engine.e.activeParty.activeParty[target].GetComponent<Character>().TakePhysicalDamage(target, GetComponent<Enemy>().physicalDamage);
         }
         Engine.e.battleSystem.partyCheckNext = false;
     }

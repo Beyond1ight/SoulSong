@@ -96,31 +96,68 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: Riggs
-  maxHealth: 200
+  lvl: 5
   currentHealth: 200
-  maxMana: 50
+  maxHealth: 200
   currentMana: 50
+  maxMana: 50
+  currentEnergy: 24
   maxEnergy: 20
-  currentEnergy: 26
-  healthCapped: 1
-  manaCapped: 1
-  energyCapped: 1
   haste: 15
   experiencePoints: 0
   levelUpReq: 100
-  lvl: 5
   baseDamage: 20
   physicalDamage: 20
+  dropCostReduction: 0
+  skillCostReduction: 0
+  fireDropsLevel: 1
+  fireDropsExperience: 0
+  fireDropsLvlReq: 50
+  firePhysicalAttackBonus: 0
+  fireDropAttackBonus: 0
+  iceDropsLevel: 1
+  iceDropsExperience: 0
+  iceDropsLvlReq: 50
+  icePhysicalAttackBonus: 0
+  iceDropAttackBonus: 0
+  waterDropsLevel: 1
+  waterDropsExperience: 0
+  waterDropsLvlReq: 50
+  waterPhysicalAttackBonus: 0
+  waterDropAttackBonus: 0
+  lightningDropsLevel: 1
+  lightningDropsExperience: 0
+  lightningDropsLvlReq: 50
+  lightningPhysicalAttackBonus: 0
+  lightningDropAttackBonus: 0
+  shadowDropsLevel: 2
+  shadowDropsExperience: 0
+  shadowDropsLvlReq: 50
+  shadowPhysicalAttackBonus: 0
+  shadowDropAttackBonus: 0
+  holyDropsLevel: 3
+  holyDropsExperience: 0
+  holyDropsLvlReq: 50
+  holyPhysicalAttackBonus: 0
+  holyDropAttackBonus: 0
+  skillScale: 1
+  healthCapped: 1
+  manaCapped: 1
+  energyCapped: 1
   isInParty: 0
   isInActiveParty: 0
   isLeader: 0
-  canUseMagic: 1
+  isPoisoned: 0
+  isAsleep: 0
+  isConfused: 0
+  deathInflicted: 0
+  inflicted: 0
   availableSkillPoints: 0
   healthOffset: 30
   manaOffset: 0
   energyOffset: -20
   strengthOffset: 10
-  dodgeChance: 12
+  stealChance: 50
   physicalDefense: 15
   fireDefense: 2
   iceDefense: 2
@@ -132,6 +169,9 @@ MonoBehaviour:
   sleepDefense: 1
   confuseDefense: 1
   deathDefense: 0
+  dodgeChance: 12
+  hitChance: 99
+  critChance: 0
   drops:
   - {fileID: 0}
   - {fileID: 0}
@@ -194,63 +234,18 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  dropCostReduction: 0
-  skillCostReduction: 0
-  fireDropsLevel: 1
-  fireDropsExperience: 0
-  fireDropsLvlReq: 50
-  firePhysicalAttackBonus: 0
-  fireDropAttackBonus: 0
-  iceDropsLevel: 1
-  iceDropsExperience: 0
-  iceDropsLvlReq: 50
-  icePhysicalAttackBonus: 0
-  iceDropAttackBonus: 0
-  waterDropsLevel: 1
-  waterDropsExperience: 0
-  waterDropsLvlReq: 50
-  waterPhysicalAttackBonus: 0
-  waterDropAttackBonus: 0
-  lightningDropsLevel: 1
-  lightningDropsExperience: 0
-  lightningDropsLvlReq: 50
-  lightningPhysicalAttackBonus: 0
-  lightningDropAttackBonus: 0
-  shadowDropsLevel: 2
-  shadowDropsExperience: 0
-  shadowDropsLvlReq: 50
-  shadowPhysicalAttackBonus: 0
-  shadowDropAttackBonus: 0
-  holyDropsLevel: 3
-  holyDropsExperience: 0
-  holyDropsLvlReq: 50
-  holyPhysicalAttackBonus: 0
-  holyDropAttackBonus: 0
   canUseFireDrops: 0
   canUseIceDrops: 0
-  canUseHolyDrops: 1
-  canUseWaterDrops: 0
   canUseLightningDrops: 0
+  canUseWaterDrops: 0
   canUseShadowDrops: 1
-  spellPower: 0
-  skillPower: 0
-  lastDropChoice: {fileID: 11400000, guid: 877fa2c092b4e40128e3db11707ac684, type: 2}
-  lastSkillChoice: {fileID: 0}
-  skillScale: 1
-  stealChance: 50
-  hitChance: 99
+  canUseHolyDrops: 1
   weapon: {fileID: 705966592086626482, guid: cae9a2effec644240a829e01bf8dd999, type: 3}
   chestArmor: {fileID: 475117527870452808, guid: c37cdb1cfe8e54b409308b0270b551c3, type: 3}
   skillIndex: 15
   skillTotal: 1
-  isPoisoned: 0
-  isAsleep: 0
-  isConfused: 0
-  deathInflicted: 0
-  inflicted: 0
   poisonDmg: 0
   sleepTimer: 0
   confuseTimer: 0
   deathTimer: 3
-  siphonAnim: {fileID: 0}
   deathTimerPopup: {fileID: 0}

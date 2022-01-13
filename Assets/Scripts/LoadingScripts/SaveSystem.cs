@@ -7,7 +7,6 @@ using TMPro;
 
 public static class SaveSystem
 {
-
     public static void SaveGame(Engine gameManager, int saveSlot)
     {
         BinaryFormatter formatter = new BinaryFormatter();
@@ -43,6 +42,7 @@ public static class SaveSystem
                 Engine.e.fileMenuReference.saveSlots[i].saveLvl.GetComponent<TMP_Text>().text = "Lvl: " + gameData.charLvl[0].ToString();
                 Engine.e.fileMenuReference.saveSlots[i].saveLocation.GetComponent<TMP_Text>().text = gameData.scene;
 
+                Engine.e.saveExists = true;
             }
             else
             {

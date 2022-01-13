@@ -45,12 +45,13 @@ public class Status : MonoBehaviour
         attackStats[7].text = Engine.e.party[charIndex].GetComponent<Character>().holyDropAttackBonus.ToString();
 
         defenseStats[0].text = Engine.e.party[charIndex].GetComponent<Character>().physicalDefense.ToString() + "%";
-        defenseStats[1].text = Engine.e.party[charIndex].GetComponent<Character>().fireDefense.ToString() + "%";
-        defenseStats[2].text = Engine.e.party[charIndex].GetComponent<Character>().iceDefense.ToString() + "%";
-        defenseStats[3].text = Engine.e.party[charIndex].GetComponent<Character>().lightningDefense.ToString() + "%";
-        defenseStats[4].text = Engine.e.party[charIndex].GetComponent<Character>().waterDefense.ToString() + "%";
-        defenseStats[5].text = Engine.e.party[charIndex].GetComponent<Character>().shadowDefense.ToString() + "%";
-        defenseStats[6].text = Engine.e.party[charIndex].GetComponent<Character>().holyDefense.ToString() + "%";
+        defenseStats[1].text = Engine.e.party[charIndex].GetComponent<Character>().dodgeChance.ToString() + "%";
+        defenseStats[2].text = Engine.e.party[charIndex].GetComponent<Character>().fireDefense.ToString() + "%";
+        defenseStats[3].text = Engine.e.party[charIndex].GetComponent<Character>().iceDefense.ToString() + "%";
+        defenseStats[4].text = Engine.e.party[charIndex].GetComponent<Character>().lightningDefense.ToString() + "%";
+        defenseStats[5].text = Engine.e.party[charIndex].GetComponent<Character>().waterDefense.ToString() + "%";
+        defenseStats[6].text = Engine.e.party[charIndex].GetComponent<Character>().shadowDefense.ToString() + "%";
+        defenseStats[7].text = Engine.e.party[charIndex].GetComponent<Character>().holyDefense.ToString() + "%";
 
         resistances[0].text = "Sleep: " + Engine.e.party[charIndex].GetComponent<Character>().sleepDefense.ToString() + "%";
         resistances[1].text = "Poison: " + Engine.e.party[charIndex].GetComponent<Character>().poisonDefense.ToString() + "%";

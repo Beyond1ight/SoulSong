@@ -18,10 +18,21 @@ public class APFollow : MonoBehaviour
     {
         if (!Engine.e.inBattle)
         {
+            //speed = Engine.e.activeParty.GetComponent<PlayerController>().speed;
             if (Vector3.Distance(transform.position, target.position) > distance)
             {
-                transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
+                GetComponent<Rigidbody2D>().velocity = (aP.transform.position - transform.position).normalized * speed;
+                //transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
             }
+            else
+            {
+                GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            }
+        }
+        else
+        {
+            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+
         }
     }
 

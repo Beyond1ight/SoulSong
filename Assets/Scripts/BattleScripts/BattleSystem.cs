@@ -61,7 +61,6 @@ public class BattleSystem : MonoBehaviour
     public Drops lastDropChoice;
     public Skills lastSkillChoice;
     public bool charUsingSkill;
-    public int teamTargetChoice;
     public bool attackingTeam = false;
     public float char1ATB, char2ATB, char3ATB, enemy1ATB, enemy2ATB, enemy3ATB, enemy4ATB, ATBReady;
     public Slider char1ATBGuage, char2ATBGuage, char3ATBGuage, enemy1ATBGuage, enemy2ATBGuage, enemy3ATBGuage, enemy4ATBGuage;
@@ -142,6 +141,9 @@ public class BattleSystem : MonoBehaviour
     public IEnumerator SetupBattle()
     {
         Engine.e.activeParty.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        Engine.e.activePartyMember2.GetComponent<BoxCollider2D>().enabled = false;
+        Engine.e.activePartyMember3.GetComponent<BoxCollider2D>().enabled = false;
+
         charAttacking = false;
         enemyAttacking = false;
         enemyAtBattlePos = true;
@@ -167,7 +169,8 @@ public class BattleSystem : MonoBehaviour
 
         lastDropChoice = null;
         lastSkillChoice = null;
-        // enemyTargetButtons[0].transform.position = enemies[0].transform.position;
+
+
 
         for (int i = 0; i < activeParty.activeParty.Length; i++)
         {
@@ -821,6 +824,19 @@ public class BattleSystem : MonoBehaviour
             if (enemies[_target].GetComponent<Enemy>().currentHealth <= 0)
             {
                 target = enemyGroup.GetRandomRemainingEnemy();
+
+                if (index == 0)
+                {
+                    char1Target = target;
+                }
+                if (index == 1)
+                {
+                    char2Target = target;
+                }
+                if (index == 2)
+                {
+                    char3Target = target;
+                }
             }
             else
             {
@@ -1061,8 +1077,8 @@ public class BattleSystem : MonoBehaviour
 
                 charAttackDrop = true;
 
-                //Engine.e.InstantiateEnemyDropTeam(characterAttacking, target);
-                isDead = Engine.e.TakeElementalDamage(target, lastDropChoice.dropPower, lastDropChoice.dropType);
+                InstantiateDropAnim(characterAttacking, dropChoice);
+                activeParty.activeParty[_target].GetComponent<Character>().DropEffect(dropChoice);
                 _characterAttacking.currentMana -= Mathf.Round(dropChoice.dropCost
                 - (dropChoice.dropCost * _characterAttacking.dropCostReduction / 100) + 0.45f);
                 //hud.displayMana[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana.ToString();
@@ -1105,8 +1121,6 @@ public class BattleSystem : MonoBehaviour
                 {
                     characterTarget = Engine.e.activePartyMember3;
                 }
-
-                Engine.e.PhysicalDamageCalculation(char1Target, characterAttackIndex.physicalDamage);
             }
         }
         if (currentInQueue == BattleState.CHAR2TURN || currentInQueue == BattleState.CONFCHAR2)
@@ -1134,8 +1148,6 @@ public class BattleSystem : MonoBehaviour
                 {
                     characterTarget = Engine.e.activePartyMember3;
                 }
-
-                Engine.e.PhysicalDamageCalculation(char2Target, characterAttackIndex.physicalDamage);
             }
         }
 
@@ -1164,8 +1176,6 @@ public class BattleSystem : MonoBehaviour
                 {
                     characterTarget = Engine.e.activePartyMember3;
                 }
-
-                Engine.e.PhysicalDamageCalculation(char3Target, characterAttackIndex.physicalDamage);
             }
         }
 
@@ -1298,7 +1308,7 @@ public class BattleSystem : MonoBehaviour
                     charAtBattlePos = false;
 
 
-                    Engine.e.TakeDamage(targetEnemy, characterAttackIndex.physicalDamage, characterAttackIndex.hitChance);
+                    activeParty.activeParty[targetEnemy].GetComponent<Character>().TakePhysicalDamage(targetEnemy, characterAttackIndex.physicalDamage);
 
 
                     if (!dontDisplayDmgPopup)
@@ -1508,21 +1518,21 @@ public class BattleSystem : MonoBehaviour
     public IEnumerator CharConfuseAttack()
     {
         int index = 0;
-        GameObject character = null;
+        GameObject _characterLoc = null;
         int target = 0;
         Character _characterAttacking = null;
 
         if (currentInQueue == BattleState.CONFCHAR1)
         {
             index = 0;
-            character = Engine.e.activeParty.gameObject;
+            _characterLoc = Engine.e.activeParty.gameObject;
             target = char1Target;
             _characterAttacking = activeParty.activeParty[0].GetComponent<Character>();
         }
         if (currentInQueue == BattleState.CONFCHAR2)
         {
             index = 1;
-            character = Engine.e.activePartyMember2;
+            _characterLoc = Engine.e.activePartyMember2;
             target = char2Target;
             _characterAttacking = activeParty.activeParty[1].GetComponent<Character>();
 
@@ -1530,7 +1540,7 @@ public class BattleSystem : MonoBehaviour
         if (currentInQueue == BattleState.CONFCHAR3)
         {
             index = 2;
-            character = Engine.e.activePartyMember3;
+            _characterLoc = Engine.e.activePartyMember3;
             target = char3Target;
             _characterAttacking = activeParty.activeParty[2].GetComponent<Character>();
 
@@ -1568,11 +1578,12 @@ public class BattleSystem : MonoBehaviour
 
                 if (lastDropChoice != null)
                 {
-                    if (teamTargetChoice == 0)
+                    InstantiateDropAnim(_characterLoc, lastDropChoice);
+
+                    if (attackingTeam)
                     {
                         physicalAttack = false;
-                        Engine.e.InstantiateEnemyDropTeam(character, index);
-                        isDead = Engine.e.TakeElementalDamage(target, lastDropChoice.dropPower, lastDropChoice.dropType);
+                        activeParty.activeParty[target].GetComponent<Character>().DropEffect(lastDropChoice);
                     }
                     else
                     {
@@ -1910,7 +1921,7 @@ public class BattleSystem : MonoBehaviour
 
         if (!Engine.e.battleModeActive)
         {
-            StartCoroutine(CheckNext());
+            //StartCoroutine(CheckNext());
         }
         else
         {
@@ -1975,7 +1986,7 @@ public class BattleSystem : MonoBehaviour
                 charAttacking = false;
                 charAtBattlePos = false;
 
-                isDead = Engine.e.TakeDamage(target, damageTotal, Engine.e.activeParty.activeParty[index].GetComponent<Character>().hitChance);
+                isDead = Engine.e.activeParty.activeParty[target].GetComponent<Character>().TakePhysicalDamage(target, damageTotal);
 
                 GameObject dmgPopup = Instantiate(damagePopup, character.transform.position, Quaternion.identity);
 
@@ -2178,7 +2189,7 @@ public class BattleSystem : MonoBehaviour
                 enemyAtBattlePos = false;
 
 
-                isDead = Engine.e.TakeDamage(enemyTarget, damageTotal, enemies[index].GetComponent<Enemy>().hitChance);
+                //isDead = activeParty.activeParty[enemyTarget].GetComponent<Character>().TakePhysicalDamage(enemyTarget, damageTotal);
                 GameObject dmgPopup = Instantiate(damagePopup, character.transform.position, Quaternion.identity);
 
                 if (dodgedAttack)
@@ -2188,7 +2199,7 @@ public class BattleSystem : MonoBehaviour
                 }
                 else
                 {
-                    dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = damageTotal.ToString();
+                    //dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = damageTotal.ToString();
                     character.GetComponent<SpriteRenderer>().material = damageFlash;
                     yield return new WaitForSeconds(0.2f);
                     character.GetComponent<SpriteRenderer>().material = originalMaterial;
@@ -2436,7 +2447,7 @@ public class BattleSystem : MonoBehaviour
                 if (!attackingTeam)
                 {
 
-                    Engine.e.PhysicalDamageCalculation(randTarget, enemies[index].gameObject.GetComponent<Enemy>().damage);
+                    isDead = activeParty.activeParty[randTarget].GetComponent<Character>().TakePhysicalDamage(randTarget, enemies[index].gameObject.GetComponent<Enemy>().physicalDamage);
                 }
                 else
                 {
@@ -2449,99 +2460,59 @@ public class BattleSystem : MonoBehaviour
             }
             else
             {
-                enemyDropChoice = Random.Range(0, enemies[index].GetComponent<Enemy>().drops.Length);
+                int _enemyDropChoice = Random.Range(0, enemies[index].GetComponent<Enemy>().drops.Length);
 
-                if (enemies[index].GetComponent<Enemy>().currentMana >= enemies[index].GetComponent<Enemy>().drops[enemyDropChoice].dropCost)
+                if (enemies[index].GetComponent<Enemy>().currentMana >= enemies[index].GetComponent<Enemy>().drops[_enemyDropChoice].dropCost)
                 {
                     physicalAttack = false;
                     confuseAttack = false;
 
                     enemyAttackDrop = true;
 
-                    lastDropChoice = enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice];
+                    lastDropChoice = enemies[index].gameObject.GetComponent<Enemy>().drops[_enemyDropChoice];
+
+                    InstantiateDropAnim(enemies[index].gameObject, enemies[index].GetComponent<Enemy>().drops[_enemyDropChoice]);
 
                     if (!attackingTeam)
                     {
-                        Engine.e.InstantiateEnemyDropEnemy(index, enemyDropChoice);
-                        isDead = Engine.e.TakeElementalDamage(randTarget, enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropPower, enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType);
+                        activeParty.activeParty[randTarget].GetComponent<Character>().DropEffect(enemies[index].GetComponent<Enemy>().drops[_enemyDropChoice]);
                     }
                     else
                     {
 
-                        if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Fire")
-                        {
-                            Instantiate(fireDropAnim, enemies[index].transform.position, Quaternion.identity);
-                        }
-                        if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Water")
-                        {
-                            Instantiate(waterDropAnim, enemies[index].transform.position, Quaternion.identity);
-                        }
-                        if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Lightning")
-                        {
-                            Instantiate(lightningDropAnim, enemies[index].transform.position, Quaternion.identity);
-                        }
-                        if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Shadow")
-                        {
-                            if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Bio" || enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Knockout"
-                            || enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Blind")
-                            {
-                                if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Bio")
-                                {
-                                    Instantiate(poisonAnim, enemies[index].transform.position, Quaternion.identity);
-                                }
-                                if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Knockout")
-                                {
-                                    Instantiate(sleepAnim, enemies[index].transform.position, Quaternion.identity);
-                                }
-                                if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Blind")
-                                {
-                                    Instantiate(confuseAnim, enemies[index].transform.position, Quaternion.identity);
-                                }
-                            }
-                            else
-                                Instantiate(shadowDropAnim, enemies[index].transform.position, Quaternion.identity);
-                        }
-                        if (enemies[index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Ice")
-                        {
-                            Instantiate(iceDropAnim, enemies[index].transform.position, Quaternion.identity);
-                        }
+                        enemies[randTarget].DropEffect(enemies[index].drops[_enemyDropChoice]);
+                    }
+                    if (currentInQueue == BattleState.ENEMY1TURN)
+                    {
+                        enemy1ATB = 0;
+                    }
+                    if (currentInQueue == BattleState.ENEMY2TURN)
+                    {
+                        enemy2ATB = 0;
+                    }
+                    if (currentInQueue == BattleState.ENEMY3TURN)
+                    {
+                        enemy3ATB = 0;
+                    }
+                    if (currentInQueue == BattleState.ENEMY4TURN)
+                    {
+                        enemy4ATB = 0;
+                    }
+                    enemies[index].GetComponent<Enemy>().currentMana -= enemies[index].GetComponent<Enemy>().drops[enemyDropChoice].dropCost;
 
-
-                        enemies[randTarget].GetComponent<Enemy>().ConfuseTakeDropDamage(randTarget, enemies[index].GetComponent<Enemy>().drops[enemyDropChoice]);
-
-
-                        if (currentInQueue == BattleState.ENEMY1TURN)
-                        {
-                            enemy1ATB = 0;
-                        }
-                        if (currentInQueue == BattleState.ENEMY2TURN)
-                        {
-                            enemy2ATB = 0;
-                        }
-                        if (currentInQueue == BattleState.ENEMY3TURN)
-                        {
-                            enemy3ATB = 0;
-                        }
-                        if (currentInQueue == BattleState.ENEMY4TURN)
-                        {
-                            enemy4ATB = 0;
-                        }
-
-                        enemies[index].GetComponent<Enemy>().currentMana -= enemies[index].GetComponent<Enemy>().drops[enemyDropChoice].dropCost;
-
-                        if (enemies[index].GetComponent<EnemyMovement>() != null)
-                        {
-                            enemies[index].GetComponent<EnemyMovement>().enabled = true;
-                        }
+                    if (enemies[index].GetComponent<EnemyMovement>() != null)
+                    {
+                        enemies[index].GetComponent<EnemyMovement>().enabled = true;
                     }
                 }
                 else
                 {
                     enemyMoving = true;
                     enemyAttacking = true;
-                    if (teamTargetChoice == 0)
+
+                    if (attackingTeam)
                     {
-                        Engine.e.PhysicalDamageCalculation(randTarget, enemies[index].gameObject.GetComponent<Enemy>().damage);
+                        activeParty.activeParty[randTarget].GetComponent<Character>().TakePhysicalDamage(randTarget, enemies[index].gameObject.GetComponent<Enemy>().physicalDamage);
                     }
                     else
                     {
@@ -2550,13 +2521,15 @@ public class BattleSystem : MonoBehaviour
                 }
             }
         }
+
         else
         {
             enemyMoving = true;
             enemyAttacking = true;
+
             if (!attackingTeam)
             {
-                Engine.e.PhysicalDamageCalculation(randTarget, enemies[index].gameObject.GetComponent<Enemy>().damage);
+                activeParty.activeParty[randTarget].GetComponent<Character>().TakePhysicalDamage(randTarget, enemies[index].gameObject.GetComponent<Enemy>().physicalDamage);
             }
             else
             {
@@ -2639,6 +2612,9 @@ public class BattleSystem : MonoBehaviour
         if (state == BattleState.WON)
         {
             Engine.e.activeParty.gameObject.GetComponent<BoxCollider2D>().enabled = true;
+            Engine.e.activePartyMember2.GetComponent<BoxCollider2D>().enabled = true;
+            Engine.e.activePartyMember3.GetComponent<BoxCollider2D>().enabled = true;
+
             enemyGroup.battleCamera.gameObject.SetActive(false);
             Engine.e.char1LevelUp = false;
             Engine.e.char2LevelUp = false;
@@ -2647,9 +2623,6 @@ public class BattleSystem : MonoBehaviour
             enemyGroup.DestroyGroup();
 
             isDead = false;
-
-            dialogueText.text = string.Empty;
-            dialogueText.text = "Victory.";
 
             Engine.e.battleMenu.battleMenuUI.SetActive(false);
             Engine.e.battleSystem.enemyLootPanelReference.SetActive(false);
@@ -3034,7 +3007,7 @@ public class BattleSystem : MonoBehaviour
             confuseTargetCheck = false;
             yield return new WaitForSeconds(0.3f);
 
-            teamTargetChoice = Random.Range(0, 2);
+            int teamTargetChoice = Random.Range(0, 2);
             int index = 0;
             bool partyAttacking = false;
             int randTarget = 0;
@@ -3096,7 +3069,7 @@ public class BattleSystem : MonoBehaviour
                         randTarget = char3Target;
                     }
 
-                    Engine.e.PhysicalDamageCalculation(randTarget, Engine.e.activeParty.activeParty[index].GetComponent<Character>().physicalDamage);
+                    activeParty.activeParty[randTarget].GetComponent<Character>().TakePhysicalDamage(randTarget, Engine.e.activeParty.activeParty[index].GetComponent<Character>().physicalDamage);
                     attackingTeam = true;
 
                 }
@@ -3150,7 +3123,7 @@ public class BattleSystem : MonoBehaviour
                         randTarget = enemy4AttackTarget;
                     }
 
-                    Engine.e.PhysicalDamageCalculation(randTarget, enemies[index].GetComponent<Enemy>().damage);
+                    activeParty.activeParty[randTarget].GetComponent<Character>().TakePhysicalDamage(randTarget, enemies[index].GetComponent<Enemy>().physicalDamage);
                 }   // Enemy is attacking themeselves
                 else
                 {
@@ -4355,7 +4328,7 @@ public class BattleSystem : MonoBehaviour
     }
 
     // For non-ATB battlesystem
-    public IEnumerator CheckNext()
+    /*public IEnumerator CheckNext()
     {
 
         yield return new WaitForSeconds(0.1f);
@@ -4527,7 +4500,7 @@ public class BattleSystem : MonoBehaviour
 
                                         if (newIndex == 0)
                                         {
-                                            int newEnemyIndex = enemyGroup.GetNextRemainingEnemy();
+                                            //int newEnemyIndex = enemyGroup.GetNextRemainingEnemy();
 
                                             if (newEnemyIndex == 0)
                                             {
@@ -5107,7 +5080,7 @@ public class BattleSystem : MonoBehaviour
                 }
             }
         }
-    }
+    }*/
 
 
 
@@ -5163,7 +5136,7 @@ public class BattleSystem : MonoBehaviour
         targetCheck = false;
         attackingTeam = false;
 
-        GameObject characterAttacking = null;
+        GameObject _characterAttacking = null;
         int index = 0;
 
         if (partyTurn)
@@ -5213,6 +5186,8 @@ public class BattleSystem : MonoBehaviour
 
                 char1ATB = 0;
                 char1ATBGuage.value = char1ATB;
+
+                _characterAttacking = Engine.e.activeParty.gameObject;
             }
 
             if (currentInQueue == BattleState.CHAR2TURN || currentInQueue == BattleState.CONFCHAR2)
@@ -5251,6 +5226,9 @@ public class BattleSystem : MonoBehaviour
                 targetingEnemy = false;
                 char2ATB = 0;
                 char2ATBGuage.value = char1ATB;
+
+                _characterAttacking = Engine.e.activePartyMember2;
+
             }
 
             if (currentInQueue == BattleState.CHAR3TURN || currentInQueue == BattleState.CONFCHAR3)
@@ -5290,11 +5268,14 @@ public class BattleSystem : MonoBehaviour
 
                 char3ATB = 0;
                 char3ATBGuage.value = char3ATB;
+
+                _characterAttacking = Engine.e.activePartyMember3;
+
             }
 
             if (activeParty.activeParty[index].GetComponent<Character>().isPoisoned)
             {
-                GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, characterAttacking.transform.position, Quaternion.identity);
+                GameObject dmgPopup = Instantiate(damagePopup, _characterAttacking.transform.position, Quaternion.identity);
 
                 isDead = Engine.e.TakePoisonDamage(currentIndex, activeParty.activeParty[index].GetComponent<Character>().poisonDmg);
 
@@ -6456,6 +6437,11 @@ public class BattleSystem : MonoBehaviour
     {
         pressUp = false;
         vertMove = 0;
+    }
+
+    public void SetDamagePopupText(string textDisplayed)
+    {
+        damagePopup.GetComponentInChildren<TMP_Text>().text = textDisplayed;
     }
 
     private void FixedUpdate()

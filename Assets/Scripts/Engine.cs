@@ -88,6 +88,8 @@ public class Engine : MonoBehaviour
     public GameObject[] pauseMenuCharacterPanels, itemMenuPanels;
     public GameObject canvasReference;
     public GameObject[] charAbilityButtons, charSkillTierButtons;
+    public bool saveExists;
+
     [SerializeField]
     TextMeshProUGUI[] inventoryMenuPartyNameStatsReference, inventoryMenuPartyHPStatsReference, inventoryMenuPartyMPStatsReference, inventoryMenuPartyENRStatsReference;
     [SerializeField]
@@ -201,7 +203,6 @@ public class Engine : MonoBehaviour
         playableCharacters[0].isInParty = true;
         playableCharacters[0].isInActiveParty = true;
         playableCharacters[0].isLeader = true;
-        playableCharacters[0].canUseMagic = false;
         playableCharacters[0].dodgeChance = 10f;
         playableCharacters[0].dropCostReduction = 0f;
         playableCharacters[0].skillCostReduction = 0f;
@@ -365,7 +366,6 @@ public class Engine : MonoBehaviour
         playableCharacters[1].isInParty = true;
         playableCharacters[1].isInActiveParty = true;
         playableCharacters[1].isLeader = false;
-        playableCharacters[1].canUseMagic = true;
         playableCharacters[1].dropCostReduction = 0f;
         playableCharacters[1].skillCostReduction = 0f;
         playableCharacters[1].healthCapped = true;
@@ -492,7 +492,6 @@ public class Engine : MonoBehaviour
         playableCharacters[2].isInParty = true;
         playableCharacters[2].isInActiveParty = true;
         playableCharacters[2].isLeader = false;
-        playableCharacters[2].canUseMagic = true;
         playableCharacters[2].dodgeChance = 15f;
         playableCharacters[2].dropCostReduction = 0f;
         playableCharacters[2].skillCostReduction = 0f;
@@ -616,7 +615,6 @@ public class Engine : MonoBehaviour
         playableCharacters[3].isInParty = false;
         playableCharacters[3].isInActiveParty = false;
         playableCharacters[3].isLeader = false;
-        playableCharacters[3].canUseMagic = true;
         playableCharacters[3].dodgeChance = 12f;
         playableCharacters[3].dropCostReduction = 0f;
         playableCharacters[3].skillCostReduction = 0f;
@@ -1504,29 +1502,6 @@ public class Engine : MonoBehaviour
         }
     }
 
-
-    // Handles character healing, outside of battle.
-    public void HealCharacter(string _name, int healAmount)
-    {
-        for (int i = 0; i < party.Length; i++)
-        {
-            if (party[i].GetComponent<Character>().characterName == _name)
-            {
-                if (party[i].GetComponent<Character>().currentHealth == party[i].GetComponent<Character>().maxHealth)
-                {
-                    Debug.Log("Already at full health!");
-                    break;
-                }
-                if (party[i].GetComponent<Character>().currentHealth + healAmount >= party[i].GetComponent<Character>().maxHealth)
-                {
-                    party[i].GetComponent<Character>().currentHealth = party[i].GetComponent<Character>().maxHealth;
-                }
-                else
-                    party[i].GetComponent<Character>().currentHealth += healAmount;
-            }
-        }
-    }
-
     // Calls the Coroutine for unloading the previous scene. Used on scene transitions.
     public void UnloadScene(string scene)
     {
@@ -1991,231 +1966,10 @@ public class Engine : MonoBehaviour
 
     // Deals the amount of Physical Damage to the targeted player, based on the
     // PhysicalDamageCalculation() method.
-    public bool TakeDamage(int index, float _dmg, float hitChance)
-    {
-        Character character = activeParty.activeParty[index].GetComponent<Character>();
-
-        float adjustedDodge = Mathf.Round(hitChance - character.dodgeChance);
-        int hit = Random.Range(0, 99);
-
-        if (character.isAsleep)
-        {
-            adjustedDodge = 100;
-            character.isAsleep = false;
-            character.inflicted = false;
-
-            activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.white;
-            activeParty.GetComponent<SpriteRenderer>().color = Color.white;
-        }
-
-        if (character.isConfused)
-        {
-            int snapoutChance = Random.Range(0, 100);
-            if (character.confuseDefense > snapoutChance)
-            {
-                character.isConfused = false;
-                character.inflicted = false;
-                character.confuseTimer = 0;
-                activeParty.GetComponent<SpriteRenderer>().color = Color.white;
-
-                //  GetComponent<SpriteRenderer>().color = Color.white;
-            }
-        }
-
-
-
-        Debug.Log(battleSystem.damageTotal);
-
-        if (hit < adjustedDodge)
-        {
-            character.currentHealth -= battleSystem.damageTotal;
-        }
-        else
-        {
-            Debug.Log("First Dodge");
-            battleSystem.dodgedAttack = true;
-        }
-        if (character.currentHealth <= 0)
-        {
-            character.currentHealth = 0;
-
-            character.isPoisoned = false;
-            character.isConfused = false;
-            character.isAsleep = false;
-            character.inflicted = false;
-            character.poisonDmg = 0f;
-            // activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.white;
-
-            switch (index)
-            {
-                case 0:
-                    battleSystem.char1ATB = 0;
-                    battleSystem.char1ATBGuage.value = 0;
-
-                    battleSystem.DeactivateChar1MenuButtons();
-
-                    if (battleSystem.state == BattleState.CHAR1TURN)
-                    {
-                        battleSystem.state = BattleState.ATBCHECK;
-                    }
-
-                    break;
-                case 1:
-                    battleSystem.char2ATB = 0;
-                    battleSystem.char2ATBGuage.value = 0;
-
-                    battleSystem.DeactivateChar2MenuButtons();
-
-                    if (battleSystem.state == BattleState.CHAR2TURN)
-                    {
-                        battleSystem.state = BattleState.ATBCHECK;
-                    }
-                    break;
-                case 2:
-                    battleSystem.char3ATB = 0;
-                    battleSystem.char3ATBGuage.value = 0;
-
-                    battleSystem.DeactivateChar3MenuButtons();
-
-                    if (battleSystem.state == BattleState.CHAR3TURN)
-                    {
-                        battleSystem.state = BattleState.ATBCHECK;
-                    }
-                    break;
-            }
-        }
-
-        battleSystem.hud.displayHealth[battleSystem.previousTargetReferenceEnemy].text = activeParty.activeParty[battleSystem.previousTargetReferenceEnemy].gameObject.GetComponent<Character>().currentHealth.ToString();
-
-
-        if (activeParty.activeParty[0].gameObject.GetComponent<Character>().currentHealth <= 0)
-        {
-            if (activeParty.activeParty[2] != null && activeParty.activeParty[1].gameObject.GetComponent<Character>().currentHealth <= 0
-            && activeParty.activeParty[2].gameObject.GetComponent<Character>().currentHealth <= 0)
-            {
-                return true;
-            }
-
-            if (activeParty.activeParty[2] == null && activeParty.activeParty[1] != null)
-            {
-                if (activeParty.activeParty[1].gameObject.GetComponent<Character>().currentHealth <= 0)
-                {
-                    return true;
-
-                }
-            }
-
-            if (activeParty.activeParty[2] == null && activeParty.activeParty[1] == null)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // Calculates how much Physical Damage a party member (index) recieves, typically in battle. Checks for Physical Defense rating,
-    // as well as the overall Physical Damage the enemy is dealing (_dmg).
-    public void PhysicalDamageCalculation(int index, float _dmg)
-    {
-        float critChance = 2;
-
-        if (activeParty.activeParty[index] != null)
-        {
-            if (activeParty.activeParty[index].GetComponent<Character>().currentHealth > 0)
-            {
-                if (battleSystem.currentInQueue == BattleState.CONFCHAR1)
-                {
-                    battleSystem.char1Target = index;
-                }
-                if (battleSystem.currentInQueue == BattleState.CONFCHAR2)
-                {
-                    battleSystem.char2Target = index;
-                }
-                if (battleSystem.currentInQueue == BattleState.CONFCHAR3)
-                {
-                    battleSystem.char3Target = index;
-                }
-                if (battleSystem.currentInQueue == BattleState.ENEMY1TURN)
-                {
-                    critChance = Random.Range(0, 10);
-
-                    if (critChance == 0)
-                    {
-                        float critDamage = Mathf.Round((_dmg + (_dmg * (2 / 3))));
-                        _dmg = _dmg + critDamage;
-                    }
-
-                    battleSystem.enemy1AttackTarget = index;
-                }
-                if (battleSystem.currentInQueue == BattleState.ENEMY2TURN)
-                {
-                    critChance = Random.Range(0, 10);
-
-                    if (critChance == 0)
-                    {
-                        float critDamage = Mathf.Round((_dmg + (_dmg * (2 / 3))));
-                        _dmg = _dmg + critDamage;
-                    }
-
-                    battleSystem.enemy2AttackTarget = index;
-                }
-                if (battleSystem.currentInQueue == BattleState.ENEMY3TURN)
-                {
-                    critChance = Random.Range(0, 10);
-
-                    if (critChance == 0)
-                    {
-                        float critDamage = Mathf.Round((_dmg + (_dmg * (2 / 3))));
-                        _dmg = _dmg + critDamage;
-                    }
-
-                    battleSystem.enemy3AttackTarget = index;
-                }
-                if (battleSystem.currentInQueue == BattleState.ENEMY4TURN)
-                {
-                    critChance = Random.Range(0, 10);
-
-                    if (critChance == 0)
-                    {
-                        float critDamage = Mathf.Round((_dmg + (_dmg * (2 / 3))));
-                        _dmg = _dmg + critDamage;
-                    }
-
-                    battleSystem.enemy4AttackTarget = index;
-                }
-
-                battleSystem.damageTotal = Mathf.Round((_dmg) - (_dmg * (activeParty.activeParty[index].gameObject.GetComponent<Character>().physicalDefense / 100)));
-            }
-            else
-            {
-                int newTarget = GetRandomRemainingPartyMember();
-
-                if (battleSystem.currentInQueue == BattleState.ENEMY1TURN)
-                {
-                    battleSystem.enemy1AttackTarget = newTarget;
-                }
-                if (battleSystem.currentInQueue == BattleState.ENEMY2TURN)
-                {
-                    battleSystem.enemy2AttackTarget = newTarget;
-                }
-                if (battleSystem.currentInQueue == BattleState.ENEMY3TURN)
-                {
-                    battleSystem.enemy3AttackTarget = newTarget;
-                }
-                if (battleSystem.currentInQueue == BattleState.ENEMY4TURN)
-                {
-                    battleSystem.enemy4AttackTarget = newTarget;
-                }
-
-                battleSystem.damageTotal = Mathf.Round((_dmg) - (_dmg * activeParty.activeParty[newTarget].gameObject.GetComponent<Character>().physicalDefense / 100));
-
-            }
-        }
-    }
 
     // Similar to the Physical Damage methods, but in one. Works the calculation as well
     // as deals the set damage, based on various Elemental Defenses.
-    public bool TakeElementalDamage(int index, float _dmg, string dropType)
+    /*public bool TakeElementalDamage(int index, float _dmg, string dropType)
     {
         if (activeParty.activeParty[index] != null)
         {
@@ -2569,104 +2323,8 @@ public class Engine : MonoBehaviour
             }
         }
         return false;
-    }
-    public void InstantiateEnemyDropTeam(GameObject _character, int _index)
-    {
-        if (battleSystem.lastDropChoice.dps)
-        {
-            if (battleSystem.lastDropChoice.dropType == "Fire")
-            {
-                Instantiate(battleSystem.fireDropAnim, _character.transform.position, Quaternion.identity);
-            }
-            if (battleSystem.lastDropChoice.dropType == "Water")
-            {
-                Instantiate(battleSystem.waterDropAnim, _character.transform.position, Quaternion.identity);
-            }
-            if (battleSystem.lastDropChoice.dropType == "Lightning")
-            {
-                Instantiate(battleSystem.lightningDropAnim, _character.transform.position, Quaternion.identity);
-            }
-            if (battleSystem.lastDropChoice.dropType == "Shadow")
-            {
-                if (battleSystem.lastDropChoice.dropName == "Bio" || battleSystem.lastDropChoice.dropName == "Knockout" || battleSystem.lastDropChoice.dropName == "Blind")
-                {
-                    if (battleSystem.lastDropChoice.dropName == "Bio")
-                    {
-                        Instantiate(battleSystem.poisonAnim, _character.transform.position, Quaternion.identity);
-                    }
-                    if (battleSystem.lastDropChoice.dropName == "Knockout")
-                    {
-                        Instantiate(battleSystem.sleepAnim, _character.transform.position, Quaternion.identity);
-                    }
-                    if (battleSystem.lastDropChoice.dropName == "Blind")
-                    {
-                        Instantiate(battleSystem.confuseAnim, _character.transform.position, Quaternion.identity);
-                    }
-                }
-                else
-                    Instantiate(battleSystem.shadowDropAnim, _character.transform.position, Quaternion.identity);
-            }
-            if (battleSystem.lastDropChoice.dropType == "Ice")
-            {
-                Instantiate(battleSystem.iceDropAnim, _character.transform.position, Quaternion.identity);
-            }
-            if (battleSystem.lastDropChoice.dropType == "Holy")
-            {
-                Instantiate(battleSystem.holyDropAnim, _character.transform.position, Quaternion.identity);
-            }
-        }
-        else
-        {
+    }*/
 
-            switch (battleSystem.lastDropChoice.dropName)
-            {
-                case "Holy Light":
-                    Instantiate(battleSystem.holyDropAnim, _character.transform.position, Quaternion.identity);
-                    break;
-            }
-        }
-    }
-
-    public void InstantiateEnemyDropEnemy(int _index, int enemyDropChoice)
-    {
-        if (battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Fire")
-        {
-            Instantiate(battleSystem.fireDropAnim, battleSystem.enemies[_index].transform.position, Quaternion.identity);
-        }
-        if (battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Water")
-        {
-            Instantiate(battleSystem.waterDropAnim, battleSystem.enemies[_index].transform.position, Quaternion.identity);
-        }
-        if (battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Lightning")
-        {
-            Instantiate(battleSystem.lightningDropAnim, battleSystem.enemies[_index].transform.position, Quaternion.identity);
-        }
-        if (battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Shadow")
-        {
-            if (battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Bio" || battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Knockout"
-            || battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Blind")
-            {
-                if (battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Bio")
-                {
-                    Instantiate(battleSystem.poisonAnim, battleSystem.enemies[_index].transform.position, Quaternion.identity);
-                }
-                if (battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Knockout")
-                {
-                    Instantiate(battleSystem.sleepAnim, battleSystem.enemies[_index].transform.position, Quaternion.identity);
-                }
-                if (battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropName == "Blind")
-                {
-                    Instantiate(battleSystem.confuseAnim, battleSystem.enemies[_index].transform.position, Quaternion.identity);
-                }
-            }
-            else
-                Instantiate(battleSystem.shadowDropAnim, battleSystem.enemies[_index].transform.position, Quaternion.identity);
-        }
-        if (battleSystem.enemies[_index].gameObject.GetComponent<Enemy>().drops[enemyDropChoice].dropType == "Ice")
-        {
-            Instantiate(battleSystem.iceDropAnim, battleSystem.enemies[_index].transform.position, Quaternion.identity);
-        }
-    }
 
     // Calculates and deals Poison Damage (Shadow Damage) to the 
     // effected character.

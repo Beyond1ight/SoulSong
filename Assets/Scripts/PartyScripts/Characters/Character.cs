@@ -6,100 +6,42 @@ using UnityEngine.UI;
 
 public class Character : MonoBehaviour
 {
+
+    // General Information
     public string characterName;
-    public float maxHealth;
-    public float currentHealth;
-    public float maxMana;
-    public float currentMana;
-    public float maxEnergy;
-    public float currentEnergy;
-    public bool healthCapped, manaCapped, energyCapped = true;
-    public float haste;
-    public float experiencePoints;
-    public float levelUpReq;
     public int lvl;
-    public float baseDamage;
-    public float physicalDamage;
-    public bool isInParty;
-    public bool isInActiveParty;
-    public bool isLeader;
-    public bool canUseMagic;
+    public float currentHealth, maxHealth, currentMana, maxMana, currentEnergy, maxEnergy, haste, experiencePoints, levelUpReq, baseDamage, physicalDamage, dropCostReduction, skillCostReduction,
+    fireDropsLevel, fireDropsExperience, fireDropsLvlReq, firePhysicalAttackBonus, fireDropAttackBonus,
+    iceDropsLevel, iceDropsExperience, iceDropsLvlReq, icePhysicalAttackBonus, iceDropAttackBonus,
+    waterDropsLevel, waterDropsExperience, waterDropsLvlReq, waterPhysicalAttackBonus, waterDropAttackBonus,
+    lightningDropsLevel, lightningDropsExperience, lightningDropsLvlReq, lightningPhysicalAttackBonus, lightningDropAttackBonus,
+    shadowDropsLevel, shadowDropsExperience, shadowDropsLvlReq, shadowPhysicalAttackBonus, shadowDropAttackBonus,
+    holyDropsLevel, holyDropsExperience, holyDropsLvlReq, holyPhysicalAttackBonus, holyDropAttackBonus,
+    skillScale;
+    public bool healthCapped, manaCapped, energyCapped = true;
+    public bool isInParty, isInActiveParty, isLeader, isPoisoned, isAsleep, isConfused, deathInflicted, inflicted;
     public int availableSkillPoints;
-    public float healthOffset, manaOffset, energyOffset, strengthOffset;
+    public float healthOffset, manaOffset, energyOffset, strengthOffset, stealChance;
 
     // Defenses
-    public float dodgeChance;
-    public float physicalDefense;
-    public float fireDefense;
-    public float iceDefense;
-    public float waterDefense;
-    public float lightningDefense;
-    public float shadowDefense;
-    public float holyDefense;
-    public float poisonDefense;
-    public float sleepDefense;
-    public float confuseDefense;
-    public float deathDefense;
+    public float physicalDefense, fireDefense, iceDefense, waterDefense, lightningDefense, shadowDefense, holyDefense,
+    poisonDefense, sleepDefense, confuseDefense, deathDefense, dodgeChance, hitChance, critChance;
 
 
     // Drops & Skills
     public Drops[] drops;
     public Skills[] skills;
 
-    public float dropCostReduction = 0f;
-    public float skillCostReduction = 0f;
-    public float fireDropsLevel, fireDropsExperience, fireDropsLvlReq;
-    public float firePhysicalAttackBonus;
-    public float fireDropAttackBonus;
-    public float iceDropsLevel, iceDropsExperience, iceDropsLvlReq;
-    public float icePhysicalAttackBonus;
-    public float iceDropAttackBonus;
-    public float waterDropsLevel, waterDropsExperience, waterDropsLvlReq;
-    public float waterPhysicalAttackBonus;
-    public float waterDropAttackBonus;
 
-    public float lightningDropsLevel, lightningDropsExperience, lightningDropsLvlReq;
-    public float lightningPhysicalAttackBonus;
-    public float lightningDropAttackBonus;
-
-    public float shadowDropsLevel, shadowDropsExperience, shadowDropsLvlReq;
-    public float shadowPhysicalAttackBonus;
-    public float shadowDropAttackBonus;
-
-    public float holyDropsLevel, holyDropsExperience, holyDropsLvlReq;
-    public float holyPhysicalAttackBonus;
-    public float holyDropAttackBonus;
-
-
-    public bool canUseFireDrops = false;
-    public bool canUseIceDrops = false;
-    public bool canUseHolyDrops = false;
-    public bool canUseWaterDrops = false;
-    public bool canUseLightningDrops = false;
-    public bool canUseShadowDrops = false;
-
-    public float spellPower;
-    public float skillPower;
-    public Drops lastDropChoice;
-    public Skills lastSkillChoice;
-    public float skillScale = 1f;
-    public float stealChance;
-    public float hitChance = 99f;
+    public bool canUseFireDrops, canUseIceDrops, canUseLightningDrops, canUseWaterDrops, canUseShadowDrops, canUseHolyDrops = false;
 
     public Item weapon;
     public Item chestArmor;
     public int skillIndex;
     public int skillTotal;
-    public bool isPoisoned;
-    public bool isAsleep;
-    public bool isConfused;
-    public bool deathInflicted;
-    public bool inflicted;
     public float poisonDmg;
-    public int sleepTimer = 0;
-    public int confuseTimer = 0;
-    public int deathTimer = 3;
-    public GameObject siphonAnim;
+    public int sleepTimer, confuseTimer = 0, deathTimer = 3;
+
     public GameObject deathTimerPopup;
 
     public void UseDrop(Drops dropChoice)
@@ -380,26 +322,6 @@ public class Character : MonoBehaviour
 
     }
 
-    public void ResetDropChoice()
-    {
-        spellPower = 0;
-    }
-
-    public void ResetSkillChoice()
-    {
-        skillPower = 0;
-    }
-
-    public Drops GetDropChoice()
-    {
-        return lastDropChoice;
-    }
-
-    public float GetFireDropLevel()
-    {
-        return fireDropsLevel;
-    }
-
     public bool KnowsSkill(Skills _skill)
     {
         for (int i = 0; i < skills.Length; i++)
@@ -433,6 +355,137 @@ public class Character : MonoBehaviour
     {
         skills[_skill.skillIndex] = _skill;
         _skill.isKnown = true;
+    }
+
+    public bool TakePhysicalDamage(int index, float _dmg)
+    {
+        float critChance = 2;
+        float adjustedDodge = Mathf.Round(hitChance - dodgeChance);
+        int hit = Random.Range(0, 99);
+
+        critChance = Random.Range(0, 10);
+
+        if (critChance == 0)
+        {
+            float critDamage = Mathf.Round((_dmg + (_dmg * (2 / 3))));
+            _dmg = _dmg + critDamage;
+        }
+
+        float adjustedPhysicalDmg = Mathf.Round((_dmg) - (_dmg * (physicalDefense / 100)));
+
+        if (isAsleep)
+        {
+            adjustedDodge = 100;
+            isAsleep = false;
+            inflicted = false;
+
+            //activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.white;
+            //activeParty.GetComponent<SpriteRenderer>().color = Color.white;
+        }
+
+        if (isConfused)
+        {
+            int snapoutChance = Random.Range(0, 100);
+            if (confuseDefense > snapoutChance)
+            {
+                isConfused = false;
+                inflicted = false;
+                confuseTimer = 0;
+                // activeParty.GetComponent<SpriteRenderer>().color = Color.white;
+
+                //  GetComponent<SpriteRenderer>().color = Color.white;
+            }
+        }
+
+        if (hit < adjustedDodge)
+        {
+            currentHealth -= adjustedPhysicalDmg;
+            Debug.Log("Test");
+            Engine.e.battleSystem.damageTotal = adjustedPhysicalDmg;
+            Engine.e.battleSystem.SetDamagePopupText(adjustedPhysicalDmg.ToString());
+
+        }
+        else
+        {
+            Engine.e.battleSystem.dodgedAttack = true;
+        }
+
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+
+            isPoisoned = false;
+            isConfused = false;
+            isAsleep = false;
+            inflicted = false;
+            poisonDmg = 0f;
+            // activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.white;
+
+            switch (index)
+            {
+                case 0:
+                    Engine.e.battleSystem.char1ATB = 0;
+                    Engine.e.battleSystem.char1ATBGuage.value = 0;
+
+                    Engine.e.battleSystem.DeactivateChar1MenuButtons();
+
+                    if (Engine.e.battleSystem.state == BattleState.CHAR1TURN)
+                    {
+                        Engine.e.battleSystem.state = BattleState.ATBCHECK;
+                    }
+
+                    break;
+                case 1:
+                    Engine.e.battleSystem.char2ATB = 0;
+                    Engine.e.battleSystem.char2ATBGuage.value = 0;
+
+                    Engine.e.battleSystem.DeactivateChar2MenuButtons();
+
+                    if (Engine.e.battleSystem.state == BattleState.CHAR2TURN)
+                    {
+                        Engine.e.battleSystem.state = BattleState.ATBCHECK;
+                    }
+                    break;
+                case 2:
+                    Engine.e.battleSystem.char3ATB = 0;
+                    Engine.e.battleSystem.char3ATBGuage.value = 0;
+
+                    Engine.e.battleSystem.DeactivateChar3MenuButtons();
+
+                    if (Engine.e.battleSystem.state == BattleState.CHAR3TURN)
+                    {
+                        Engine.e.battleSystem.state = BattleState.ATBCHECK;
+                    }
+                    break;
+            }
+        }
+
+        //.battleSystem.hud.displayHealth[battleSystem.previousTargetReferenceEnemy].text = activeParty.activeParty[battleSystem.previousTargetReferenceEnemy].gameObject.GetComponent<Character>().currentHealth.ToString();
+
+
+        if (Engine.e.activeParty.activeParty[0].gameObject.GetComponent<Character>().currentHealth <= 0)
+        {
+            if (Engine.e.activeParty.activeParty[2] != null && Engine.e.activeParty.activeParty[1].gameObject.GetComponent<Character>().currentHealth <= 0
+            && Engine.e.activeParty.activeParty[2].gameObject.GetComponent<Character>().currentHealth <= 0)
+            {
+                return true;
+            }
+
+            if (Engine.e.activeParty.activeParty[2] == null && Engine.e.activeParty.activeParty[1] != null)
+            {
+                if (Engine.e.activeParty.activeParty[1].gameObject.GetComponent<Character>().currentHealth <= 0)
+                {
+                    return true;
+
+                }
+            }
+
+            if (Engine.e.activeParty.activeParty[2] == null && Engine.e.activeParty.activeParty[1] == null)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void DropEffect(Drops dropChoice)
@@ -749,8 +802,14 @@ public class Character : MonoBehaviour
             }
         }
 
-
-        Engine.e.battleSystem.damageTotal = damageTotal;
+        if (damageTotal >= 0)
+        {
+            Engine.e.battleSystem.damageTotal = damageTotal;
+        }
+        else
+        {
+            Engine.e.battleSystem.damageTotal = (damageTotal * -1);
+        }
 
         if (isAsleep)
         {
