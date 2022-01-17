@@ -15,11 +15,13 @@ MonoBehaviour:
   skillPower: 0
   skillCost: 25
   skillName: Berserk
-  skillDescription: 'Hits an enemy for 2x physical damage. Ignores defense. '
+  skillDescription: Hits all enemies for Physical Damage.
   skillPointReturn: 0
   abilityPointCost: 1
   physicalDps: 1
   rangedDps: 0
   selfSupport: 0
   targetSupport: 0
-  skillIndex: 0
+  instantCast: 0
+  skillIndex: 1
+  isKnown: 0

@@ -17,6 +17,7 @@ public class Grid : MonoBehaviour
     public CinemachineVirtualCamera gridPerspective, centerOfGridPerspective;
     public GameObject[] dropsButtons, skillButtons;
 
+
     private void Start()
     {
         helpReference.transform.SetParent(helpTextParentObj.transform);

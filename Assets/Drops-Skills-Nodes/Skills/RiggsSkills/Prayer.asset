@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 188a665f8b92841d6be326e8b6d92978, type: 3}
+  m_Name: Prayer
+  m_EditorClassIdentifier: 
+  skillPower: 25
+  skillCost: 15
+  skillName: Prayer
+  skillDescription: Heals all active party members for a small amount.
+  skillPointReturn: 0
+  abilityPointCost: 0
+  physicalDps: 0
+  rangedDps: 0
+  selfSupport: 1
+  targetSupport: 0
+  instantCast: 0
+  skillIndex: 16
+  isKnown: 0

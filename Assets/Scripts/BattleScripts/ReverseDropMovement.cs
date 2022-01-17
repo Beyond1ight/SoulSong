@@ -31,9 +31,6 @@ public class ReverseDropMovement : MonoBehaviour
         }
 
         Engine.e.battleSystem.animExists = true;
-        GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.battleSystem.enemies[enemyTarget].transform.position, Quaternion.identity);
-        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = Engine.e.battleSystem.skillBoostTotal.ToString();
-        Destroy(dmgPopup, 1f);
 
         if (Engine.e.timeOfDay < 300 || Engine.e.timeOfDay > 700)
         {
@@ -62,14 +59,10 @@ public class ReverseDropMovement : MonoBehaviour
             {
                 dmgPopupDisplay = true;
 
-                GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.battleSystem.characterDropTarget.transform.position, Quaternion.identity);
                 // Change this value
-                dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = Engine.e.battleSystem.skillBoostTotal.ToString();
                 if (Engine.e.battleSystem.mpRestore)
                 {
-                    dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 54, 255, 255);
                 }
-                Destroy(dmgPopup, 1f);
             }
             GetComponent<ParticleSystem>().Emit(1);
 

@@ -66,7 +66,7 @@ public class EnemyGroup : MonoBehaviour
 
             if (battleCamera != null)
             {
-                Engine.e.mainCamera.GetComponent<CinemachineVirtualCamera>().Priority = -1;
+                Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = -1;
             }
 
             Engine.e.BeginBattle();

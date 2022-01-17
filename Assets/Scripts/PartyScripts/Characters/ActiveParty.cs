@@ -101,15 +101,20 @@ public class ActiveParty : MonoBehaviour
 
     public void ArrangeActiveParty()
     {
-        activeParty[0].GetComponent<Character>().isInActiveParty = false;
-        activeParty[1].GetComponent<Character>().isInActiveParty = false;
-        activeParty[2].GetComponent<Character>().isInActiveParty = false;
+        for (int i = 0; i < 3; i++)
+        {
+            //activeParty[i].GetComponent<Character>().activePartyGO = null;
+            activeParty[i].GetComponent<Character>().isInActiveParty = false;
+        }
+
         activeParty = new GameObject[3];
         Engine.e.inBattle = true;
     }
+
     public void ArrangeActivePartyChar1(int char1)
     {
         activeParty[0] = gameManager.party[char1];
+        //activeParty[char1].GetComponent<Character>().activePartyGO = Engine.e.activeParty.gameObject;
         Engine.e.party[char1].GetComponent<Character>().isInActiveParty = true;
         aPChar2ChoiceButtons[char1].SetActive(false);
         choice1 += char1;
@@ -137,6 +142,7 @@ public class ActiveParty : MonoBehaviour
         choice2 -= choice2;
         Engine.e.inBattle = false;
 
+        SetActivePartyIndexes();
     }
 
     public void InstantiateActivePartyMembers()
@@ -158,6 +164,7 @@ public class ActiveParty : MonoBehaviour
         activeParty[0] = Engine.e.party[index];
         activeParty[0].GetComponent<Character>().isInActiveParty = true;
         SetLeaderSprite();
+        activeParty[0].GetComponent<Character>().activePartyIndex = 0;
         Engine.e.battleSystem.enemyGroup.moveToPosition = true;
         Engine.e.activeParty.gameObject.transform.position = Engine.e.battleSystem.enemyGroup.char1SwitchPos.transform.position;
         if (Vector3.Distance(Engine.e.activeParty.transform.position, Engine.e.battleSystem.leaderPos) < 0.2)
@@ -175,6 +182,7 @@ public class ActiveParty : MonoBehaviour
         activeParty[1] = Engine.e.party[index];
         activeParty[1].GetComponent<Character>().isInActiveParty = true;
         SetActiveParty2Sprite();
+        activeParty[1].GetComponent<Character>().activePartyIndex = 1;
         Engine.e.battleSystem.enemyGroup.moveToPosition = true;
         Engine.e.activePartyMember2.gameObject.transform.position = Engine.e.battleSystem.enemyGroup.char2SwitchPos.transform.position;
         if (Vector3.Distance(Engine.e.activePartyMember2.transform.position, Engine.e.battleSystem.activeParty2Pos) < 0.2)
@@ -191,11 +199,45 @@ public class ActiveParty : MonoBehaviour
         activeParty[2] = Engine.e.party[index];
         activeParty[2].GetComponent<Character>().isInActiveParty = true;
         SetActiveParty3Sprite();
+        activeParty[2].GetComponent<Character>().activePartyIndex = 2;
         Engine.e.battleSystem.enemyGroup.moveToPosition = true;
         Engine.e.activePartyMember3.gameObject.transform.position = Engine.e.battleSystem.enemyGroup.char3SwitchPos.transform.position;
         if (Vector3.Distance(Engine.e.activePartyMember3.transform.position, Engine.e.battleSystem.activeParty3Pos) < 0.2)
         {
             Engine.e.activePartyMember3.transform.position = Engine.e.battleSystem.activeParty3Pos;
+        }
+    }
+
+    // Be smart where you (me, sooo weird I need to get out more) call this. Pretty damn important for battles in particular
+    public void SetActivePartyIndexes()
+    {
+        for (int i = 0; i < Engine.e.party.Length; i++)
+        {
+            if (Engine.e.party[i] != null)
+            {
+                if (Engine.e.party[i].GetComponent<Character>() == activeParty[0].GetComponent<Character>())
+                {
+                    Engine.e.party[i].GetComponent<Character>().activePartyIndex = 0;
+                }
+                else
+                {
+                    if (Engine.e.party[i].GetComponent<Character>() == activeParty[1].GetComponent<Character>())
+                    {
+                        Engine.e.party[i].GetComponent<Character>().activePartyIndex = 1;
+                    }
+                    else
+                    {
+                        if (Engine.e.party[i].GetComponent<Character>() == activeParty[2].GetComponent<Character>())
+                        {
+                            Engine.e.party[i].GetComponent<Character>().activePartyIndex = 2;
+                        }
+                        else
+                        {
+                            Engine.e.party[i].GetComponent<Character>().activePartyIndex = -1;
+                        }
+                    }
+                }
+            }
         }
     }
 }

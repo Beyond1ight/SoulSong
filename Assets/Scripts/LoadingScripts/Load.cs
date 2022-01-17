@@ -39,9 +39,9 @@ public class Load : MonoBehaviour
 
                 if (Engine.e.inWorldMap)
                 {
-                    if (Engine.e.mainCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 6.5f)
+                    if (Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 6.5f)
                     {
-                        Engine.e.mainCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 10f;
+                        Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 10f;
                     }
 
                     Engine.e.activeParty.gameObject.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
@@ -67,9 +67,9 @@ public class Load : MonoBehaviour
                 }
                 else
                 {
-                    if (Engine.e.mainCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 10f)
+                    if (Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 10f)
                     {
-                        Engine.e.mainCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 6.5f;
+                        Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 6.5f;
                     }
 
                     Engine.e.activeParty.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
@@ -134,9 +134,9 @@ public class Load : MonoBehaviour
 
                     if (Engine.e.inWorldMap)
                     {
-                        if (Engine.e.mainCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 6.5f)
+                        if (Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 6.5f)
                         {
-                            Engine.e.mainCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 10f;
+                            Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 10f;
                         }
 
                         Engine.e.activeParty.gameObject.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
@@ -160,9 +160,9 @@ public class Load : MonoBehaviour
                     }
                     else
                     {
-                        if (Engine.e.mainCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 10f)
+                        if (Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 10f)
                         {
-                            Engine.e.mainCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 6.5f;
+                            Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 6.5f;
                         }
 
                         Engine.e.activeParty.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1f);

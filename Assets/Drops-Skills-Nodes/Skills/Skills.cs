@@ -14,6 +14,7 @@ public class Skills : ScriptableObject
     public bool physicalDps, rangedDps;
     public bool selfSupport;
     public bool targetSupport;
+    public bool instantCast;
     public int skillIndex;
     public bool isKnown;
 

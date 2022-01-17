@@ -57,30 +57,30 @@ public class PlayerController : MonoBehaviour
 
 
                 //Engine.e.mainCamera.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 0.20f;
-                // Engine.e.mainCamera.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 0.20f;
+                //Engine.e.mainCamera.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 0.20f;
 
             }
             else
             {
                 isMoving = false;
 
-                if (Engine.e.mainCamera.GetCinemachineComponent<CinemachineTransposer>().m_XDamping != 0)
+                if (Engine.e.mainVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_XDamping != 0)
                 {
-                    Engine.e.mainCamera.GetCinemachineComponent<CinemachineTransposer>().m_XDamping -= 0.05f;
+                    Engine.e.mainVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_XDamping -= 0.05f;
                 }
-                if (Engine.e.mainCamera.GetCinemachineComponent<CinemachineTransposer>().m_YDamping != 0)
+                if (Engine.e.mainVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_YDamping != 0)
                 {
-                    Engine.e.mainCamera.GetCinemachineComponent<CinemachineTransposer>().m_YDamping -= 0.05f;
-                }
-
-                if (Engine.e.mainCamera.GetCinemachineComponent<CinemachineTransposer>().m_XDamping < 0)
-                {
-                    Engine.e.mainCamera.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 0;
+                    Engine.e.mainVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_YDamping -= 0.05f;
                 }
 
-                if (Engine.e.mainCamera.GetCinemachineComponent<CinemachineTransposer>().m_YDamping < 0)
+                if (Engine.e.mainVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_XDamping < 0)
                 {
-                    Engine.e.mainCamera.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 0;
+                    Engine.e.mainVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 0;
+                }
+
+                if (Engine.e.mainVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_YDamping < 0)
+                {
+                    Engine.e.mainVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 0;
                 }
 
 

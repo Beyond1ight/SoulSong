@@ -48,11 +48,26 @@ public class BattleSkillsUIHolder : MonoBehaviour
     }
     public void OnClickEvent()
     {
+
         if (Engine.e.battleSystem.state == BattleState.CHAR1TURN)
         {
             if (Engine.e.activeParty.activeParty[0].GetComponent<Character>().KnowsSkill(skill))
             {
-                Engine.e.battleSystem.SkillChoice(skill);
+                if (skill.skillIndex != 21)
+                {
+                    Engine.e.battleSystem.SkillChoice(skill);
+                }
+                else
+                {
+                    if (Engine.e.activeParty.activeParty[0].GetComponent<Character>().haltInflicted)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        Engine.e.battleSystem.SkillChoice(skill);
+                    }
+                }
             }
             else
             {
@@ -64,7 +79,21 @@ public class BattleSkillsUIHolder : MonoBehaviour
         {
             if (Engine.e.activeParty.activeParty[1].GetComponent<Character>().KnowsSkill(skill))
             {
-                Engine.e.battleSystem.SkillChoice(skill);
+                if (skill.skillIndex != 21)
+                {
+                    Engine.e.battleSystem.SkillChoice(skill);
+                }
+                else
+                {
+                    if (Engine.e.activeParty.activeParty[1].GetComponent<Character>().haltInflicted)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        Engine.e.battleSystem.SkillChoice(skill);
+                    }
+                }
             }
             else
             {
@@ -76,7 +105,21 @@ public class BattleSkillsUIHolder : MonoBehaviour
         {
             if (Engine.e.activeParty.activeParty[2].GetComponent<Character>().KnowsSkill(skill))
             {
-                Engine.e.battleSystem.SkillChoice(skill);
+                if (skill.skillIndex != 21)
+                {
+                    Engine.e.battleSystem.SkillChoice(skill);
+                }
+                else
+                {
+                    if (Engine.e.activeParty.activeParty[2].GetComponent<Character>().haltInflicted)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        Engine.e.battleSystem.SkillChoice(skill);
+                    }
+                }
             }
             else
             {
@@ -84,6 +127,7 @@ public class BattleSkillsUIHolder : MonoBehaviour
             }
         }
     }
+
 
     public void DisplayHelpText()
     {

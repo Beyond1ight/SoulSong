@@ -10,7 +10,7 @@ public class Character : MonoBehaviour
     // General Information
     public string characterName;
     public int lvl;
-    public float currentHealth, maxHealth, currentMana, maxMana, currentEnergy, maxEnergy, haste, experiencePoints, levelUpReq, baseDamage, physicalDamage, dropCostReduction, skillCostReduction,
+    public float currentHealth, maxHealth, currentMana, maxMana, currentEnergy, maxEnergy, haste, experiencePoints, levelUpReq, physicalDamage, dropCostReduction, skillCostReduction,
     fireDropsLevel, fireDropsExperience, fireDropsLvlReq, firePhysicalAttackBonus, fireDropAttackBonus,
     iceDropsLevel, iceDropsExperience, iceDropsLvlReq, icePhysicalAttackBonus, iceDropAttackBonus,
     waterDropsLevel, waterDropsExperience, waterDropsLvlReq, waterPhysicalAttackBonus, waterDropAttackBonus,
@@ -19,13 +19,18 @@ public class Character : MonoBehaviour
     holyDropsLevel, holyDropsExperience, holyDropsLvlReq, holyPhysicalAttackBonus, holyDropAttackBonus,
     skillScale;
     public bool healthCapped, manaCapped, energyCapped = true;
-    public bool isInParty, isInActiveParty, isLeader, isPoisoned, isAsleep, isConfused, deathInflicted, inflicted;
+    public bool isInParty, isInActiveParty, isLeader, isPoisoned, isAsleep, isConfused, miterInflicted, haltInflicted, deathInflicted, inflicted;
     public int availableSkillPoints;
     public float healthOffset, manaOffset, energyOffset, strengthOffset, stealChance;
-
     // Defenses
     public float physicalDefense, fireDefense, iceDefense, waterDefense, lightningDefense, shadowDefense, holyDefense,
     poisonDefense, sleepDefense, confuseDefense, deathDefense, dodgeChance, hitChance, critChance;
+
+    // Default values (before any boosts). Mainly to reset values after status effects wear off
+    public float maxHealthBase, maxManaBase, maxEnergyBase, physicalDamageBase, dodgeChanceBase, critChanceBase,
+    hasteBase, firePhysicalAttackBonusBase, icePhysicalAttackBonusBase, lightningPhysicalAttackBonusBase, waterPhysicalAttackBonusBase,
+    shadowPhysicalAttackBonusBase, holyPhysicalAttackBonusBase, fireDefenseBase, iceDefenseBase, lightningDefenseBase, waterDefenseBase,
+    shadowDefenseBase, holyDefenseBase, sleepDefenseBase, poisonDefenseBase, confuseDefenseBase, deathDefenseBase;
 
 
     // Drops & Skills
@@ -41,8 +46,8 @@ public class Character : MonoBehaviour
     public int skillTotal;
     public float poisonDmg;
     public int sleepTimer, confuseTimer = 0, deathTimer = 3;
-
-    public GameObject deathTimerPopup;
+    public int activePartyIndex, partyIndex; // activePartyIndex is Mostly for battles
+    public bool inSwitchQueue = false;
 
     public void UseDrop(Drops dropChoice)
     {
@@ -105,6 +110,10 @@ public class Character : MonoBehaviour
                     Engine.e.battleSystem.char1SkillPhysicalAttack = true;
                     Engine.e.battleSystem.char1SkillAttack = true;
                     Engine.e.battleSystem.char1Attacking = true;
+                    if (skillChoice.skillIndex == 1)
+                    {
+                        Engine.e.battleSystem.ActivateTargetSpriteEnemiesAll();
+                    }
                 }
                 if (skillChoice.rangedDps)
                 {
@@ -121,6 +130,12 @@ public class Character : MonoBehaviour
                 {
                     Engine.e.battleSystem.char1SkillTargetSupport = true;
                     Engine.e.battleSystem.char1Supporting = true;
+
+                    if (skillChoice.skillIndex == 21)
+                    {
+                        Engine.e.battleSystem.charSkillSwitchCheck = true;
+                        Engine.e.battleSystem.ActivateAvailableCharSwitchButtons();
+                    }
                 }
             }
 
@@ -131,6 +146,10 @@ public class Character : MonoBehaviour
                     Engine.e.battleSystem.char2SkillPhysicalAttack = true;
                     Engine.e.battleSystem.char2SkillAttack = true;
                     Engine.e.battleSystem.char2Attacking = true;
+                    if (skillChoice.skillIndex == 1)
+                    {
+                        Engine.e.battleSystem.ActivateTargetSpriteEnemiesAll();
+                    }
                 }
                 if (skillChoice.rangedDps)
                 {
@@ -147,6 +166,12 @@ public class Character : MonoBehaviour
                 {
                     Engine.e.battleSystem.char2SkillTargetSupport = true;
                     Engine.e.battleSystem.char2Supporting = true;
+
+                    if (skillChoice.skillIndex == 21)
+                    {
+                        Engine.e.battleSystem.charSkillSwitchCheck = true;
+                        Engine.e.battleSystem.ActivateAvailableCharSwitchButtons();
+                    }
                 }
             }
 
@@ -157,6 +182,11 @@ public class Character : MonoBehaviour
                     Engine.e.battleSystem.char3SkillPhysicalAttack = true;
                     Engine.e.battleSystem.char3SkillAttack = true;
                     Engine.e.battleSystem.char3Attacking = true;
+
+                    if (skillChoice.skillIndex == 1)
+                    {
+                        Engine.e.battleSystem.ActivateTargetSpriteEnemiesAll();
+                    }
                 }
                 if (skillChoice.rangedDps)
                 {
@@ -173,6 +203,12 @@ public class Character : MonoBehaviour
                 {
                     Engine.e.battleSystem.char3SkillTargetSupport = true;
                     Engine.e.battleSystem.char3Supporting = true;
+
+                    if (skillChoice.skillIndex == 21)
+                    {
+                        Engine.e.battleSystem.charSkillSwitchCheck = true;
+                        Engine.e.battleSystem.ActivateAvailableCharSwitchButtons();
+                    }
                 }
             }
 
@@ -180,55 +216,22 @@ public class Character : MonoBehaviour
         }
     }
 
-    public void Revive(float healPower, int target)
-    {
-        float healAmount = healPower + (healPower * holyDropsLevel / 2);
-        if (Engine.e.activeParty.activeParty[target].GetComponent<Character>().currentHealth <= 0)
-        {
-            Engine.e.activeParty.activeParty[target].GetComponent<Character>().currentHealth += healAmount;
-            Engine.e.battleSystem.damageTotal = healAmount;
-            if (Engine.e.activeParty.activeParty[target].GetComponent<Character>().currentHealth > Engine.e.activeParty.activeParty[target].GetComponent<Character>().maxHealth)
-            {
-                Engine.e.activeParty.activeParty[target].GetComponent<Character>().currentHealth = Engine.e.activeParty.activeParty[target].GetComponent<Character>().maxHealth;
-            }
-        }
-    }
 
-    public void SoothingRain(float healPower)
+    public void InflictDeath()
     {
-        Engine.e.weatherRain.SetActive(true);
-        float healAmount = healPower + (healPower * waterDropsLevel / 2);
-        for (int i = 0; i < Engine.e.activeParty.activeParty.Length; i++)
-        {
-            if (Engine.e.activeParty.activeParty[i] != null && Engine.e.activeParty.activeParty[i].GetComponent<Character>().currentHealth > 0)
-            {
-                Engine.e.activeParty.activeParty[i].GetComponent<Character>().currentHealth += healAmount;
-                Engine.e.battleSystem.damageTotal = healAmount;
-                if (Engine.e.activeParty.activeParty[i].GetComponent<Character>().currentHealth > Engine.e.activeParty.activeParty[i].GetComponent<Character>().maxHealth)
-                {
-                    Engine.e.activeParty.activeParty[i].GetComponent<Character>().currentHealth = Engine.e.activeParty.activeParty[i].GetComponent<Character>().maxHealth;
-                }
-            }
-        }
-    }
+        GameObject thisCharacterGOLoc = null;
 
-    public void InflictDeathAttack()
-    {
-        GameObject characterLoc = null;
-        Character character = Engine.e.activeParty.activeParty[Engine.e.charBeingTargeted].GetComponent<Character>();
-        Debug.Log(character.characterName);
-
-        if (Engine.e.charBeingTargeted == 0)
+        if (activePartyIndex == 0)
         {
-            characterLoc = Engine.e.activeParty.gameObject;
+            thisCharacterGOLoc = Engine.e.activeParty.gameObject;
         }
-        if (Engine.e.charBeingTargeted == 1)
+        if (activePartyIndex == 1)
         {
-            characterLoc = Engine.e.activePartyMember2.gameObject;
+            thisCharacterGOLoc = Engine.e.activePartyMember2;
         }
-        if (Engine.e.charBeingTargeted == 2)
+        if (activePartyIndex == 2)
         {
-            characterLoc = Engine.e.activePartyMember3.gameObject;
+            thisCharacterGOLoc = Engine.e.activePartyMember3;
         }
 
         int instantDeath = Random.Range(0, 99);
@@ -239,37 +242,59 @@ public class Character : MonoBehaviour
         {
             if (deathDefense < deathChance)
             {
-                Vector3 deathTimerLoc = new Vector3(characterLoc.transform.position.x, characterLoc.transform.position.y + 1, characterLoc.transform.position.z);
-                deathTimerPopup = Instantiate(Engine.e.battleSystem.deathTimerPopup, deathTimerLoc, Quaternion.identity);
-                deathTimerPopup.transform.SetParent(characterLoc.gameObject.transform);
-                deathTimerPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = character.deathTimer.ToString();
+                Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, "Death", Color.white);
+
                 Engine.e.battleSystem.charUsingSkill = false;
 
-                GameObject result = Instantiate(Engine.e.battleSystem.damagePopup, characterLoc.transform.position, Quaternion.identity);
-                character.deathInflicted = true;
-                result.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Death";
-                Destroy(result, 1f);
+                if (activePartyIndex == 0)
+                {
+                    Engine.e.battleSystem.char1Context.transform.position = thisCharacterGOLoc.transform.position;
+                    Engine.e.battleSystem.char1Context.transform.GetChild(0).GetComponent<TextMeshPro>().text = deathTimer.ToString();
+                    Engine.e.battleSystem.char1Context.SetActive(true);
+                }
+                if (activePartyIndex == 1)
+                {
+                    Engine.e.battleSystem.char2Context.transform.position = thisCharacterGOLoc.transform.position;
+                    Engine.e.battleSystem.char2Context.transform.GetChild(0).GetComponent<TextMeshPro>().text = deathTimer.ToString();
+                    Engine.e.battleSystem.char2Context.SetActive(true);
+                }
+                if (activePartyIndex == 2)
+                {
+                    Engine.e.battleSystem.char3Context.transform.position = thisCharacterGOLoc.transform.position;
+                    Engine.e.battleSystem.char3Context.transform.GetChild(0).GetComponent<TextMeshPro>().text = deathTimer.ToString();
+                    Engine.e.battleSystem.char3Context.SetActive(true);
+                }
+
+                deathInflicted = true;
             }
             else
             {
-                GameObject result = Instantiate(Engine.e.battleSystem.damagePopup, characterLoc.transform.position, Quaternion.identity);
-                result.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Resisted";
-                Destroy(result, 1f);
+                Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, "Resisted!", Color.white);
             }
         }
         else
         {
-            GameObject result = Instantiate(Engine.e.battleSystem.damagePopup, characterLoc.transform.position, Quaternion.identity);
-            result.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Resisted";
-            Destroy(result, 1f);
+            Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, "Resisted!", Color.white);
         }
     }
 
-    public bool TakeDeathDamage(int index)
+    public bool TakeDeathDamage()
     {
 
         deathTimer--;
-        deathTimerPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = deathTimer.ToString();
+
+        if (activePartyIndex == 0)
+        {
+            Engine.e.battleSystem.char1Context.transform.GetChild(0).GetComponent<TextMeshPro>().text = deathTimer.ToString();
+        }
+        if (activePartyIndex == 1)
+        {
+            Engine.e.battleSystem.char2Context.transform.GetChild(0).GetComponent<TextMeshPro>().text = deathTimer.ToString();
+        }
+        if (activePartyIndex == 2)
+        {
+            Engine.e.battleSystem.char3Context.transform.GetChild(0).GetComponent<TextMeshPro>().text = deathTimer.ToString();
+        }
 
         if (deathTimer == 0)
         {
@@ -282,9 +307,21 @@ public class Character : MonoBehaviour
             poisonDmg = 0;
             deathTimer = 3;
 
-            Destroy(deathTimerPopup);
-
-            Engine.e.battleSystem.hud.displayHealth[index].text = currentHealth.ToString();
+            if (activePartyIndex == 0)
+            {
+                Engine.e.battleSystem.char1Context.transform.GetChild(0).GetComponent<TextMeshPro>().text = deathTimer.ToString();
+                Engine.e.battleSystem.char1Context.SetActive(false);
+            }
+            if (activePartyIndex == 1)
+            {
+                Engine.e.battleSystem.char2Context.transform.GetChild(0).GetComponent<TextMeshPro>().text = deathTimer.ToString();
+                Engine.e.battleSystem.char2Context.SetActive(false);
+            }
+            if (activePartyIndex == 2)
+            {
+                Engine.e.battleSystem.char3Context.transform.GetChild(0).GetComponent<TextMeshPro>().text = deathTimer.ToString();
+                Engine.e.battleSystem.char3Context.SetActive(false);
+            }
 
             if (currentHealth <= 0)
             {
@@ -314,14 +351,6 @@ public class Character : MonoBehaviour
         return false;
     }
 
-    public void RemoveDeath()
-    {
-        deathInflicted = false;
-        deathTimer = 3;
-        Destroy(deathTimerPopup);
-
-    }
-
     public bool KnowsSkill(Skills _skill)
     {
         for (int i = 0; i < skills.Length; i++)
@@ -334,53 +363,108 @@ public class Character : MonoBehaviour
         return false;
     }
 
-    public bool KnowsDrop(Drops _drop)
-    {
-        for (int i = 0; i < drops.Length; i++)
-        {
-            if (drops[i] == _drop)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void TeachDrop(Drops _drop)
-    {
-        drops[_drop.dropIndex] = _drop;
-        _drop.isKnown = true;
-    }
-    public void TeachSkill(Skills _skill)
-    {
-        skills[_skill.skillIndex] = _skill;
-        _skill.isKnown = true;
-    }
-
     public bool TakePhysicalDamage(int index, float _dmg)
     {
-        float critChance = 2;
+        float _crit = 0;
         float adjustedDodge = Mathf.Round(hitChance - dodgeChance);
-        int hit = Random.Range(0, 99);
+        int hit = Random.Range(0, 100);
+        bool teamAttack = false;
+        Character attackingCharacter = null;
+        GameObject thisCharacterGOLoc = null;
+        float adjustedCritChance = 0;
 
-        critChance = Random.Range(0, 10);
+        float elementFireDamageBonus = 0;
+        float elementWaterDamageBonus = 0;
+        float elementLightningDamageBonus = 0;
+        float elementShadowDamageBonus = 0;
+        float elementIceDamageBonus = 0;
 
-        if (critChance == 0)
+        if (activePartyIndex == 0)
         {
-            float critDamage = Mathf.Round((_dmg + (_dmg * (2 / 3))));
-            _dmg = _dmg + critDamage;
+            thisCharacterGOLoc = Engine.e.activeParty.gameObject;
+        }
+        if (activePartyIndex == 1)
+        {
+            thisCharacterGOLoc = Engine.e.activePartyMember2;
+        }
+        if (activePartyIndex == 2)
+        {
+            thisCharacterGOLoc = Engine.e.activePartyMember3;
+        }
+
+        if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR1TURN || Engine.e.battleSystem.currentInQueue == BattleState.CONFCHAR1)
+        {
+            attackingCharacter = Engine.e.activeParty.activeParty[0].GetComponent<Character>();
+            teamAttack = true;
+
+        }
+        if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR2TURN || Engine.e.battleSystem.currentInQueue == BattleState.CONFCHAR2)
+        {
+            attackingCharacter = Engine.e.activeParty.activeParty[1].GetComponent<Character>();
+            teamAttack = true;
+        }
+        if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR3TURN || Engine.e.battleSystem.currentInQueue == BattleState.CONFCHAR3)
+        {
+            attackingCharacter = Engine.e.activeParty.activeParty[2].GetComponent<Character>();
+            teamAttack = true;
+        }
+
+        if (teamAttack)
+        {
+            adjustedCritChance = attackingCharacter.critChance;
+
+            float desperationHealth1 = attackingCharacter.maxHealth / 2;
+            float desperationHealth2 = attackingCharacter.maxHealth * (0.4f);
+            float desperationHealth3 = attackingCharacter.maxHealth * (0.3f);
+
+
+            if (attackingCharacter.currentHealth <= desperationHealth1)
+            {
+                adjustedCritChance += 5f;
+
+                if (attackingCharacter.currentHealth <= desperationHealth2)
+                {
+                    adjustedCritChance += 10f;
+                }
+
+                if (attackingCharacter.currentHealth <= desperationHealth3)
+                {
+                    adjustedCritChance += 15f;
+                }
+            }
+        }
+
+        _crit = Random.Range(0, 100);
+
+        if (teamAttack)
+        {
+            if (_crit < adjustedCritChance)
+            {
+                float critDamage = Mathf.Round((_dmg + (_dmg * (2 / 3))));
+                _dmg = _dmg + critDamage;
+            }
+        }
+        else
+        {
+            if (_crit <= 10)
+            {
+                float critDamage = Mathf.Round((_dmg + (_dmg * (2 / 3))));
+                _dmg = _dmg + critDamage;
+            }
         }
 
         float adjustedPhysicalDmg = Mathf.Round((_dmg) - (_dmg * (physicalDefense / 100)));
+
+        if (teamAttack) // Consider removing this
+        {
+            adjustedPhysicalDmg = Random.Range(adjustedPhysicalDmg, (adjustedPhysicalDmg + attackingCharacter.lvl));
+        }
 
         if (isAsleep)
         {
             adjustedDodge = 100;
             isAsleep = false;
             inflicted = false;
-
-            //activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.white;
-            //activeParty.GetComponent<SpriteRenderer>().color = Color.white;
         }
 
         if (isConfused)
@@ -399,16 +483,39 @@ public class Character : MonoBehaviour
 
         if (hit < adjustedDodge)
         {
-            currentHealth -= adjustedPhysicalDmg;
-            Debug.Log("Test");
-            Engine.e.battleSystem.damageTotal = adjustedPhysicalDmg;
-            Engine.e.battleSystem.SetDamagePopupText(adjustedPhysicalDmg.ToString());
+            if (teamAttack)
+            {
+                elementFireDamageBonus += Mathf.Round((attackingCharacter.firePhysicalAttackBonus)
+                    - (attackingCharacter.firePhysicalAttackBonus * fireDefense / 100));
 
+                elementWaterDamageBonus += Mathf.Round((attackingCharacter.waterPhysicalAttackBonus)
+                - (attackingCharacter.waterPhysicalAttackBonus * waterDefense / 100));
+
+                elementLightningDamageBonus += Mathf.Round((attackingCharacter.lightningPhysicalAttackBonus)
+                - (attackingCharacter.lightningPhysicalAttackBonus * lightningDefense / 100));
+
+                elementShadowDamageBonus += Mathf.Round((attackingCharacter.shadowPhysicalAttackBonus)
+                - (attackingCharacter.shadowPhysicalAttackBonus * shadowDefense / 100));
+
+                elementIceDamageBonus += Mathf.Round((attackingCharacter.icePhysicalAttackBonus)
+                - (attackingCharacter.icePhysicalAttackBonus * iceDefense / 100));
+
+                adjustedPhysicalDmg = Mathf.Round((adjustedPhysicalDmg) + elementFireDamageBonus + elementWaterDamageBonus + elementLightningDamageBonus + elementShadowDamageBonus + elementIceDamageBonus);
+
+            }
+            currentHealth -= adjustedPhysicalDmg;
+            Engine.e.battleSystem.damageTotal = adjustedPhysicalDmg;
+            Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, adjustedPhysicalDmg.ToString(), Color.white);
         }
         else
         {
             Engine.e.battleSystem.dodgedAttack = true;
+            adjustedPhysicalDmg = 0;
+            Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, "Dodged!", Color.white);
+
         }
+
+
 
         if (currentHealth <= 0)
         {
@@ -488,11 +595,96 @@ public class Character : MonoBehaviour
         return false;
     }
 
+    public void InflictBio(float _poisonDmg)
+    {
+        float poisonChance = Random.Range(0, 100);
+
+        if (poisonDefense < poisonChance)
+        {
+            isPoisoned = true;
+            inflicted = true;
+
+            poisonDmg = Mathf.Round((_poisonDmg) - (_poisonDmg * poisonDefense / 100));
+
+        }
+    }
+
+    public bool TakePoisonDamage(float poisonDmg)
+    {
+        GameObject thisCharacterGOLoc = null;
+
+        if (activePartyIndex == 0)
+        {
+            thisCharacterGOLoc = Engine.e.activeParty.gameObject;
+        }
+        if (activePartyIndex == 1)
+        {
+            thisCharacterGOLoc = Engine.e.activePartyMember2;
+        }
+        if (activePartyIndex == 2)
+        {
+            thisCharacterGOLoc = Engine.e.activePartyMember3;
+        }
+
+        float totalDamage = Mathf.Round((poisonDmg) - (poisonDmg * poisonDefense / 100));
+        currentHealth -= totalDamage;
+
+        if (poisonDefense < 100)
+        {
+            Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, totalDamage.ToString(), Color.white);
+        }
+        else
+        {
+            float totalDamageText = totalDamage * -1;
+            Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, totalDamageText.ToString(), Color.green);
+
+        }
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            isPoisoned = false;
+            isConfused = false;
+            isAsleep = false;
+            poisonDmg = 0f;
+            inflicted = false;
+            GetComponent<SpriteRenderer>().color = Color.white;
+
+        }
+
+        //Engine.e.battleSystem.hud.displayHealth[index].text = currentHealth.ToString();
+
+        if (currentHealth <= 0)
+        {
+            if (Engine.e.activeParty.activeParty[2] != null && Engine.e.activeParty.activeParty[1].gameObject.GetComponent<Character>().currentHealth <= 0
+            && Engine.e.activeParty.activeParty[2].gameObject.GetComponent<Character>().currentHealth <= 0)
+            {
+                return true;
+            }
+
+            if (Engine.e.activeParty.activeParty[2] == null && Engine.e.activeParty.activeParty[1] != null)
+            {
+                if (Engine.e.activeParty.activeParty[1].gameObject.GetComponent<Character>().currentHealth <= 0)
+                {
+
+                    return true;
+
+                }
+            }
+
+            if (Engine.e.activeParty.activeParty[2] == null && Engine.e.activeParty.activeParty[1] == null)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void DropEffect(Drops dropChoice)
     {
         float dropValueOutcome = 0;
         int currentIndex = 0;
         Character characterAttacking = null;
+        GameObject thisCharacterGOLoc = null;
         Enemy enemyAttacking = null;
         bool teamAttack = false; // If "false," an active party member is attacking 
         float damageTotal = 0;
@@ -514,6 +706,19 @@ public class Character : MonoBehaviour
             currentIndex = 2;
             characterAttacking = Engine.e.activeParty.activeParty[2].GetComponent<Character>();
             teamAttack = true;
+        }
+
+        if (activePartyIndex == 0)
+        {
+            thisCharacterGOLoc = Engine.e.activeParty.gameObject;
+        }
+        if (activePartyIndex == 1)
+        {
+            thisCharacterGOLoc = Engine.e.activePartyMember2;
+        }
+        if (activePartyIndex == 2)
+        {
+            thisCharacterGOLoc = Engine.e.activePartyMember3;
         }
 
         if (Engine.e.battleSystem.currentInQueue == BattleState.ENEMY1TURN)
@@ -552,13 +757,16 @@ public class Character : MonoBehaviour
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.fireDropsLevel / 2)) + characterAttacking.fireDropAttackBonus);
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * fireDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
-                characterAttacking.GetDropExperience(dropChoice);
+                Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, dropValueOutcome.ToString(), Color.white);
+
             }
             else
             {
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.fireDropsLevel / 2)));
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * fireDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
+                Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, dropValueOutcome.ToString(), Color.white);
+
             }
         }
 
@@ -569,13 +777,16 @@ public class Character : MonoBehaviour
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.iceDropsLevel / 2)) + characterAttacking.iceDropAttackBonus);
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * iceDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
-                characterAttacking.GetDropExperience(dropChoice);
+                Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, dropValueOutcome.ToString(), Color.white);
+
             }
             else
             {
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.iceDropsLevel / 2)));
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * iceDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
+                Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, dropValueOutcome.ToString(), Color.white);
+
             }
         }
 
@@ -588,13 +799,14 @@ public class Character : MonoBehaviour
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.lightningDropsLevel / 2)) + characterAttacking.lightningDropAttackBonus);
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * lightningDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
-                characterAttacking.GetDropExperience(dropChoice);
+                Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, dropValueOutcome.ToString(), Color.white);
             }
             else
             {
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.lightningDropsLevel / 2)));
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * lightningDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
+                Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, dropValueOutcome.ToString(), Color.white);
             }
         }
 
@@ -605,38 +817,61 @@ public class Character : MonoBehaviour
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.waterDropsLevel / 2)) + characterAttacking.waterDropAttackBonus);
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
-                characterAttacking.GetDropExperience(dropChoice);
+                Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, dropValueOutcome.ToString(), Color.white);
             }
             else
             {
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.waterDropsLevel / 2)));
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
+                Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, dropValueOutcome.ToString(), Color.white);
             }
         }
 
         if (dropChoice.dropType == "Shadow")
         {
-            if (teamAttack)
-            {
-                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.shadowDropsLevel / 2)) + characterAttacking.shadowDropAttackBonus);
-                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * shadowDefense / 100));
-                currentHealth -= Mathf.Round(damageTotal);
-                characterAttacking.GetDropExperience(dropChoice);
-            }
-            else
-            {
-                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.shadowDropsLevel / 2)));
-                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * shadowDefense / 100));
-                currentHealth -= Mathf.Round(damageTotal);
-            }
-
             switch (dropChoice.dropName)
             {
+                case "Dark Embrace":
+                    if (teamAttack)
+                    {
+                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.shadowDropsLevel / 2)) + characterAttacking.shadowDropAttackBonus);
+                        damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * shadowDefense / 100));
+                        currentHealth -= Mathf.Round(damageTotal);
+                    }
+                    else
+                    {
+                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.shadowDropsLevel / 2)));
+                        damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * shadowDefense / 100));
+                        currentHealth -= Mathf.Round(damageTotal);
+                    }
+                    Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, dropValueOutcome.ToString(), Color.white);
+                    break;
                 case "Bio":
 
-                    //InflictPoisonAttack(currentIndex, battleSystem.lastDropChoice.dotDmg);
+                    float poisonChance = Random.Range(0, 100);
 
+                    if (poisonDefense < poisonChance)
+                    {
+                        isPoisoned = true;
+                        inflicted = true;
+
+                        if (teamAttack)
+                        {
+                            float poisonDmgCalculation = Mathf.Round(dropChoice.dropPower + (characterAttacking.shadowDropsLevel * 6) / 2);
+                            poisonDmg = ((poisonDmgCalculation) - (poisonDmgCalculation * poisonDefense / 100));
+                        }
+                        else
+                        {
+                            float poisonDmgCalculation = Mathf.Round(dropChoice.dropPower + (enemyAttacking.shadowDropsLevel * 6) / 2);
+                            poisonDmg = ((poisonDmgCalculation) - (poisonDmgCalculation * poisonDefense / 100));
+                        }
+                        Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, "Poisoned!", Color.white);
+                    }
+                    else
+                    {
+                        Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, "Resisted!", Color.white);
+                    }
                     break;
                 case "Knockout":
                     if (!isAsleep)
@@ -647,10 +882,16 @@ public class Character : MonoBehaviour
                         {
                             isAsleep = true;
                             sleepTimer = 0;
+                            Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, "Sleeping!", Color.white);
+                        }
+                        else
+                        {
+                            Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, "Resisted!", Color.white);
                         }
                     }
                     break;
                 case "Blind":
+
                     if (!isConfused)
                     {
                         float confuseChance = Random.Range(0, 100);
@@ -658,34 +899,78 @@ public class Character : MonoBehaviour
                         if (confuseDefense < confuseChance)
                         {
                             isConfused = true;
+                            haltInflicted = false;
                             confuseTimer = 0;
+                            Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, "Confused!", Color.white);
+
+                            if (activePartyIndex == 0)
+                            {
+                                Engine.e.battleSystem.DeactivateChar1MenuButtons();
+                                if (Engine.e.battleSystem.char1Ready == true)
+                                {
+                                    Engine.e.battleSystem.char1Ready = false;
+                                }
+                            }
+                            if (activePartyIndex == 1)
+                            {
+                                Engine.e.battleSystem.DeactivateChar2MenuButtons();
+                                if (Engine.e.battleSystem.char2Ready == true)
+                                {
+                                    Engine.e.battleSystem.char2Ready = false;
+                                }
+                            }
+                            if (activePartyIndex == 2)
+                            {
+                                Engine.e.battleSystem.DeactivateChar3MenuButtons();
+                                if (Engine.e.battleSystem.char3Ready == true)
+                                {
+                                    Engine.e.battleSystem.char3Ready = false;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, "Resisted!", Color.white);
                         }
                     }
+                    break;
+                case "Death":
+                    InflictDeath();
                     break;
             }
         }
 
         if (dropChoice.dropType == "Holy")
         {
-            if (teamAttack)
+            switch (dropChoice.dropName)
             {
-                characterAttacking.GetDropExperience(dropChoice);
+                case "Holy Light":
 
-                switch (dropChoice.dropName)
-                {
-                    case "Holy Light":
+                    if (teamAttack)
+                    {
                         dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.holyDropsLevel / 2)));
                         damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * holyDefense / 100));
                         currentHealth += damageTotal;
 
-                        if (currentHealth >= maxHealth)
-                        {
-                            currentHealth = maxHealth;
-                        }
+                    }
+                    else
+                    {
+                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.holyDropsLevel / 2)));
+                        damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * holyDefense / 100));
+                        currentHealth += damageTotal;
+                    }
 
-                        break;
-                    case "Repent":
+                    Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, damageTotal.ToString(), Color.green);
 
+                    if (currentHealth >= maxHealth)
+                    {
+                        currentHealth = maxHealth;
+                    }
+
+                    break;
+                case "Repent":
+                    if (teamAttack)
+                    {
                         if (characterAttacking.holyDropsLevel >= 20)
                         {
                             if (isAsleep)
@@ -708,50 +993,9 @@ public class Character : MonoBehaviour
                                 //deathTimerPopup.SetActive(false);
                             }
                         }
-                        else
-                        {
-                            if (characterAttacking.holyDropsLevel < 20 && characterAttacking.holyDropsLevel >= 10)
-                            {
-                                if (isAsleep)
-                                {
-                                    isAsleep = false;
-                                }
-                                if (isPoisoned)
-                                {
-                                    isPoisoned = false;
-                                }
-                            }
-                            else
-                            {
-                                if (isAsleep)
-                                {
-                                    isAsleep = false;
-                                }
-                            }
-                        }
-                        inflicted = false;
-
-                        break;
-
-                }
-            }
-            else
-            {
-                switch (dropChoice.dropName)
-                {
-                    case "Holy Light":
-                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.holyDropsLevel / 2)));
-                        damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * holyDefense / 100));
-
-                        currentHealth += damageTotal;
-
-                        if (currentHealth >= maxHealth)
-                        {
-                            currentHealth = maxHealth;
-                        }
-
-                        break;
-                    case "Repent":
+                    }
+                    else
+                    {
                         if (enemyAttacking.holyDropsLevel >= 20)
                         {
                             if (isAsleep)
@@ -796,10 +1040,18 @@ public class Character : MonoBehaviour
                             }
                         }
 
-                        inflicted = false;
-                        break;
-                }
+
+                    }
+                    Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, "Cured!", Color.green);
+                    inflicted = false;
+
+                    break;
             }
+        }
+
+        if (teamAttack)
+        {
+            characterAttacking.GetDropExperience(dropChoice);
         }
 
         if (damageTotal >= 0)
@@ -855,11 +1107,6 @@ public class Character : MonoBehaviour
 
                 GetComponent<SpriteRenderer>().color = Color.grey;
             }
-        }
-
-        if (currentHealth > maxHealth)
-        {
-            currentHealth = maxHealth;
         }
 
         if (!Engine.e.battleSystem.animExists)
@@ -998,5 +1245,27 @@ public class Character : MonoBehaviour
                 }
             }
         }
+    }
+    public bool KnowsDrop(Drops _drop)
+    {
+        for (int i = 0; i < drops.Length; i++)
+        {
+            if (drops[i] == _drop)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void TeachDrop(Drops _drop)
+    {
+        drops[_drop.dropIndex] = _drop;
+        _drop.isKnown = true;
+    }
+    public void TeachSkill(Skills _skill)
+    {
+        skills[_skill.skillIndex] = _skill;
+        _skill.isKnown = true;
     }
 }

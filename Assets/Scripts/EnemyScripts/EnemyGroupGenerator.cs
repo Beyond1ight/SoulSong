@@ -7,6 +7,7 @@ public class EnemyGroupGenerator : MonoBehaviour
     public Enemy[] listOfEnemies; // List of enemies available to choose from
     public GameObject[] enemyLocations;
     public EnemyGroup enemyGroup;
+    public int numberOfEnemies = 0;
 
     void Start()
     {
@@ -33,16 +34,16 @@ public class EnemyGroupGenerator : MonoBehaviour
 
         if (enemyGroup.inWorld)
         {
-            int numberOfEnemies = Random.Range(1, 5); // Generating number of enemies
+            int _numberOfEnemies = Random.Range(1, numberOfEnemies + 1); // Generating number of enemies
 
-            enemyGroup.enemies = new Enemy[numberOfEnemies];
+            enemyGroup.enemies = new Enemy[_numberOfEnemies];
             int enemy1 = Random.Range(0, listOfEnemies.Length); // If the group is "inWorld," there will always be at least one enemy. This picks the first enemy
 
             GameObject enemy1Obj = Instantiate(listOfEnemies[enemy1].gameObject, enemyLocations[0].transform.position, Quaternion.identity); // Instantiates the GameObject of the first enemy
             enemy1Obj.transform.parent = enemyGroup.transform; // Sets the instantiated enemy1's parent to the enemyGroup, mostly for organization
             enemyGroup.enemies[0] = enemy1Obj.GetComponent<Enemy>(); // Sets the enemyGroup's enemy1 to be associated with the instantiated enemy1, not to be confused with the prefab
 
-            if (numberOfEnemies == 4)
+            if (_numberOfEnemies == 4)
             {
                 int enemy4 = Random.Range(0, listOfEnemies.Length);
                 int enemy3 = Random.Range(0, listOfEnemies.Length);
@@ -62,7 +63,7 @@ public class EnemyGroupGenerator : MonoBehaviour
 
             }
 
-            if (numberOfEnemies == 3)
+            if (_numberOfEnemies == 3)
             {
                 int enemy3 = Random.Range(0, listOfEnemies.Length);
                 int enemy2 = Random.Range(0, listOfEnemies.Length);
@@ -76,7 +77,7 @@ public class EnemyGroupGenerator : MonoBehaviour
                 enemyGroup.enemies[1] = enemy2Obj.GetComponent<Enemy>();
             }
 
-            if (numberOfEnemies == 2)
+            if (_numberOfEnemies == 2)
             {
                 int enemy2 = Random.Range(0, listOfEnemies.Length);
 

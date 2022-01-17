@@ -11,8 +11,7 @@ public class Enemy : MonoBehaviour
     public int lvl, physicalDamage, groupIndex, moneyLootAmount, sleepTimer, confuseTimer, deathTimer = 3;
     public Drops[] drops;
     public bool isPoisoned, isConfused, isAsleep, deathInflicted, inflicted;
-    public GameObject deathTimerPopup;
-    public float physicalDefense, dodgeChance, fireDefense, iceDefense, lightningDefense, waterDefense, shadowDefense, holyDefense, poisonDefense, sleepDefense, confuseDefense, deathDefense,
+    public float physicalDefense, dodgeChance, fireDefense, iceDefense, lightningDefense, waterDefense, shadowDefense, holyDefense, poisonDefense, sleepDefense, confuseDefense, deathDefense, instantDeathDefense,
     fireDropsLevel, iceDropsLevel, lightningDropsLevel, waterDropsLevel, shadowDropsLevel, holyDropsLevel, stealChance;
 
     public Item[] itemDrops;
@@ -23,6 +22,7 @@ public class Enemy : MonoBehaviour
     public Transform enemyPos;
     public string worldZone;
     public Vector3 currentBattlePos;
+    public GameObject enemyContext;
 
     void Awake()
     {
@@ -42,8 +42,14 @@ public class Enemy : MonoBehaviour
     {
         switch (_enemy.enemyName)
         {
+            // Regular Enemies
             case "Cave Bat":
                 GetComponent<CaveBatBattleLogic>().Logic(_enemyTarget);
+                break;
+
+            // Bosses
+            case "Xelient the Aggressor":
+                GetComponent<XelientBattleLogic>().Logic(_enemyTarget);
                 break;
         }
     }
@@ -107,62 +113,27 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void TakePhysicalDamage(int index, float _damage, float hitChance)
+    public void TakePhysicalDamage(int index, float _dmg, float hitChance)
     {
-        float critChance = 2;
+        float _crit = 0;
+        bool teamAttack = false;
+        float adjustedDodge = Mathf.Round(hitChance - dodgeChance);
+        int hit = Random.Range(0, 99);
+        Character attackingCharacter = null;
 
         if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR1TURN || Engine.e.battleSystem.currentInQueue == BattleState.CONFCHAR1)
         {
-            if (Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentHealth > (Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxHealth * 50 / 100))
-            {
-                critChance = Random.Range(0, 10);
-            }
-            if (Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentHealth > (Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxHealth * 40 / 100) &&
-            Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentHealth < (Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxHealth * 50 / 100))
-            {
-                critChance = Random.Range(0, 9);
-            }
-            if (Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentHealth > (Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxHealth * 25 / 100) &&
-          Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentHealth < (Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxHealth * 40 / 100))
-            {
-                critChance = Random.Range(0, 8);
-            }
+            attackingCharacter = Engine.e.activeParty.activeParty[0].GetComponent<Character>();
         }
 
         if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR2TURN || Engine.e.battleSystem.currentInQueue == BattleState.CONFCHAR2)
         {
-            if (Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentHealth > (Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxHealth * 50 / 100))
-            {
-                critChance = Random.Range(0, 10);
-            }
-            if (Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentHealth > (Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxHealth * 40 / 100) &&
-            Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentHealth < (Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxHealth * 50 / 100))
-            {
-                critChance = Random.Range(0, 9);
-            }
-            if (Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentHealth > (Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxHealth * 25 / 100) &&
-          Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentHealth < (Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxHealth * 40 / 100))
-            {
-                critChance = Random.Range(0, 8);
-            }
+            attackingCharacter = Engine.e.activeParty.activeParty[1].GetComponent<Character>();
         }
 
         if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR3TURN || Engine.e.battleSystem.currentInQueue == BattleState.CONFCHAR3)
         {
-            if (Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth > (Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxHealth * 50 / 100))
-            {
-                critChance = Random.Range(0, 10);
-            }
-            if (Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth > (Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxHealth * 40 / 100) &&
-            Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth < (Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxHealth * 50 / 100))
-            {
-                critChance = Random.Range(0, 9);
-            }
-            if (Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth > (Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxHealth * 25 / 100) &&
-          Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth < (Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxHealth * 40 / 100))
-            {
-                critChance = Random.Range(0, 8);
-            }
+            attackingCharacter = Engine.e.activeParty.activeParty[2].GetComponent<Character>();
         }
 
         float elementFireDamageBonus = 0;
@@ -171,32 +142,53 @@ public class Enemy : MonoBehaviour
         float elementShadowDamageBonus = 0;
         float elementIceDamageBonus = 0;
 
-        if (critChance == 0)
+        _crit = Random.Range(0, 100);
+
+        float adjustedCritChance = attackingCharacter.critChance;
+
+        float desperationHealth1 = attackingCharacter.maxHealth / 2;
+        float desperationHealth2 = attackingCharacter.maxHealth * (0.4f);
+        float desperationHealth3 = attackingCharacter.maxHealth * (0.3f);
+
+
+        if (attackingCharacter.currentHealth <= desperationHealth1)
         {
-            float critDamage = Mathf.Round((_damage + (_damage * (2 / 3))));
-            _damage = _damage + critDamage;
+            adjustedCritChance += 5f;
+
+            if (attackingCharacter.currentHealth <= desperationHealth2)
+            {
+                adjustedCritChance += 10f;
+            }
+
+            if (attackingCharacter.currentHealth <= desperationHealth3)
+            {
+                adjustedCritChance += 15f;
+            }
         }
 
-        _damage = Random.Range(_damage, _damage + 5);
-
-        float adjustedDodge = Mathf.Round(hitChance - dodgeChance);
-        int hit = Random.Range(0, 99);
-        int characterIndex = 0;
-
-        if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR1TURN)
+        if (teamAttack)
         {
-            characterIndex = 0;
+            if (_crit <= 10)
+            {
+                float critDamage = Mathf.Round((_dmg + (_dmg * (2 / 3))));
+                _dmg = _dmg + critDamage;
+            }
         }
-        if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR2TURN)
+        else
         {
-            characterIndex = 1;
-        }
-        if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR3TURN)
-        {
-            characterIndex = 2;
+            if (_crit < adjustedCritChance)
+            {
+                float critDamage = Mathf.Round((_dmg + (_dmg * (2 / 3))));
+                _dmg = _dmg + critDamage;
+            }
         }
 
-        Character character = Engine.e.activeParty.activeParty[characterIndex].GetComponent<Character>();
+        float adjustedPhysicalDmg = Mathf.Round((_dmg) - (_dmg * (physicalDefense / 100)));
+
+        if (!teamAttack)
+        {
+            adjustedPhysicalDmg = Random.Range(adjustedPhysicalDmg, (adjustedPhysicalDmg + attackingCharacter.lvl));
+        }
 
         if (isAsleep)
         {
@@ -205,47 +197,54 @@ public class Enemy : MonoBehaviour
 
         if (hit < adjustedDodge)
         {
+            if (!teamAttack)
+            {
+                elementFireDamageBonus += Mathf.Round((attackingCharacter.firePhysicalAttackBonus)
+                - (attackingCharacter.firePhysicalAttackBonus * fireDefense / 100));
 
-            elementFireDamageBonus += Mathf.Round((character.firePhysicalAttackBonus)
-            - (character.firePhysicalAttackBonus * fireDefense / 100));
+                elementWaterDamageBonus += Mathf.Round((attackingCharacter.waterPhysicalAttackBonus)
+                - (attackingCharacter.waterPhysicalAttackBonus * waterDefense / 100));
 
-            elementWaterDamageBonus += Mathf.Round((character.waterPhysicalAttackBonus)
-            - (character.waterPhysicalAttackBonus * waterDefense / 100));
+                elementLightningDamageBonus += Mathf.Round((attackingCharacter.lightningPhysicalAttackBonus)
+                - (attackingCharacter.lightningPhysicalAttackBonus * lightningDefense / 100));
 
-            elementLightningDamageBonus += Mathf.Round((character.lightningPhysicalAttackBonus)
-            - (character.lightningPhysicalAttackBonus * lightningDefense / 100));
+                elementShadowDamageBonus += Mathf.Round((attackingCharacter.shadowPhysicalAttackBonus)
+                - (attackingCharacter.shadowPhysicalAttackBonus * shadowDefense / 100));
 
-            elementShadowDamageBonus += Mathf.Round((character.shadowPhysicalAttackBonus)
-            - (character.shadowPhysicalAttackBonus * shadowDefense / 100));
+                elementIceDamageBonus += Mathf.Round((attackingCharacter.icePhysicalAttackBonus)
+                - (attackingCharacter.icePhysicalAttackBonus * iceDefense / 100));
 
-            elementIceDamageBonus += Mathf.Round((character.icePhysicalAttackBonus)
-            - (character.icePhysicalAttackBonus * iceDefense / 100));
+                adjustedPhysicalDmg = Mathf.Round((adjustedPhysicalDmg) + elementFireDamageBonus + elementWaterDamageBonus + elementLightningDamageBonus + elementShadowDamageBonus + elementIceDamageBonus);
 
-            damageTotal = Mathf.Round((_damage) - (_damage * physicalDefense / 100) + elementFireDamageBonus + elementWaterDamageBonus + elementLightningDamageBonus + elementShadowDamageBonus + elementIceDamageBonus);
+            }
 
+            Engine.e.battleSystem.damageTotal = adjustedPhysicalDmg;
+            currentHealth -= adjustedPhysicalDmg;
+            Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, adjustedPhysicalDmg.ToString(), Color.white);
         }
         else
         {
-            damageTotal = 0;
-            Debug.Log("Missed!");
+            adjustedPhysicalDmg = 0;
             battleSystem.dodgedAttack = true;
+            Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Dodged!", Color.white);
+
         }
 
-        currentHealth -= damageTotal;
+
 
         if (currentHealth > maxHealth)
         {
             currentHealth = maxHealth;
         }
 
-        if (isAsleep && damageTotal != 0)
+        if (isAsleep && adjustedPhysicalDmg != 0)
         {
             isAsleep = false;
             inflicted = false;
             if (GetComponent<EnemyMovement>() != null)
             {
                 GetComponent<EnemyMovement>().enabled = true;
-                GetComponent<SpriteRenderer>().color = Color.white;
+                GetComponentInChildren<SpriteRenderer>().color = Color.white;
             }
         }
 
@@ -261,7 +260,7 @@ public class Enemy : MonoBehaviour
                 {
                     GetComponent<EnemyMovement>().enabled = true;
                 }
-                GetComponent<SpriteRenderer>().color = Color.white;
+                GetComponentInChildren<SpriteRenderer>().color = Color.white;
             }
         }
 
@@ -274,12 +273,12 @@ public class Enemy : MonoBehaviour
 
             GetComponent<SpriteRenderer>().enabled = false;
             battleSystem.enemyUI[index].SetActive(false);
-            battleSystem.enemies[index].GetComponent<Enemy>().isPoisoned = false;
-            battleSystem.enemies[index].GetComponent<Enemy>().isConfused = false;
-            battleSystem.enemies[index].GetComponent<Enemy>().isAsleep = false;
-            battleSystem.enemies[index].GetComponent<Enemy>().deathInflicted = false;
-            battleSystem.enemies[index].GetComponent<Enemy>().inflicted = false;
-            battleSystem.enemies[index].GetComponent<Enemy>().poisonDmg = 0;
+            isPoisoned = false;
+            isConfused = false;
+            isAsleep = false;
+            deathInflicted = false;
+            inflicted = false;
+            poisonDmg = 0;
 
             switch (index)
             {
@@ -360,95 +359,124 @@ public class Enemy : MonoBehaviour
 
         if (dropChoice.dropType == "Fire")
         {
-            if (!teamAttack)
-            {
-                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.fireDropsLevel / 2)) + characterAttacking.fireDropAttackBonus);
-                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * fireDefense / 100));
-                currentHealth -= Mathf.Round(damageTotal);
-                characterAttacking.GetDropExperience(dropChoice);
-            }
-            else
+            if (teamAttack)
             {
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.fireDropsLevel / 2)));
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * fireDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
+                Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, dropValueOutcome.ToString(), Color.white);
+            }
+            else
+            {
+                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.fireDropsLevel / 2)) + characterAttacking.fireDropAttackBonus);
+                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * fireDefense / 100));
+                currentHealth -= Mathf.Round(damageTotal);
+                Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, dropValueOutcome.ToString(), Color.white);
             }
         }
 
         if (dropChoice.dropType == "Ice")
         {
-            if (!teamAttack)
-            {
-                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.iceDropsLevel / 2)) + characterAttacking.iceDropAttackBonus);
-                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * iceDefense / 100));
-                currentHealth -= Mathf.Round(damageTotal);
-                characterAttacking.GetDropExperience(dropChoice);
-            }
-            else
+            if (teamAttack)
             {
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.iceDropsLevel / 2)));
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * iceDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
+                Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, dropValueOutcome.ToString(), Color.white);
+            }
+            else
+            {
+                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.iceDropsLevel / 2)) + characterAttacking.iceDropAttackBonus);
+                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * iceDefense / 100));
+                currentHealth -= Mathf.Round(damageTotal);
+                Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, dropValueOutcome.ToString(), Color.white);
             }
         }
 
         if (dropChoice.dropType == "Lightning")
         {
-            // Instantiate(battleSystem.fireDropAnim, currentLocation.transform.position, Quaternion.identity);
-
-            if (!teamAttack)
-            {
-                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.lightningDropsLevel / 2)) + characterAttacking.lightningDropAttackBonus);
-                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * lightningDefense / 100));
-                currentHealth -= Mathf.Round(damageTotal);
-                characterAttacking.GetDropExperience(dropChoice);
-            }
-            else
+            if (teamAttack)
             {
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.lightningDropsLevel / 2)));
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * lightningDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
             }
+            else
+            {
+                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.lightningDropsLevel / 2)) + characterAttacking.lightningDropAttackBonus);
+                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * lightningDefense / 100));
+                currentHealth -= Mathf.Round(damageTotal);
+                Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, dropValueOutcome.ToString(), Color.white);
+            }
         }
 
         if (dropChoice.dropType == "Water")
         {
-            if (!teamAttack)
-            {
-                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.waterDropsLevel / 2)) + characterAttacking.waterDropAttackBonus);
-                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
-                currentHealth -= Mathf.Round(damageTotal);
-                characterAttacking.GetDropExperience(dropChoice);
-            }
-            else
+            if (teamAttack)
             {
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.waterDropsLevel / 2)));
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
+                Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, dropValueOutcome.ToString(), Color.white);
+            }
+            else
+            {
+                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.waterDropsLevel / 2)) + characterAttacking.waterDropAttackBonus);
+                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
+                currentHealth -= Mathf.Round(damageTotal);
+                Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, dropValueOutcome.ToString(), Color.white);
             }
         }
 
         if (dropChoice.dropType == "Shadow")
         {
-            if (!teamAttack)
-            {
-                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.shadowDropsLevel / 2)) + characterAttacking.shadowDropAttackBonus);
-                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * shadowDefense / 100));
-                currentHealth -= Mathf.Round(damageTotal);
-                characterAttacking.GetDropExperience(dropChoice);
-            }
-            else
-            {
-                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.shadowDropsLevel / 2)));
-                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * shadowDefense / 100));
-                currentHealth -= Mathf.Round(damageTotal);
-            }
 
             switch (dropChoice.dropName)
             {
-                case "Bio":
+                case "Dark Embrace":
+                    if (teamAttack)
+                    {
+                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.shadowDropsLevel / 2)));
+                        damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * shadowDefense / 100));
+                        currentHealth -= Mathf.Round(damageTotal);
+                    }
+                    else
+                    {
+                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.shadowDropsLevel / 2)) + characterAttacking.shadowDropAttackBonus);
+                        damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * shadowDefense / 100));
+                        currentHealth -= Mathf.Round(damageTotal);
+                    }
 
-                    InflictPoisonAttack(currentIndex, battleSystem.lastDropChoice.dotDmg);
+                    Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, dropValueOutcome.ToString(), Color.white);
+
+                    break;
+                case "Bio":
+                    float poisonChance = Random.Range(0, 100);
+
+                    if (poisonDefense < poisonChance)
+                    {
+                        isPoisoned = true;
+                        inflicted = true;
+
+                        if (teamAttack)
+                        {
+                            float poisonDmgCalculation = Mathf.Round(dropChoice.dropPower + (enemyAttacking.shadowDropsLevel * 6) / 2);
+                            poisonDmg = ((poisonDmgCalculation) - (poisonDmgCalculation * poisonDefense / 100));
+
+                        }
+                        else
+                        {
+                            float poisonDmgCalculation = Mathf.Round(dropChoice.dropPower + (characterAttacking.shadowDropsLevel * 6) / 2);
+                            poisonDmg = ((poisonDmgCalculation) - (poisonDmgCalculation * poisonDefense / 100));
+
+                        }
+                        Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Poisoned!", Color.white);
+                    }
+                    else
+                    {
+
+                        Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Resisted!", Color.white);
+                    }
                     break;
                 case "Knockout":
                     if (!isAsleep)
@@ -459,6 +487,12 @@ public class Enemy : MonoBehaviour
                         {
                             isAsleep = true;
                             sleepTimer = 0;
+
+                            Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Sleeping!", Color.white);
+                        }
+                        else
+                        {
+                            Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Resisted!", Color.white);
                         }
                     }
                     break;
@@ -471,99 +505,52 @@ public class Enemy : MonoBehaviour
                         {
                             isConfused = true;
                             confuseTimer = 0;
+
+                            Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Confused!", Color.white);
+                        }
+                        else
+                        {
+                            Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Resisted!", Color.white);
                         }
                     }
+                    break;
+                case "Death":
+                    InflictDeath();
                     break;
             }
         }
 
         if (dropChoice.dropType == "Holy")
         {
-            if (!teamAttack)
+            switch (dropChoice.dropName)
             {
-                characterAttacking.GetDropExperience(dropChoice);
-
-                switch (dropChoice.dropName)
-                {
-                    case "Holy Light":
+                case "Holy Light":
+                    if (teamAttack)
+                    {
+                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.holyDropsLevel / 2)));
+                        damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * holyDefense / 100));
+                        currentHealth += damageTotal;
+                    }
+                    else
+                    {
                         dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.holyDropsLevel / 2)));
                         damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * holyDefense / 100));
                         currentHealth += damageTotal;
+                        Debug.Log(damageTotal);
+                    }
 
-                        if (currentHealth >= maxHealth)
-                        {
-                            currentHealth = maxHealth;
-                        }
+                    Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, damageTotal.ToString(), Color.green);
 
-                        break;
-                    case "Repent":
+                    if (currentHealth >= maxHealth)
+                    {
+                        currentHealth = maxHealth;
+                    }
 
-                        if (characterAttacking.holyDropsLevel >= 20)
-                        {
-                            if (isAsleep)
-                            {
-                                isAsleep = false;
-                            }
-                            if (isPoisoned)
-                            {
-                                isPoisoned = false;
-                            }
-                            if (isConfused)
-                            {
-                                isConfused = false;
-                                confuseTimer = 0;
-                            }
-                            if (deathInflicted)
-                            {
-                                deathInflicted = false;
-                                deathTimer = 3;
-                                //deathTimerPopup.SetActive(false);
-                            }
-                        }
-                        else
-                        {
-                            if (characterAttacking.holyDropsLevel < 20 && characterAttacking.holyDropsLevel >= 10)
-                            {
-                                if (isAsleep)
-                                {
-                                    isAsleep = false;
-                                }
-                                if (isPoisoned)
-                                {
-                                    isPoisoned = false;
-                                }
-                            }
-                            else
-                            {
-                                if (isAsleep)
-                                {
-                                    isAsleep = false;
-                                }
-                            }
-                        }
-                        inflicted = false;
+                    break;
+                case "Repent":
 
-                        break;
-
-                }
-            }
-            else
-            {
-                switch (dropChoice.dropName)
-                {
-                    case "Holy Light":
-                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.holyDropsLevel / 2)));
-                        damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * holyDefense / 100));
-
-                        currentHealth += damageTotal;
-
-                        if (currentHealth >= maxHealth)
-                        {
-                            currentHealth = maxHealth;
-                        }
-
-                        break;
-                    case "Repent":
+                    if (teamAttack)
+                    {
                         if (enemyAttacking.holyDropsLevel >= 20)
                         {
                             if (isAsleep)
@@ -608,14 +595,68 @@ public class Enemy : MonoBehaviour
                             }
                         }
 
-                        inflicted = false;
-                        break;
-                }
+                    }
+                    else
+                    {
+                        if (characterAttacking.holyDropsLevel >= 20)
+                        {
+                            if (isAsleep)
+                            {
+                                isAsleep = false;
+                            }
+                            if (isPoisoned)
+                            {
+                                isPoisoned = false;
+                            }
+                            if (isConfused)
+                            {
+                                isConfused = false;
+                                confuseTimer = 0;
+                            }
+                            if (deathInflicted)
+                            {
+                                deathInflicted = false;
+                                deathTimer = 3;
+                                //deathTimerPopup.SetActive(false);
+                            }
+                        }
+                        else
+                        {
+                            if (characterAttacking.holyDropsLevel < 20 && characterAttacking.holyDropsLevel >= 10)
+                            {
+                                if (isAsleep)
+                                {
+                                    isAsleep = false;
+                                }
+                                if (isPoisoned)
+                                {
+                                    isPoisoned = false;
+                                }
+                            }
+                            else
+                            {
+                                if (isAsleep)
+                                {
+                                    isAsleep = false;
+                                }
+                            }
+                        }
+                    }
+                    Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Cured!", Color.green);
+
+                    inflicted = false;
+
+                    break;
             }
         }
 
 
         Engine.e.battleSystem.damageTotal = damageTotal;
+
+        if (!teamAttack)
+        {
+            characterAttacking.GetDropExperience(dropChoice);
+        }
 
         if (isAsleep)
         {
@@ -629,7 +670,7 @@ public class Enemy : MonoBehaviour
                 {
                     GetComponent<EnemyMovement>().enabled = true;
                 }
-                GetComponent<SpriteRenderer>().color = Color.grey;
+                GetComponentInChildren<SpriteRenderer>().color = Color.grey;
             }
         }
 
@@ -646,7 +687,7 @@ public class Enemy : MonoBehaviour
                 {
                     GetComponent<EnemyMovement>().enabled = true;
                 }
-                GetComponent<SpriteRenderer>().color = Color.white;
+                GetComponentInChildren<SpriteRenderer>().color = Color.white;
             }
 
             if (dropChoice.dropName == "Knockout")
@@ -659,13 +700,8 @@ public class Enemy : MonoBehaviour
                 }
 
 
-                GetComponent<SpriteRenderer>().color = Color.grey;
+                GetComponentInChildren<SpriteRenderer>().color = Color.grey;
             }
-        }
-
-        if (currentHealth > maxHealth)
-        {
-            currentHealth = maxHealth;
         }
 
         if (!battleSystem.animExists)
@@ -684,15 +720,13 @@ public class Enemy : MonoBehaviour
                 inflicted = false;
                 poisonDmg = 0;
 
-                GetComponent<SpriteRenderer>().enabled = false;
+                GetComponentInChildren<SpriteRenderer>().enabled = false;
 
 
                 battleSystem.enemyUI[GetComponentInParent<EnemyGroup>().GetEnemyIndex(this)].SetActive(false);
             }
         }
     }
-
-
 
     public void UseItem(Item item)
     {
@@ -719,12 +753,8 @@ public class Enemy : MonoBehaviour
                     {
 
                         GameObject healthSprite = Instantiate(Engine.e.gameInventory[item.itemIndex].GetComponent<Item>().anim, transform.position, Quaternion.identity);
-                        GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, transform.position, Quaternion.identity);
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = item.itemPower.ToString();
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
-                        Destroy(dmgPopup, 1f);
+                        Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, item.itemPower.ToString(), Color.green);
                         Destroy(healthSprite, 1f);
-
 
                         currentHealth += item.itemPower;
 
@@ -756,10 +786,7 @@ public class Enemy : MonoBehaviour
 
 
                         GameObject manaSprite = Instantiate(Engine.e.gameInventory[item.itemIndex].GetComponent<Item>().anim, transform.position, Quaternion.identity);
-                        GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, transform.position, Quaternion.identity);
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = item.itemPower.ToString();
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 54, 255, 255);
-                        Destroy(dmgPopup, 1f);
+                        Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, item.itemPower.ToString(), Color.blue);
                         Destroy(manaSprite, 1f);
 
 
@@ -795,9 +822,6 @@ public class Enemy : MonoBehaviour
 
                 if (!failedItemUse)
                 {
-
-
-
                     if (poisonDefense > 100)
                     {
                         currentHealth -= 100;
@@ -812,12 +836,9 @@ public class Enemy : MonoBehaviour
                     }
                     else
                     {
-                        GetComponent<SpriteRenderer>().color = Color.white;
+                        GetComponentInChildren<SpriteRenderer>().color = Color.white;
                         GameObject antidote = Instantiate(Engine.e.gameInventory[item.itemIndex].GetComponent<Item>().anim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                        GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activeParty.transform.position, Quaternion.identity);
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Cured";
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
-                        Destroy(dmgPopup, 1f);
+                        Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Cured!", Color.green);
                         Destroy(antidote, 1f);
                         isPoisoned = false;
                         inflicted = false;
@@ -837,207 +858,24 @@ public class Enemy : MonoBehaviour
         Engine.e.itemToBeUsed = null;
     }
 
-    public void ConfuseTakeDropDamage(int index, Drops dropChoice)
-    {
-        float charDropDamage = 0;
-
-        if (dropChoice.dropType == "Fire")
-        {
-
-            charDropDamage = Mathf.Round(dropChoice.dropPower);
-
-            damageTotal = Mathf.Round((charDropDamage) - (charDropDamage * fireDefense / 100));
-            battleSystem.enemies[index].gameObject.GetComponent<Enemy>().currentHealth -= Mathf.Round(damageTotal);
-            Debug.Log(damageTotal);
-        }
-
-        if (dropChoice.dropType == "Water")
-        {
-
-            charDropDamage = Mathf.Round(dropChoice.dropPower);
-            damageTotal = Mathf.Round((charDropDamage) - (charDropDamage * waterDefense / 100));
-            battleSystem.enemies[index].gameObject.GetComponent<Enemy>().currentHealth -= Mathf.Round(damageTotal);
-            Debug.Log(damageTotal);
-        }
-
-        if (dropChoice.dropType == "Lightning")
-        {
-
-            charDropDamage = Mathf.Round(dropChoice.dropPower);
-            damageTotal = Mathf.Round((charDropDamage) - (charDropDamage * lightningDefense / 100));
-            battleSystem.enemies[index].gameObject.GetComponent<Enemy>().currentHealth -= Mathf.Round(damageTotal);
-            Debug.Log(damageTotal);
-        }
-
-        if (dropChoice.dropType == "Shadow")
-        {
-
-            charDropDamage = Mathf.Round(dropChoice.dropPower);
-            damageTotal = Mathf.Round((charDropDamage) - (charDropDamage * shadowDefense / 100));
-            battleSystem.enemies[index].gameObject.GetComponent<Enemy>().currentHealth -= Mathf.Round(damageTotal);
-            Debug.Log(damageTotal);
-
-            if (battleSystem.lastDropChoice.dropName == "Bio")
-            {
-                if (!isPoisoned)
-                {
-                    float poisonChance = Random.Range(0, 100);
-
-                    if (poisonDefense < poisonChance)
-                    {
-                        isPoisoned = true;
-                        inflicted = true;
-                        float poisonDmgCalculation = (battleSystem.lastDropChoice.dotDmg) * 4 / 2;
-                        poisonDmg = ((poisonDmgCalculation) - (poisonDmgCalculation * poisonDefense / 100));
-                    }
-                }
-            }
-            if (battleSystem.lastDropChoice.dropName == "Knockout")
-            {
-                if (!isAsleep)
-                {
-                    float sleepChance = Random.Range(0, 100);
-
-                    if (sleepDefense < sleepChance)
-                    {
-                        isAsleep = true;
-                        inflicted = true;
-                        sleepTimer = 0;
-                    }
-                }
-            }
-
-            if (battleSystem.lastDropChoice.dropName == "Blind")
-            {
-                if (!isConfused)
-                {
-                    float confuseChance = Random.Range(0, 100);
-
-                    if (confuseDefense < confuseChance)
-                    {
-                        isConfused = true;
-                        inflicted = true;
-                    }
-                }
-            }
-        }
-
-        if (dropChoice.dropType == "Ice")
-        {
-
-            charDropDamage = Mathf.Round(dropChoice.dropPower);
-            damageTotal = Mathf.Round((charDropDamage) - (charDropDamage * iceDefense / 100));
-            battleSystem.enemies[index].gameObject.GetComponent<Enemy>().currentHealth -= Mathf.Round(damageTotal);
-            Debug.Log(damageTotal);
-        }
-
-        if (dropChoice.dropType == "Holy")
-        {
-
-            charDropDamage = Mathf.Round(dropChoice.dropPower);
-            damageTotal = Mathf.Round((charDropDamage) - (charDropDamage * holyDefense / 100));
-
-            if (dropChoice.dropName == "Holy Light")
-            {
-                currentHealth += Mathf.Round(damageTotal);
-
-                if (currentHealth > maxHealth)
-                {
-                    currentHealth = maxHealth;
-                }
-                Debug.Log(damageTotal);
-            }
-        }
-
-        Engine.e.battleSystem.damageTotal = damageTotal;
-
-        if (isAsleep)
-        {
-            if (battleSystem.lastDropChoice.dropName != "Knockout" && battleSystem.lastDropChoice.dropName != "Bio" && battleSystem.lastDropChoice.dropName != "Blind")
-            {
-                isAsleep = false;
-                isConfused = false;
-                inflicted = false;
-                if (GetComponent<EnemyMovement>() != null)
-                {
-                    GetComponent<EnemyMovement>().enabled = true;
-                }
-                // GetComponent<SpriteRenderer>().color = Color.grey;
-            }
-        }
-
-        if (isConfused)
-        {
-            int snapoutChance = Random.Range(0, 100);
-            if (confuseDefense > snapoutChance)
-            {
-                isConfused = false;
-                confuseTimer = 0;
-                inflicted = false;
-                if (GetComponent<EnemyMovement>() != null)
-                {
-                    GetComponent<EnemyMovement>().enabled = true;
-                }
-                GetComponent<SpriteRenderer>().color = Color.white;
-            }
-
-            if (battleSystem.lastDropChoice.dropName == "Knockout")
-            {
-                isAsleep = true;
-                isConfused = false;
-                if (GetComponent<EnemyMovement>() != null)
-                {
-                    GetComponent<EnemyMovement>().enabled = false;
-                }
-                GetComponent<SpriteRenderer>().color = Color.grey;
-            }
-        }
-
-        if (currentHealth > maxHealth)
-        {
-            currentHealth = maxHealth;
-        }
-
-        if (!battleSystem.animExists)
-        {
-            if (battleSystem.enemies[index].gameObject.GetComponent<Enemy>().currentHealth <= 0)
-            {
-                if (GetComponent<Light2D>())
-                {
-                    GetComponent<Light2D>().enabled = false;
-                }
-                battleSystem.enemies[index].GetComponent<Enemy>().isPoisoned = false;
-                battleSystem.enemies[index].GetComponent<Enemy>().isConfused = false;
-                battleSystem.enemies[index].GetComponent<Enemy>().isAsleep = false;
-                battleSystem.enemies[index].GetComponent<Enemy>().poisonDmg = 0;
-                battleSystem.enemies[index].GetComponent<Enemy>().deathInflicted = false;
-                battleSystem.enemies[index].GetComponent<Enemy>().inflicted = false;
-                battleSystem.enemies[index].gameObject.GetComponent<SpriteRenderer>().enabled = false;
-
-
-                battleSystem.enemyUI[index].SetActive(false);
-            }
-        }
-    }
-
     public void TakeSkillDamage(float power, int target)
     {
         damageTotal = Mathf.Round(power);
         Engine.e.battleSystem.damageTotal = damageTotal;
-        battleSystem.enemies[target].gameObject.GetComponent<Enemy>().currentHealth -= damageTotal;
+        currentHealth -= damageTotal;
 
         if (!battleSystem.skillRangedAttack)
         {
-            if (battleSystem.enemies[target].gameObject.GetComponent<Enemy>().currentHealth <= 0)
+            if (currentHealth <= 0)
             {
-                battleSystem.enemies[target].gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                battleSystem.enemies[target].gameObject.GetComponentInChildren<SpriteRenderer>().enabled = false;
                 battleSystem.enemyUI[target].SetActive(false);
-                battleSystem.enemies[target].GetComponent<Enemy>().isPoisoned = false;
-                battleSystem.enemies[target].GetComponent<Enemy>().isConfused = false;
-                battleSystem.enemies[target].GetComponent<Enemy>().isAsleep = false;
-                battleSystem.enemies[target].GetComponent<Enemy>().deathInflicted = false;
-                battleSystem.enemies[target].GetComponent<Enemy>().inflicted = false;
-                battleSystem.enemies[target].GetComponent<Enemy>().poisonDmg = 0;
+                isPoisoned = false;
+                isConfused = false;
+                isAsleep = false;
+                deathInflicted = false;
+                inflicted = false;
+                poisonDmg = 0;
 
                 if (GetComponent<Light2D>())
                 {
@@ -1066,13 +904,13 @@ public class Enemy : MonoBehaviour
                 {
                     GetComponent<EnemyMovement>().enabled = true;
                 }
-                GetComponent<SpriteRenderer>().color = Color.white;
+                GetComponentInChildren<SpriteRenderer>().color = Color.white;
 
             }
         }
     }
 
-    public void InflictPoisonAttack(int index, float _poisonDmg)
+    public void InflictBio(int index, float _poisonDmg)
     {
         float poisonChance = Random.Range(0, 100);
         Character character = Engine.e.activeParty.activeParty[index].GetComponent<Character>();
@@ -1081,92 +919,54 @@ public class Enemy : MonoBehaviour
         {
             isPoisoned = true;
             inflicted = true;
-            float poisonDmgCalculation = Mathf.Round(_poisonDmg + (character.shadowDropsLevel * 6) / 2);
-            poisonDmg = ((poisonDmgCalculation) - (poisonDmgCalculation * poisonDefense / 100));
+            float poisonDmgCalculation = (_poisonDmg + (character.shadowDropsLevel * 6) / 2);
+            poisonDmg = Mathf.Round((poisonDmgCalculation) - (poisonDmgCalculation * poisonDefense / 100));
             if (!Engine.e.battleSystem.animExists)
             {
-                GetComponent<SpriteRenderer>().color = Color.green;
+                GetComponentInChildren<SpriteRenderer>().color = Color.green;
             }
         }
     }
 
-    public void InflictDeathAttack()
+    public void InflictDeath()
     {
         //Character character = GameManager.gameManager.activeParty.activeParty[index].GetComponent<Character>();
 
-        int instantDeath = Random.Range(0, 99);
-
-        if (instantDeath > deathDefense)
-        {
-            TakeSkillDamage(maxHealth, groupIndex);
-        }
-
-        else
-        {
-            float deathChance = Random.Range(0, 100);
-
-            if (deathDefense < deathChance)
-            {
-                Vector3 deathTimerLoc = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
-                deathTimerPopup = Instantiate(Engine.e.battleSystem.deathTimerPopup, deathTimerLoc, Quaternion.identity);
-                deathTimerPopup.transform.SetParent(this.gameObject.transform);
-                deathTimerPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = deathTimer.ToString();
-                Engine.e.battleSystem.charUsingSkill = false;
-
-                GameObject result = Instantiate(Engine.e.battleSystem.damagePopup, transform.position, Quaternion.identity);
-                deathInflicted = true;
-                result.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Death";
-                Destroy(result, 1f);
-
-            }
-            else
-            {
-                GameObject result = Instantiate(Engine.e.battleSystem.damagePopup, transform.position, Quaternion.identity);
-                result.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Resisted";
-                Destroy(result, 1f);
-            }
-        }
-    }
-
-    public void InflictDeathDrop()
-    {
 
         float deathChance = Random.Range(0, 100);
 
         if (deathDefense < deathChance)
         {
-            Vector3 deathTimerLoc = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
-            deathTimerPopup = Instantiate(Engine.e.battleSystem.deathTimerPopup, deathTimerLoc, Quaternion.identity);
-            deathTimerPopup.transform.SetParent(this.gameObject.transform);
-            deathTimerPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = deathTimer.ToString();
+            Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Death", Color.white);
+
+            enemyContext.transform.position = this.transform.position;
+            enemyContext.transform.GetChild(0).GetComponent<TextMeshPro>().text = deathTimer.ToString();
+            enemyContext.SetActive(true);
+
             Engine.e.battleSystem.charUsingSkill = false;
 
-            GameObject result = Instantiate(Engine.e.battleSystem.damagePopup, transform.position, Quaternion.identity);
             deathInflicted = true;
-            result.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Death";
-            Destroy(result, 1f);
 
         }
         else
         {
-            GameObject result = Instantiate(Engine.e.battleSystem.damagePopup, transform.position, Quaternion.identity);
-            result.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Resisted";
-            Destroy(result, 1f);
+            Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Resisted!", Color.white);
         }
     }
-
 
     public void TakeDeathDamage()
     {
         deathTimer--;
-        deathTimerPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = deathTimer.ToString();
+
+        enemyContext.transform.GetChild(0).GetComponent<TextMeshPro>().text = deathTimer.ToString();
 
         if (deathTimer == 0)
         {
             currentHealth = 0;
 
-            GetComponent<SpriteRenderer>().enabled = false;
+            GetComponentInChildren<SpriteRenderer>().enabled = false;
             battleSystem.enemyUI[groupIndex].SetActive(false);
+
             isPoisoned = false;
             isConfused = false;
             isAsleep = false;
@@ -1174,13 +974,17 @@ public class Enemy : MonoBehaviour
             inflicted = false;
             poisonDmg = 0;
 
-            Destroy(deathTimerPopup);
+            deathTimer = 3;
+
+            enemyContext.transform.GetChild(0).GetComponent<TextMeshPro>().text = deathTimer.ToString();
+            enemyContext.SetActive(false);
+
         }
     }
 
     public void TakePoisonDamage(int index, float poisonDmg)
     {
-        float totalDamage = Mathf.Round((poisonDmg) - (poisonDmg * Engine.e.battleSystem.enemies[index].gameObject.GetComponent<Enemy>().poisonDefense / 100));
+        float totalDamage = Mathf.Round((poisonDmg) - (poisonDmg * poisonDefense / 100));
         currentHealth -= totalDamage;
 
         if (currentHealth < 0)
@@ -1193,11 +997,10 @@ public class Enemy : MonoBehaviour
             currentHealth = maxHealth;
         }
 
-        battleSystem.hud.displayEnemyHealth[index].text = currentHealth.ToString();
 
         if (battleSystem.enemies[index].gameObject.GetComponent<Enemy>().currentHealth <= 0)
         {
-            battleSystem.enemies[index].gameObject.GetComponent<SpriteRenderer>().enabled = false;
+            battleSystem.enemies[index].gameObject.GetComponentInChildren<SpriteRenderer>().enabled = false;
             battleSystem.enemyUI[index].SetActive(false);
             battleSystem.enemies[index].GetComponent<Enemy>().isPoisoned = false;
             battleSystem.enemies[index].GetComponent<Enemy>().isConfused = false;
@@ -1213,18 +1016,16 @@ public class Enemy : MonoBehaviour
             }
         }
 
-        GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, transform.position, Quaternion.identity);
         if (poisonDefense < 100)
         {
-            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = totalDamage.ToString();
+            Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, totalDamage.ToString(), Color.white);
         }
         else
         {
             float totalDamageText = totalDamage * -1;
-            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = totalDamageText.ToString();
+            Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, totalDamageText.ToString(), Color.white);
 
         }
-        Destroy(dmgPopup, 1f);
     }
 
     public void StealAttempt(int index, float stealChance)
@@ -1237,29 +1038,18 @@ public class Enemy : MonoBehaviour
             if (steal < stealChance)
             {
                 Engine.e.partyInventoryReference.AddItemToInventory(stealableItem);
-                GameObject success = Instantiate(Engine.e.battleSystem.damagePopup, transform.position, Quaternion.identity);
-                success.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Stole " + stealableItem.itemName + "!";
-                Destroy(success, 2f);
+                Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Stole " + stealableItem.itemName + "!", Color.white);
                 stealableItem = null;
             }
             else
             {
-                GameObject failure = Instantiate(Engine.e.battleSystem.damagePopup, transform.position, Quaternion.identity);
-                failure.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Failed!";
-                Destroy(failure, 1f);
+                Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Failed!", Color.white);
             }
         }
         else
         {
-            GameObject nothing = Instantiate(Engine.e.battleSystem.damagePopup, transform.position, Quaternion.identity);
-            nothing.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Nothing to steal!";
-            Destroy(nothing, 1f);
+            Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Nothing to Steal!", Color.white);
         }
-    }
-
-    void FixedUpdate()
-    {
-
     }
 
 }

@@ -106,7 +106,6 @@ MonoBehaviour:
   haste: 15
   experiencePoints: 0
   levelUpReq: 100
-  baseDamage: 20
   physicalDamage: 20
   dropCostReduction: 0
   skillCostReduction: 0
@@ -150,6 +149,8 @@ MonoBehaviour:
   isPoisoned: 0
   isAsleep: 0
   isConfused: 0
+  miterInflicted: 0
+  haltInflicted: 0
   deathInflicted: 0
   inflicted: 0
   availableSkillPoints: 0
@@ -171,7 +172,30 @@ MonoBehaviour:
   deathDefense: 0
   dodgeChance: 12
   hitChance: 99
-  critChance: 0
+  critChance: 10
+  maxHealthBase: 177
+  maxManaBase: 52
+  maxEnergyBase: 24
+  physicalDamageBase: 13
+  dodgeChanceBase: 12
+  critChanceBase: 10
+  hasteBase: 15
+  firePhysicalAttackBonusBase: 0
+  icePhysicalAttackBonusBase: 0
+  lightningPhysicalAttackBonusBase: 0
+  waterPhysicalAttackBonusBase: 0
+  shadowPhysicalAttackBonusBase: 0
+  holyPhysicalAttackBonusBase: 0
+  fireDefenseBase: 2
+  iceDefenseBase: 2
+  lightningDefenseBase: 2
+  waterDefenseBase: 2
+  shadowDefenseBase: 2
+  holyDefenseBase: 0
+  sleepDefenseBase: 1
+  poisonDefenseBase: 1
+  confuseDefenseBase: 1
+  deathDefenseBase: 0
   drops:
   - {fileID: 0}
   - {fileID: 0}
@@ -248,4 +272,6 @@ MonoBehaviour:
   sleepTimer: 0
   confuseTimer: 0
   deathTimer: 3
-  deathTimerPopup: {fileID: 0}
+  activePartyIndex: -1
+  partyIndex: 3
+  inSwitchQueue: 0

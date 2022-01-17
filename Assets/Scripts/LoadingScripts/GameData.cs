@@ -200,7 +200,6 @@ public class GameData
                 charShadowPhysicalAttackBonus[i] = gameManager.party[i].GetComponent<Character>().shadowPhysicalAttackBonus;
                 charIcePhysicalAttackBonus[i] = gameManager.party[i].GetComponent<Character>().icePhysicalAttackBonus;
 
-                charBaseDamage[i] = gameManager.party[i].GetComponent<Character>().baseDamage;
                 charPhysicalDamage[i] = gameManager.party[i].GetComponent<Character>().physicalDamage;
                 charXP[i] = gameManager.party[i].GetComponent<Character>().experiencePoints;
                 charLvlUpReq[i] = gameManager.party[i].GetComponent<Character>().levelUpReq;

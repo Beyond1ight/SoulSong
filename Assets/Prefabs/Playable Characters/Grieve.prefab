@@ -146,7 +146,6 @@ MonoBehaviour:
   haste: 17
   experiencePoints: 0
   levelUpReq: 100
-  baseDamage: 10
   physicalDamage: 10
   dropCostReduction: 0
   skillCostReduction: 0
@@ -190,6 +189,8 @@ MonoBehaviour:
   isPoisoned: 0
   isAsleep: 0
   isConfused: 0
+  miterInflicted: 0
+  haltInflicted: 0
   deathInflicted: 0
   inflicted: 0
   availableSkillPoints: 0
@@ -211,10 +212,33 @@ MonoBehaviour:
   deathDefense: 0
   dodgeChance: 10
   hitChance: 99
-  critChance: 0
+  critChance: 15
+  maxHealthBase: 100
+  maxManaBase: 35
+  maxEnergyBase: 30
+  physicalDamageBase: 10
+  dodgeChanceBase: 10
+  critChanceBase: 15
+  hasteBase: 17
+  firePhysicalAttackBonusBase: 0
+  icePhysicalAttackBonusBase: 0
+  lightningPhysicalAttackBonusBase: 0
+  waterPhysicalAttackBonusBase: 0
+  shadowPhysicalAttackBonusBase: 0
+  holyPhysicalAttackBonusBase: 0
+  fireDefenseBase: 1
+  iceDefenseBase: 1
+  lightningDefenseBase: 3
+  waterDefenseBase: 1
+  shadowDefenseBase: 3
+  holyDefenseBase: 0
+  sleepDefenseBase: 1
+  poisonDefenseBase: 1
+  confuseDefenseBase: 1
+  deathDefenseBase: 0
   drops:
   - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 1227ecefb6f5e4a1c9a406e55a2cc35d, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -244,7 +268,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   skills:
-  - {fileID: 11400000, guid: 6e5821a29f25149f19782eeed785f6d3, type: 2}
+  - {fileID: 11400000, guid: c8cb40e3c8978489a9967b00d789dfbc, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -288,7 +312,9 @@ MonoBehaviour:
   sleepTimer: 0
   confuseTimer: 0
   deathTimer: 3
-  deathTimerPopup: {fileID: 0}
+  activePartyIndex: 0
+  partyIndex: 0
+  inSwitchQueue: 0
 --- !u!114 &6154385487382725465
 MonoBehaviour:
   m_ObjectHideFlags: 0

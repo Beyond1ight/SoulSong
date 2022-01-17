@@ -8,6 +8,6 @@ public class CameraCollisionSetter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Engine.e.mainCamera.GetComponent<CinemachineConfiner>().m_BoundingShape2D = GetComponent<PolygonCollider2D>();
+        Engine.e.mainVirtualCamera.GetComponent<CinemachineConfiner>().m_BoundingShape2D = GetComponent<PolygonCollider2D>();
     }
 }

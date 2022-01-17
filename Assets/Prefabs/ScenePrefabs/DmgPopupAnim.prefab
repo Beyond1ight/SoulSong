@@ -99,7 +99,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 0
+  m_text: 10
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6936c700bd7664061ac492dbc420176f, type: 2}
   m_sharedMaterial: {fileID: -2343896236126760565, guid: 6936c700bd7664061ac492dbc420176f, type: 2}
@@ -213,7 +213,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4765239620846869176}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -16.372684, y: 24.424887, z: 10}
+  m_LocalPosition: {x: -465.07, y: -192.01999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5909181185584229202}

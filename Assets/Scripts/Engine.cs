@@ -55,7 +55,8 @@ public class Engine : MonoBehaviour
     public bool gameStart, loading, onRamp, ableToSave, arrangePartyButtonActive, char1LevelUp, char2LevelUp, char3LevelUp;
     public BattleSystem battleSystem;
     int nextRemainingCharacterIndex, randomPartyMemberIndex;
-    public CinemachineVirtualCamera mainCamera;
+    public CinemachineVirtualCamera mainVirtualCamera;
+    public Camera mainCamera;
     public GameObject activateArrangePartyButton,
     activePartyMember2, activePartyMember3, itemMenuCharFirst, dropMenuCharFirst;
     public TextMeshProUGUI[] char1LevelUpPanelReference, char2LevelUpPanelReference, char3LevelUpPanelReference;
@@ -94,6 +95,7 @@ public class Engine : MonoBehaviour
     TextMeshProUGUI[] inventoryMenuPartyNameStatsReference, inventoryMenuPartyHPStatsReference, inventoryMenuPartyMPStatsReference, inventoryMenuPartyENRStatsReference;
     [SerializeField]
     GameObject miniMap;
+    float timer = 60;
     //public float rainTimer = 0f, rainChance, rainOff;
     //public bool startTimer = true, stopTimer = false, weatherRainOn = false;
     // Music
@@ -130,7 +132,7 @@ public class Engine : MonoBehaviour
         timeOfDay = 750f;
         recentAutoSave = true;
         arrangePartyButtonActive = false;
-        mainCamera.GetComponent<CinemachineVirtualCamera>().Priority = 10;
+        mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 10;
         partyMoney = 100;
         aboveLayer = false;
         inWorldMap = false;
@@ -196,7 +198,7 @@ public class Engine : MonoBehaviour
         playableCharacters[0].maxEnergy = Mathf.Round(energyCurve.Evaluate(playableCharacters[0].lvl) + (energyCurve.Evaluate(playableCharacters[0].lvl) * (playableCharacters[0].energyOffset / 100)));
         playableCharacters[0].currentEnergy = playableCharacters[0].maxEnergy;
         playableCharacters[0].haste = 17;
-        playableCharacters[0].baseDamage = 10;
+        playableCharacters[0].critChance = 15;
         playableCharacters[0].physicalDamage = Mathf.Round(strengthCurve.Evaluate(playableCharacters[0].lvl) + +(strengthCurve.Evaluate(playableCharacters[0].lvl) * (playableCharacters[0].strengthOffset / 100)));
         playableCharacters[0].experiencePoints = 0;
         playableCharacters[0].levelUpReq = 100;
@@ -209,6 +211,9 @@ public class Engine : MonoBehaviour
         playableCharacters[0].healthCapped = true;
         playableCharacters[0].manaCapped = true;
         playableCharacters[0].energyCapped = true;
+
+        playableCharacters[0].activePartyIndex = 0;
+        playableCharacters[0].partyIndex = 0;
 
         playableCharacters[0].physicalDefense = 2;
         playableCharacters[0].physicalDefense += gameChestArmor[0].GetComponent<ChestArmor>().physicalArmor;
@@ -231,6 +236,7 @@ public class Engine : MonoBehaviour
         playableCharacters[0].canUseIceDrops = true;
 
 
+        //playableCharacters[0].activePartyGO = activeParty.gameObject;
 
         /* playableCharacters[0].fireDrops = new Drops[10];
          playableCharacters[0].holyDrops = new Drops[10];
@@ -262,8 +268,10 @@ public class Engine : MonoBehaviour
 
         playableCharacters[0].drops = new Drops[gameDrops.Length];
 
+        playableCharacters[0].drops[1] = gameDrops[1];
         playableCharacters[0].drops[10] = gameDrops[10];
         gameDrops[10].isKnown = true;
+        gameDrops[1].isKnown = true;
         //playableCharacters[0].drops[4] = gameDrops[4];
         /*playableCharacters[0].drops[5] = gameDrops[5];
         playableCharacters[0].drops[10] = gameDrops[10];
@@ -333,7 +341,8 @@ public class Engine : MonoBehaviour
         playableCharacters[0].isConfused = false;
         playableCharacters[0].deathInflicted = false;
         playableCharacters[0].inflicted = false;
-
+        playableCharacters[0].miterInflicted = false;
+        playableCharacters[0].haltInflicted = false;
 
         playableCharacters[0].poisonDmg = 0f;
         playableCharacters[0].sleepTimer = 0;
@@ -359,7 +368,7 @@ public class Engine : MonoBehaviour
         playableCharacters[1].maxEnergy = Mathf.Round(energyCurve.Evaluate(playableCharacters[1].lvl) + (energyCurve.Evaluate(playableCharacters[1].lvl) * (playableCharacters[1].energyOffset / 100)));
         playableCharacters[1].currentEnergy = playableCharacters[1].maxEnergy;
         playableCharacters[1].haste = 14;
-        playableCharacters[1].baseDamage = 10;
+        playableCharacters[1].critChance = 10;
         playableCharacters[1].physicalDamage = Mathf.Round(strengthCurve.Evaluate(playableCharacters[1].lvl) + +(strengthCurve.Evaluate(playableCharacters[1].lvl) * (playableCharacters[1].strengthOffset / 100)));
         playableCharacters[1].experiencePoints = 0;
         playableCharacters[1].levelUpReq = 100;
@@ -371,6 +380,9 @@ public class Engine : MonoBehaviour
         playableCharacters[1].healthCapped = true;
         playableCharacters[1].manaCapped = true;
         playableCharacters[1].energyCapped = true;
+
+        playableCharacters[1].activePartyIndex = 1;
+        playableCharacters[1].partyIndex = 1;
 
         playableCharacters[1].dodgeChance = 10f;
 
@@ -460,6 +472,8 @@ public class Engine : MonoBehaviour
         playableCharacters[1].isConfused = false;
         playableCharacters[1].deathInflicted = false;
         playableCharacters[1].inflicted = false;
+        playableCharacters[1].miterInflicted = false;
+        playableCharacters[1].haltInflicted = false;
 
         playableCharacters[1].stealChance = 60f;
 
@@ -485,7 +499,7 @@ public class Engine : MonoBehaviour
         playableCharacters[2].maxEnergy = 50f;
         playableCharacters[2].currentEnergy = playableCharacters[2].maxEnergy;
         playableCharacters[2].haste = 19;
-        playableCharacters[2].baseDamage = 10;
+        playableCharacters[2].critChance = 10;
         playableCharacters[2].physicalDamage = 10;
         playableCharacters[2].experiencePoints = 0;
         playableCharacters[2].levelUpReq = 100;
@@ -498,6 +512,9 @@ public class Engine : MonoBehaviour
         playableCharacters[2].healthCapped = true;
         playableCharacters[2].manaCapped = true;
         playableCharacters[2].energyCapped = true;
+
+        playableCharacters[2].activePartyIndex = 2;
+        playableCharacters[2].partyIndex = 2;
 
         playableCharacters[2].physicalDefense = 1f;
         playableCharacters[2].physicalDefense += gameChestArmor[0].GetComponent<ChestArmor>().physicalArmor;
@@ -584,6 +601,8 @@ public class Engine : MonoBehaviour
         playableCharacters[2].isConfused = false;
         playableCharacters[2].deathInflicted = false;
         playableCharacters[2].inflicted = false;
+        playableCharacters[2].miterInflicted = false;
+        playableCharacters[2].haltInflicted = false;
 
         playableCharacters[2].stealChance = 75f;
 
@@ -608,7 +627,7 @@ public class Engine : MonoBehaviour
         playableCharacters[3].currentMana = playableCharacters[3].maxMana;
         playableCharacters[3].maxEnergy = 20f;
         playableCharacters[3].haste = 15;
-        playableCharacters[3].baseDamage = 20;
+        playableCharacters[3].critChance = 10;
         playableCharacters[3].physicalDamage = 20;
         playableCharacters[3].experiencePoints = 0;
         playableCharacters[3].levelUpReq = 100;
@@ -621,6 +640,9 @@ public class Engine : MonoBehaviour
         playableCharacters[3].healthCapped = true;
         playableCharacters[3].manaCapped = true;
         playableCharacters[3].energyCapped = true;
+
+        playableCharacters[3].activePartyIndex = -1;
+        playableCharacters[3].partyIndex = 3;
 
         playableCharacters[3].physicalDefense = 5;
         playableCharacters[3].physicalDefense += gameChestArmor[1].GetComponent<ChestArmor>().physicalArmor;
@@ -704,6 +726,8 @@ public class Engine : MonoBehaviour
         playableCharacters[3].isConfused = false;
         playableCharacters[3].deathInflicted = false;
         playableCharacters[3].inflicted = false;
+        playableCharacters[3].miterInflicted = false;
+        playableCharacters[3].haltInflicted = false;
 
         playableCharacters[3].stealChance = 50f;
 
@@ -737,15 +761,22 @@ public class Engine : MonoBehaviour
                 activePartyMember2.SetActive(true);
                 gameDrops[15].isKnown = true;
                 gameSkills[5].isKnown = true;
-
-                //         charAbilityButtons[1].SetActive(true);
-                //                charSkillTierButtons[1].SetActive(true);
+                playableCharacters[1].activePartyIndex = 1;
 
             }
             if (party[2] != null)
             {
                 ActivateArrangePartyButton();
-                playableCharacters[2].lvl = playableCharacters[0].lvl;
+
+                if (playableCharacters[0].lvl > 1)
+                {
+                    playableCharacters[2].lvl = playableCharacters[0].lvl - 1;
+                }
+                else
+                {
+                    playableCharacters[2].lvl = playableCharacters[0].lvl;
+                }
+
                 playableCharacters[2].healthOffset = -20f;
                 playableCharacters[2].manaOffset = 0f;
                 playableCharacters[2].energyOffset = 20f;
@@ -756,6 +787,9 @@ public class Engine : MonoBehaviour
                 playableCharacters[2].maxEnergy = Mathf.Round(energyCurve.Evaluate(playableCharacters[2].lvl) + (energyCurve.Evaluate(playableCharacters[2].lvl) * (playableCharacters[2].energyOffset / 100)));
                 playableCharacters[2].currentEnergy = playableCharacters[2].maxEnergy;
                 playableCharacters[2].physicalDamage = Mathf.Round(strengthCurve.Evaluate(playableCharacters[2].lvl) + +(strengthCurve.Evaluate(playableCharacters[2].lvl) * (playableCharacters[2].strengthOffset / 100)));
+                playableCharacters[2].maxHealthBase = playableCharacters[2].maxHealth;
+                playableCharacters[2].maxManaBase = playableCharacters[2].maxMana;
+                playableCharacters[2].maxEnergyBase = playableCharacters[2].maxEnergy;
                 arrangePartyButtonActive = true;
                 activePartyMember3.GetComponent<SpriteRenderer>().sprite = party[2].GetComponent<SpriteRenderer>().sprite;
                 activePartyMember3.SetActive(true);
@@ -764,6 +798,9 @@ public class Engine : MonoBehaviour
                 //     charSkillTierButtons[2].SetActive(true);
                 gameDrops[20].isKnown = true;
                 gameSkills[10].isKnown = true;
+                playableCharacters[2].activePartyIndex = 2;
+
+                activeParty.SetActivePartyIndexes();
 
             }
             if (party[3] != null)
@@ -788,10 +825,14 @@ public class Engine : MonoBehaviour
                 playableCharacters[3].maxEnergy = Mathf.Round(energyCurve.Evaluate(playableCharacters[3].lvl) + (energyCurve.Evaluate(playableCharacters[3].lvl) * (playableCharacters[3].energyOffset / 100)));
                 playableCharacters[3].currentEnergy = playableCharacters[3].maxEnergy;
                 playableCharacters[3].physicalDamage = Mathf.Round(strengthCurve.Evaluate(playableCharacters[3].lvl) + +(strengthCurve.Evaluate(playableCharacters[3].lvl) * (playableCharacters[3].strengthOffset / 100)));
+                playableCharacters[3].maxHealthBase = playableCharacters[3].maxHealth;
+                playableCharacters[3].maxManaBase = playableCharacters[3].maxMana;
+                playableCharacters[3].maxEnergyBase = playableCharacters[3].maxEnergy;
                 //     charAbilityButtons[3].SetActive(true);
                 //     charSkillTierButtons[3].SetActive(true);
                 gameDrops[25].isKnown = true;
                 gameSkills[15].isKnown = true;
+                playableCharacters[3].activePartyIndex = -1;
 
             }
         }
@@ -1211,9 +1252,26 @@ public class Engine : MonoBehaviour
                         }
                         ItemDisplayCharacterStats(_target);
                         partyInventoryReference.SubtractItemFromInventory(itemToBeUsed);
-                        break;
                     }
+                    break;
+
+                case "Antidote":
+
+                    if (!party[_target].GetComponent<Character>().isPoisoned)
+                    {
+                        return;
+                    }
+                    else
+                    {
+
+                        party[_target].GetComponent<Character>().isPoisoned = false;
+                        party[_target].GetComponent<Character>().poisonDmg = 0;
+                        ItemDisplayCharacterStats(_target);
+                        partyInventoryReference.SubtractItemFromInventory(itemToBeUsed);
+                    }
+                    break;
             }
+
             itemToBeUsed = null;
             partyInventoryReference.OpenInventoryMenu();
         }
@@ -1296,29 +1354,17 @@ public class Engine : MonoBehaviour
                         if (_target == 0)
                         {
                             GameObject healthSprite = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                            GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activeParty.transform.position, Quaternion.identity);
-                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = _itemToBeUsed.itemPower.ToString();
-                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
-                            Destroy(dmgPopup, 1f);
                             Destroy(healthSprite, 1f);
                         }
                         if (_target == 1)
                         {
                             GameObject healthSprite = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
-                            GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
-                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = _itemToBeUsed.itemPower.ToString();
-                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
-                            Destroy(dmgPopup, 1f);
                             Destroy(healthSprite, 1f);
 
                         }
                         if (_target == 2)
                         {
                             GameObject healthSprite = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
-                            GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
-                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = _itemToBeUsed.itemPower.ToString();
-                            dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
-                            Destroy(dmgPopup, 1f);
                             Destroy(healthSprite, 1f);
                         }
 
@@ -1355,28 +1401,21 @@ public class Engine : MonoBehaviour
                     if (_target == 0)
                     {
                         GameObject manaSprite = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                        GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activeParty.transform.position, Quaternion.identity);
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = _itemToBeUsed.itemPower.ToString();
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 54, 255, 255);
-                        Destroy(dmgPopup, 1f);
+                        //GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activeParty.transform.position, Quaternion.identity);
+                        // dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = _itemToBeUsed.itemPower.ToString();
+                        //dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 54, 255, 255);
                         Destroy(manaSprite, 1f);
                     }
                     if (_target == 1)
                     {
                         GameObject manaSprite = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
-                        GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = _itemToBeUsed.itemPower.ToString();
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 54, 255, 255);
-                        Destroy(dmgPopup, 1f);
+
                         Destroy(manaSprite, 1f);
                     }
                     if (_target == 2)
                     {
                         GameObject manaSprite = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
-                        GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = _itemToBeUsed.itemPower.ToString();
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 54, 255, 255);
-                        Destroy(dmgPopup, 1f);
+
                         Destroy(manaSprite, 1f);
 
                     }
@@ -1438,10 +1477,7 @@ public class Engine : MonoBehaviour
                     if (_target == 0)
                     {
                         GameObject antidote = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                        GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activeParty.transform.position, Quaternion.identity);
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Cured";
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
-                        Destroy(dmgPopup, 1f);
+
                         Destroy(antidote, 1f);
                         Engine.e.activeParty.GetComponent<SpriteRenderer>().color = Color.white;
 
@@ -1449,10 +1485,7 @@ public class Engine : MonoBehaviour
                     if (_target == 1)
                     {
                         GameObject antidote = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
-                        GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Cured";
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
-                        Destroy(dmgPopup, 1f);
+
                         Destroy(antidote, 1f);
                         Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().color = Color.white;
 
@@ -1460,10 +1493,7 @@ public class Engine : MonoBehaviour
                     if (_target == 2)
                     {
                         GameObject antidote = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
-                        GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Cured";
-                        dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 229, 69, 255);
-                        Destroy(dmgPopup, 1f);
+
                         Destroy(antidote, 1f);
                         Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().color = Color.white;
 
@@ -1610,7 +1640,6 @@ public class Engine : MonoBehaviour
                 party[i].GetComponent<Character>().shadowPhysicalAttackBonus = gameData.charShadowPhysicalAttackBonus[i];
                 party[i].GetComponent<Character>().icePhysicalAttackBonus = gameData.charIcePhysicalAttackBonus[i];
 
-                party[i].GetComponent<Character>().baseDamage = gameData.charBaseDamage[i];
                 party[i].GetComponent<Character>().physicalDamage = gameData.charPhysicalDamage[i];
                 party[i].GetComponent<Character>().experiencePoints = gameData.charXP[i];
                 party[i].GetComponent<Character>().levelUpReq = gameData.charLvlUpReq[i];
@@ -1863,6 +1892,7 @@ public class Engine : MonoBehaviour
             activePartyMember3.SetActive(true);
             activeParty.activeParty[2] = party[2].GetComponent<Character>().gameObject;
             charAbilityButtons[2].SetActive(true);
+            activeParty.SetActivePartyIndexes();
             //        charSkillTierButtons[2].SetActive(true);
 
         }
@@ -1870,7 +1900,6 @@ public class Engine : MonoBehaviour
         {
             battleSystem.battleSwitchButtons = true;
             charAbilityButtons[3].SetActive(true);
-            //       charSkillTierButtons[3].SetActive(true);
 
         }
 
@@ -1900,9 +1929,9 @@ public class Engine : MonoBehaviour
 
         if (gameData.scene == "WorldMap")
         {
-            if (Engine.e.mainCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 6.5f)
+            if (Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 6.5f)
             {
-                Engine.e.mainCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 10f;
+                Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 10f;
             }
 
             Engine.e.activeParty.gameObject.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
@@ -1927,9 +1956,9 @@ public class Engine : MonoBehaviour
         }
         else
         {
-            if (Engine.e.mainCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 10f)
+            if (Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 10f)
             {
-                Engine.e.mainCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 6.5f;
+                Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 6.5f;
             }
 
             Engine.e.activeParty.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
@@ -1964,527 +1993,7 @@ public class Engine : MonoBehaviour
 
     }
 
-    // Deals the amount of Physical Damage to the targeted player, based on the
-    // PhysicalDamageCalculation() method.
 
-    // Similar to the Physical Damage methods, but in one. Works the calculation as well
-    // as deals the set damage, based on various Elemental Defenses.
-    /*public bool TakeElementalDamage(int index, float _dmg, string dropType)
-    {
-        if (activeParty.activeParty[index] != null)
-        {
-            if (activeParty.activeParty[index].GetComponent<Character>().currentHealth > 0)
-            {
-
-                if (battleSystem.currentInQueue == BattleState.CONFCHAR1)
-                {
-                    battleSystem.char1Target = index;
-                }
-                if (battleSystem.currentInQueue == BattleState.CONFCHAR2)
-                {
-                    battleSystem.char2Target = index;
-                }
-                if (battleSystem.currentInQueue == BattleState.CONFCHAR3)
-                {
-                    battleSystem.char3Target = index;
-                }
-
-                if (battleSystem.currentInQueue == BattleState.ENEMY1TURN)
-                {
-                    battleSystem.enemy1AttackTarget = index;
-                }
-                if (battleSystem.currentInQueue == BattleState.ENEMY2TURN)
-                {
-                    battleSystem.enemy2AttackTarget = index;
-                }
-                if (battleSystem.currentInQueue == BattleState.ENEMY3TURN)
-                {
-                    battleSystem.enemy3AttackTarget = index;
-                }
-                if (battleSystem.currentInQueue == BattleState.ENEMY4TURN)
-                {
-                    battleSystem.enemy4AttackTarget = index;
-                }
-            }
-            else
-            {
-                int newTarget = GetRandomRemainingPartyMember();
-
-                if (battleSystem.currentInQueue == BattleState.ENEMY1TURN)
-                {
-                    battleSystem.enemy1AttackTarget = newTarget;
-                }
-                if (battleSystem.currentInQueue == BattleState.ENEMY2TURN)
-                {
-                    battleSystem.enemy2AttackTarget = newTarget;
-                }
-                if (battleSystem.currentInQueue == BattleState.ENEMY3TURN)
-                {
-                    battleSystem.enemy3AttackTarget = newTarget;
-                }
-                if (battleSystem.currentInQueue == BattleState.ENEMY4TURN)
-                {
-                    battleSystem.enemy4AttackTarget = newTarget;
-                    index = newTarget;
-                }
-            }
-        }
-
-        // Fire Drop
-        if (dropType == "Fire")
-        {
-            if (activeParty.activeParty[index] != null)
-            {
-                float damageFirstTargetTotal = Mathf.Round((_dmg) - (_dmg * activeParty.activeParty[index].gameObject.GetComponent<Character>().fireDefense / 100));
-                battleSystem.damageTotal = damageFirstTargetTotal;
-                Debug.Log(dropType);
-                Debug.Log(damageFirstTargetTotal);
-                activeParty.activeParty[index].gameObject.GetComponent<Character>().currentHealth -= damageFirstTargetTotal;
-
-                if (activeParty.activeParty[index].gameObject.GetComponent<Character>().currentHealth <= 0)
-                {
-                    activeParty.activeParty[index].gameObject.GetComponent<Character>().currentHealth = 0;
-                }
-
-                //hud.displayHealth[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentHealth.ToString();
-            }
-        }
-
-        // Water Drop
-        if (dropType == "Water")
-        {
-            if (activeParty.activeParty[index] != null)
-            {
-                float damageFirstTargetTotal = Mathf.Round((_dmg) - (_dmg * activeParty.activeParty[index].gameObject.GetComponent<Character>().waterDefense / 100));
-                battleSystem.damageTotal = damageFirstTargetTotal;
-                Debug.Log(dropType);
-                Debug.Log(damageFirstTargetTotal);
-                activeParty.activeParty[index].gameObject.GetComponent<Character>().currentHealth -= damageFirstTargetTotal;
-
-                if (activeParty.activeParty[index].gameObject.GetComponent<Character>().currentHealth <= 0)
-                {
-                    activeParty.activeParty[index].gameObject.GetComponent<Character>().currentHealth = 0;
-                }
-            }
-
-        }
-
-        // Lightning Drop
-        if (dropType == "Lightning")
-        {
-            if (activeParty.activeParty[index] != null)
-            {
-                float damageFirstTargetTotal = Mathf.Round((_dmg) - (_dmg * activeParty.activeParty[index].gameObject.GetComponent<Character>().lightningDefense / 100));
-                battleSystem.damageTotal = damageFirstTargetTotal;
-                Debug.Log(dropType);
-                Debug.Log(damageFirstTargetTotal);
-                activeParty.activeParty[index].gameObject.GetComponent<Character>().currentHealth -= damageFirstTargetTotal;
-
-                if (activeParty.activeParty[index].gameObject.GetComponent<Character>().currentHealth <= 0)
-                {
-                    activeParty.activeParty[index].gameObject.GetComponent<Character>().currentHealth = 0;
-                }
-            }
-        }
-
-        // Shadow Drop
-        if (dropType == "Shadow")
-        {
-            if (activeParty.activeParty[index] != null)
-            {
-                float damageFirstTargetTotal = Mathf.Round((_dmg) - (_dmg * activeParty.activeParty[index].gameObject.GetComponent<Character>().shadowDefense / 100));
-                battleSystem.damageTotal = damageFirstTargetTotal;
-                Debug.Log(dropType);
-                Debug.Log(damageFirstTargetTotal);
-                activeParty.activeParty[index].gameObject.GetComponent<Character>().currentHealth -= damageFirstTargetTotal;
-
-                if (activeParty.activeParty[index].gameObject.GetComponent<Character>().currentHealth <= 0)
-                {
-                    activeParty.activeParty[index].gameObject.GetComponent<Character>().currentHealth = 0;
-                }
-
-                if (battleSystem.lastDropChoice.dropName == "Bio")
-                {
-                    if (!activeParty.activeParty[index].GetComponent<Character>().isPoisoned)
-                    {
-                        float poisonChance = Random.Range(0, 100);
-
-                        if (activeParty.activeParty[index].GetComponent<Character>().poisonDefense < poisonChance)
-                        {
-                            activeParty.activeParty[index].GetComponent<Character>().isPoisoned = true;
-                            activeParty.activeParty[index].GetComponent<Character>().poisonDmg = battleSystem.lastDropChoice.dotDmg;
-                            activeParty.activeParty[index].GetComponent<Character>().inflicted = true;
-                        }
-                    }
-                }
-
-                if (battleSystem.lastDropChoice.dropName == "Knockout")
-                {
-                    if (!activeParty.activeParty[index].GetComponent<Character>().isAsleep)
-                    {
-                        float sleepChance = Random.Range(0, 100);
-
-                        if (activeParty.activeParty[index].GetComponent<Character>().sleepDefense < sleepChance)
-                        {
-                            activeParty.activeParty[index].GetComponent<Character>().isAsleep = true;
-                            activeParty.activeParty[index].GetComponent<Character>().sleepTimer = 0;
-                            activeParty.activeParty[index].GetComponent<Character>().inflicted = true;
-
-                            Queue<BattleState> newQueue = new Queue<BattleState>(7);
-
-                            if (index == 0)
-                            {
-                                battleSystem.DeactivateChar1MenuButtons();
-                            }
-
-                            if (index == 1)
-                            {
-                                battleSystem.DeactivateChar2MenuButtons();
-                            }
-                            if (index == 2)
-                            {
-                                battleSystem.DeactivateChar3MenuButtons();
-                            }
-                        }
-                    }
-                }
-
-                if (battleSystem.lastDropChoice.dropName == "Blind")
-                {
-                    if (!activeParty.activeParty[index].GetComponent<Character>().isConfused)
-                    {
-                        float confuseChance = Random.Range(0, 100);
-
-                        if (activeParty.activeParty[index].GetComponent<Character>().confuseDefense < confuseChance)
-                        {
-                            activeParty.activeParty[index].GetComponent<Character>().isConfused = true;
-                            battleSystem.state = BattleState.ATBCHECK;
-                            activeParty.activeParty[index].GetComponent<Character>().inflicted = true;
-
-                            if (index == 0)
-                            {
-                                battleSystem.DeactivateChar1MenuButtons();
-                                battleSystem.char1ATB = (battleSystem.char1ATB / 2);
-                                if (battleSystem.currentState == BattleState.CHAR1TURN)
-                                {
-                                    if (battleSystem.inBattleMenu)
-                                    {
-                                        battleSystem.DisableBattleMenus();
-                                    }
-                                }
-
-                            }
-                            if (index == 1)
-                            {
-                                battleSystem.DeactivateChar2MenuButtons();
-                                battleSystem.char2ATB = (battleSystem.char2ATB / 2);
-                                if (battleSystem.currentState == BattleState.CHAR2TURN)
-                                {
-                                    if (battleSystem.inBattleMenu)
-                                    {
-                                        battleSystem.DisableBattleMenus();
-                                    }
-                                }
-
-                            }
-                            if (index == 2)
-                            {
-                                battleSystem.DeactivateChar3MenuButtons();
-                                battleSystem.char3ATB = (battleSystem.char3ATB / 2);
-                                if (battleSystem.currentState == BattleState.CHAR3TURN)
-                                {
-                                    if (battleSystem.inBattleMenu)
-                                    {
-                                        battleSystem.DisableBattleMenus();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // Ice Drop
-        if (dropType == "Ice")
-        {
-            if (activeParty.activeParty[index] != null)
-            {
-                float damageFirstTargetTotal = Mathf.Round((_dmg) - (_dmg * activeParty.activeParty[index].gameObject.GetComponent<Character>().iceDefense / 100));
-                battleSystem.damageTotal = damageFirstTargetTotal;
-                Debug.Log(dropType);
-                Debug.Log(damageFirstTargetTotal);
-                activeParty.activeParty[index].gameObject.GetComponent<Character>().currentHealth -= damageFirstTargetTotal;
-
-                if (activeParty.activeParty[index].gameObject.GetComponent<Character>().currentHealth <= 0)
-                {
-                    activeParty.activeParty[index].gameObject.GetComponent<Character>().currentHealth = 0;
-                }
-            }
-        }
-
-        if (activeParty.activeParty[index].GetComponent<Character>().currentHealth <= 0)
-        {
-            activeParty.activeParty[index].GetComponent<Character>().isPoisoned = false;
-            activeParty.activeParty[index].GetComponent<Character>().isConfused = false;
-            activeParty.activeParty[index].GetComponent<Character>().isAsleep = false;
-            activeParty.activeParty[index].GetComponent<Character>().deathInflicted = false;
-            activeParty.activeParty[index].GetComponent<Character>().inflicted = false;
-            activeParty.activeParty[index].GetComponent<Character>().poisonDmg = 0f;
-            activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.white;
-
-            if (index == 0)
-            {
-                battleSystem.DeactivateChar1MenuButtons();
-
-                if (battleSystem.state == BattleState.CHAR1TURN)
-                {
-                    battleSystem.state = BattleState.ATBCHECK;
-                }
-            }
-
-            if (index == 1)
-            {
-                battleSystem.DeactivateChar2MenuButtons();
-
-                if (battleSystem.state == BattleState.CHAR2TURN)
-                {
-                    battleSystem.state = BattleState.ATBCHECK;
-                }
-            }
-
-            if (index == 2)
-            {
-                battleSystem.DeactivateChar3MenuButtons();
-
-                if (battleSystem.state == BattleState.CHAR3TURN)
-                {
-                    battleSystem.state = BattleState.ATBCHECK;
-                }
-            }
-        }
-
-        if (activeParty.activeParty[index].GetComponent<Character>().isAsleep)
-        {
-            if (battleSystem.lastDropChoice.dropName != "Knockout" && battleSystem.lastDropChoice.dropName != "Bio" && battleSystem.lastDropChoice.dropName != "Blind" && battleSystem.lastDropChoice.dropName != "Death")
-            {
-                activeParty.activeParty[index].GetComponent<Character>().isAsleep = false;
-                activeParty.activeParty[index].GetComponent<Character>().isConfused = false;
-                activeParty.activeParty[index].GetComponent<Character>().inflicted = false;
-                // activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.grey;
-                //activeParty.GetComponent<SpriteRenderer>().color = Color.grey;
-            }
-        }
-
-        if (activeParty.activeParty[index].GetComponent<Character>().isConfused)
-        {
-            int snapoutChance = Random.Range(0, 100);
-            if (activeParty.activeParty[index].GetComponent<Character>().confuseDefense > snapoutChance)
-            {
-                activeParty.activeParty[index].GetComponent<Character>().isConfused = false;
-                activeParty.activeParty[index].GetComponent<Character>().confuseTimer = 0;
-                activeParty.activeParty[index].GetComponent<Character>().inflicted = false;
-
-                //activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.grey;
-                // activeParty.GetComponent<SpriteRenderer>().color = Color.grey;
-
-            }
-
-            if (battleSystem.lastDropChoice.dropName == "Knockout")
-            {
-                activeParty.activeParty[index].GetComponent<Character>().isAsleep = true;
-                activeParty.activeParty[index].GetComponent<Character>().isConfused = false;
-
-                //activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.grey;
-                // activeParty.GetComponent<SpriteRenderer>().color = Color.grey;
-            }
-        }
-
-        if (activeParty.activeParty[0].gameObject.GetComponent<Character>().currentHealth <= 0)
-        {
-            if (activeParty.activeParty[2] != null && activeParty.activeParty[1].gameObject.GetComponent<Character>().currentHealth <= 0
-            && activeParty.activeParty[2].gameObject.GetComponent<Character>().currentHealth <= 0)
-            {
-                return true;
-            }
-
-            if (activeParty.activeParty[2] == null && activeParty.activeParty[1] != null)
-            {
-                if (activeParty.activeParty[1].gameObject.GetComponent<Character>().currentHealth <= 0)
-                {
-                    return true;
-
-                }
-            }
-
-            if (activeParty.activeParty[2] == null && activeParty.activeParty[1] == null)
-            {
-                return true;
-            }
-        }
-        return false;
-    }*/
-
-
-    // Calculates and deals Poison Damage (Shadow Damage) to the 
-    // effected character.
-    public bool TakePoisonDamage(int index, float poisonDmg)
-    {
-        GameObject characterObject = null;
-
-        if (index == 0)
-        {
-            characterObject = activeParty.gameObject;
-        }
-        if (index == 1)
-        {
-            characterObject = activePartyMember2.gameObject;
-        }
-        if (index == 2)
-        {
-            characterObject = activePartyMember3.gameObject;
-        }
-
-        float totalDamage = Mathf.Round((poisonDmg) - (poisonDmg * activeParty.activeParty[index].gameObject.GetComponent<Character>().poisonDefense / 100));
-        activeParty.activeParty[index].GetComponent<Character>().currentHealth -= totalDamage;
-
-        if (activeParty.activeParty[index].gameObject.GetComponent<Character>().currentHealth <= 0)
-        {
-            activeParty.activeParty[index].gameObject.GetComponent<Character>().currentHealth = 0;
-            activeParty.activeParty[index].GetComponent<Character>().isPoisoned = false;
-            activeParty.activeParty[index].GetComponent<Character>().isConfused = false;
-            activeParty.activeParty[index].GetComponent<Character>().isAsleep = false;
-            activeParty.activeParty[index].GetComponent<Character>().poisonDmg = 0f;
-            activeParty.activeParty[index].GetComponent<Character>().inflicted = false;
-            activeParty.activeParty[index].GetComponent<SpriteRenderer>().color = Color.white;
-            characterObject.GetComponent<SpriteRenderer>().color = Color.white;
-
-        }
-
-        battleSystem.hud.displayHealth[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentHealth.ToString();
-
-        if (activeParty.activeParty[0].gameObject.GetComponent<Character>().currentHealth <= 0)
-        {
-            if (activeParty.activeParty[2] != null && activeParty.activeParty[1].gameObject.GetComponent<Character>().currentHealth <= 0
-            && activeParty.activeParty[2].gameObject.GetComponent<Character>().currentHealth <= 0)
-            {
-                return true;
-            }
-
-            if (activeParty.activeParty[2] == null && activeParty.activeParty[1] != null)
-            {
-                if (activeParty.activeParty[1].gameObject.GetComponent<Character>().currentHealth <= 0)
-                {
-
-                    return true;
-
-                }
-            }
-
-            if (activeParty.activeParty[2] == null && activeParty.activeParty[1] == null)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // Calls Update() every frame.
-    void Update()
-    {
-
-        if (gameStart)
-        {
-            if (timeOfDay > 650 || timeOfDay < 400)
-            {
-                timeOfDay += Time.deltaTime / 2;
-            }
-            else
-            {
-                timeOfDay += Time.deltaTime;
-            }
-        }
-
-        if (autoSaveReady && ableToSave && !inBattle && !recentAutoSave)
-        {
-            //  autoSaveReady = false;
-            //  recentAutoSave = true;
-            //  SaveGame(3);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            adventureLogReference.AddQuestToAdventureLog(gameQuests[0]);
-
-            adventureLogReference.AddQuestToAdventureLog(gameQuests[1]);
-            //GameManager.gameManager.activeParty.activeParty[0].GetComponent<Grieve>().weapon.GetComponent<GrieveWeapons>().fireAttack += 10;
-            partyInventoryReference.AddItemToInventory(gameInventory[0]);
-            partyInventoryReference.AddItemToInventory(gameInventory[1]);
-            partyInventoryReference.AddItemToInventory(gameInventory[3]);
-
-            // partyInventoryReference.AddItemToInventory(gameInventory[2]);
-            //partyInventoryReference.AddItemToInventory(gameInventory[3]);
-            partyInventoryReference.AddItemToInventory(gameGrieveWeapons[1].GetComponent<GrieveWeapons>());
-            partyInventoryReference.AddItemToInventory(gameChestArmor[2].GetComponent<ChestArmor>());
-            partyInventoryReference.AddItemToInventory(gameFireDrops[0]);
-
-            //partyInventoryReference.AddMacWeaponToInventory(macGameWeapons[2].GetComponent<MacWeapons>());
-            //partyInventoryReference.AddFieldWeaponToInventory(fieldGameWeapons[2].GetComponent<FieldWeapons>());
-
-            //partyInventoryReference.AddChestArmorToInventory(gameArmor[0].GetComponent<ChestArmor>());
-            // partyInventoryReference.AddChestArmorToInventory(gameArmor[2].GetComponent<ChestArmor>());
-
-            //partyInventoryReference.AddItemToInventory(gameFireDrops[0]);
-
-        }
-
-        if (Input.GetKeyDown(KeyCode.O) || Input.GetKeyDown("joystick button 2"))
-        {
-            //SaveGame();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Keypad1))
-        {
-            SaveGame(0);
-        }
-
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-
-        }
-
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            if (!inBattle)
-            {
-                if (miniMap.activeInHierarchy)
-                {
-                    miniMap.SetActive(false);
-                }
-                else
-                {
-                    miniMap.SetActive(true);
-                }
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            AddCharacterToParty("Mac");
-            AddCharacterToParty("Field");
-            AddCharacterToParty("Riggs");
-
-            activeParty.SetActiveParty();
-        }
-
-        if (inWorldMap)
-        {
-            if (currentScene != "WorldMap")
-            {
-                currentScene = "WorldMap";
-            }
-        }
-    }
 
     // Clears the "Amount Held" value of any item that is stackable. Used mainly for NewGame().
     void ClearGameInventoryHeld()
@@ -2568,7 +2077,6 @@ public class Engine : MonoBehaviour
     {
         shopSellButtons[0].SetActive(false);
         shopSellButtons[1].SetActive(false);
-        currentMerchant.SellItem();
 
     }
 
@@ -2693,108 +2201,6 @@ public class Engine : MonoBehaviour
         return remainingPartyMembers[randomPartyMemberIndex];
     }
 
-    public int GetNextRemainingPartyMember()
-    {
-        remainingPartyMembers = new List<int>();
-
-        for (int i = 0; i < activeParty.activeParty.Length; i++)
-        {
-            if (activeParty.activeParty[i] != null)
-            {
-
-                remainingPartyMembers.Add(i);
-                if (activeParty.activeParty[i].GetComponent<Character>().isAsleep)
-                {
-                    activeParty.activeParty[i].GetComponent<Character>().sleepTimer++;
-                    if (activeParty.activeParty[i].GetComponent<Character>().sleepTimer == 3)
-                    {
-                        activeParty.activeParty[i].GetComponent<Character>().isAsleep = false;
-                        activeParty.activeParty[i].GetComponent<Character>().sleepTimer = 0;
-
-                        activeParty.activeParty[i].GetComponent<SpriteRenderer>().color = Color.white;
-
-                    }
-
-                    if (activeParty.activeParty[i].GetComponent<Character>().isPoisoned)
-                    {
-                        TakePoisonDamage(i, activeParty.activeParty[i].GetComponent<Character>().poisonDmg);
-                    }
-                    if (activeParty.activeParty[i].GetComponent<Character>().deathInflicted)
-                    {
-                        activeParty.activeParty[i].GetComponent<Character>().TakeDeathDamage(i);
-
-                    }
-                }
-
-            }
-        }
-
-        if (battleSystem.currentInQueue == BattleState.CHAR1TURN)
-        {
-            for (int i = 1; i < remainingPartyMembers.Count; i++)
-            {
-                if (activeParty.activeParty[i] != null)
-                {
-                    if (activeParty.activeParty[i].GetComponent<Character>().currentHealth > 0 && !activeParty.activeParty[i].GetComponent<Character>().isAsleep)
-                    {
-                        nextRemainingCharacterIndex = remainingPartyMembers[i];
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (battleSystem.currentInQueue == BattleState.CHAR2TURN)
-        {
-            for (int i = 2; i < remainingPartyMembers.Count; i++)
-            {
-                if (activeParty.activeParty[i] != null)
-                {
-                    if (activeParty.activeParty[i].GetComponent<Character>().currentHealth > 0 && !activeParty.activeParty[i].GetComponent<Character>().isAsleep)
-                    {
-                        nextRemainingCharacterIndex = remainingPartyMembers[i];
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (battleSystem.currentInQueue == BattleState.CHAR3TURN || battleSystem.currentInQueue == BattleState.ENEMY1TURN || battleSystem.currentInQueue == BattleState.ENEMY2TURN
-       || battleSystem.currentInQueue == BattleState.ENEMY3TURN || battleSystem.currentInQueue == BattleState.ENEMY4TURN)
-        {
-            for (int i = 0; i < remainingPartyMembers.Count; i++)
-            {
-                if (activeParty.activeParty[i] != null)
-                {
-                    if (activeParty.activeParty[i].GetComponent<Character>().currentHealth > 0 && !activeParty.activeParty[i].GetComponent<Character>().isAsleep)
-                    {
-                        nextRemainingCharacterIndex = remainingPartyMembers[i];
-                        break;
-                    }
-                }
-            }
-        }
-
-
-        /* if (battleSystem.state == BattleState.CHAR1TURN)
-         {
-             nextRemainingCharacterIndex = 1;
-         }
-         if (battleSystem.state == BattleState.CHAR2TURN)
-         {
-             nextRemainingCharacterIndex = 2;
-         }
-         if (battleSystem.state == BattleState.CHAR3TURN || battleSystem.state == BattleState.ENEMY1TURN || battleSystem.state == BattleState.ENEMY2TURN
-         || battleSystem.state == BattleState.ENEMY3TURN || battleSystem.state == BattleState.ENEMY4TURN)
-         {
-             nextRemainingCharacterIndex = 0;
-         }
-
-         return remainingPartyMembers[nextRemainingCharacterIndex];*/
-        return nextRemainingCharacterIndex;
-    }
-
-    // Cuz lazy idk, should only run once anyway.
     public void SetInventoryArrayPositions()
     {
         for (int i = 0; i < partyInventoryReference.itemInventorySlots.Length; i++)
@@ -2855,6 +2261,120 @@ public class Engine : MonoBehaviour
 
 
         }
+    }
+
+    // Calls Update() every frame.
+    void Update()
+    {
+
+        if (!inBattle)
+        {
+            mainCamera.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 0;
+        }
+        else
+        {
+            mainCamera.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 2;
+        }
+
+        if (gameStart)
+        {
+            if (timeOfDay > 650 || timeOfDay < 400)
+            {
+                timeOfDay += Time.deltaTime / 2;
+            }
+            else
+            {
+                timeOfDay += Time.deltaTime;
+            }
+        }
+
+        if (autoSaveReady && ableToSave && !inBattle && !recentAutoSave)
+        {
+            //  autoSaveReady = false;
+            //  recentAutoSave = true;
+            //  SaveGame(3);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            adventureLogReference.AddQuestToAdventureLog(gameQuests[0]);
+
+            adventureLogReference.AddQuestToAdventureLog(gameQuests[1]);
+            //GameManager.gameManager.activeParty.activeParty[0].GetComponent<Grieve>().weapon.GetComponent<GrieveWeapons>().fireAttack += 10;
+            partyInventoryReference.AddItemToInventory(gameInventory[0]);
+            partyInventoryReference.AddItemToInventory(gameInventory[1]);
+            partyInventoryReference.AddItemToInventory(gameInventory[3]);
+
+            // partyInventoryReference.AddItemToInventory(gameInventory[2]);
+            //partyInventoryReference.AddItemToInventory(gameInventory[3]);
+            partyInventoryReference.AddItemToInventory(gameGrieveWeapons[1].GetComponent<GrieveWeapons>());
+            partyInventoryReference.AddItemToInventory(gameChestArmor[2].GetComponent<ChestArmor>());
+            partyInventoryReference.AddItemToInventory(gameFireDrops[0]);
+
+            //partyInventoryReference.AddMacWeaponToInventory(macGameWeapons[2].GetComponent<MacWeapons>());
+            //partyInventoryReference.AddFieldWeaponToInventory(fieldGameWeapons[2].GetComponent<FieldWeapons>());
+
+            //partyInventoryReference.AddChestArmorToInventory(gameArmor[0].GetComponent<ChestArmor>());
+            // partyInventoryReference.AddChestArmorToInventory(gameArmor[2].GetComponent<ChestArmor>());
+
+            //partyInventoryReference.AddItemToInventory(gameFireDrops[0]);
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.O) || Input.GetKeyDown("joystick button 2"))
+        {
+            //SaveGame();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            SaveGame(0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            if (!inBattle)
+            {
+                if (miniMap.activeInHierarchy)
+                {
+                    miniMap.SetActive(false);
+                }
+                else
+                {
+                    miniMap.SetActive(true);
+                }
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            AddCharacterToParty("Mac");
+            AddCharacterToParty("Field");
+            AddCharacterToParty("Riggs");
+
+            activeParty.SetActiveParty();
+        }
+
+        if (inWorldMap)
+        {
+            if (currentScene != "WorldMap")
+            {
+                currentScene = "WorldMap";
+            }
+        }
+    }
+
+    void FixedUpdate()
+    {
+
+        // Debug.Log(timer);
+
+        // timer -= Time.deltaTime;
     }
 }
 

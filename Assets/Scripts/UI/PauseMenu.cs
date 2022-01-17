@@ -29,7 +29,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject equipWeaponFirst, equipChestArmorCharFirst;
     public bool shoppingArmor = false, shoppingWeapons = false, shoppingDrops = false, shoppingItems = false;
     public TextMeshProUGUI battleModeReference;
-
+    public GameUI uiReference;
 
 
     void Start()
@@ -377,6 +377,8 @@ public class PauseMenu : MonoBehaviour
             gridCharSelect[i].SetActive(false);
         }
 
+        uiReference.PlayTransition();
+
         gridMenu.SetActive(true);
         Engine.e.gridReference.SetGrieveScreen();
         //Engine.e.abilityScreenReference.DisplayCharSelection();
@@ -399,6 +401,8 @@ public class PauseMenu : MonoBehaviour
             gridCharSelect[i].SetActive(false);
         }
 
+        uiReference.PlayTransition();
+
         Engine.e.gridReference.SetMacScreen();
 
         gridMenu.SetActive(true);
@@ -418,6 +422,7 @@ public class PauseMenu : MonoBehaviour
         {
             gridCharSelect[i].SetActive(false);
         }
+        uiReference.PlayTransition();
 
         Engine.e.gridReference.SetFieldScreen();
 
@@ -438,6 +443,8 @@ public class PauseMenu : MonoBehaviour
         {
             gridCharSelect[i].SetActive(false);
         }
+
+        uiReference.PlayTransition();
 
         Engine.e.gridReference.SetRiggsScreen();
 
@@ -460,6 +467,7 @@ public class PauseMenu : MonoBehaviour
         }
 
         //Engine.e.gridReference.SetSolaceScreen();
+        uiReference.PlayTransition();
 
         gridMenu.SetActive(true);
         Engine.e.canvasReference.SetActive(false);

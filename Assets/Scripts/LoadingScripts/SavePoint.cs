@@ -65,6 +65,18 @@ public class SavePoint : MonoBehaviour
                         Engine.e.party[i].GetComponent<Character>().currentHealth = Engine.e.party[i].GetComponent<Character>().maxHealth;
                         Engine.e.party[i].GetComponent<Character>().currentMana = Engine.e.party[i].GetComponent<Character>().maxMana;
                         Engine.e.party[i].GetComponent<Character>().currentEnergy = Engine.e.party[i].GetComponent<Character>().maxEnergy;
+
+                        Engine.e.party[i].GetComponent<Character>().isPoisoned = false;
+                        Engine.e.party[i].GetComponent<Character>().poisonDmg = 0;
+                        Engine.e.party[i].GetComponent<Character>().isConfused = false;
+                        Engine.e.party[i].GetComponent<Character>().confuseTimer = 0;
+                        Engine.e.party[i].GetComponent<Character>().isAsleep = false;
+                        Engine.e.party[i].GetComponent<Character>().sleepTimer = 0;
+                        Engine.e.party[i].GetComponent<Character>().miterInflicted = false;
+                        Engine.e.party[i].GetComponent<Character>().haltInflicted = false;
+                        Engine.e.party[i].GetComponent<Character>().deathInflicted = false;
+
+
                     }
                 }
             }

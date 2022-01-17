@@ -436,7 +436,7 @@ MonoBehaviour:
   char2SwitchPos: {fileID: 2326179207838030260}
   char3SwitchPos: {fileID: 2326179208821601968}
   groupInBattle: 0
-  remainingEnemies: 
+  remainingEnemies: []
   inWorld: 0
 --- !u!114 &2326179208711771419
 MonoBehaviour:
@@ -467,16 +467,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   listOfEnemies:
-  - {fileID: 4151345855461053950, guid: 5cc5636e4e4024349bcb5d768239b589, type: 3}
-  - {fileID: 7155512343672080740, guid: 965a15157edc6478ab1c936d8b385cc7, type: 3}
-  - {fileID: 627387583183325586, guid: 327807a6b1f1c4e98a6fc4c3960c2f7c, type: 3}
-  - {fileID: 4141833159647113841, guid: 34b8dcc861ec54c13a89a85a291b199e, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   enemyLocations:
   - {fileID: 2326179209033473924}
   - {fileID: 2326179207239602110}
   - {fileID: 2326179207287667820}
   - {fileID: 2326179208598507010}
   enemyGroup: {fileID: 0}
+  numberOfEnemies: 0
 --- !u!1 &2326179208821601968
 GameObject:
   m_ObjectHideFlags: 0

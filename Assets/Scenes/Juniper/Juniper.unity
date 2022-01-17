@@ -1004,6 +1004,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -2802526864715437999, guid: 0735782a4bb1a42af90af0768a0fbf08, type: 3}
+      propertyPath: m_TagString
+      value: Camera Bounding Collision
+      objectReference: {fileID: 0}
     - target: {fileID: 2525847841935282308, guid: 0735782a4bb1a42af90af0768a0fbf08, type: 3}
       propertyPath: m_SortingLayer
       value: 1
