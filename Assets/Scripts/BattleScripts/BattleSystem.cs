@@ -8,13 +8,13 @@ using Cinemachine;
 using UnityEngine.SceneManagement;
 
 public enum BattleState { START, CHAR1TURN, CHAR2TURN, CHAR3TURN, ENEMY1TURN, ENEMY2TURN, ENEMY3TURN, ENEMY4TURN, CONFCHAR1, CONFCHAR2, CONFCHAR3, ATBCHECK, QUEUECHECK, WON, LOST, LEVELUP, LEVELUPCHECK }
+public enum AnimState { NONE, ATTACKANIM, ITEMANIM, DROPANIM, SKILLANIM, SWITCHANIM }
 public class BattleSystem : MonoBehaviour
 {
 
     // General Info
-    public BattleState state;
-    public BattleState currentState;
-    public BattleState currentInQueue;
+    public BattleState state, currentState, currentInQueue;
+    public AnimState animState;
     public Queue<BattleState> battleQueue;
     public ActiveParty activeParty;
     public Enemy[] enemies;
@@ -129,7 +129,7 @@ public class BattleSystem : MonoBehaviour
     bool pressUp, pressDown;
     public int inventoryPointerIndex = 0, vertMove = 0;
     public TextMeshProUGUI battleHelpReference;
-
+    public Animator currentAnimation;
     bool partyTurn = false;
     [SerializeField]
     bool dmgText1Active, dmgText2Active, dmgText3Active, dmgText4Active, dmgText5Active, dmgText6Active, dmgText7Active, settingTarget;
@@ -138,6 +138,8 @@ public class BattleSystem : MonoBehaviour
     float battleBodyTotal, menuTargetIndex;
     [SerializeField]
     float[] damageTextTimer;
+    public float animationTimer = 0f;
+    public bool displayDamageText = false;
 
     public IEnumerator SetupBattle()
     {
@@ -170,6 +172,8 @@ public class BattleSystem : MonoBehaviour
 
         lastDropChoice = null;
         lastSkillChoice = null;
+
+        currentAnimation = null;
 
         for (int i = 0; i < Engine.e.party.Length; i++)
         {
@@ -829,11 +833,12 @@ public class BattleSystem : MonoBehaviour
     public IEnumerator CharAttack(int _target)
     {
 
-        DeactivateTargetButtons();
+        //DeactivateTargetButtons();
         inBattleMenu = false;
         int index = 0;
         int target = 0;
         GameObject characterAttacking = null;
+        GameObject targetGOLoc = null;
         Character _characterAttacking = null;
 
         if (currentInQueue == BattleState.CHAR1TURN)
@@ -862,6 +867,8 @@ public class BattleSystem : MonoBehaviour
 
         if (!attackingTeam)
         {
+            targetGOLoc = enemies[_target].gameObject;
+
             if (enemies[_target].GetComponent<Enemy>().currentHealth <= 0)
             {
                 target = enemyGroup.GetRandomRemainingEnemy();
@@ -1053,7 +1060,7 @@ public class BattleSystem : MonoBehaviour
 
                 charAttackDrop = true;
 
-                InstantiateDropAnim(characterAttacking, dropChoice);
+                HandleDropAnim(characterAttacking, targetGOLoc, dropChoice);
 
                 enemies[_target].GetComponent<Enemy>().DropEffect(dropChoice);
 
@@ -1073,6 +1080,19 @@ public class BattleSystem : MonoBehaviour
         }
         else
         {
+            if (_target == 0)
+            {
+                targetGOLoc = Engine.e.activeParty.gameObject;
+            }
+            if (_target == 1)
+            {
+                targetGOLoc = Engine.e.activePartyMember2;
+            }
+            if (_target == 2)
+            {
+                targetGOLoc = Engine.e.activePartyMember3;
+            }
+
             if (activeParty.activeParty[_target].GetComponent<Character>().currentHealth <= 0)
             {
                 target = Engine.e.GetRandomRemainingPartyMember();
@@ -1118,7 +1138,7 @@ public class BattleSystem : MonoBehaviour
 
                 charAttackDrop = true;
 
-                InstantiateDropAnim(characterAttacking, dropChoice);
+                HandleDropAnim(characterAttacking, targetGOLoc, dropChoice);
                 activeParty.activeParty[_target].GetComponent<Character>().DropEffect(dropChoice);
                 _characterAttacking.currentMana -= Mathf.Round(dropChoice.dropCost
                 - (dropChoice.dropCost * _characterAttacking.dropCostReduction / 100) + 0.45f);
@@ -1368,7 +1388,6 @@ public class BattleSystem : MonoBehaviour
                     charAttacking = false;
                     charAtBattlePos = false;
 
-
                     activeParty.activeParty[targetEnemy].GetComponent<Character>().TakePhysicalDamage(targetEnemy, characterAttackIndex.physicalDamage);
 
 
@@ -1437,7 +1456,9 @@ public class BattleSystem : MonoBehaviour
                     attackingTeam = false;
                 }
 
-                EndTurn();
+                animExists = false;
+                HandleAnimation();
+                //PauseTransition();
                 //state = BattleState.ATBCHECK;
                 //currentInQueue = nextInQueue;
 
@@ -1458,57 +1479,32 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    IEnumerator CharDropAttack()
+    void HandleAnimation()
     {
-
-        if (!animExists)
+        if (state == currentInQueue)
         {
-            charAttackDrop = false;
-            // currentInQueue = nextInQueue;
+            state = BattleState.ATBCHECK;
         }
-        else
-        {
-            if (state == currentInQueue)
-                state = BattleState.ATBCHECK;
 
-        }
-        if (targetCheck)
-        {
-            targetCheck = false;
+        Debug.Log(animationTimer);
 
-            if (Engine.e.battleModeActive)
+        if (animExists)
+        {
+            if (animationTimer <= 0)
             {
-                //  state = BattleState.ATBCHECK;
-                //state = currentState;
+                charAttackDrop = false;
+                animExists = false;
+                currentAnimation.gameObject.SetActive(false);
+                currentAnimation.GetComponent<Animator>().enabled = true;
+                animState = AnimState.NONE;
+
+                displayDamageText = true;
             }
         }
-        if (!animExists && !charAttackDrop)
+        else // For strange scenarios 
         {
-
-            EndTurn();
-
-            //currentInQueue = nextInQueue;
-            //if (s)
-            //state = BattleState.ATBCHECK;
-
-            yield return new WaitForSeconds(0.3f);
-
-            if (isDead)
-            {
-                state = BattleState.LEVELUPCHECK;
-                yield return new WaitForSeconds(1f);
-                StartCoroutine(LevelUpCheck());
-            }
-            else
-            {
-
-                if (!Engine.e.battleModeActive)
-                {
-                    state = BattleState.ATBCHECK;
-                }
-
-            }
-            //StartCoroutine(CheckNext());
+            displayDamageText = true;
+            //EndTurn();
         }
     }
 
@@ -1625,7 +1621,7 @@ public class BattleSystem : MonoBehaviour
 
                 if (lastDropChoice != null)
                 {
-                    InstantiateDropAnim(_characterLoc, lastDropChoice);
+                    //HandleDropAnim(_characterLoc, lastDropChoice);
 
                     if (attackingTeam)
                     {
@@ -1675,6 +1671,7 @@ public class BattleSystem : MonoBehaviour
 
         int index = 0;
         GameObject _characterLoc = null;
+        GameObject _targetGOLoc = null;
 
         inBattleMenu = false;
 
@@ -1682,7 +1679,6 @@ public class BattleSystem : MonoBehaviour
         {
             index = 0;
             _characterLoc = Engine.e.activeParty.gameObject;
-
         }
         if (currentInQueue == BattleState.CHAR2TURN)
         {
@@ -1694,11 +1690,24 @@ public class BattleSystem : MonoBehaviour
         {
             index = 2;
             _characterLoc = Engine.e.activePartyMember3;
-
         }
 
         if (targetingTeam) // Most of the time this should be the case
         {
+
+            if (_target == 0)
+            {
+                _targetGOLoc = Engine.e.activeParty.gameObject;
+            }
+            if (_target == 1)
+            {
+                _targetGOLoc = Engine.e.activePartyMember2;
+            }
+            if (_target == 2)
+            {
+                _targetGOLoc = Engine.e.activePartyMember3;
+            }
+
             // Supporting target via an Item
             if (usingItem)
             {
@@ -1744,7 +1753,7 @@ public class BattleSystem : MonoBehaviour
 
                 }
 
-                InstantiateDropAnim(_characterLoc, _dropChoice);
+                HandleDropAnim(_characterLoc, _targetGOLoc, _dropChoice);
 
 
                 activeParty.activeParty[_target].GetComponent<Character>().DropEffect(_dropChoice);
@@ -1924,6 +1933,9 @@ public class BattleSystem : MonoBehaviour
 
         else // Targeting enemy
         {
+
+            _targetGOLoc = enemies[_target].gameObject;
+
             Drops _dropChoice = null;
 
             dropSupport = false;
@@ -1943,7 +1955,7 @@ public class BattleSystem : MonoBehaviour
 
             }
 
-            InstantiateDropAnim(_characterLoc, _dropChoice);
+            HandleDropAnim(_characterLoc, _targetGOLoc, _dropChoice);
 
 
             enemies[_target].DropEffect(_dropChoice);
@@ -1963,7 +1975,8 @@ public class BattleSystem : MonoBehaviour
             }
         }
 
-        EndTurn();
+
+        //EndTurn();
 
         yield return new WaitForSeconds(1f);
         if (!Engine.e.battleModeActive)
@@ -2200,7 +2213,8 @@ public class BattleSystem : MonoBehaviour
 
             if (charAtBattlePos && !charAttacking)
             {
-                EndTurn();
+                // EndTurn();
+                animExists = false;
 
             }
 
@@ -2376,8 +2390,9 @@ public class BattleSystem : MonoBehaviour
             {
                 enemyMoving = false;
 
-                EndTurn();
-
+                //EndTurn();
+                animExists = false;
+                HandleAnimation();
                 yield return new WaitForSeconds(0.3f);
 
                 if (isDead)
@@ -2491,8 +2506,8 @@ public class BattleSystem : MonoBehaviour
 
             if (enemyAtBattlePos && !enemyAttacking)
             {
-                EndTurn();
-
+                //EndTurn();
+                animExists = false;
                 yield return new WaitForSeconds(0.3f);
 
                 if (isDead)
@@ -2504,44 +2519,6 @@ public class BattleSystem : MonoBehaviour
                 else
 
                     // StartCoroutine(CheckNext());
-                    state = BattleState.ATBCHECK;
-
-            }
-        }
-    }
-
-
-    IEnumerator EnemyDropAttack()
-    {
-
-        if (!animExists)
-        {
-            enemyAttackDrop = false;
-            // currentInQueue = nextInQueue;
-
-        }
-        else
-        {
-            if (state == currentInQueue)
-                state = BattleState.ATBCHECK;
-        }
-
-        if (!animExists && !enemyAttackDrop)
-        {
-            EndTurn();
-            yield return new WaitForSeconds(0.3f);
-
-            if (isDead)
-            {
-                state = BattleState.LOST;
-                yield return new WaitForSeconds(2f);
-                StartCoroutine(EndBattle());
-
-            }
-            else
-            {
-                // StartCoroutine(CheckNext());
-                if (!Engine.e.battleModeActive)
                     state = BattleState.ATBCHECK;
 
             }
@@ -2615,10 +2592,10 @@ public class BattleSystem : MonoBehaviour
 
                     lastDropChoice = enemies[index].gameObject.GetComponent<Enemy>().drops[_enemyDropChoice];
 
-                    InstantiateDropAnim(enemies[index].gameObject, enemies[index].GetComponent<Enemy>().drops[_enemyDropChoice]);
 
                     if (!attackingTeam)
                     {
+                        //                      HandleDropAnim(enemies[index].gameObject, enemies[index].GetComponent<Enemy>().drops[_enemyDropChoice]);
                         activeParty.activeParty[randTarget].GetComponent<Character>().DropEffect(enemies[index].GetComponent<Enemy>().drops[_enemyDropChoice]);
                     }
                     else
@@ -3415,7 +3392,6 @@ public class BattleSystem : MonoBehaviour
             char1Target = _target;
             char1Ready = false;
 
-            DeactivateChar1MenuButtons();
             battleQueue.Enqueue(BattleState.CHAR1TURN);
 
             if (activeParty.activeParty[1] != null)
@@ -3446,7 +3422,6 @@ public class BattleSystem : MonoBehaviour
             char2Target = _target;
             char2Ready = false;
 
-            DeactivateChar2MenuButtons();
             battleQueue.Enqueue(BattleState.CHAR2TURN);
 
 
@@ -3486,8 +3461,8 @@ public class BattleSystem : MonoBehaviour
             if (char2Ready)
             {
                 ActivateChar2MenuButtons();
-
             }
+
 
         }
 
@@ -3666,6 +3641,9 @@ public class BattleSystem : MonoBehaviour
     {
 
         inBattleMenu = true;
+        DeactivateChar1MenuButtons();
+        DeactivateChar2MenuButtons();
+        DeactivateChar3MenuButtons();
 
         if (!char1SkillAttack && !char2SkillAttack && !char3SkillAttack && !char1SkillSelfSupport
         && !char2SkillSelfSupport && !char3SkillSelfSupport && !charSkillSwitch)
@@ -4347,6 +4325,7 @@ public class BattleSystem : MonoBehaviour
             Engine.e.battleSystem.enemyPanel.SetActive(true);
 
             Engine.e.activeParty.activeParty[index].gameObject.GetComponent<Character>().UseDrop(dropChoice);
+
             if (index == 0)
             {
                 char1DropChoice = dropChoice;
@@ -4482,7 +4461,6 @@ public class BattleSystem : MonoBehaviour
         charMoving = false;
         targetCheck = false;
         attackingTeam = false;
-
         GameObject _characterAttacking = null;
         int index = 0;
 
@@ -4526,8 +4504,7 @@ public class BattleSystem : MonoBehaviour
                 skillTargetSupport = false;
                 charUsingSkill = false;
 
-                targetingTeam = false;
-                targetingEnemy = false;
+
                 //char1DropChoice = null;
                 //char1SkillChoice = null;
 
@@ -4574,8 +4551,7 @@ public class BattleSystem : MonoBehaviour
                 skillTargetSupport = false;
                 charUsingSkill = false;
 
-                targetingTeam = false;
-                targetingEnemy = false;
+
 
 
                 if (!charSkillSwitch)
@@ -4622,8 +4598,6 @@ public class BattleSystem : MonoBehaviour
                 skillTargetSupport = false;
                 charUsingSkill = false;
 
-                targetingTeam = false;
-                targetingEnemy = false;
 
                 if (!charSkillSwitch)
                 {
@@ -4734,13 +4708,17 @@ public class BattleSystem : MonoBehaviour
             {
                 enemies[index].GetComponent<EnemyMovement>().enabled = true;
             }
+
+            //CheckIsDeadTeam
         }
 
+        targetingTeam = false;
+        targetingEnemy = false;
         /* for (int i = 0; i < damagePopup.Length; i++)
          {
              damagePopup[i].SetActive(false);
          }
- */
+    */
         if (battleQueue.Count > 0)
             battleQueue.Dequeue();
 
@@ -5078,6 +5056,16 @@ public class BattleSystem : MonoBehaviour
 
         if (Engine.e.battleModeActive)
         {
+            if (animExists)
+            {
+                HandleAnimation();
+            }
+
+            if (!animExists && displayDamageText)
+            {
+                DisplayDamageText();
+            }
+
             if (isDead && state != BattleState.LEVELUPCHECK && state != BattleState.LEVELUP && state != BattleState.WON && state != BattleState.LOST)
             {
                 DeactivateTargetSprite();
@@ -5165,35 +5153,6 @@ public class BattleSystem : MonoBehaviour
 
         // if ()
 
-        if (!animExists)
-        {
-            if (Engine.e.battleSystem.hud.displayHealth[0].text != Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentHealth.ToString())
-            {
-                Engine.e.battleSystem.hud.displayHealth[0].text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentHealth.ToString();
-            }
-        }
-        if (Engine.e.battleSystem.hud.displayMaxHealth[0].text != Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxHealth.ToString())
-        {
-            Engine.e.battleSystem.hud.displayMaxHealth[0].text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxHealth.ToString();
-        }
-
-        if (Engine.e.battleSystem.hud.displayMana[0].text != Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentMana.ToString())
-        {
-            Engine.e.battleSystem.hud.displayMana[0].text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentMana.ToString();
-        }
-        if (Engine.e.battleSystem.hud.displayMaxMana[0].text != Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxMana.ToString())
-        {
-            Engine.e.battleSystem.hud.displayMaxMana[0].text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxMana.ToString();
-        }
-
-        if (Engine.e.battleSystem.hud.displayEnergy[0].text != Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentEnergy.ToString())
-        {
-            Engine.e.battleSystem.hud.displayEnergy[0].text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentEnergy.ToString();
-        }
-        if (Engine.e.battleSystem.hud.displayMaxEnergy[0].text != Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxEnergy.ToString())
-        {
-            Engine.e.battleSystem.hud.displayMaxEnergy[0].text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxEnergy.ToString();
-        }
 
         if (activeParty.activeParty[0].GetComponent<Character>().isAsleep || activeParty.activeParty[0].GetComponent<Character>().isConfused)
         {
@@ -5232,35 +5191,6 @@ public class BattleSystem : MonoBehaviour
 
         if (activeParty.activeParty[1] != null)
         {
-            if (!animExists)
-            {
-                if (Engine.e.battleSystem.hud.displayHealth[1].text != Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentHealth.ToString())
-                {
-                    Engine.e.battleSystem.hud.displayHealth[1].text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentHealth.ToString();
-                }
-                if (Engine.e.battleSystem.hud.displayMaxHealth[1].text != Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxHealth.ToString())
-                {
-                    Engine.e.battleSystem.hud.displayMaxHealth[1].text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxHealth.ToString();
-                }
-            }
-
-            if (Engine.e.battleSystem.hud.displayMana[1].text != Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentMana.ToString())
-            {
-                Engine.e.battleSystem.hud.displayMana[1].text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentMana.ToString();
-            }
-            if (Engine.e.battleSystem.hud.displayMaxMana[1].text != Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxMana.ToString())
-            {
-                Engine.e.battleSystem.hud.displayMaxMana[1].text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxMana.ToString();
-            }
-
-            if (Engine.e.battleSystem.hud.displayEnergy[1].text != Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentEnergy.ToString())
-            {
-                Engine.e.battleSystem.hud.displayEnergy[1].text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentEnergy.ToString();
-            }
-            if (Engine.e.battleSystem.hud.displayMaxEnergy[1].text != Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxEnergy.ToString())
-            {
-                Engine.e.battleSystem.hud.displayMaxEnergy[1].text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxEnergy.ToString();
-            }
 
             if (activeParty.activeParty[1].GetComponent<Character>().isAsleep || activeParty.activeParty[1].GetComponent<Character>().isConfused)
             {
@@ -5300,34 +5230,6 @@ public class BattleSystem : MonoBehaviour
 
         if (activeParty.activeParty[2] != null)
         {
-            if (!animExists)
-            {
-                if (Engine.e.battleSystem.hud.displayHealth[2].text != Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth.ToString())
-                {
-                    Engine.e.battleSystem.hud.displayHealth[2].text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth.ToString();
-                }
-                if (Engine.e.battleSystem.hud.displayMaxHealth[2].text != Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxHealth.ToString())
-                {
-                    Engine.e.battleSystem.hud.displayMaxHealth[2].text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxHealth.ToString();
-                }
-            }
-            if (Engine.e.battleSystem.hud.displayMana[2].text != Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth.ToString())
-            {
-                Engine.e.battleSystem.hud.displayMana[2].text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentMana.ToString();
-            }
-            if (Engine.e.battleSystem.hud.displayMaxMana[2].text != Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxMana.ToString())
-            {
-                Engine.e.battleSystem.hud.displayMaxMana[2].text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxMana.ToString();
-            }
-
-            if (Engine.e.battleSystem.hud.displayEnergy[2].text != Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth.ToString())
-            {
-                Engine.e.battleSystem.hud.displayEnergy[2].text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentEnergy.ToString();
-            }
-            if (Engine.e.battleSystem.hud.displayMaxEnergy[2].text != Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxEnergy.ToString())
-            {
-                Engine.e.battleSystem.hud.displayMaxEnergy[2].text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxEnergy.ToString();
-            }
 
             if (activeParty.activeParty[2].GetComponent<Character>().isAsleep || activeParty.activeParty[2].GetComponent<Character>().isConfused)
             {
@@ -5376,15 +5278,6 @@ public class BattleSystem : MonoBehaviour
             Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().color = activeParty.activeParty[2].GetComponent<SpriteRenderer>().color;
         }
 
-        if (!animExists)
-        {
-            if (Engine.e.battleSystem.hud.displayEnemyHealth[0].text != enemies[0].GetComponent<Enemy>().currentHealth.ToString())
-            {
-                Engine.e.battleSystem.hud.displayEnemyHealth[0].text = enemies[0].GetComponent<Enemy>().currentHealth.ToString();
-            }
-        }
-
-
         if (enemies[0].GetComponent<Enemy>().isAsleep || enemies[0].GetComponent<Enemy>().isConfused)
         {
             if (!enemies[0].GetComponent<Enemy>().inflicted)
@@ -5421,14 +5314,6 @@ public class BattleSystem : MonoBehaviour
 
         if (enemies[1] != null)
         {
-            if (!animExists)
-            {
-                if (Engine.e.battleSystem.hud.displayEnemyHealth[1].text != enemies[1].GetComponent<Enemy>().currentHealth.ToString())
-                {
-                    Engine.e.battleSystem.hud.displayEnemyHealth[1].text = enemies[1].GetComponent<Enemy>().currentHealth.ToString();
-                }
-            }
-
 
             if (enemies[1].GetComponent<Enemy>().isAsleep || enemies[1].GetComponent<Enemy>().isConfused)
             {
@@ -5467,14 +5352,6 @@ public class BattleSystem : MonoBehaviour
 
         if (enemies[2] != null)
         {
-            if (!animExists)
-            {
-                if (Engine.e.battleSystem.hud.displayEnemyHealth[2].text != enemies[2].GetComponent<Enemy>().currentHealth.ToString())
-                {
-                    Engine.e.battleSystem.hud.displayEnemyHealth[2].text = enemies[2].GetComponent<Enemy>().currentHealth.ToString();
-                }
-            }
-
 
             if (enemies[2].GetComponent<Enemy>().isAsleep || enemies[2].GetComponent<Enemy>().isConfused)
             {
@@ -5513,13 +5390,6 @@ public class BattleSystem : MonoBehaviour
 
         if (enemies[3] != null)
         {
-            if (!animExists)
-            {
-                if (Engine.e.battleSystem.hud.displayEnemyHealth[3].text != enemies[3].GetComponent<Enemy>().currentHealth.ToString())
-                {
-                    Engine.e.battleSystem.hud.displayEnemyHealth[3].text = enemies[3].GetComponent<Enemy>().currentHealth.ToString();
-                }
-            }
 
 
             if (enemies[3].GetComponent<Enemy>().isAsleep || enemies[3].GetComponent<Enemy>().isConfused)
@@ -5758,9 +5628,14 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    public void InstantiateDropAnim(GameObject _spawnLoc, Drops _drop)
+    public void HandleItemAnim(GameObject _spawnLoc, GameObject _targetLoc, Item _item)
     {
-        Instantiate(_drop.dropAnim, _spawnLoc.transform.position, Quaternion.identity);
+        GetComponent<BattleAnimations>().StartItemAnimation(_spawnLoc, _targetLoc, _item);
+    }
+    public void HandleDropAnim(GameObject _spawnLoc, GameObject _targetLoc, Drops _drop)
+
+    {
+        GetComponent<BattleAnimations>().StartDropAnimation(_spawnLoc, _targetLoc, _drop);
     }
 
     void PressDown()
@@ -5782,6 +5657,174 @@ public class BattleSystem : MonoBehaviour
     {
         pressUp = false;
         vertMove = 0;
+    }
+
+    public IEnumerator DisplayDamageText()
+    {
+        displayDamageText = false;
+
+        if (dmgText1Active == true)
+        {
+            dmgText1Active = false;
+            damagePopup[0].SetActive(true);
+        }
+        if (dmgText2Active == true)
+        {
+            dmgText2Active = false;
+            damagePopup[1].SetActive(true);
+        }
+        if (dmgText3Active == true)
+        {
+            dmgText3Active = false;
+            damagePopup[2].SetActive(true);
+        }
+        if (dmgText4Active == true)
+        {
+            dmgText4Active = false;
+            damagePopup[3].SetActive(true);
+        }
+        if (dmgText5Active == true)
+        {
+            dmgText5Active = false;
+            damagePopup[4].SetActive(true);
+        }
+        if (dmgText6Active == true)
+        {
+            dmgText6Active = false;
+            damagePopup[5].SetActive(true);
+        }
+        if (dmgText7Active == true)
+        {
+            dmgText7Active = false;
+            damagePopup[6].SetActive(true);
+        }
+
+        if (Engine.e.battleSystem.hud.displayHealth[0].text != Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentHealth.ToString())
+        {
+            Engine.e.battleSystem.hud.displayHealth[0].text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentHealth.ToString();
+        }
+
+        if (Engine.e.battleSystem.hud.displayMaxHealth[0].text != Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxHealth.ToString())
+        {
+            Engine.e.battleSystem.hud.displayMaxHealth[0].text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxHealth.ToString();
+        }
+
+        if (Engine.e.battleSystem.hud.displayMana[0].text != Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentMana.ToString())
+        {
+            Engine.e.battleSystem.hud.displayMana[0].text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentMana.ToString();
+        }
+        if (Engine.e.battleSystem.hud.displayMaxMana[0].text != Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxMana.ToString())
+        {
+            Engine.e.battleSystem.hud.displayMaxMana[0].text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxMana.ToString();
+        }
+
+        if (Engine.e.battleSystem.hud.displayEnergy[0].text != Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentEnergy.ToString())
+        {
+            Engine.e.battleSystem.hud.displayEnergy[0].text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentEnergy.ToString();
+        }
+        if (Engine.e.battleSystem.hud.displayMaxEnergy[0].text != Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxEnergy.ToString())
+        {
+            Engine.e.battleSystem.hud.displayMaxEnergy[0].text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().maxEnergy.ToString();
+        }
+
+        if (Engine.e.party[1] != null)
+        {
+            if (Engine.e.battleSystem.hud.displayHealth[1].text != Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentHealth.ToString())
+            {
+                Engine.e.battleSystem.hud.displayHealth[1].text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentHealth.ToString();
+            }
+            if (Engine.e.battleSystem.hud.displayMaxHealth[1].text != Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxHealth.ToString())
+            {
+                Engine.e.battleSystem.hud.displayMaxHealth[1].text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxHealth.ToString();
+            }
+
+
+            if (Engine.e.battleSystem.hud.displayMana[1].text != Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentMana.ToString())
+            {
+                Engine.e.battleSystem.hud.displayMana[1].text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentMana.ToString();
+            }
+            if (Engine.e.battleSystem.hud.displayMaxMana[1].text != Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxMana.ToString())
+            {
+                Engine.e.battleSystem.hud.displayMaxMana[1].text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxMana.ToString();
+            }
+
+            if (Engine.e.battleSystem.hud.displayEnergy[1].text != Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentEnergy.ToString())
+            {
+                Engine.e.battleSystem.hud.displayEnergy[1].text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentEnergy.ToString();
+            }
+            if (Engine.e.battleSystem.hud.displayMaxEnergy[1].text != Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxEnergy.ToString())
+            {
+                Engine.e.battleSystem.hud.displayMaxEnergy[1].text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().maxEnergy.ToString();
+            }
+        }
+
+        if (Engine.e.party[2] != null)
+        {
+            if (Engine.e.battleSystem.hud.displayHealth[2].text != Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth.ToString())
+            {
+                Engine.e.battleSystem.hud.displayHealth[2].text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth.ToString();
+            }
+            if (Engine.e.battleSystem.hud.displayMaxHealth[2].text != Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxHealth.ToString())
+            {
+                Engine.e.battleSystem.hud.displayMaxHealth[2].text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxHealth.ToString();
+            }
+
+            if (Engine.e.battleSystem.hud.displayMana[2].text != Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth.ToString())
+            {
+                Engine.e.battleSystem.hud.displayMana[2].text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentMana.ToString();
+            }
+            if (Engine.e.battleSystem.hud.displayMaxMana[2].text != Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxMana.ToString())
+            {
+                Engine.e.battleSystem.hud.displayMaxMana[2].text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxMana.ToString();
+            }
+
+            if (Engine.e.battleSystem.hud.displayEnergy[2].text != Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth.ToString())
+            {
+                Engine.e.battleSystem.hud.displayEnergy[2].text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentEnergy.ToString();
+            }
+            if (Engine.e.battleSystem.hud.displayMaxEnergy[2].text != Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxEnergy.ToString())
+            {
+                Engine.e.battleSystem.hud.displayMaxEnergy[2].text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxEnergy.ToString();
+            }
+        }
+
+        if (Engine.e.battleSystem.hud.displayEnemyHealth[0].text != enemies[0].GetComponent<Enemy>().currentHealth.ToString())
+        {
+            Engine.e.battleSystem.hud.displayEnemyHealth[0].text = enemies[0].GetComponent<Enemy>().currentHealth.ToString();
+        }
+
+        if (enemies[1] != null)
+        {
+            if (Engine.e.battleSystem.hud.displayEnemyHealth[1].text != enemies[1].GetComponent<Enemy>().currentHealth.ToString())
+            {
+                Engine.e.battleSystem.hud.displayEnemyHealth[1].text = enemies[1].GetComponent<Enemy>().currentHealth.ToString();
+            }
+        }
+
+        if (enemies[2] != null)
+        {
+            if (Engine.e.battleSystem.hud.displayEnemyHealth[2].text != enemies[2].GetComponent<Enemy>().currentHealth.ToString())
+            {
+                Engine.e.battleSystem.hud.displayEnemyHealth[2].text = enemies[2].GetComponent<Enemy>().currentHealth.ToString();
+            }
+        }
+
+        if (enemies[3] != null)
+        {
+            if (Engine.e.battleSystem.hud.displayEnemyHealth[3].text != enemies[3].GetComponent<Enemy>().currentHealth.ToString())
+            {
+                Engine.e.battleSystem.hud.displayEnemyHealth[3].text = enemies[3].GetComponent<Enemy>().currentHealth.ToString();
+            }
+        }
+
+        yield return new WaitForSeconds(0.75f);
+
+        for (int i = 0; i < damagePopup.Length; i++)
+        {
+            damagePopup[i].SetActive(false);
+        }
+
+        EndTurn();
     }
 
     public void SetDamagePopupTextOne(Vector3 _pos, string _textDisplayed, Color _color)
@@ -6041,6 +6084,10 @@ public class BattleSystem : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (animExists)
+        {
+            animationTimer -= Time.deltaTime;
+        }
 
         if (charMoving == true)
         {
@@ -6076,11 +6123,6 @@ public class BattleSystem : MonoBehaviour
 
                 }
             }
-        }
-
-        if (charAttackDrop == true)
-        {
-            StartCoroutine(CharDropAttack());
         }
 
         if (enemyMoving == true)
@@ -6122,109 +6164,9 @@ public class BattleSystem : MonoBehaviour
             }
         }
 
-        if (enemyAttackDrop == true)
+        if (displayDamageText)
         {
-            StartCoroutine(EnemyDropAttack());
-        }
-
-        if (dmgText1Active)
-        {
-            if (!animExists)
-            {
-                damagePopup[0].SetActive(true);
-                damageTextTimer[0] -= Time.deltaTime;
-                if (damageTextTimer[0] <= 0)
-                {
-                    dmgText1Active = false;
-                    damageTextTimer[0] = 0.75f;
-                    damagePopup[0].SetActive(false);
-                }
-            }
-        }
-        if (dmgText2Active)
-        {
-            if (!animExists)
-            {
-                damagePopup[1].SetActive(true);
-                damageTextTimer[1] -= Time.deltaTime;
-                if (damageTextTimer[1] <= 0)
-                {
-                    dmgText2Active = false;
-                    damageTextTimer[1] = 0.75f;
-                    damagePopup[1].SetActive(false);
-                }
-            }
-        }
-        if (dmgText3Active)
-        {
-            if (!animExists)
-            {
-                damagePopup[2].SetActive(true);
-                damageTextTimer[2] -= Time.deltaTime;
-                if (damageTextTimer[2] <= 0)
-                {
-                    dmgText3Active = false;
-                    damageTextTimer[2] = 0.75f;
-                    damagePopup[2].SetActive(false);
-                }
-            }
-        }
-        if (dmgText4Active)
-        {
-            if (!animExists)
-            {
-                damagePopup[3].SetActive(true);
-                damageTextTimer[3] -= Time.deltaTime;
-                if (damageTextTimer[3] <= 0)
-                {
-                    dmgText4Active = false;
-                    damageTextTimer[3] = 0.75f;
-                    damagePopup[3].SetActive(false);
-                }
-            }
-        }
-        if (dmgText5Active)
-        {
-            if (!animExists)
-            {
-                damagePopup[4].SetActive(true);
-                damageTextTimer[4] -= Time.deltaTime;
-                if (damageTextTimer[4] <= 0)
-                {
-                    dmgText5Active = false;
-                    damageTextTimer[4] = 0.75f;
-                    damagePopup[4].SetActive(false);
-                }
-            }
-        }
-        if (dmgText6Active)
-        {
-            if (!animExists)
-            {
-                damagePopup[5].SetActive(true);
-                damageTextTimer[5] -= Time.deltaTime;
-                if (damageTextTimer[5] <= 0)
-                {
-                    dmgText6Active = false;
-                    damageTextTimer[5] = 0.75f;
-                    damagePopup[5].SetActive(false);
-                }
-            }
-        }
-        if (dmgText7Active)
-        {
-            if (!animExists)
-            {
-                damagePopup[6].SetActive(true
-                );
-                damageTextTimer[6] -= Time.deltaTime;
-                if (damageTextTimer[6] <= 0)
-                {
-                    dmgText7Active = false;
-                    damageTextTimer[6] = 0.75f;
-                    damagePopup[6].SetActive(false);
-                }
-            }
+            StartCoroutine(DisplayDamageText());
         }
     }
 }

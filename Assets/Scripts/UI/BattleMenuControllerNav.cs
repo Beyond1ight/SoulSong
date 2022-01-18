@@ -251,16 +251,10 @@ public class BattleMenuControllerNav : MonoBehaviour
 
     public void OpenDropChoice()
     {
-        Engine.e.battleSystem.enemyPanel.SetActive(false);
-        Engine.e.battleSystem.char1BattlePanel.SetActive(false);
-        if (Engine.e.activeParty.activeParty[1] != null)
-        {
-            Engine.e.battleSystem.char2BattlePanel.SetActive(false);
-        }
-        if (Engine.e.activeParty.activeParty[2] != null)
-        {
-            Engine.e.battleSystem.char3BattlePanel.SetActive(false);
-        }
+        //Engine.e.battleSystem.enemyPanel.SetActive(false);
+        Engine.e.battleSystem.DeactivateChar1MenuButtons();
+        Engine.e.battleSystem.DeactivateChar2MenuButtons();
+        Engine.e.battleSystem.DeactivateChar3MenuButtons();
 
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(dropFirstButton);

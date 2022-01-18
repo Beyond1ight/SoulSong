@@ -19,9 +19,9 @@ public class Item : MonoBehaviour
     public int itemPower;
     public bool stackable;
     public int itemIndex;
-    public GameObject anim;
     public float dropCostReduction;
     public float skillCostReduction;
+    public AnimationClip animationClip;
 
     public bool consumable, isDrop, weapon, chestArmor, useableOutOfBattle;
 

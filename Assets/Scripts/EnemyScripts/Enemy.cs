@@ -57,6 +57,21 @@ public class Enemy : MonoBehaviour
     public void GenericMoveSet(int target)
     {
 
+        GameObject targetGOLoc = null;
+
+        if (target == 0)
+        {
+            targetGOLoc = Engine.e.activeParty.gameObject;
+        }
+        if (target == 1)
+        {
+            targetGOLoc = Engine.e.activePartyMember2;
+        }
+        if (target == 2)
+        {
+            targetGOLoc = Engine.e.activePartyMember3;
+        }
+
         if (drops[0] != null)
         {
             int _choiceAttack = Random.Range(0, 100);
@@ -78,7 +93,7 @@ public class Enemy : MonoBehaviour
                     Engine.e.battleSystem.enemyAttackDrop = true;
 
                     Engine.e.battleSystem.lastDropChoice = drops[enemyDropChoice];
-                    Engine.e.battleSystem.InstantiateDropAnim(this.gameObject, drops[enemyDropChoice]);
+                    Engine.e.battleSystem.HandleDropAnim(this.gameObject, targetGOLoc, drops[enemyDropChoice]);
 
                     Engine.e.activeParty.activeParty[target].GetComponent<Character>().DropEffect(drops[enemyDropChoice]);
 
@@ -752,9 +767,9 @@ public class Enemy : MonoBehaviour
                     if (!failedItemUse)
                     {
 
-                        GameObject healthSprite = Instantiate(Engine.e.gameInventory[item.itemIndex].GetComponent<Item>().anim, transform.position, Quaternion.identity);
+                        //  GameObject healthSprite = Instantiate(Engine.e.gameInventory[item.itemIndex].GetComponent<Item>().anim, transform.position, Quaternion.identity);
                         Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, item.itemPower.ToString(), Color.green);
-                        Destroy(healthSprite, 1f);
+                        //Destroy(healthSprite, 1f);
 
                         currentHealth += item.itemPower;
 
@@ -785,9 +800,9 @@ public class Enemy : MonoBehaviour
                     {
 
 
-                        GameObject manaSprite = Instantiate(Engine.e.gameInventory[item.itemIndex].GetComponent<Item>().anim, transform.position, Quaternion.identity);
+                        //GameObject manaSprite = Instantiate(Engine.e.gameInventory[item.itemIndex].GetComponent<Item>().anim, transform.position, Quaternion.identity);
                         Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, item.itemPower.ToString(), Color.blue);
-                        Destroy(manaSprite, 1f);
+                        // Destroy(manaSprite, 1f);
 
 
                         currentMana += item.itemPower;
@@ -837,9 +852,9 @@ public class Enemy : MonoBehaviour
                     else
                     {
                         GetComponentInChildren<SpriteRenderer>().color = Color.white;
-                        GameObject antidote = Instantiate(Engine.e.gameInventory[item.itemIndex].GetComponent<Item>().anim, Engine.e.activeParty.transform.position, Quaternion.identity);
+                        // GameObject antidote = Instantiate(Engine.e.gameInventory[item.itemIndex].GetComponent<Item>().anim, Engine.e.activeParty.transform.position, Quaternion.identity);
                         Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Cured!", Color.green);
-                        Destroy(antidote, 1f);
+                        // Destroy(antidote, 1f);
                         isPoisoned = false;
                         inflicted = false;
                     }

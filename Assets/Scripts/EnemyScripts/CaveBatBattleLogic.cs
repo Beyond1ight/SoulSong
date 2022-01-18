@@ -38,7 +38,7 @@ public class CaveBatBattleLogic : MonoBehaviour
             Engine.e.battleSystem.lastDropChoice = GetComponent<Enemy>().drops[0];
             Engine.e.battleSystem.enemies[GetComponentInParent<EnemyGroup>().GetLowestHealthEnemy()].GetComponent<Enemy>().DropEffect(Engine.e.battleSystem.enemies[enemyPos].GetComponent<Enemy>().drops[0]);
 
-            Engine.e.battleSystem.InstantiateDropAnim(this.gameObject, GetComponent<Enemy>().drops[0]);
+            Engine.e.battleSystem.HandleDropAnim(this.gameObject, this.gameObject, GetComponent<Enemy>().drops[0]);
             GetComponent<Enemy>().currentMana -= GetComponent<Enemy>().drops[0].dropCost;
 
             Engine.e.battleSystem.enemyAttacking = false;

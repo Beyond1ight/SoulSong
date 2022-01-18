@@ -14,6 +14,23 @@ public class XelientBattleLogic : MonoBehaviour
 
     public void Logic(int target)
     {
+        GameObject targetGOLoc = null;
+
+        if (!Engine.e.battleSystem.attackingTeam)
+        {
+            if (target == 0)
+            {
+                targetGOLoc = Engine.e.activeParty.gameObject;
+            }
+            if (target == 1)
+            {
+                targetGOLoc = Engine.e.activePartyMember2;
+            }
+            if (target == 2)
+            {
+                targetGOLoc = Engine.e.activePartyMember3;
+            }
+        }
 
         if (Engine.e.battleSystem.enemies[0].currentHealth < Engine.e.battleSystem.enemies[0].maxHealth * (0.2f)
         && enemy.currentMana >= enemy.drops[0].dropCost)
@@ -24,7 +41,7 @@ public class XelientBattleLogic : MonoBehaviour
             Engine.e.battleSystem.lastDropChoice = enemy.drops[0];
             enemy.DropEffect(enemy.drops[0]);
 
-            Engine.e.battleSystem.InstantiateDropAnim(this.gameObject, enemy.drops[0]);
+            Engine.e.battleSystem.HandleDropAnim(this.gameObject, this.gameObject, enemy.drops[0]);
             enemy.currentMana -= enemy.drops[0].dropCost;
 
             Engine.e.battleSystem.enemyAttacking = false;
@@ -50,7 +67,7 @@ public class XelientBattleLogic : MonoBehaviour
                     Engine.e.battleSystem.enemyAttackDrop = true;
 
                     Engine.e.battleSystem.lastDropChoice = enemy.drops[enemyDropChoice];
-                    Engine.e.battleSystem.InstantiateDropAnim(this.gameObject, enemy.drops[enemyDropChoice]);
+                    Engine.e.battleSystem.HandleDropAnim(this.gameObject, targetGOLoc, enemy.drops[enemyDropChoice]);
 
                     Engine.e.activeParty.activeParty[target].GetComponent<Character>().DropEffect(enemy.drops[enemyDropChoice]);
 
@@ -75,7 +92,7 @@ public class XelientBattleLogic : MonoBehaviour
                     Engine.e.battleSystem.enemyAttackDrop = true;
 
                     Engine.e.battleSystem.lastDropChoice = enemy.drops[2];
-                    Engine.e.battleSystem.InstantiateDropAnim(this.gameObject, enemy.drops[2]);
+                    Engine.e.battleSystem.HandleDropAnim(this.gameObject, targetGOLoc, enemy.drops[2]);
 
                     Engine.e.activeParty.activeParty[target].GetComponent<Character>().DropEffect(enemy.drops[2]);
 

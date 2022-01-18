@@ -11,6 +11,7 @@ public class Engine : MonoBehaviour
 {
 
     // General Info
+    public GameObject fireDrop;
     public GameObject[] party;
     public ActiveParty activeParty;
     public Character[] playableCharacters;
@@ -107,6 +108,7 @@ public class Engine : MonoBehaviour
         e = this;
         SaveSystem.CheckFilesForDisplay();
 
+        WarmUpEngine();
     }
 
     // Establishes a New Game. Clears multiple variables to their default states for a fresh start.
@@ -1318,17 +1320,38 @@ public class Engine : MonoBehaviour
         bool failedItemUse = false;
         Item _itemToBeUsed = null;
 
+        GameObject spawnGOLoc = null;
+        GameObject targetGOLoc = null;
+
         if (battleSystem.currentInQueue == BattleState.CHAR1TURN)
         {
             _itemToBeUsed = battleSystem.char1ItemToBeUsed;
+            spawnGOLoc = activeParty.gameObject;
         }
         if (battleSystem.currentInQueue == BattleState.CHAR2TURN)
         {
             _itemToBeUsed = battleSystem.char2ItemToBeUsed;
+            spawnGOLoc = activePartyMember2;
+
         }
         if (battleSystem.currentInQueue == BattleState.CHAR3TURN)
         {
             _itemToBeUsed = battleSystem.char3ItemToBeUsed;
+            spawnGOLoc = activePartyMember3;
+
+        }
+
+        if (_target == 0)
+        {
+            targetGOLoc = activeParty.gameObject;
+        }
+        if (_target == 1)
+        {
+            targetGOLoc = activePartyMember2;
+        }
+        if (_target == 2)
+        {
+            targetGOLoc = activePartyMember3;
         }
 
         if (_itemToBeUsed == null || _itemToBeUsed.numberHeld == 0)
@@ -1351,24 +1374,9 @@ public class Engine : MonoBehaviour
                 {
                     if (!failedItemUse)
                     {
-                        if (_target == 0)
-                        {
-                            GameObject healthSprite = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                            Destroy(healthSprite, 1f);
-                        }
-                        if (_target == 1)
-                        {
-                            GameObject healthSprite = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
-                            Destroy(healthSprite, 1f);
 
-                        }
-                        if (_target == 2)
-                        {
-                            GameObject healthSprite = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
-                            Destroy(healthSprite, 1f);
-                        }
-
-
+                        battleSystem.HandleItemAnim(spawnGOLoc, targetGOLoc, _itemToBeUsed);
+                        battleSystem.SetDamagePopupTextOne(targetGOLoc.transform.position, _itemToBeUsed.itemPower.ToString(), Color.green);
                         party[_target].GetComponent<Character>().currentHealth += _itemToBeUsed.itemPower;
 
                         if (party[_target].GetComponent<Character>().currentHealth > party[_target].GetComponent<Character>().maxHealth)
@@ -1398,27 +1406,8 @@ public class Engine : MonoBehaviour
                 if (!failedItemUse)
                 {
 
-                    if (_target == 0)
-                    {
-                        GameObject manaSprite = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                        //GameObject dmgPopup = Instantiate(Engine.e.battleSystem.damagePopup, Engine.e.activeParty.transform.position, Quaternion.identity);
-                        // dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().text = _itemToBeUsed.itemPower.ToString();
-                        //dmgPopup.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(0, 54, 255, 255);
-                        Destroy(manaSprite, 1f);
-                    }
-                    if (_target == 1)
-                    {
-                        GameObject manaSprite = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
-
-                        Destroy(manaSprite, 1f);
-                    }
-                    if (_target == 2)
-                    {
-                        GameObject manaSprite = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
-
-                        Destroy(manaSprite, 1f);
-
-                    }
+                    battleSystem.HandleItemAnim(spawnGOLoc, targetGOLoc, _itemToBeUsed);
+                    battleSystem.SetDamagePopupTextOne(targetGOLoc.transform.position, _itemToBeUsed.itemPower.ToString(), Color.blue);
 
                     party[_target].GetComponent<Character>().currentMana += _itemToBeUsed.itemPower;
 
@@ -1476,25 +1465,25 @@ public class Engine : MonoBehaviour
 
                     if (_target == 0)
                     {
-                        GameObject antidote = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activeParty.transform.position, Quaternion.identity);
+                        //  GameObject antidote = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activeParty.transform.position, Quaternion.identity);
 
-                        Destroy(antidote, 1f);
+                        //   Destroy(antidote, 1f);
                         Engine.e.activeParty.GetComponent<SpriteRenderer>().color = Color.white;
 
                     }
                     if (_target == 1)
                     {
-                        GameObject antidote = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
+                        //  GameObject antidote = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
 
-                        Destroy(antidote, 1f);
+                        // Destroy(antidote, 1f);
                         Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().color = Color.white;
 
                     }
                     if (_target == 2)
                     {
-                        GameObject antidote = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
+                        // GameObject antidote = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
 
-                        Destroy(antidote, 1f);
+                        //  Destroy(antidote, 1f);
                         Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().color = Color.white;
 
                     }
@@ -2369,6 +2358,21 @@ public class Engine : MonoBehaviour
         }
     }
 
+    void WarmUpEngine()
+    {
+        for (int i = 0; i < battleSystem.GetComponent<BattleAnimations>().allAnimations.Length; i++)
+        {
+            if (battleSystem.GetComponent<BattleAnimations>().allAnimations[i] != null)
+            {
+                //battleSystem.GetComponent<BattleAnimations>().allAnimations[i].SetActive(true);
+                //battleSystem.GetComponent<BattleAnimations>().allAnimations[i].GetComponent<Animator>().enabled = true;
+                //battleSystem.GetComponent<BattleAnimations>().allAnimations[i].GetComponent<Animator>().enabled = false;
+                //battleSystem.GetComponent<BattleAnimations>().allAnimations[i].SetActive(false);
+
+                //battleSystem.GetComponent<BattleAnimations>().allAnimations[i].
+            }
+        }
+    }
     void FixedUpdate()
     {
 
