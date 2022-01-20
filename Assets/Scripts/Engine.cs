@@ -107,8 +107,6 @@ public class Engine : MonoBehaviour
         gameStart = false;
         e = this;
         SaveSystem.CheckFilesForDisplay();
-
-        WarmUpEngine();
     }
 
     // Establishes a New Game. Clears multiple variables to their default states for a fresh start.
@@ -1455,7 +1453,6 @@ public class Engine : MonoBehaviour
                 {
 
                     failedItemUse = true;
-                    //partyInventoryReference.OpenInventoryMenu();
 
                     break;
                 }
@@ -1463,30 +1460,8 @@ public class Engine : MonoBehaviour
                 if (!failedItemUse)
                 {
 
-                    if (_target == 0)
-                    {
-                        //  GameObject antidote = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activeParty.transform.position, Quaternion.identity);
-
-                        //   Destroy(antidote, 1f);
-                        Engine.e.activeParty.GetComponent<SpriteRenderer>().color = Color.white;
-
-                    }
-                    if (_target == 1)
-                    {
-                        //  GameObject antidote = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember2.transform.position, Quaternion.identity);
-
-                        // Destroy(antidote, 1f);
-                        Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().color = Color.white;
-
-                    }
-                    if (_target == 2)
-                    {
-                        // GameObject antidote = Instantiate(gameInventory[_itemToBeUsed.itemIndex].GetComponent<Item>().anim, Engine.e.activePartyMember3.transform.position, Quaternion.identity);
-
-                        //  Destroy(antidote, 1f);
-                        Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().color = Color.white;
-
-                    }
+                    battleSystem.HandleItemAnim(spawnGOLoc, targetGOLoc, _itemToBeUsed);
+                    battleSystem.SetDamagePopupTextOne(targetGOLoc.transform.position, "Cured!", Color.green);
 
                     party[_target].GetComponent<Character>().isPoisoned = false;
                     party[_target].GetComponent<Character>().inflicted = false;
@@ -2354,22 +2329,6 @@ public class Engine : MonoBehaviour
             if (currentScene != "WorldMap")
             {
                 currentScene = "WorldMap";
-            }
-        }
-    }
-
-    void WarmUpEngine()
-    {
-        for (int i = 0; i < battleSystem.GetComponent<BattleAnimations>().allAnimations.Length; i++)
-        {
-            if (battleSystem.GetComponent<BattleAnimations>().allAnimations[i] != null)
-            {
-                //battleSystem.GetComponent<BattleAnimations>().allAnimations[i].SetActive(true);
-                //battleSystem.GetComponent<BattleAnimations>().allAnimations[i].GetComponent<Animator>().enabled = true;
-                //battleSystem.GetComponent<BattleAnimations>().allAnimations[i].GetComponent<Animator>().enabled = false;
-                //battleSystem.GetComponent<BattleAnimations>().allAnimations[i].SetActive(false);
-
-                //battleSystem.GetComponent<BattleAnimations>().allAnimations[i].
             }
         }
     }

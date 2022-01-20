@@ -40,7 +40,6 @@ public class BattleSystem : MonoBehaviour
     public bool char1ConfusedReady, char2ConfusedReady, char3ConfusedReady;
     public int enemy1AttackTarget, enemy2AttackTarget, enemy3AttackTarget, enemy4AttackTarget;
     public bool enemy1Ready, enemy2Ready, enemy3Ready, enemy4Ready;
-    public bool checkNextInQueue;
     public int previousTargetReferenceChar, previousTargetReferenceEnemy; // For HUD and Drop Reference
     public bool char1Switching, char2Switching, char3Switching;
     public int char1SwitchToIndex, char2SwitchToIndex, char3SwitchToIndex;
@@ -88,13 +87,6 @@ public class BattleSystem : MonoBehaviour
 
     // Drops
     public GameObject[] dropsButtons;
-    public GameObject fireDropAnim;
-    public GameObject iceDropAnim;
-    public GameObject waterDropAnim;
-    public GameObject lightningDropAnim;
-    public GameObject holyDropAnim;
-    public GameObject shadowDropAnim, poisonAnim;
-    public GameObject sleepAnim, confuseAnim, siphonAnim;
 
     public GameObject[] switchButtons;
     public GameObject skillListReference;
@@ -103,6 +95,7 @@ public class BattleSystem : MonoBehaviour
 
     // Misc Info/References
     public string[] charIndexName;
+    public BattleAnimations battleAnimationsReference;
     int currentIndex;
     int nextIndex;
     public bool dodgedAttack = false;
@@ -139,7 +132,8 @@ public class BattleSystem : MonoBehaviour
     [SerializeField]
     float[] damageTextTimer;
     public float animationTimer = 0f;
-    public bool displayDamageText = false;
+    public bool displayDamageText, targetAll, targetAllTeam, targetAllEnemy = false;
+
 
     public IEnumerator SetupBattle()
     {
@@ -1001,7 +995,7 @@ public class BattleSystem : MonoBehaviour
                         mpRestore = true;
                         _characterAttacking.currentMana += (_skillChoice.skillPointReturn + (_skillChoice.skillPointReturn * skillModifier));
                         skillBoostTotal = (_skillChoice.skillPointReturn + (_skillChoice.skillPointReturn * skillModifier));
-                        Instantiate(siphonAnim, enemies[target].transform.position, Quaternion.identity);
+                        //Instantiate(siphonAnim, enemies[target].transform.position, Quaternion.identity);
 
                         if (_characterAttacking.currentMana > _characterAttacking.maxMana)
                         {
@@ -3646,7 +3640,8 @@ public class BattleSystem : MonoBehaviour
         DeactivateChar3MenuButtons();
 
         if (!char1SkillAttack && !char2SkillAttack && !char3SkillAttack && !char1SkillSelfSupport
-        && !char2SkillSelfSupport && !char3SkillSelfSupport && !charSkillSwitch)
+        && !char2SkillSelfSupport && !char3SkillSelfSupport && !charSkillSwitch && !targetAll
+        && !targetAllTeam && !targetAllEnemy)
         {
             for (int i = 0; i < allyTargetButtons.Length; i++)
             {
@@ -3678,9 +3673,6 @@ public class BattleSystem : MonoBehaviour
                 }
             }
 
-
-            GetComponent<BattleMenuControllerNav>().OpenAttackFirstEnemy();
-
             if (state == BattleState.CHAR1TURN)
             {
                 if (char1Attacking || char1PhysicalAttack)
@@ -3689,8 +3681,11 @@ public class BattleSystem : MonoBehaviour
                 }
                 else
                 {
+
+
                     EventSystem.current.SetSelectedGameObject(null);
                     EventSystem.current.SetSelectedGameObject(allyTargetButtons[0]);
+
                 }
             }
             if (state == BattleState.CHAR2TURN)
@@ -3701,10 +3696,11 @@ public class BattleSystem : MonoBehaviour
                 }
                 else
                 {
-                    EventSystem.current.SetSelectedGameObject(null);
-                    EventSystem.current.SetSelectedGameObject(allyTargetButtons[0]);
-                }
 
+                    EventSystem.current.SetSelectedGameObject(null);
+                    EventSystem.current.SetSelectedGameObject(allyTargetButtons[1]);
+
+                }
             }
             if (state == BattleState.CHAR3TURN)
             {
@@ -3714,8 +3710,10 @@ public class BattleSystem : MonoBehaviour
                 }
                 else
                 {
+
                     EventSystem.current.SetSelectedGameObject(null);
-                    EventSystem.current.SetSelectedGameObject(allyTargetButtons[0]);
+                    EventSystem.current.SetSelectedGameObject(allyTargetButtons[2]);
+
                 }
             }
         }
@@ -3745,18 +3743,45 @@ public class BattleSystem : MonoBehaviour
 
             if (char1SkillAttack || char2SkillAttack || char3SkillAttack)
             {
-                for (int i = 0; i < enemies.Length; i++)
+                if (targetAllEnemy)
                 {
-                    if (enemies[i] != null)
+                    targetAllEnemy = false;
+                    for (int i = 0; i < enemies.Length; i++)
                     {
-                        if (enemies[i].currentHealth > 0)
+                        if (enemies[i] != null)
                         {
-                            enemyTargetButtons[i].SetActive(true);
+                            if (enemies[i].currentHealth > 0)
+                            {
+                                enemyTargetButtons[i].SetActive(true);
+                                EventSystem.current.SetSelectedGameObject(null);
+                                EventSystem.current.SetSelectedGameObject(enemyTargetButtons[i]);
+                                break;
+                            }
                         }
                     }
+
+                    ActivateTargetSpriteEnemiesAll();
+                }
+                else
+                {
+                    for (int i = 0; i < enemies.Length; i++)
+                    {
+                        if (enemies[i] != null)
+                        {
+                            if (enemies[i].currentHealth > 0)
+                            {
+                                enemyTargetButtons[i].SetActive(true);
+                            }
+                        }
+                    }
+                    GetComponent<BattleMenuControllerNav>().OpenAttackFirstEnemy();
                 }
 
-                GetComponent<BattleMenuControllerNav>().OpenAttackFirstEnemy();
+            }
+
+            if (char1Supporting || char2Supporting || char3Supporting)
+            {
+
             }
 
             if (charSkillSwitchCheck)
@@ -3813,29 +3838,33 @@ public class BattleSystem : MonoBehaviour
 
     public void ActivateAllyTargetSprite(int index)
     {
-        if (index == 0)
+        if (!targetAllTeam)
         {
-            Vector3 position = new Vector3(Engine.e.activeParty.transform.position.x - 0.5f, Engine.e.activeParty.transform.position.y, Engine.e.activeParty.transform.position.z);
-            targetSprite[0].transform.position = position;
-        }
-        if (index == 1)
-        {
-            Vector3 position = new Vector3(Engine.e.activePartyMember2.transform.position.x - 0.5f, Engine.e.activePartyMember2.transform.position.y, Engine.e.activePartyMember2.transform.position.z);
-            targetSprite[1].transform.position = position;
-        }
-        if (index == 2)
-        {
-            Vector3 position = new Vector3(Engine.e.activePartyMember3.transform.position.x - 0.5f, Engine.e.activePartyMember3.transform.position.y, Engine.e.activePartyMember3.transform.position.z);
-            targetSprite[2].transform.position = position;
-        }
+            if (index == 0)
+            {
+                Vector3 position = new Vector3(Engine.e.activeParty.transform.position.x - 0.5f, Engine.e.activeParty.transform.position.y, Engine.e.activeParty.transform.position.z);
+                targetSprite[0].transform.position = position;
+            }
+            if (index == 1)
+            {
+                Vector3 position = new Vector3(Engine.e.activePartyMember2.transform.position.x - 0.5f, Engine.e.activePartyMember2.transform.position.y, Engine.e.activePartyMember2.transform.position.z);
+                targetSprite[1].transform.position = position;
+            }
+            if (index == 2)
+            {
+                Vector3 position = new Vector3(Engine.e.activePartyMember3.transform.position.x - 0.5f, Engine.e.activePartyMember3.transform.position.y, Engine.e.activePartyMember3.transform.position.z);
+                targetSprite[2].transform.position = position;
+            }
 
-        targetSprite[0].SetActive(true);
-        targetSprite[1].SetActive(true);
-        targetSprite[2].SetActive(true);
-
+            targetSprite[index].SetActive(true);
+        }
+        else
+        {
+            ActivateAllTargetSpriteTeam();
+        }
     }
 
-    public void ActivateAllyTargetSpriteTeam()
+    public void ActivateAllTargetSpriteTeam()
     {
 
         Vector3 position1 = new Vector3(Engine.e.activeParty.transform.position.x - 0.5f, Engine.e.activeParty.transform.position.y, Engine.e.activeParty.transform.position.z);
@@ -3863,10 +3892,16 @@ public class BattleSystem : MonoBehaviour
 
     public void ActivateEnemyTargetSprite(int index)
     {
-        Vector3 position = new Vector3(enemies[index].transform.position.x - 0.5f, enemies[index].transform.position.y, enemies[index].transform.position.z);
-        targetSprite[3].transform.position = position;
-        targetSprite[3].SetActive(true);
-
+        if (!targetAllEnemy)
+        {
+            Vector3 position = new Vector3(enemies[index].transform.position.x - 0.5f, enemies[index].transform.position.y, enemies[index].transform.position.z);
+            targetSprite[3].transform.position = position;
+            targetSprite[3].SetActive(true);
+        }
+        else
+        {
+            ActivateTargetSpriteEnemiesAll();
+        }
     }
     public void ActivateTargetSpriteEnemiesAll()
     {
@@ -5183,7 +5218,11 @@ public class BattleSystem : MonoBehaviour
 
         if (!activeParty.activeParty[0].GetComponent<Character>().inflicted)
         {
-            if (activeParty.activeParty[0].GetComponent<SpriteRenderer>().color != Color.white)
+            if (activeParty.activeParty[0].GetComponent<SpriteRenderer>().color != Color.white && !animExists && currentAnimation != GetComponent<BattleAnimations>().antidoteAnim)
+            {
+                activeParty.activeParty[0].GetComponent<SpriteRenderer>().color = Color.white;
+            }
+            else
             {
                 activeParty.activeParty[0].GetComponent<SpriteRenderer>().color = Color.white;
             }
@@ -5220,7 +5259,7 @@ public class BattleSystem : MonoBehaviour
 
             if (!activeParty.activeParty[1].GetComponent<Character>().inflicted)
             {
-                if (activeParty.activeParty[1].GetComponent<SpriteRenderer>().color != Color.white)
+                if (activeParty.activeParty[1].GetComponent<SpriteRenderer>().color != Color.white && !animExists)
                 {
                     activeParty.activeParty[1].GetComponent<SpriteRenderer>().color = Color.white;
                 }
@@ -5259,7 +5298,7 @@ public class BattleSystem : MonoBehaviour
 
             if (!activeParty.activeParty[2].GetComponent<Character>().inflicted)
             {
-                if (activeParty.activeParty[2].GetComponent<SpriteRenderer>().color != Color.white)
+                if (activeParty.activeParty[2].GetComponent<SpriteRenderer>().color != Color.white && !animExists)
                 {
                     activeParty.activeParty[2].GetComponent<SpriteRenderer>().color = Color.white;
                 }
@@ -5306,7 +5345,7 @@ public class BattleSystem : MonoBehaviour
 
         if (!enemies[0].GetComponent<Enemy>().inflicted)
         {
-            if (enemies[0].GetComponentInChildren<SpriteRenderer>().color != Color.white)
+            if (enemies[0].GetComponentInChildren<SpriteRenderer>().color != Color.white && !animExists)
             {
                 enemies[0].GetComponentInChildren<SpriteRenderer>().color = Color.white;
             }
@@ -5343,7 +5382,7 @@ public class BattleSystem : MonoBehaviour
 
             if (!enemies[1].GetComponent<Enemy>().inflicted)
             {
-                if (enemies[1].GetComponentInChildren<SpriteRenderer>().color != Color.white)
+                if (enemies[1].GetComponentInChildren<SpriteRenderer>().color != Color.white && !animExists)
                 {
                     enemies[1].GetComponentInChildren<SpriteRenderer>().color = Color.white;
                 }
@@ -5381,7 +5420,7 @@ public class BattleSystem : MonoBehaviour
 
             if (!enemies[2].GetComponent<Enemy>().inflicted)
             {
-                if (enemies[2].GetComponentInChildren<SpriteRenderer>().color != Color.white)
+                if (enemies[2].GetComponentInChildren<SpriteRenderer>().color != Color.white && !animExists)
                 {
                     enemies[2].GetComponentInChildren<SpriteRenderer>().color = Color.white;
                 }
@@ -5420,7 +5459,7 @@ public class BattleSystem : MonoBehaviour
 
             if (!enemies[3].GetComponent<Enemy>().inflicted)
             {
-                if (enemies[3].GetComponentInChildren<SpriteRenderer>().color != Color.white)
+                if (enemies[3].GetComponentInChildren<SpriteRenderer>().color != Color.white && !animExists)
                 {
                     enemies[3].GetComponentInChildren<SpriteRenderer>().color = Color.white;
                 }
@@ -5630,12 +5669,12 @@ public class BattleSystem : MonoBehaviour
 
     public void HandleItemAnim(GameObject _spawnLoc, GameObject _targetLoc, Item _item)
     {
-        GetComponent<BattleAnimations>().StartItemAnimation(_spawnLoc, _targetLoc, _item);
+        battleAnimationsReference.StartItemAnimation(_spawnLoc, _targetLoc, _item);
     }
     public void HandleDropAnim(GameObject _spawnLoc, GameObject _targetLoc, Drops _drop)
 
     {
-        GetComponent<BattleAnimations>().StartDropAnimation(_spawnLoc, _targetLoc, _drop);
+        battleAnimationsReference.StartDropAnimation(_spawnLoc, _targetLoc, _drop);
     }
 
     void PressDown()
@@ -5990,19 +6029,30 @@ public class BattleSystem : MonoBehaviour
     public void SetDamagePopupTextAllEnemies(string _textDisplayed, Color _color)
     {
         damagePopup[3].transform.position = enemies[0].transform.position;
-        damagePopup[4].transform.position = enemies[1].transform.position;
-        damagePopup[5].transform.position = enemies[2].transform.position;
-        damagePopup[6].transform.position = enemies[3].transform.position;
-
         damagePopup[3].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[4].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[5].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[6].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-
         damagePopup[3].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[4].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[5].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[6].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
+
+        if (enemies[1] != null)
+        {
+            damagePopup[4].transform.position = enemies[1].transform.position;
+            damagePopup[4].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
+            damagePopup[4].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
+        }
+
+        if (enemies[2] != null)
+        {
+            damagePopup[5].transform.position = enemies[2].transform.position;
+            damagePopup[5].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
+            damagePopup[5].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
+        }
+
+        if (enemies[3] != null)
+        {
+            damagePopup[6].transform.position = enemies[3].transform.position;
+            damagePopup[6].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
+            damagePopup[6].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
+        }
+
 
         if (enemies[0].currentHealth > 0)
         {

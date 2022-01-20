@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class BattleAnimations : MonoBehaviour
 {
-    public GameObject[] allAnimations;
+
+    //public GameObject[] allAnimations;
 
     // Items
-    public GameObject healthPotionAnim, manaPotionAnim;
+    public GameObject healthPotionAnim, manaPotionAnim, antidoteAnim;
 
     // Drops
     public GameObject fireBlastAnim;
@@ -22,13 +23,13 @@ public class BattleAnimations : MonoBehaviour
                 fireBlastAnim.transform.position = _targetLoc.transform.position;
                 fireBlastAnim.GetComponent<Animator>().enabled = true;
                 fireBlastAnim.SetActive(true);
-                GetComponent<BattleSystem>().animState = AnimState.DROPANIM;
-                GetComponent<BattleSystem>().currentAnimation = fireBlastAnim.GetComponent<Animator>();
-                GetComponent<BattleSystem>().animExists = true;
+                Engine.e.battleSystem.currentAnimation = fireBlastAnim.GetComponent<Animator>();
                 break;
         }
-        GetComponent<BattleSystem>().animationTimer = drop.animationClip.length;
-        GetComponent<BattleSystem>().currentAnimation.GetComponent<Animator>().Play("Start");
+        Engine.e.battleSystem.animState = AnimState.DROPANIM;
+        Engine.e.battleSystem.animExists = true;
+        Engine.e.battleSystem.animationTimer = drop.animationClip.length;
+        Engine.e.battleSystem.currentAnimation.GetComponent<Animator>().Play("Start");
     }
 
     public void StartItemAnimation(GameObject _spawnLoc, GameObject _targetLoc, Item item)
@@ -39,22 +40,24 @@ public class BattleAnimations : MonoBehaviour
                 healthPotionAnim.transform.position = _targetLoc.transform.position;
                 healthPotionAnim.GetComponent<Animator>().enabled = true;
                 healthPotionAnim.SetActive(true);
-                GetComponent<BattleSystem>().animState = AnimState.ITEMANIM;
-                GetComponent<BattleSystem>().currentAnimation = healthPotionAnim.GetComponent<Animator>();
-                GetComponent<BattleSystem>().animExists = true;
-
+                Engine.e.battleSystem.currentAnimation = healthPotionAnim.GetComponent<Animator>();
                 break;
             case "Mana Potion":
                 manaPotionAnim.transform.position = _targetLoc.transform.position;
                 manaPotionAnim.GetComponent<Animator>().enabled = true;
                 manaPotionAnim.SetActive(true);
-                GetComponent<BattleSystem>().animState = AnimState.ITEMANIM;
-                GetComponent<BattleSystem>().currentAnimation = manaPotionAnim.GetComponent<Animator>();
-                GetComponent<BattleSystem>().animExists = true;
-
+                Engine.e.battleSystem.currentAnimation = manaPotionAnim.GetComponent<Animator>();
+                break;
+            case "Antidote":
+                antidoteAnim.transform.position = _targetLoc.transform.position;
+                antidoteAnim.GetComponent<Animator>().enabled = true;
+                antidoteAnim.SetActive(true);
+                Engine.e.battleSystem.currentAnimation = antidoteAnim.GetComponent<Animator>();
                 break;
         }
-        GetComponent<BattleSystem>().animationTimer = item.animationClip.length;
-        GetComponent<BattleSystem>().currentAnimation.GetComponent<Animator>().Play("Start");
+        Engine.e.battleSystem.animState = AnimState.ITEMANIM;
+        Engine.e.battleSystem.animExists = true;
+        Engine.e.battleSystem.animationTimer = item.animationClip.length;
+        Engine.e.battleSystem.currentAnimation.GetComponent<Animator>().Play("Start");
     }
 }

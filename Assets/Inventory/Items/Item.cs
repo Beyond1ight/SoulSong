@@ -67,22 +67,9 @@ public class Item : MonoBehaviour
 
             }
 
-            Engine.e.battleSystem.DeactivateChar1MenuButtons();
-
-            if (Engine.e.activeParty.activeParty[1] != null)
-            {
-                Engine.e.battleSystem.DeactivateChar2MenuButtons();
-            }
-            if (Engine.e.activeParty.activeParty[2] != null)
-            {
-                Engine.e.battleSystem.DeactivateChar3MenuButtons();
-            }
-
             Engine.e.battleSystem.battleItemMenu.SetActive(false);
-            Engine.e.battleSystem.ActivateTargetButtons();
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(Engine.e.battleSystem.allyTargetButtons[0]);
             Engine.e.partyInventoryReference.battleScreenInventorySet = false;
+            Engine.e.battleSystem.ActivateTargetButtons();
 
         }
     }

@@ -12,11 +12,11 @@ public class Drops : ScriptableObject
     public float dropPower;
     public float dotDmg;
     public float experiencePoints;
-    public bool dps;
-    public bool support;
+    public bool dps, support, targetAllTeam, targetAllEnemy;
     public int dropValue;
     public int dropIndex;
     public bool isKnown = false;
     public AnimationClip animationClip;
+
 
 }

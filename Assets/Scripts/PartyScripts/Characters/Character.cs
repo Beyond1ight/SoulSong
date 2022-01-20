@@ -110,10 +110,6 @@ public class Character : MonoBehaviour
                     Engine.e.battleSystem.char1SkillPhysicalAttack = true;
                     Engine.e.battleSystem.char1SkillAttack = true;
                     Engine.e.battleSystem.char1Attacking = true;
-                    if (skillChoice.skillIndex == 1)
-                    {
-                        Engine.e.battleSystem.ActivateTargetSpriteEnemiesAll();
-                    }
                 }
                 if (skillChoice.rangedDps)
                 {
@@ -136,6 +132,14 @@ public class Character : MonoBehaviour
                         Engine.e.battleSystem.charSkillSwitchCheck = true;
                         Engine.e.battleSystem.ActivateAvailableCharSwitchButtons();
                     }
+                }
+                if (skillChoice.targetAllEnemy)
+                {
+                    Engine.e.battleSystem.targetAllEnemy = true;
+                }
+                if (skillChoice.targetAllTeam)
+                {
+                    Engine.e.battleSystem.targetAllTeam = true;
                 }
             }
 
