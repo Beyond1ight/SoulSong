@@ -290,7 +290,7 @@ MonoBehaviour:
   itemType: Item
   itemValue: 50
   resaleValue: 25
-  numberHeld: 3
+  numberHeld: 0
   itemPower: 50
   stackable: 1
   itemIndex: 0
@@ -302,6 +302,7 @@ MonoBehaviour:
   weapon: 0
   chestArmor: 0
   useableOutOfBattle: 1
+  targetAll: 1
 --- !u!114 &7707865015592688569
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -11,7 +11,7 @@ public class Skills : ScriptableObject
     public string skillDescription;
     public float skillPointReturn = 0;
     public int abilityPointCost;
-    public bool physicalDps, rangedDps, selfSupport, targetSupport, targetAllTeam, targetAllEnemy;
+    public bool physicalDps, rangedDps, selfSupport, targetSupport, targetAll;
     public bool instantCast;
     public int skillIndex;
     public bool isKnown;

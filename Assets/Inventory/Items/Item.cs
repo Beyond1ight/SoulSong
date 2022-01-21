@@ -23,7 +23,7 @@ public class Item : MonoBehaviour
     public float skillCostReduction;
     public AnimationClip animationClip;
 
-    public bool consumable, isDrop, weapon, chestArmor, useableOutOfBattle;
+    public bool consumable, isDrop, weapon, chestArmor, useableOutOfBattle, targetAll;
 
     public void UseItemCheck()
     {
@@ -57,14 +57,17 @@ public class Item : MonoBehaviour
                 Engine.e.battleSystem.char2ItemToBeUsed = this;
                 Engine.e.battleSystem.char2UsingItem = true;
                 Engine.e.battleSystem.char2Supporting = true;
-
             }
             if (Engine.e.battleSystem.state == BattleState.CHAR3TURN)
             {
                 Engine.e.battleSystem.char3ItemToBeUsed = this;
                 Engine.e.battleSystem.char3UsingItem = true;
                 Engine.e.battleSystem.char3Supporting = true;
+            }
 
+            if (targetAll)
+            {
+                Engine.e.battleSystem.targetAll = true;
             }
 
             Engine.e.battleSystem.battleItemMenu.SetActive(false);
@@ -72,6 +75,7 @@ public class Item : MonoBehaviour
             Engine.e.battleSystem.ActivateTargetButtons();
 
         }
+
     }
 
     public void OnButtonHeal(Item item)

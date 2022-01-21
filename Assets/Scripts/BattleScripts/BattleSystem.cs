@@ -122,7 +122,7 @@ public class BattleSystem : MonoBehaviour
     bool pressUp, pressDown;
     public int inventoryPointerIndex = 0, vertMove = 0;
     public TextMeshProUGUI battleHelpReference;
-    public Animator currentAnimation;
+    public GameObject[] currentAnimation;
     bool partyTurn = false;
     [SerializeField]
     bool dmgText1Active, dmgText2Active, dmgText3Active, dmgText4Active, dmgText5Active, dmgText6Active, dmgText7Active, settingTarget;
@@ -132,7 +132,7 @@ public class BattleSystem : MonoBehaviour
     [SerializeField]
     float[] damageTextTimer;
     public float animationTimer = 0f;
-    public bool displayDamageText, targetAll, targetAllTeam, targetAllEnemy = false;
+    public bool displayDamageText, targetAll = false; // "targetAll" refers to all (sprites) on one side for targeting, i.e. all enemies or all active party members
 
 
     public IEnumerator SetupBattle()
@@ -166,8 +166,6 @@ public class BattleSystem : MonoBehaviour
 
         lastDropChoice = null;
         lastSkillChoice = null;
-
-        currentAnimation = null;
 
         for (int i = 0; i < Engine.e.party.Length; i++)
         {
@@ -834,6 +832,7 @@ public class BattleSystem : MonoBehaviour
         GameObject characterAttacking = null;
         GameObject targetGOLoc = null;
         Character _characterAttacking = null;
+        bool _targetAll = false;
 
         if (currentInQueue == BattleState.CHAR1TURN)
         {
@@ -848,7 +847,6 @@ public class BattleSystem : MonoBehaviour
             characterAttacking = Engine.e.activePartyMember2;
             attackingTeam = char2TargetingTeam;
             _characterAttacking = activeParty.activeParty[1].GetComponent<Character>();
-
         }
         if (currentInQueue == BattleState.CHAR3TURN)
         {
@@ -856,7 +854,6 @@ public class BattleSystem : MonoBehaviour
             characterAttacking = Engine.e.activePartyMember3;
             attackingTeam = char3TargetingTeam;
             _characterAttacking = activeParty.activeParty[2].GetComponent<Character>();
-
         }
 
         if (!attackingTeam)
@@ -1056,10 +1053,23 @@ public class BattleSystem : MonoBehaviour
 
                 HandleDropAnim(characterAttacking, targetGOLoc, dropChoice);
 
-                enemies[_target].GetComponent<Enemy>().DropEffect(dropChoice);
+                if (dropChoice.targetAll)
+                {
+                    for (int i = 0; i < enemies.Length; i++)
+                    {
+                        if (enemies[i] != null && enemies[i].currentHealth > 0)
+                        {
+                            enemies[i].GetComponent<Enemy>().DropEffect(dropChoice);
+                        }
+                    }
+                }
+                else
+                {
+                    enemies[_target].GetComponent<Enemy>().DropEffect(dropChoice);
+                }
 
                 activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana -= Mathf.Round(dropChoice.dropCost
-                - (dropChoice.dropCost * activeParty.activeParty[index].GetComponent<Character>().dropCostReduction / 100) + 0.45f);
+                    - (dropChoice.dropCost * activeParty.activeParty[index].GetComponent<Character>().dropCostReduction / 100) + 0.45f);
 
                 dropAttack = false;
 
@@ -1072,7 +1082,7 @@ public class BattleSystem : MonoBehaviour
                 }
             }
         }
-        else
+        else // Attacking Team
         {
             if (_target == 0)
             {
@@ -1133,7 +1143,22 @@ public class BattleSystem : MonoBehaviour
                 charAttackDrop = true;
 
                 HandleDropAnim(characterAttacking, targetGOLoc, dropChoice);
-                activeParty.activeParty[_target].GetComponent<Character>().DropEffect(dropChoice);
+
+                if (dropChoice.targetAll)
+                {
+                    for (int i = 0; i < activeParty.activeParty.Length; i++)
+                    {
+                        if (activeParty.activeParty[i] != null && activeParty.activeParty[i].GetComponent<Character>().currentHealth > 0)
+                        {
+                            activeParty.activeParty[i].GetComponent<Character>().DropEffect(dropChoice);
+                        }
+                    }
+                }
+                else
+                {
+                    activeParty.activeParty[_target].GetComponent<Character>().DropEffect(dropChoice);
+                }
+
                 _characterAttacking.currentMana -= Mathf.Round(dropChoice.dropCost
                 - (dropChoice.dropCost * _characterAttacking.dropCostReduction / 100) + 0.45f);
                 //hud.displayMana[index].text = activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana.ToString();
@@ -1488,8 +1513,14 @@ public class BattleSystem : MonoBehaviour
             {
                 charAttackDrop = false;
                 animExists = false;
-                currentAnimation.gameObject.SetActive(false);
-                currentAnimation.GetComponent<Animator>().enabled = true;
+                for (int i = 0; i < currentAnimation.Length; i++)
+                {
+                    if (currentAnimation[i].GetComponent<Animator>().runtimeAnimatorController != null)
+                    {
+                        currentAnimation[i].gameObject.SetActive(false);
+                        currentAnimation[i].GetComponent<Animator>().runtimeAnimatorController = null;
+                    }
+                }
                 animState = AnimState.NONE;
 
                 displayDamageText = true;
@@ -1688,7 +1719,6 @@ public class BattleSystem : MonoBehaviour
 
         if (targetingTeam) // Most of the time this should be the case
         {
-
             if (_target == 0)
             {
                 _targetGOLoc = Engine.e.activeParty.gameObject;
@@ -1930,42 +1960,83 @@ public class BattleSystem : MonoBehaviour
 
             _targetGOLoc = enemies[_target].gameObject;
 
-            Drops _dropChoice = null;
-
-            dropSupport = false;
-
-            if (index == 0)
+            if (usingItem)
             {
-                _dropChoice = char1DropChoice;
+                usingItem = false;
+
+                Item _itemToBeUsed = null;
+
+                if (index == 0)
+                {
+                    _itemToBeUsed = char1ItemToBeUsed;
+                }
+                if (index == 1)
+                {
+                    _itemToBeUsed = char2ItemToBeUsed;
+                }
+                if (index == 2)
+                {
+                    _itemToBeUsed = char3ItemToBeUsed;
+                }
+
+                if (!_itemToBeUsed.targetAll)
+                {
+                    enemies[_target].UseItem(_itemToBeUsed);
+                }
+                else
+                {
+                    for (int i = 0; i < enemies.Length; i++)
+                    {
+                        if (enemies[i] != null && enemies[i].currentHealth > 0)
+                        {
+                            enemies[i].UseItem(_itemToBeUsed);
+
+                        }
+                    }
+
+                    Engine.e.partyInventoryReference.SubtractItemFromInventory(_itemToBeUsed);
+                }
             }
-            if (index == 1)
+
+            if (dropSupport)
             {
-                _dropChoice = char2DropChoice;
+                Drops _dropChoice = null;
 
-            }
-            if (index == 2)
-            {
-                _dropChoice = char3DropChoice;
+                dropSupport = false;
 
-            }
+                if (index == 0)
+                {
+                    _dropChoice = char1DropChoice;
+                }
+                if (index == 1)
+                {
+                    _dropChoice = char2DropChoice;
 
-            HandleDropAnim(_characterLoc, _targetGOLoc, _dropChoice);
+                }
+                if (index == 2)
+                {
+                    _dropChoice = char3DropChoice;
 
+                }
 
-            enemies[_target].DropEffect(_dropChoice);
-
-            activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana -= Mathf.Round(_dropChoice.dropCost
-            - (_dropChoice.dropCost * activeParty.activeParty[index].GetComponent<Character>().dropCostReduction / 100) + 0.45f);
-            dropAttack = false;
-
-            if (enemies[_target].gameObject.GetComponent<Enemy>().currentHealth <= 0)
-            {
-                enemies[_target].gameObject.GetComponent<Enemy>().currentHealth = 0;
-
-                isDead = EnemyGroup.enemyGroup.CheckEndBattle();
-                yield return new WaitForSeconds(0.1f);
+                HandleDropAnim(_characterLoc, _targetGOLoc, _dropChoice);
 
 
+                enemies[_target].DropEffect(_dropChoice);
+
+                activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana -= Mathf.Round(_dropChoice.dropCost
+                - (_dropChoice.dropCost * activeParty.activeParty[index].GetComponent<Character>().dropCostReduction / 100) + 0.45f);
+                dropAttack = false;
+
+                if (enemies[_target].gameObject.GetComponent<Enemy>().currentHealth <= 0)
+                {
+                    enemies[_target].gameObject.GetComponent<Enemy>().currentHealth = 0;
+
+                    isDead = EnemyGroup.enemyGroup.CheckEndBattle();
+                    yield return new WaitForSeconds(0.1f);
+
+
+                }
             }
         }
 
@@ -3639,28 +3710,21 @@ public class BattleSystem : MonoBehaviour
         DeactivateChar2MenuButtons();
         DeactivateChar3MenuButtons();
 
-        if (!char1SkillAttack && !char2SkillAttack && !char3SkillAttack && !char1SkillSelfSupport
-        && !char2SkillSelfSupport && !char3SkillSelfSupport && !charSkillSwitch && !targetAll
-        && !targetAllTeam && !targetAllEnemy)
+        if (char1PhysicalAttack || char2PhysicalAttack || char3PhysicalAttack
+                   || char1DropAttack || char2DropAttack || char3DropAttack)
         {
             for (int i = 0; i < allyTargetButtons.Length; i++)
             {
                 if (activeParty.activeParty[i] != null)
                 {
-                    if (char1PhysicalAttack || char2PhysicalAttack || char3PhysicalAttack
-                    || char1DropAttack || char2DropAttack || char3DropAttack)
-                    {
-                        if (activeParty.activeParty[i].GetComponent<Character>().currentHealth > 0)
-                        {
-                            allyTargetButtons[i].SetActive(true);
-                        }
-                    }
-                    else
+
+                    if (activeParty.activeParty[i].GetComponent<Character>().currentHealth > 0)
                     {
                         allyTargetButtons[i].SetActive(true);
                     }
                 }
             }
+
 
             for (int i = 0; i < enemies.Length; i++)
             {
@@ -3673,53 +3737,70 @@ public class BattleSystem : MonoBehaviour
                 }
             }
 
-            if (state == BattleState.CHAR1TURN)
-            {
-                if (char1Attacking || char1PhysicalAttack)
-                {
-                    GetComponent<BattleMenuControllerNav>().OpenAttackFirstEnemy();
-                }
-                else
-                {
+            GetComponent<BattleMenuControllerNav>().OpenAttackFirstEnemy();
 
-
-                    EventSystem.current.SetSelectedGameObject(null);
-                    EventSystem.current.SetSelectedGameObject(allyTargetButtons[0]);
-
-                }
-            }
-            if (state == BattleState.CHAR2TURN)
-            {
-                if (char2Attacking || char2PhysicalAttack)
-                {
-                    GetComponent<BattleMenuControllerNav>().OpenAttackFirstEnemy();
-                }
-                else
-                {
-
-                    EventSystem.current.SetSelectedGameObject(null);
-                    EventSystem.current.SetSelectedGameObject(allyTargetButtons[1]);
-
-                }
-            }
-            if (state == BattleState.CHAR3TURN)
-            {
-                if (char3Attacking || char3PhysicalAttack)
-                {
-                    GetComponent<BattleMenuControllerNav>().OpenAttackFirstEnemy();
-                }
-                else
-                {
-
-                    EventSystem.current.SetSelectedGameObject(null);
-                    EventSystem.current.SetSelectedGameObject(allyTargetButtons[2]);
-
-                }
-            }
         }
-        else
+
+        if (char1Supporting || char2Supporting || char3Supporting)
         {
-            if (char1SkillSelfSupport || char2SkillSelfSupport || char3SkillSelfSupport)
+            if (!char1SkillSelfSupport && !char2SkillSelfSupport && !char3SkillSelfSupport)
+            {
+                if (!targetAll)
+                {
+                    for (int i = 0; i < allyTargetButtons.Length; i++)
+                    {
+                        if (activeParty.activeParty[i] != null)
+                        {
+                            allyTargetButtons[i].SetActive(true);
+                        }
+                    }
+
+                    for (int i = 0; i < enemies.Length; i++)
+                    {
+                        if (enemies[i] != null)
+                        {
+                            if (enemies[i].currentHealth > 0)
+                            {
+                                enemyTargetButtons[i].SetActive(true);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (state == BattleState.CHAR1TURN)
+                    {
+                        allyTargetButtons[0].SetActive(true);
+                        EventSystem.current.SetSelectedGameObject(null);
+                        EventSystem.current.SetSelectedGameObject(allyTargetButtons[0]);
+                    }
+                    if (state == BattleState.CHAR2TURN)
+                    {
+                        allyTargetButtons[1].SetActive(true);
+                        EventSystem.current.SetSelectedGameObject(null);
+                        EventSystem.current.SetSelectedGameObject(allyTargetButtons[1]);
+                    }
+                    if (state == BattleState.CHAR3TURN)
+                    {
+                        allyTargetButtons[2].SetActive(true);
+                        EventSystem.current.SetSelectedGameObject(null);
+                        EventSystem.current.SetSelectedGameObject(allyTargetButtons[2]);
+                    }
+
+                    for (int i = 0; i < enemies.Length; i++)
+                    {
+                        if (enemies[i] != null)
+                        {
+                            if (enemies[i].currentHealth > 0)
+                            {
+                                enemyTargetButtons[i].SetActive(true);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            else
             {
                 if (state == BattleState.CHAR1TURN)
                 {
@@ -3740,105 +3821,96 @@ public class BattleSystem : MonoBehaviour
                     EventSystem.current.SetSelectedGameObject(allyTargetButtons[2]);
                 }
             }
+        }
 
-            if (char1SkillAttack || char2SkillAttack || char3SkillAttack)
+        if (char1SkillAttack || char2SkillAttack || char3SkillAttack)
+        {
+            if (!targetAll)
             {
-                if (targetAllEnemy)
+                for (int i = 0; i < enemies.Length; i++)
                 {
-                    targetAllEnemy = false;
-                    for (int i = 0; i < enemies.Length; i++)
+                    if (enemies[i] != null)
                     {
-                        if (enemies[i] != null)
+                        if (enemies[i].currentHealth > 0)
                         {
-                            if (enemies[i].currentHealth > 0)
-                            {
-                                enemyTargetButtons[i].SetActive(true);
-                                EventSystem.current.SetSelectedGameObject(null);
-                                EventSystem.current.SetSelectedGameObject(enemyTargetButtons[i]);
-                                break;
-                            }
+                            enemyTargetButtons[i].SetActive(true);
                         }
                     }
-
-                    ActivateTargetSpriteEnemiesAll();
                 }
-                else
+                GetComponent<BattleMenuControllerNav>().OpenAttackFirstEnemy();
+            }
+            else
+            {
+                for (int i = 0; i < enemies.Length; i++)
                 {
-                    for (int i = 0; i < enemies.Length; i++)
+                    if (enemies[i] != null)
                     {
-                        if (enemies[i] != null)
+                        if (enemies[i].currentHealth > 0)
                         {
-                            if (enemies[i].currentHealth > 0)
-                            {
-                                enemyTargetButtons[i].SetActive(true);
-                            }
+                            enemyTargetButtons[i].SetActive(true);
+                            EventSystem.current.SetSelectedGameObject(null);
+                            EventSystem.current.SetSelectedGameObject(enemyTargetButtons[i]);
+                            break;
                         }
                     }
-                    GetComponent<BattleMenuControllerNav>().OpenAttackFirstEnemy();
                 }
-
             }
+        }
 
-            if (char1Supporting || char2Supporting || char3Supporting)
+        if (charSkillSwitchCheck)
+        {
+            charSkillSwitchCheck = false;
+            for (int i = 0; i < allyTargetButtons.Length; i++)
             {
+                if (activeParty.activeParty[i].GetComponent<Character>().currentHealth > 0 &&
+                !activeParty.activeParty[i].GetComponent<Character>().isAsleep
+                && !activeParty.activeParty[i].GetComponent<Character>().isConfused)
 
-            }
-
-            if (charSkillSwitchCheck)
-            {
-                for (int i = 0; i < allyTargetButtons.Length; i++)
                 {
-                    if (activeParty.activeParty[i].GetComponent<Character>().currentHealth > 0 &&
-                    !activeParty.activeParty[i].GetComponent<Character>().isAsleep
-                    && !activeParty.activeParty[i].GetComponent<Character>().isConfused)
-
-                    {
-                        allyTargetButtons[i].SetActive(true);
-                    }
-
-                    if (state == BattleState.CHAR1TURN)
-                    {
-                        allyTargetButtons[0].SetActive(false);
-                    }
-                    if (state == BattleState.CHAR2TURN)
-                    {
-                        allyTargetButtons[1].SetActive(false);
-                    }
-                    if (state == BattleState.CHAR3TURN)
-                    {
-                        allyTargetButtons[2].SetActive(false);
-                    }
+                    allyTargetButtons[i].SetActive(true);
                 }
 
-                EventSystem.current.SetSelectedGameObject(null);
-                EventSystem.current.SetSelectedGameObject(switchButtons[0]);
-
+                if (state == BattleState.CHAR1TURN)
+                {
+                    allyTargetButtons[0].SetActive(false);
+                }
+                if (state == BattleState.CHAR2TURN)
+                {
+                    allyTargetButtons[1].SetActive(false);
+                }
+                if (state == BattleState.CHAR3TURN)
+                {
+                    allyTargetButtons[2].SetActive(false);
+                }
             }
 
-            DeactivateDropsUI();
-            DeactivateSkillsUI();
-            DeactivateChar1MenuButtons();
-            DeactivateChar2MenuButtons();
-            DeactivateChar3MenuButtons();
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(switchButtons[0]);
+        }
 
-            if (state == BattleState.CHAR1TURN)
-            {
-                returnToPanelButton[0].SetActive(true);
-            }
-            if (state == BattleState.CHAR2TURN)
-            {
-                returnToPanelButton[1].SetActive(true);
-            }
-            if (state == BattleState.CHAR3TURN)
-            {
-                returnToPanelButton[2].SetActive(true);
-            }
+        DeactivateDropsUI();
+        DeactivateSkillsUI();
+        DeactivateChar1MenuButtons();
+        DeactivateChar2MenuButtons();
+        DeactivateChar3MenuButtons();
+
+        if (state == BattleState.CHAR1TURN)
+        {
+            returnToPanelButton[0].SetActive(true);
+        }
+        if (state == BattleState.CHAR2TURN)
+        {
+            returnToPanelButton[1].SetActive(true);
+        }
+        if (state == BattleState.CHAR3TURN)
+        {
+            returnToPanelButton[2].SetActive(true);
         }
     }
 
     public void ActivateAllyTargetSprite(int index)
     {
-        if (!targetAllTeam)
+        if (!targetAll)
         {
             if (index == 0)
             {
@@ -3860,11 +3932,11 @@ public class BattleSystem : MonoBehaviour
         }
         else
         {
-            ActivateAllTargetSpriteTeam();
+            ActivateTargetSpriteTeam();
         }
     }
 
-    public void ActivateAllTargetSpriteTeam()
+    public void ActivateTargetSpriteTeam()
     {
 
         Vector3 position1 = new Vector3(Engine.e.activeParty.transform.position.x - 0.5f, Engine.e.activeParty.transform.position.y, Engine.e.activeParty.transform.position.z);
@@ -3892,7 +3964,7 @@ public class BattleSystem : MonoBehaviour
 
     public void ActivateEnemyTargetSprite(int index)
     {
-        if (!targetAllEnemy)
+        if (!targetAll)
         {
             Vector3 position = new Vector3(enemies[index].transform.position.x - 0.5f, enemies[index].transform.position.y, enemies[index].transform.position.z);
             targetSprite[3].transform.position = position;
@@ -3903,6 +3975,7 @@ public class BattleSystem : MonoBehaviour
             ActivateTargetSpriteEnemiesAll();
         }
     }
+
     public void ActivateTargetSpriteEnemiesAll()
     {
 
@@ -4065,6 +4138,7 @@ public class BattleSystem : MonoBehaviour
 
     public void DeactivateTargetButtons()
     {
+        targetAll = false;
 
         for (int i = 0; i < Engine.e.activeParty.activeParty.Length; i++)
         {
@@ -4525,7 +4599,6 @@ public class BattleSystem : MonoBehaviour
                 char1Ready = false;
                 char1ConfusedReady = false;
                 char1Switching = false;
-
                 char1ItemToBeUsed = null;
 
                 confuseAttack = false;
@@ -4574,7 +4647,6 @@ public class BattleSystem : MonoBehaviour
                 char2Ready = false;
                 char2ConfusedReady = false;
                 char2Switching = false;
-
                 char2ItemToBeUsed = null;
 
                 physicalAttack = false;
@@ -4621,7 +4693,6 @@ public class BattleSystem : MonoBehaviour
                 char3Ready = false;
                 char3ConfusedReady = false;
                 char3Switching = false;
-
                 char3ItemToBeUsed = null;
 
                 physicalAttack = false;
@@ -5218,7 +5289,7 @@ public class BattleSystem : MonoBehaviour
 
         if (!activeParty.activeParty[0].GetComponent<Character>().inflicted)
         {
-            if (activeParty.activeParty[0].GetComponent<SpriteRenderer>().color != Color.white && !animExists && currentAnimation != GetComponent<BattleAnimations>().antidoteAnim)
+            if (activeParty.activeParty[0].GetComponent<SpriteRenderer>().color != Color.white && !animExists && currentAnimation[0] != GetComponent<BattleAnimations>().antidoteAnim)
             {
                 activeParty.activeParty[0].GetComponent<SpriteRenderer>().color = Color.white;
             }
@@ -5259,7 +5330,7 @@ public class BattleSystem : MonoBehaviour
 
             if (!activeParty.activeParty[1].GetComponent<Character>().inflicted)
             {
-                if (activeParty.activeParty[1].GetComponent<SpriteRenderer>().color != Color.white && !animExists)
+                if (activeParty.activeParty[1].GetComponent<SpriteRenderer>().color != Color.white && !animExists && currentAnimation[0] != GetComponent<BattleAnimations>().antidoteAnim)
                 {
                     activeParty.activeParty[1].GetComponent<SpriteRenderer>().color = Color.white;
                 }
@@ -5298,7 +5369,7 @@ public class BattleSystem : MonoBehaviour
 
             if (!activeParty.activeParty[2].GetComponent<Character>().inflicted)
             {
-                if (activeParty.activeParty[2].GetComponent<SpriteRenderer>().color != Color.white && !animExists)
+                if (activeParty.activeParty[2].GetComponent<SpriteRenderer>().color != Color.white && !animExists && currentAnimation[0] != GetComponent<BattleAnimations>().antidoteAnim)
                 {
                     activeParty.activeParty[2].GetComponent<SpriteRenderer>().color = Color.white;
                 }
@@ -5669,12 +5740,40 @@ public class BattleSystem : MonoBehaviour
 
     public void HandleItemAnim(GameObject _spawnLoc, GameObject _targetLoc, Item _item)
     {
-        battleAnimationsReference.StartItemAnimation(_spawnLoc, _targetLoc, _item);
+        if (_item.targetAll)
+        {
+            if (targetingTeam)
+            {
+                battleAnimationsReference.StartItemAnimationAllTeam(_spawnLoc, _item);
+            }
+            if (targetingEnemy)
+            {
+                battleAnimationsReference.StartItemAnimationAllEnemies(_spawnLoc, _item);
+            }
+        }
+        else
+        {
+            battleAnimationsReference.StartItemAnimation(_spawnLoc, _targetLoc, _item);
+        }
     }
-    public void HandleDropAnim(GameObject _spawnLoc, GameObject _targetLoc, Drops _drop)
 
+    public void HandleDropAnim(GameObject _spawnLoc, GameObject _targetLoc, Drops _drop)
     {
-        battleAnimationsReference.StartDropAnimation(_spawnLoc, _targetLoc, _drop);
+        if (_drop.targetAll)
+        {
+            if (targetingTeam)
+            {
+                battleAnimationsReference.StartDropAnimationAllTeam(_spawnLoc, _drop);
+            }
+            if (targetingEnemy)
+            {
+                battleAnimationsReference.StartDropAnimationAllEnemies(_spawnLoc, _drop);
+            }
+        }
+        else
+        {
+            battleAnimationsReference.StartDropAnimation(_spawnLoc, _targetLoc, _drop);
+        }
     }
 
     void PressDown()

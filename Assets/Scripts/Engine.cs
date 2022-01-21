@@ -1315,7 +1315,6 @@ public class Engine : MonoBehaviour
     // Function for "consuming" an item, in battle.
     public void UseItemInBattle(int _target)
     {
-        bool failedItemUse = false;
         Item _itemToBeUsed = null;
 
         GameObject spawnGOLoc = null;
@@ -1352,133 +1351,102 @@ public class Engine : MonoBehaviour
             targetGOLoc = activePartyMember3;
         }
 
-        if (_itemToBeUsed == null || _itemToBeUsed.numberHeld == 0)
-        {
-            failedItemUse = true;
-        }
-
         // Consumables
         switch (_itemToBeUsed.itemName)
         {
             case "Health Potion":
 
-                if (party[_target].GetComponent<Character>().currentHealth == party[_target].GetComponent<Character>().maxHealth || party[_target].GetComponent<Character>().currentHealth == 0)
+
+                battleSystem.HandleItemAnim(spawnGOLoc, targetGOLoc, _itemToBeUsed);
+
+                battleSystem.SetDamagePopupTextOne(targetGOLoc.transform.position, _itemToBeUsed.itemPower.ToString(), Color.green);
+
+                if (activeParty.activeParty[_target].GetComponent<Character>().currentHealth > 0)
                 {
-                    failedItemUse = true;
-                    //partyInventoryReference.OpenInventoryMenu();
-                    break;
+                    activeParty.activeParty[_target].GetComponent<Character>().currentHealth += _itemToBeUsed.itemPower;
                 }
-                else
+
+                if (activeParty.activeParty[_target].GetComponent<Character>().currentHealth > activeParty.activeParty[_target].GetComponent<Character>().maxHealth)
                 {
-                    if (!failedItemUse)
-                    {
+                    activeParty.activeParty[_target].GetComponent<Character>().currentHealth = activeParty.activeParty[_target].GetComponent<Character>().maxHealth;
 
-                        battleSystem.HandleItemAnim(spawnGOLoc, targetGOLoc, _itemToBeUsed);
-                        battleSystem.SetDamagePopupTextOne(targetGOLoc.transform.position, _itemToBeUsed.itemPower.ToString(), Color.green);
-                        party[_target].GetComponent<Character>().currentHealth += _itemToBeUsed.itemPower;
-
-                        if (party[_target].GetComponent<Character>().currentHealth > party[_target].GetComponent<Character>().maxHealth)
-                        {
-                            party[_target].GetComponent<Character>().currentHealth = party[_target].GetComponent<Character>().maxHealth;
-                        }
-
-                        ItemDisplayCharacterStats(_target);
-                        partyInventoryReference.SubtractItemFromInventory(_itemToBeUsed);
-                        break;
-
-                    }
-                    break;
                 }
+
+                ItemDisplayCharacterStats(_target);
+                break;
 
             case "Mana Potion":
 
-                if (party[_target].GetComponent<Character>().currentMana == party[_target].GetComponent<Character>().maxMana)
+
+                battleSystem.HandleItemAnim(spawnGOLoc, targetGOLoc, _itemToBeUsed);
+                battleSystem.SetDamagePopupTextOne(targetGOLoc.transform.position, _itemToBeUsed.itemPower.ToString(), Color.blue);
+
+                activeParty.activeParty[_target].GetComponent<Character>().currentMana += _itemToBeUsed.itemPower;
+
+                if (activeParty.activeParty[_target].GetComponent<Character>().currentMana > activeParty.activeParty[_target].GetComponent<Character>().maxMana)
                 {
-
-                    failedItemUse = true;
-                    //partyInventoryReference.OpenInventoryMenu();
-                    break;
-
+                    activeParty.activeParty[_target].GetComponent<Character>().currentMana = activeParty.activeParty[_target].GetComponent<Character>().maxMana;
                 }
 
-                if (!failedItemUse)
-                {
-
-                    battleSystem.HandleItemAnim(spawnGOLoc, targetGOLoc, _itemToBeUsed);
-                    battleSystem.SetDamagePopupTextOne(targetGOLoc.transform.position, _itemToBeUsed.itemPower.ToString(), Color.blue);
-
-                    party[_target].GetComponent<Character>().currentMana += _itemToBeUsed.itemPower;
-
-                    if (party[_target].GetComponent<Character>().currentMana > party[_target].GetComponent<Character>().maxMana)
-                    {
-                        party[_target].GetComponent<Character>().currentMana = party[_target].GetComponent<Character>().maxMana;
-                    }
-
-                    ItemDisplayCharacterStats(_target);
-                    partyInventoryReference.SubtractItemFromInventory(_itemToBeUsed);
-                    break;
-
-                }
+                ItemDisplayCharacterStats(_target);
                 break;
+
 
             case "Ashes":
 
-                if (party[_target].GetComponent<Character>().currentHealth > 0)
+                if (activeParty.activeParty[_target].GetComponent<Character>().currentHealth == 0)
                 {
-
-
-                    failedItemUse = true;
-                    //partyInventoryReference.OpenInventoryMenu();
-                    break;
-
+                    activeParty.activeParty[_target].GetComponent<Character>().currentHealth += _itemToBeUsed.itemPower;
                 }
-
-                if (!failedItemUse)
+                if (activeParty.activeParty[_target].GetComponent<Character>().currentHealth > activeParty.activeParty[_target].GetComponent<Character>().maxHealth)
                 {
-                    party[_target].GetComponent<Character>().currentHealth += _itemToBeUsed.itemPower;
-
-                    if (party[_target].GetComponent<Character>().currentHealth > party[_target].GetComponent<Character>().maxHealth)
-                    {
-                        party[_target].GetComponent<Character>().currentHealth = party[_target].GetComponent<Character>().maxHealth;
-                    }
-                    ItemDisplayCharacterStats(_target);
-                    partyInventoryReference.SubtractItemFromInventory(_itemToBeUsed);
+                    activeParty.activeParty[_target].GetComponent<Character>().currentHealth = activeParty.activeParty[_target].GetComponent<Character>().maxHealth;
                 }
-
+                ItemDisplayCharacterStats(_target);
                 break;
 
             case "Antidote":
 
-                if (!party[_target].GetComponent<Character>().isPoisoned)
-                {
 
-                    failedItemUse = true;
+                battleSystem.HandleItemAnim(spawnGOLoc, targetGOLoc, _itemToBeUsed);
+                battleSystem.SetDamagePopupTextOne(targetGOLoc.transform.position, "Cured!", Color.green);
 
-                    break;
-                }
+                activeParty.activeParty[_target].GetComponent<Character>().isPoisoned = false;
+                activeParty.activeParty[_target].GetComponent<Character>().inflicted = false;
 
-                if (!failedItemUse)
-                {
+                ItemDisplayCharacterStats(_target);
+
+                break;
+                /*case "Elixir":
+
 
                     battleSystem.HandleItemAnim(spawnGOLoc, targetGOLoc, _itemToBeUsed);
-                    battleSystem.SetDamagePopupTextOne(targetGOLoc.transform.position, "Cured!", Color.green);
 
-                    party[_target].GetComponent<Character>().isPoisoned = false;
-                    party[_target].GetComponent<Character>().inflicted = false;
+
+                    battleSystem.SetDamagePopupTextAllTeam(_itemToBeUsed.itemPower.ToString(), Color.green);
+
+                    for (int i = 0; i < activeParty.activeParty.Length; i++)
+                    {
+                        if (activeParty.activeParty[i] != null && activeParty.activeParty[i].GetComponent<Character>().currentHealth > 0)
+                        {
+                            activeParty.activeParty[i].GetComponent<Character>().currentHealth += _itemToBeUsed.itemPower;
+
+                            if (activeParty.activeParty[i].GetComponent<Character>().currentHealth > activeParty.activeParty[i].GetComponent<Character>().maxHealth)
+                            {
+                                activeParty.activeParty[i].GetComponent<Character>().currentHealth = activeParty.activeParty[i].GetComponent<Character>().maxHealth;
+                            }
+                        }
+                    }
 
                     ItemDisplayCharacterStats(_target);
                     partyInventoryReference.SubtractItemFromInventory(_itemToBeUsed);
-
-                }
-
-                break;
-
+                    break;
+                */
         }
 
-        if (failedItemUse)
-        {
-            failedItemUse = false;
-        }
+
+        partyInventoryReference.SubtractItemFromInventory(_itemToBeUsed);
+
 
         itemToBeUsed = null;
     }

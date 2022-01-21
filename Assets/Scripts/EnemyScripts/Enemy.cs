@@ -746,79 +746,63 @@ public class Enemy : MonoBehaviour
     public void UseItem(Item item)
     {
         bool failedItemUse = false;
+        GameObject spawnGOLoc = null;
 
         if (item.numberHeld == 0)
         {
             failedItemUse = true;
         }
 
+        if (battleSystem.currentInQueue == BattleState.CHAR1TURN)
+        {
+            spawnGOLoc = Engine.e.activeParty.gameObject;
+        }
+        if (battleSystem.currentInQueue == BattleState.CHAR2TURN)
+        {
+            spawnGOLoc = Engine.e.activePartyMember2;
+
+        }
+        if (battleSystem.currentInQueue == BattleState.CHAR3TURN)
+        {
+            spawnGOLoc = Engine.e.activePartyMember3;
+        }
 
         switch (item.itemName)
         {
             case "Health Potion":
 
-                if (currentHealth == maxHealth || currentHealth == 0)
+
+                Engine.e.battleSystem.HandleItemAnim(spawnGOLoc, this.gameObject, item);
+                Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, item.itemPower.ToString(), Color.green);
+
+                currentHealth += item.itemPower;
+
+                if (currentHealth > maxHealth)
                 {
-                    failedItemUse = true;
-                    break;
+                    currentHealth = maxHealth;
                 }
-                else
-                {
-                    if (!failedItemUse)
-                    {
 
-                        //  GameObject healthSprite = Instantiate(Engine.e.gameInventory[item.itemIndex].GetComponent<Item>().anim, transform.position, Quaternion.identity);
-                        Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, item.itemPower.ToString(), Color.green);
-                        //Destroy(healthSprite, 1f);
+                break;
 
-                        currentHealth += item.itemPower;
-
-                        if (currentHealth > maxHealth)
-                        {
-                            currentHealth = maxHealth;
-                        }
-
-                        Engine.e.partyInventoryReference.SubtractItemFromInventory(item);
-                        break;
-                    }
-                    break;
-                }
 
             case "Mana Potion":
 
-                if (currentMana == maxMana)
+
+                Engine.e.battleSystem.HandleItemAnim(spawnGOLoc, this.gameObject, item);
+                Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, item.itemPower.ToString(), Color.blue);
+                // Destroy(manaSprite, 1f);
+
+
+                currentMana += item.itemPower;
+
+                if (currentMana > maxMana)
                 {
-
-                    failedItemUse = true;
-                    break;
-
+                    currentMana = maxMana;
                 }
-                else
-                {
 
-                    if (!failedItemUse)
-                    {
+                break;
 
 
-                        //GameObject manaSprite = Instantiate(Engine.e.gameInventory[item.itemIndex].GetComponent<Item>().anim, transform.position, Quaternion.identity);
-                        Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, item.itemPower.ToString(), Color.blue);
-                        // Destroy(manaSprite, 1f);
-
-
-                        currentMana += item.itemPower;
-
-                        if (currentMana > maxMana)
-                        {
-                            currentMana = maxMana;
-                        }
-
-
-                        Engine.e.partyInventoryReference.SubtractItemFromInventory(item);
-                        break;
-
-                    }
-                    break;
-                }
 
             case "Ashes":
                 // Zombie status effect instant kill?
@@ -826,50 +810,41 @@ public class Enemy : MonoBehaviour
 
             case "Antidote":
 
-                if (!isPoisoned)
+
+                if (poisonDefense > 100)
                 {
+                    currentHealth -= 100;
 
-                    failedItemUse = true;
-                    Engine.e.partyInventoryReference.OpenInventoryMenu();
-
-                    break;
-                }
-
-                if (!failedItemUse)
-                {
-                    if (poisonDefense > 100)
+                    if (currentHealth < 0)
                     {
-                        currentHealth -= 100;
+                        currentHealth = 0;
 
-                        if (currentHealth < 0)
-                        {
-                            currentHealth = 0;
-
-                            Engine.e.battleSystem.CheckIsDeadEnemy();
-                        }
-
-                    }
-                    else
-                    {
-                        GetComponentInChildren<SpriteRenderer>().color = Color.white;
-                        // GameObject antidote = Instantiate(Engine.e.gameInventory[item.itemIndex].GetComponent<Item>().anim, Engine.e.activeParty.transform.position, Quaternion.identity);
-                        Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Cured!", Color.green);
-                        // Destroy(antidote, 1f);
-                        isPoisoned = false;
-                        inflicted = false;
+                        Engine.e.battleSystem.CheckIsDeadEnemy();
                     }
 
-
-                    break;
-
                 }
+                else
+                {
+
+                    Engine.e.battleSystem.HandleItemAnim(spawnGOLoc, this.gameObject, item);
+                    Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Cured!", Color.green);
+                    // Destroy(antidote, 1f);
+                    isPoisoned = false;
+                    inflicted = false;
+                }
+
+
                 break;
+
+
         }
 
-        if (failedItemUse)
+
+        if (!item.targetAll)
         {
-            failedItemUse = false;
+            Engine.e.partyInventoryReference.SubtractItemFromInventory(item);
         }
+
         Engine.e.itemToBeUsed = null;
     }
 

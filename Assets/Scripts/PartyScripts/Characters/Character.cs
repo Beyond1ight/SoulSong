@@ -95,6 +95,11 @@ public class Character : MonoBehaviour
                 }
             }
 
+            if (dropChoice.targetAll)
+            {
+                Engine.e.battleSystem.targetAll = true;
+            }
+
             Engine.e.battleSystem.ActivateTargetButtons();
         }
     }
@@ -132,14 +137,6 @@ public class Character : MonoBehaviour
                         Engine.e.battleSystem.charSkillSwitchCheck = true;
                         Engine.e.battleSystem.ActivateAvailableCharSwitchButtons();
                     }
-                }
-                if (skillChoice.targetAllEnemy)
-                {
-                    Engine.e.battleSystem.targetAllEnemy = true;
-                }
-                if (skillChoice.targetAllTeam)
-                {
-                    Engine.e.battleSystem.targetAllTeam = true;
                 }
             }
 
@@ -214,6 +211,11 @@ public class Character : MonoBehaviour
                         Engine.e.battleSystem.ActivateAvailableCharSwitchButtons();
                     }
                 }
+            }
+
+            if (skillChoice.targetAll)
+            {
+                Engine.e.battleSystem.targetAll = true;
             }
 
             Engine.e.battleSystem.ActivateTargetButtons();
