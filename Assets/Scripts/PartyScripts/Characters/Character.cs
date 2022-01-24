@@ -222,6 +222,33 @@ public class Character : MonoBehaviour
         }
     }
 
+    public void SetBattleDamagePopupText(string _textDisplayed, Color _color)
+    {
+        if (activePartyIndex == 0)
+        {
+            Engine.e.battleSystem.damagePopup[0].transform.position = Engine.e.activeParty.gameObject.transform.position;
+            Engine.e.battleSystem.damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
+            Engine.e.battleSystem.damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
+
+            Engine.e.battleSystem.dmgText1Active = true;
+        }
+        if (activePartyIndex == 1)
+        {
+            Engine.e.battleSystem.damagePopup[1].transform.position = Engine.e.activePartyMember2.transform.position;
+            Engine.e.battleSystem.damagePopup[1].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
+            Engine.e.battleSystem.damagePopup[1].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
+
+            Engine.e.battleSystem.dmgText2Active = true;
+        }
+        if (activePartyIndex == 2)
+        {
+            Engine.e.battleSystem.damagePopup[2].transform.position = Engine.e.activePartyMember3.transform.position;
+            Engine.e.battleSystem.damagePopup[2].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
+            Engine.e.battleSystem.damagePopup[2].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
+
+            Engine.e.battleSystem.dmgText3Active = true;
+        }
+    }
 
     public void InflictDeath()
     {
@@ -763,7 +790,7 @@ public class Character : MonoBehaviour
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.fireDropsLevel / 2)) + characterAttacking.fireDropAttackBonus);
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * fireDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
-                Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, dropValueOutcome.ToString(), Color.white);
+                SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
 
             }
             else
@@ -771,7 +798,7 @@ public class Character : MonoBehaviour
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.fireDropsLevel / 2)));
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * fireDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
-                Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, dropValueOutcome.ToString(), Color.white);
+                SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
 
             }
         }
@@ -783,7 +810,7 @@ public class Character : MonoBehaviour
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.iceDropsLevel / 2)) + characterAttacking.iceDropAttackBonus);
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * iceDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
-                Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, dropValueOutcome.ToString(), Color.white);
+                SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
 
             }
             else
@@ -791,7 +818,7 @@ public class Character : MonoBehaviour
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.iceDropsLevel / 2)));
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * iceDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
-                Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, dropValueOutcome.ToString(), Color.white);
+                SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
 
             }
         }
@@ -805,14 +832,14 @@ public class Character : MonoBehaviour
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.lightningDropsLevel / 2)) + characterAttacking.lightningDropAttackBonus);
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * lightningDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
-                Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, dropValueOutcome.ToString(), Color.white);
+                SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
             }
             else
             {
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.lightningDropsLevel / 2)));
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * lightningDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
-                Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, dropValueOutcome.ToString(), Color.white);
+                SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
             }
         }
 
@@ -823,14 +850,14 @@ public class Character : MonoBehaviour
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.waterDropsLevel / 2)) + characterAttacking.waterDropAttackBonus);
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
-                Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, dropValueOutcome.ToString(), Color.white);
+                SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
             }
             else
             {
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.waterDropsLevel / 2)));
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
-                Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, dropValueOutcome.ToString(), Color.white);
+                SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
             }
         }
 
@@ -851,7 +878,7 @@ public class Character : MonoBehaviour
                         damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * shadowDefense / 100));
                         currentHealth -= Mathf.Round(damageTotal);
                     }
-                    Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, dropValueOutcome.ToString(), Color.white);
+                    SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
                     break;
                 case "Bio":
 
@@ -872,11 +899,11 @@ public class Character : MonoBehaviour
                             float poisonDmgCalculation = Mathf.Round(dropChoice.dropPower + (enemyAttacking.shadowDropsLevel * 6) / 2);
                             poisonDmg = ((poisonDmgCalculation) - (poisonDmgCalculation * poisonDefense / 100));
                         }
-                        Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, "Poisoned!", Color.white);
+                        SetBattleDamagePopupText("Poisoned!", Color.white);
                     }
                     else
                     {
-                        Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, "Resisted!", Color.white);
+                        SetBattleDamagePopupText("Resisted!", Color.white);
                     }
                     break;
                 case "Knockout":
@@ -888,11 +915,11 @@ public class Character : MonoBehaviour
                         {
                             isAsleep = true;
                             sleepTimer = 0;
-                            Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, "Sleeping!", Color.white);
+                            SetBattleDamagePopupText("Sleeping!", Color.white);
                         }
                         else
                         {
-                            Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, "Resisted!", Color.white);
+                            SetBattleDamagePopupText("Resisted!", Color.white);
                         }
                     }
                     break;
@@ -907,7 +934,7 @@ public class Character : MonoBehaviour
                             isConfused = true;
                             haltInflicted = false;
                             confuseTimer = 0;
-                            Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, "Confused!", Color.white);
+                            SetBattleDamagePopupText("Confused!", Color.white);
 
                             if (activePartyIndex == 0)
                             {
@@ -936,7 +963,7 @@ public class Character : MonoBehaviour
                         }
                         else
                         {
-                            Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, "Resisted!", Color.white);
+                            SetBattleDamagePopupText("Resisted!", Color.white);
                         }
                     }
                     break;
@@ -966,7 +993,7 @@ public class Character : MonoBehaviour
                         currentHealth += damageTotal;
                     }
 
-                    Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, damageTotal.ToString(), Color.green);
+                    SetBattleDamagePopupText(damageTotal.ToString(), Color.green);
 
                     if (currentHealth >= maxHealth)
                     {
@@ -1048,7 +1075,7 @@ public class Character : MonoBehaviour
 
 
                     }
-                    Engine.e.battleSystem.SetDamagePopupTextOne(thisCharacterGOLoc.transform.position, "Cured!", Color.green);
+                    SetBattleDamagePopupText("Cured!", Color.green);
                     inflicted = false;
 
                     break;
