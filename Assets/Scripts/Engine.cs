@@ -271,7 +271,7 @@ public class Engine : MonoBehaviour
         playableCharacters[0].drops[1] = gameDrops[1];
         playableCharacters[0].drops[10] = gameDrops[10];
         gameDrops[10].isKnown = true;
-        gameDrops[1].isKnown = true;
+        //gameDrops[1].isKnown = true;
         //playableCharacters[0].drops[4] = gameDrops[4];
         /*playableCharacters[0].drops[5] = gameDrops[5];
         playableCharacters[0].drops[10] = gameDrops[10];
@@ -759,7 +759,7 @@ public class Engine : MonoBehaviour
             {
                 activePartyMember2.GetComponent<SpriteRenderer>().sprite = party[1].GetComponent<SpriteRenderer>().sprite;
                 activePartyMember2.SetActive(true);
-                gameDrops[15].isKnown = true;
+                //                gameDrops[15].isKnown = true;
                 gameSkills[5].isKnown = true;
                 playableCharacters[1].activePartyIndex = 1;
 
@@ -830,7 +830,7 @@ public class Engine : MonoBehaviour
                 playableCharacters[3].maxEnergyBase = playableCharacters[3].maxEnergy;
                 //     charAbilityButtons[3].SetActive(true);
                 //     charSkillTierButtons[3].SetActive(true);
-                gameDrops[25].isKnown = true;
+                //         gameDrops[25].isKnown = true;
                 gameSkills[15].isKnown = true;
                 playableCharacters[3].activePartyIndex = -1;
 
@@ -1444,9 +1444,10 @@ public class Engine : MonoBehaviour
                 */
         }
 
-
-        partyInventoryReference.SubtractItemFromInventory(_itemToBeUsed);
-
+        if (!_itemToBeUsed.targetAll)
+        {
+            partyInventoryReference.SubtractItemFromInventory(_itemToBeUsed);
+        }
 
         itemToBeUsed = null;
     }
@@ -2241,7 +2242,7 @@ public class Engine : MonoBehaviour
             //partyInventoryReference.AddItemToInventory(gameInventory[3]);
             partyInventoryReference.AddItemToInventory(gameGrieveWeapons[1].GetComponent<GrieveWeapons>());
             partyInventoryReference.AddItemToInventory(gameChestArmor[2].GetComponent<ChestArmor>());
-            partyInventoryReference.AddItemToInventory(gameFireDrops[0]);
+            partyInventoryReference.AddItemToInventory(gameShadowDrops[2]);
 
             //partyInventoryReference.AddMacWeaponToInventory(macGameWeapons[2].GetComponent<MacWeapons>());
             //partyInventoryReference.AddFieldWeaponToInventory(fieldGameWeapons[2].GetComponent<FieldWeapons>());

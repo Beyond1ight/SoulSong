@@ -284,6 +284,7 @@ GameObject:
   - component: {fileID: 7603787917564805420}
   - component: {fileID: 7844609031142243219}
   - component: {fileID: -4928628150088967769}
+  - component: {fileID: 3322517123027797964}
   m_Layer: 5
   m_Name: Mana Potion
   m_TagString: Untagged
@@ -436,6 +437,7 @@ MonoBehaviour:
   weapon: 0
   chestArmor: 0
   useableOutOfBattle: 1
+  targetAll: 0
 --- !u!114 &-4928628150088967769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -497,3 +499,22 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!95 &3322517123027797964
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8158483218004709198}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 229b0fe29a2714fff899e7edfc4dd8ed, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

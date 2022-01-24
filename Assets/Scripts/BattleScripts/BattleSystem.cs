@@ -832,7 +832,6 @@ public class BattleSystem : MonoBehaviour
         GameObject characterAttacking = null;
         GameObject targetGOLoc = null;
         Character _characterAttacking = null;
-        bool _targetAll = false;
 
         if (currentInQueue == BattleState.CHAR1TURN)
         {
@@ -1752,7 +1751,21 @@ public class BattleSystem : MonoBehaviour
                     _itemToBeUsed = char3ItemToBeUsed;
                 }
 
-                Engine.e.UseItemInBattle(_target);
+                if (!_itemToBeUsed.targetAll)
+                {
+                    Engine.e.UseItemInBattle(_target);
+                }
+                else
+                {
+                    for (int i = 0; i < activeParty.activeParty.Length; i++)
+                    {
+                        if (activeParty.activeParty[i] != null)
+                        {
+                            Engine.e.UseItemInBattle(i);
+                        }
+                    }
+                    Engine.e.partyInventoryReference.SubtractItemFromInventory(_itemToBeUsed);
+                }
             }
 
             // Supporting target via Drop
@@ -3765,6 +3778,22 @@ public class BattleSystem : MonoBehaviour
                             }
                         }
                     }
+
+                    if (state == BattleState.CHAR1TURN)
+                    {
+                        EventSystem.current.SetSelectedGameObject(null);
+                        EventSystem.current.SetSelectedGameObject(allyTargetButtons[0]);
+                    }
+                    if (state == BattleState.CHAR2TURN)
+                    {
+                        EventSystem.current.SetSelectedGameObject(null);
+                        EventSystem.current.SetSelectedGameObject(allyTargetButtons[1]);
+                    }
+                    if (state == BattleState.CHAR3TURN)
+                    {
+                        EventSystem.current.SetSelectedGameObject(null);
+                        EventSystem.current.SetSelectedGameObject(allyTargetButtons[2]);
+                    }
                 }
                 else
                 {
@@ -4570,6 +4599,7 @@ public class BattleSystem : MonoBehaviour
         charMoving = false;
         targetCheck = false;
         attackingTeam = false;
+        //targetAll = false;
         GameObject _characterAttacking = null;
         int index = 0;
 
@@ -5289,7 +5319,7 @@ public class BattleSystem : MonoBehaviour
 
         if (!activeParty.activeParty[0].GetComponent<Character>().inflicted)
         {
-            if (activeParty.activeParty[0].GetComponent<SpriteRenderer>().color != Color.white && !animExists && currentAnimation[0] != GetComponent<BattleAnimations>().antidoteAnim)
+            if (activeParty.activeParty[0].GetComponent<SpriteRenderer>().color != Color.white && !animExists && currentAnimation[0].GetComponent<Animator>() != Engine.e.gameInventory[3].GetComponent<Animator>())
             {
                 activeParty.activeParty[0].GetComponent<SpriteRenderer>().color = Color.white;
             }
@@ -5330,7 +5360,7 @@ public class BattleSystem : MonoBehaviour
 
             if (!activeParty.activeParty[1].GetComponent<Character>().inflicted)
             {
-                if (activeParty.activeParty[1].GetComponent<SpriteRenderer>().color != Color.white && !animExists && currentAnimation[0] != GetComponent<BattleAnimations>().antidoteAnim)
+                if (activeParty.activeParty[1].GetComponent<SpriteRenderer>().color != Color.white && !animExists && currentAnimation[0].GetComponent<Animator>() != Engine.e.gameInventory[3].GetComponent<Animator>())
                 {
                     activeParty.activeParty[1].GetComponent<SpriteRenderer>().color = Color.white;
                 }
@@ -5369,7 +5399,7 @@ public class BattleSystem : MonoBehaviour
 
             if (!activeParty.activeParty[2].GetComponent<Character>().inflicted)
             {
-                if (activeParty.activeParty[2].GetComponent<SpriteRenderer>().color != Color.white && !animExists && currentAnimation[0] != GetComponent<BattleAnimations>().antidoteAnim)
+                if (activeParty.activeParty[2].GetComponent<SpriteRenderer>().color != Color.white && !animExists && currentAnimation[0].GetComponent<Animator>() != Engine.e.gameInventory[3].GetComponent<Animator>())
                 {
                     activeParty.activeParty[2].GetComponent<SpriteRenderer>().color = Color.white;
                 }

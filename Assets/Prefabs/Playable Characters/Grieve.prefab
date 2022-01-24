@@ -137,9 +137,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Grieve
   lvl: 1
-  currentHealth: 100
+  currentHealth: 49
   maxHealth: 100
-  currentMana: 35
+  currentMana: 20
   maxMana: 35
   currentEnergy: 30
   maxEnergy: 30
@@ -170,7 +170,7 @@ MonoBehaviour:
   lightningPhysicalAttackBonus: 0
   lightningDropAttackBonus: 0
   shadowDropsLevel: 1
-  shadowDropsExperience: 0
+  shadowDropsExperience: 15
   shadowDropsLvlReq: 50
   shadowPhysicalAttackBonus: 0
   shadowDropAttackBonus: 0
@@ -238,16 +238,6 @@ MonoBehaviour:
   deathDefenseBase: 0
   drops:
   - {fileID: 0}
-  - {fileID: 11400000, guid: 1227ecefb6f5e4a1c9a406e55a2cc35d, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 11400000, guid: 8c550a8dffde3433db125665c63f91f8, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -257,8 +247,18 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 4561571794371166769, guid: aa424de30ac5443eb81c992bf59a844b, type: 3}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 75677074133245748, guid: 3be602a3cc95143ec96f22e804f02c79, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
