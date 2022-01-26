@@ -5,6 +5,7 @@ using UnityEngine;
 public class BattleAnimations : MonoBehaviour
 {
 
+
     // Single Target w/ Drop
     public void StartDropAnimation(GameObject _spawnLoc, GameObject _targetLoc, Drops drop)
     {
@@ -13,7 +14,6 @@ public class BattleAnimations : MonoBehaviour
         Engine.e.battleSystem.currentAnimation[0].transform.position = _targetLoc.transform.position;
         Engine.e.battleSystem.currentAnimation[0].GetComponent<Animator>().enabled = true;
         Engine.e.battleSystem.currentAnimation[0].SetActive(true);
-
         Engine.e.battleSystem.animState = AnimState.ITEMANIM;
         Engine.e.battleSystem.animExists = true;
         Engine.e.battleSystem.animationTimer = drop.GetComponent<Item>().animationClip.length;

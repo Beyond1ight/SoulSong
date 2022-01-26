@@ -104,7 +104,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 7927a394c228f4904aee51696860557a, type: 3}
-  m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -128,9 +128,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Mac
   lvl: 1
-  currentHealth: 29
+  currentHealth: 80
   maxHealth: 80
-  currentMana: 50
+  currentMana: 60
   maxMana: 60
   currentEnergy: 30
   maxEnergy: 30
@@ -151,7 +151,7 @@ MonoBehaviour:
   icePhysicalAttackBonus: 0
   iceDropAttackBonus: 0
   waterDropsLevel: 5
-  waterDropsExperience: 20
+  waterDropsExperience: 0
   waterDropsLvlReq: 50
   waterPhysicalAttackBonus: 0
   waterDropAttackBonus: 0
@@ -178,12 +178,12 @@ MonoBehaviour:
   isInActiveParty: 1
   isLeader: 0
   isPoisoned: 0
-  isAsleep: 1
+  isAsleep: 0
   isConfused: 0
   miterInflicted: 0
   haltInflicted: 0
   deathInflicted: 0
-  inflicted: 1
+  inflicted: 0
   availableSkillPoints: 0
   healthOffset: -20
   manaOffset: 20
@@ -264,7 +264,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 11400000, guid: 1df5a6e2c9d234357b27a7bafcffe23d, type: 2}
+  - {fileID: 3843857172235643000, guid: 4c64158a9b4db40d0b9cb8a84bd4f10a, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

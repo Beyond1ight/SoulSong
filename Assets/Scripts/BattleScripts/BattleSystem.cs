@@ -40,7 +40,7 @@ public class BattleSystem : MonoBehaviour
     public bool char1ConfusedReady, char2ConfusedReady, char3ConfusedReady;
     public int enemy1AttackTarget, enemy2AttackTarget, enemy3AttackTarget, enemy4AttackTarget;
     public bool enemy1Ready, enemy2Ready, enemy3Ready, enemy4Ready;
-    public int previousTargetReferenceChar, previousTargetReferenceEnemy; // For HUD and Drop Reference
+    public int previousTargetReference;
     public bool char1Switching, char2Switching, char3Switching;
     public int char1SwitchToIndex, char2SwitchToIndex, char3SwitchToIndex;
     public Item char1ItemToBeUsed, char2ItemToBeUsed, char3ItemToBeUsed;
@@ -125,7 +125,7 @@ public class BattleSystem : MonoBehaviour
     public GameObject[] currentAnimation;
     bool partyTurn = false;
     [SerializeField]
-    bool dmgText1Active, dmgText2Active, dmgText3Active, dmgText4Active, dmgText5Active, dmgText6Active, dmgText7Active, settingTarget;
+    public bool dmgText1Active, dmgText2Active, dmgText3Active, dmgText4Active, dmgText5Active, dmgText6Active, dmgText7Active, settingTarget;
 
     [SerializeField]
     float battleBodyTotal, menuTargetIndex;
@@ -133,7 +133,6 @@ public class BattleSystem : MonoBehaviour
     float[] damageTextTimer;
     public float animationTimer = 0f;
     public bool displayDamageText, targetAll = false; // "targetAll" refers to all (sprites) on one side for targeting, i.e. all enemies or all active party members
-
 
     public IEnumerator SetupBattle()
     {
@@ -215,6 +214,11 @@ public class BattleSystem : MonoBehaviour
             }
         }
 
+        for (int i = 0; i < currentAnimation.Length; i++)
+        {
+            currentAnimation[i].GetComponent<Animator>().runtimeAnimatorController = null;
+        }
+
         damageTextTimer = new float[8];
 
         for (int i = 0; i < damageTextTimer.Length; i++)
@@ -281,9 +285,11 @@ public class BattleSystem : MonoBehaviour
                     if (char1ATB < ATBReady)
                     {
                         //char1ATB += (activeParty.activeParty[0].GetComponent<Character>().haste * 10) / 50;
-                        char1ATB += activeParty.activeParty[0].GetComponent<Character>().haste * Time.deltaTime;
-                        char1ATBGuage.value = char1ATB;
-
+                        if (Engine.e.battleModeActive || !Engine.e.battleModeActive && !char2Ready && !char3Ready && !enemy1Ready && !enemy2Ready && !enemy3Ready && !enemy4Ready)
+                        {
+                            char1ATB += activeParty.activeParty[0].GetComponent<Character>().haste * Time.deltaTime;
+                            char1ATBGuage.value = char1ATB;
+                        }
                     }
                     else
                     {
@@ -327,9 +333,11 @@ public class BattleSystem : MonoBehaviour
                         if (char2ATB < ATBReady)
                         {
 
-                            char2ATB += activeParty.activeParty[1].GetComponent<Character>().haste * Time.deltaTime;
-                            char2ATBGuage.value = char2ATB;
-
+                            if (Engine.e.battleModeActive || !Engine.e.battleModeActive && !char1Ready && !char3Ready && !enemy1Ready && !enemy2Ready && !enemy3Ready && !enemy4Ready)
+                            {
+                                char2ATB += activeParty.activeParty[1].GetComponent<Character>().haste * Time.deltaTime;
+                                char2ATBGuage.value = char2ATB;
+                            }
                         }
                         else
                         {
@@ -374,8 +382,12 @@ public class BattleSystem : MonoBehaviour
                     {
                         if (char3ATB < ATBReady)
                         {
-                            char3ATB += activeParty.activeParty[2].GetComponent<Character>().haste * Time.deltaTime;
-                            char3ATBGuage.value = char3ATB;
+                            if (Engine.e.battleModeActive || !Engine.e.battleModeActive && !char1Ready && !char2Ready && !enemy1Ready && !enemy2Ready && !enemy3Ready && !enemy4Ready)
+                            {
+
+                                char3ATB += activeParty.activeParty[2].GetComponent<Character>().haste * Time.deltaTime;
+                                char3ATBGuage.value = char3ATB;
+                            }
                         }
                         else
                         {
@@ -417,9 +429,12 @@ public class BattleSystem : MonoBehaviour
                 {
                     if (enemy1ATB < ATBReady)
                     {
-                        float randomVariation = Random.Range(0.65f, 1f);
-                        enemy1ATB += ((enemies[0].GetComponent<Enemy>().haste * randomVariation) * Time.deltaTime);
-                        enemy1ATBGuage.value = enemy1ATB;
+                        if (Engine.e.battleModeActive || !Engine.e.battleModeActive && !char1Ready && !char2Ready && !char3Ready && !enemy2Ready && !enemy3Ready && !enemy4Ready)
+                        {
+                            float randomVariation = Random.Range(0.65f, 1f);
+                            enemy1ATB += ((enemies[0].GetComponent<Enemy>().haste * randomVariation) * Time.deltaTime);
+                            enemy1ATBGuage.value = enemy1ATB;
+                        }
                     }
                     else
                     {
@@ -429,6 +444,7 @@ public class BattleSystem : MonoBehaviour
                     }
                 }
 
+
                 if (!battleQueue.Contains(BattleState.ENEMY2TURN))
                 {
                     if (enemies[1] != null)
@@ -437,11 +453,14 @@ public class BattleSystem : MonoBehaviour
                         {
                             if (enemy2ATB < ATBReady)
                             {
-                                float randomVariation = Random.Range(0.65f, 1f);
-                                enemy2ATB += ((enemies[1].GetComponent<Enemy>().haste * randomVariation) * Time.deltaTime);
-                                enemy2ATBGuage.value = enemy2ATB;
-
+                                if (Engine.e.battleModeActive || !Engine.e.battleModeActive && !char1Ready && !char2Ready && !char3Ready && !enemy1Ready && !enemy3Ready && !enemy4Ready)
+                                {
+                                    float randomVariation = Random.Range(0.65f, 1f);
+                                    enemy2ATB += ((enemies[1].GetComponent<Enemy>().haste * randomVariation) * Time.deltaTime);
+                                    enemy2ATBGuage.value = enemy2ATB;
+                                }
                             }
+
                             else
                             {
                                 enemy2ATB = ATBReady;
@@ -460,9 +479,12 @@ public class BattleSystem : MonoBehaviour
                         {
                             if (enemy3ATB < ATBReady)
                             {
-                                float randomVariation = Random.Range(0.65f, 1f);
-                                enemy3ATB += ((enemies[2].GetComponent<Enemy>().haste * randomVariation) * Time.deltaTime);
-                                enemy3ATBGuage.value = enemy3ATB;
+                                if (Engine.e.battleModeActive || !Engine.e.battleModeActive && !char1Ready && !char2Ready && !char3Ready && !enemy1Ready && !enemy2Ready && !enemy4Ready)
+                                {
+                                    float randomVariation = Random.Range(0.65f, 1f);
+                                    enemy3ATB += ((enemies[2].GetComponent<Enemy>().haste * randomVariation) * Time.deltaTime);
+                                    enemy3ATBGuage.value = enemy3ATB;
+                                }
                             }
                             else
                             {
@@ -482,9 +504,12 @@ public class BattleSystem : MonoBehaviour
                         {
                             if (enemy4ATB < ATBReady)
                             {
-                                float randomVariation = Random.Range(0.65f, 1f);
-                                enemy4ATB += ((enemies[3].GetComponent<Enemy>().haste * randomVariation) * Time.deltaTime);
-                                enemy4ATBGuage.value = enemy4ATB;
+                                if (Engine.e.battleModeActive || !Engine.e.battleModeActive && !char1Ready && !char2Ready && !char3Ready && !enemy1Ready && !enemy2Ready && !enemy3Ready)
+                                {
+                                    float randomVariation = Random.Range(0.65f, 1f);
+                                    enemy4ATB += ((enemies[3].GetComponent<Enemy>().haste * randomVariation) * Time.deltaTime);
+                                    enemy4ATBGuage.value = enemy4ATB;
+                                }
                             }
                             else
                             {
@@ -881,7 +906,7 @@ public class BattleSystem : MonoBehaviour
                 target = _target;
             }
 
-            previousTargetReferenceChar = target;
+            previousTargetReference = target;
 
             dialogueText.text = string.Empty;
 
@@ -1045,6 +1070,8 @@ public class BattleSystem : MonoBehaviour
                     dropChoice = char3DropChoice;
                 }
 
+                lastDropChoice = dropChoice;
+
                 charMoving = false;
                 targetCheck = true;
 
@@ -1105,7 +1132,7 @@ public class BattleSystem : MonoBehaviour
                 target = _target;
             }
 
-            previousTargetReferenceChar = target;
+            previousTargetReference = target;
 
             dialogueText.text = string.Empty;
 
@@ -1333,34 +1360,28 @@ public class BattleSystem : MonoBehaviour
                                 if (enemies[0].currentHealth > 0)
                                 {
                                     enemies[0].TakeSkillDamage(damageTotal, 0);
-                                    enemies[0].GetComponentInChildren<SpriteRenderer>().material = damageFlash;
-                                    yield return new WaitForSeconds(0.2f);
-                                    enemies[0].GetComponentInChildren<SpriteRenderer>().material = originalMaterial;
-
+                                    SpriteDamageFlash(0);
                                 }
                                 if (enemies[1] != null && enemies[1].currentHealth > 0)
                                 {
                                     enemies[1].TakeSkillDamage(damageTotal, 1);
-                                    enemies[1].GetComponentInChildren<SpriteRenderer>().material = damageFlash;
-                                    yield return new WaitForSeconds(0.2f);
-                                    enemies[1].GetComponentInChildren<SpriteRenderer>().material = originalMaterial;
+                                    SpriteDamageFlash(1);
+
                                 }
                                 if (enemies[2] != null && enemies[2].currentHealth > 0)
                                 {
                                     enemies[2].TakeSkillDamage(damageTotal, 2);
-                                    enemies[2].GetComponentInChildren<SpriteRenderer>().material = damageFlash;
-                                    yield return new WaitForSeconds(0.2f);
-                                    enemies[2].GetComponentInChildren<SpriteRenderer>().material = originalMaterial;
+                                    SpriteDamageFlash(2);
+
                                 }
                                 if (enemies[3] != null && enemies[3].currentHealth > 0)
                                 {
                                     enemies[3].TakeSkillDamage(damageTotal, 3);
-                                    enemies[3].GetComponentInChildren<SpriteRenderer>().material = damageFlash;
-                                    yield return new WaitForSeconds(0.2f);
-                                    enemies[3].GetComponentInChildren<SpriteRenderer>().material = originalMaterial;
+                                    SpriteDamageFlash(3);
+
                                 }
 
-                                SetDamagePopupTextAllEnemies(damageTotal.ToString(), Color.white);
+                                //SetDamagePopupTextAllEnemies(damageTotal.ToString(), Color.white);
 
                                 break;
                             case 10: // Steal
@@ -1388,9 +1409,7 @@ public class BattleSystem : MonoBehaviour
                     }
                     else
                     {
-                        enemies[targetEnemy].GetComponentInChildren<SpriteRenderer>().material = damageFlash;
-                        yield return new WaitForSeconds(0.2f);
-                        enemies[targetEnemy].GetComponentInChildren<SpriteRenderer>().material = originalMaterial;
+                        SpriteDamageFlash(targetEnemy);
                     }
                 }
             }
@@ -1416,11 +1435,8 @@ public class BattleSystem : MonoBehaviour
                     }
                     else
                     {
-                        characterTarget.GetComponent<SpriteRenderer>().material = damageFlash;
-                        yield return new WaitForSeconds(0.2f);
-                        characterTarget.GetComponent<SpriteRenderer>().material = originalMaterial;
+                        SpriteDamageFlash(targetEnemy);
                     }
-
                 }
             }
         }
@@ -1493,6 +1509,120 @@ public class BattleSystem : MonoBehaviour
 
                 }
                 // StartCoroutine(CheckNext());
+            }
+        }
+    }
+
+    public void SpriteDamageFlash(int _target)
+    {
+        if (currentInQueue == BattleState.CHAR1TURN || currentInQueue == BattleState.CONFCHAR1
+        || currentInQueue == BattleState.CHAR2TURN || currentInQueue == BattleState.CONFCHAR2
+        || currentInQueue == BattleState.CHAR3TURN || currentInQueue == BattleState.CONFCHAR3)
+        {
+            if (!attackingTeam)
+            {
+                if (lastDropChoice != null && !lastDropChoice.targetAll || lastSkillChoice != null && !lastSkillChoice.targetAll
+                || lastDropChoice == null && lastSkillChoice == null)
+                {
+                    enemies[_target].GetComponentInChildren<SpriteRenderer>().material = damageFlash;
+                }
+                else
+                {
+                    for (int i = 0; i < enemies.Length; i++)
+                    {
+                        if (enemies[i].currentHealth > 0)
+                        {
+                            enemies[i].GetComponentInChildren<SpriteRenderer>().material = damageFlash;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (lastDropChoice != null && !lastDropChoice.targetAll || lastSkillChoice != null && !lastSkillChoice.targetAll
+                || lastSkillChoice == null && lastDropChoice == null)
+                {
+                    if (_target == 0)
+                    {
+                        Engine.e.activeParty.gameObject.GetComponent<SpriteRenderer>().material = damageFlash;
+                    }
+                    if (_target == 1)
+                    {
+                        Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().material = damageFlash;
+                    }
+                    if (_target == 2)
+                    {
+                        Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().material = damageFlash;
+                    }
+                }
+                else
+                {
+                    if (activeParty.activeParty[0].GetComponent<Character>().currentHealth > 0)
+                    {
+                        Engine.e.activeParty.gameObject.GetComponent<SpriteRenderer>().material = damageFlash;
+                    }
+                    if (activeParty.activeParty[1] != null && activeParty.activeParty[1].GetComponent<Character>().currentHealth > 0)
+                    {
+                        Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().material = damageFlash;
+                    }
+                    if (activeParty.activeParty[2] != null && activeParty.activeParty[2].GetComponent<Character>().currentHealth > 0)
+                    {
+                        Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().material = damageFlash;
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (!attackingTeam)
+            {
+                if (!lastDropChoice.targetAll)
+                {
+                    if (_target == 0)
+                    {
+                        Engine.e.activeParty.gameObject.GetComponent<SpriteRenderer>().material = damageFlash;
+                    }
+                    if (_target == 1)
+                    {
+                        Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().material = damageFlash;
+                    }
+                    if (_target == 2)
+                    {
+                        Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().material = damageFlash;
+                    }
+                }
+                else
+                {
+                    if (activeParty.activeParty[0].GetComponent<Character>().currentHealth > 0)
+                    {
+                        Engine.e.activeParty.gameObject.GetComponent<SpriteRenderer>().material = damageFlash;
+                    }
+                    if (activeParty.activeParty[1] != null && activeParty.activeParty[1].GetComponent<Character>().currentHealth > 0)
+                    {
+                        Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().material = damageFlash;
+                    }
+                    if (activeParty.activeParty[2] != null && activeParty.activeParty[2].GetComponent<Character>().currentHealth > 0)
+                    {
+                        Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().material = damageFlash;
+                    }
+                }
+            }
+            else
+            {
+                if (!lastDropChoice.targetAll)
+                {
+                    enemies[_target].GetComponentInChildren<SpriteRenderer>().material = damageFlash;
+                }
+                else
+                {
+                    for (int i = 0; i < enemies.Length; i++)
+                    {
+                        if (enemies[i].currentHealth > 0)
+                        {
+                            enemies[i].GetComponentInChildren<SpriteRenderer>().material = damageFlash;
+                        }
+                    }
+                }
             }
         }
     }
@@ -1697,6 +1827,8 @@ public class BattleSystem : MonoBehaviour
         GameObject _characterLoc = null;
         GameObject _targetGOLoc = null;
 
+        previousTargetReference = _target;
+
         inBattleMenu = false;
 
         if (currentInQueue == BattleState.CHAR1TURN)
@@ -1790,9 +1922,15 @@ public class BattleSystem : MonoBehaviour
 
                 }
 
+                lastDropChoice = _dropChoice;
+
+
                 HandleDropAnim(_characterLoc, _targetGOLoc, _dropChoice);
 
+                if (_dropChoice.targetAll)
+                {
 
+                }
                 activeParty.activeParty[_target].GetComponent<Character>().DropEffect(_dropChoice);
 
                 activeParty.activeParty[index].gameObject.GetComponent<Character>().currentMana -= Mathf.Round(_dropChoice.dropCost
@@ -2374,7 +2512,8 @@ public class BattleSystem : MonoBehaviour
         }
 
 
-        previousTargetReferenceEnemy = randTarget;
+        previousTargetReference = randTarget;
+
         Debug.Log(randTarget);
 
         yield return new WaitForSeconds(1f);
@@ -2446,9 +2585,7 @@ public class BattleSystem : MonoBehaviour
                 }
                 else
                 {
-                    character.GetComponent<SpriteRenderer>().material = damageFlash;
-                    yield return new WaitForSeconds(0.2f);
-                    character.GetComponent<SpriteRenderer>().material = originalMaterial;
+                    SpriteDamageFlash(enemyTarget);
                 }
             }
         }
@@ -2564,9 +2701,8 @@ public class BattleSystem : MonoBehaviour
                 }
                 else
                 {
-                    enemies[randTarget].GetComponentInChildren<SpriteRenderer>().material = damageFlash;
-                    yield return new WaitForSeconds(0.2f);
-                    enemies[randTarget].GetComponentInChildren<SpriteRenderer>().material = originalMaterial;
+                    SpriteDamageFlash(randTarget);
+
                 }
             }
         }
@@ -5569,129 +5705,8 @@ public class BattleSystem : MonoBehaviour
 
         if (!isDead)
         {
-            if (!Engine.e.battleModeActive)
-            {
-                if (state == BattleState.ATBCHECK)
-                {
-                    dialogueText.text = string.Empty;
-                    if (activeParty.activeParty[0].GetComponent<Character>().currentHealth > 0)
-                    {
-                        if (char1ATB < ATBReady)
-                        {
-                            //char1ATB += (activeParty.activeParty[0].GetComponent<Character>().haste * 10) / 50;
-                            char1ATB += activeParty.activeParty[0].GetComponent<Character>().haste * Time.deltaTime;
-                            char1ATBGuage.value = char1ATB;
-                        }
-                        else
-                        {
-                            state = BattleState.CHAR1TURN;
-                            Char1Turn();
-                        }
-                    }
 
-                    if (activeParty.activeParty[1] != null)
-                    {
-                        if (activeParty.activeParty[1].GetComponent<Character>().currentHealth > 0)
-                        {
-                            if (char2ATB < ATBReady)
-                            {
-                                //char2ATB += (activeParty.activeParty[1].GetComponent<Character>().haste * 10) / 50;
-
-                                char2ATB += activeParty.activeParty[1].GetComponent<Character>().haste * Time.deltaTime;
-                                char2ATBGuage.value = char2ATB;
-                            }
-                            else
-                            {
-                                state = BattleState.CHAR2TURN;
-                                Char2Turn();
-                            }
-                        }
-                    }
-
-                    if (activeParty.activeParty[2] != null)
-                    {
-                        if (activeParty.activeParty[2].GetComponent<Character>().currentHealth > 0)
-                        {
-                            if (char3ATB < ATBReady)
-                            {
-                                char3ATB += activeParty.activeParty[2].GetComponent<Character>().haste * Time.deltaTime;
-                                char3ATBGuage.value = char3ATB;
-                            }
-                            else
-                            {
-                                state = BattleState.CHAR3TURN;
-                                Char3Turn();
-                            }
-                        }
-                    }
-
-                    if (enemies[0].GetComponent<Enemy>().currentHealth > 0)
-                    {
-                        if (enemy1ATB < ATBReady)
-                        {
-                            enemy1ATB += (enemies[0].GetComponent<Enemy>().haste * Time.deltaTime);
-                            enemy1ATBGuage.value = enemy1ATB;
-                        }
-                        else
-                        {
-                            Enemy1Turn();
-                        }
-                    }
-
-                    if (enemies[1] != null)
-                    {
-                        if (enemies[1].GetComponent<Enemy>().currentHealth > 0)
-                        {
-                            if (enemy2ATB < ATBReady)
-                            {
-                                enemy2ATB += (enemies[1].GetComponent<Enemy>().haste * Time.deltaTime);
-                                enemy2ATBGuage.value = enemy2ATB;
-
-                            }
-                            else
-                            {
-                                Enemy2Turn();
-                            }
-                        }
-                    }
-
-                    if (enemies[2] != null)
-                    {
-                        if (enemies[2].GetComponent<Enemy>().currentHealth > 0)
-                        {
-                            if (enemy3ATB < ATBReady)
-                            {
-                                enemy3ATB += (enemies[2].GetComponent<Enemy>().haste * Time.deltaTime);
-                                enemy3ATBGuage.value = enemy3ATB;
-                            }
-                            else
-                            {
-                                Enemy3Turn();
-                            }
-                        }
-                    }
-
-                    if (enemies[3] != null)
-                    {
-                        if (enemies[3].GetComponent<Enemy>().currentHealth > 0)
-                        {
-                            if (enemy4ATB < ATBReady)
-                            {
-                                enemy4ATB += (enemies[3].GetComponent<Enemy>().haste * Time.deltaTime);
-                                enemy4ATBGuage.value = enemy4ATB;
-                            }
-                            else
-                            {
-                                Enemy4Turn();
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                HandleQueue();
-            }
+            HandleQueue();
         }
 
 
@@ -5867,6 +5882,11 @@ public class BattleSystem : MonoBehaviour
             damagePopup[6].SetActive(true);
         }
 
+        if (Engine.e.activeParty.gameObject.GetComponent<SpriteRenderer>().material != originalMaterial)
+        {
+            Engine.e.activeParty.gameObject.GetComponent<SpriteRenderer>().material = originalMaterial;
+        }
+
         if (Engine.e.battleSystem.hud.displayHealth[0].text != Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentHealth.ToString())
         {
             Engine.e.battleSystem.hud.displayHealth[0].text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().currentHealth.ToString();
@@ -5897,6 +5917,11 @@ public class BattleSystem : MonoBehaviour
 
         if (Engine.e.party[1] != null)
         {
+            if (Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().material != originalMaterial)
+            {
+                Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().material = originalMaterial;
+            }
+
             if (Engine.e.battleSystem.hud.displayHealth[1].text != Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentHealth.ToString())
             {
                 Engine.e.battleSystem.hud.displayHealth[1].text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().currentHealth.ToString();
@@ -5928,9 +5953,15 @@ public class BattleSystem : MonoBehaviour
 
         if (Engine.e.party[2] != null)
         {
+            if (Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().material != originalMaterial)
+            {
+                Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().material = originalMaterial;
+            }
+
             if (Engine.e.battleSystem.hud.displayHealth[2].text != Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth.ToString())
             {
                 Engine.e.battleSystem.hud.displayHealth[2].text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().currentHealth.ToString();
+                Engine.e.activeParty.gameObject.GetComponent<SpriteRenderer>().material = originalMaterial;
             }
             if (Engine.e.battleSystem.hud.displayMaxHealth[2].text != Engine.e.activeParty.activeParty[2].GetComponent<Character>().maxHealth.ToString())
             {
@@ -5956,6 +5987,12 @@ public class BattleSystem : MonoBehaviour
             }
         }
 
+        if (enemies[0].GetComponentInChildren<SpriteRenderer>().material != originalMaterial)
+        {
+            enemies[0].GetComponentInChildren<SpriteRenderer>().material = originalMaterial;
+        }
+
+
         if (Engine.e.battleSystem.hud.displayEnemyHealth[0].text != enemies[0].GetComponent<Enemy>().currentHealth.ToString())
         {
             Engine.e.battleSystem.hud.displayEnemyHealth[0].text = enemies[0].GetComponent<Enemy>().currentHealth.ToString();
@@ -5967,6 +6004,10 @@ public class BattleSystem : MonoBehaviour
             {
                 Engine.e.battleSystem.hud.displayEnemyHealth[1].text = enemies[1].GetComponent<Enemy>().currentHealth.ToString();
             }
+            if (enemies[1].GetComponentInChildren<SpriteRenderer>().material != originalMaterial)
+            {
+                enemies[1].GetComponentInChildren<SpriteRenderer>().material = originalMaterial;
+            }
         }
 
         if (enemies[2] != null)
@@ -5975,6 +6016,10 @@ public class BattleSystem : MonoBehaviour
             {
                 Engine.e.battleSystem.hud.displayEnemyHealth[2].text = enemies[2].GetComponent<Enemy>().currentHealth.ToString();
             }
+            if (enemies[2].GetComponentInChildren<SpriteRenderer>().material != originalMaterial)
+            {
+                enemies[2].GetComponentInChildren<SpriteRenderer>().material = originalMaterial;
+            }
         }
 
         if (enemies[3] != null)
@@ -5982,6 +6027,10 @@ public class BattleSystem : MonoBehaviour
             if (Engine.e.battleSystem.hud.displayEnemyHealth[3].text != enemies[3].GetComponent<Enemy>().currentHealth.ToString())
             {
                 Engine.e.battleSystem.hud.displayEnemyHealth[3].text = enemies[3].GetComponent<Enemy>().currentHealth.ToString();
+            }
+            if (enemies[3].GetComponentInChildren<SpriteRenderer>().material != originalMaterial)
+            {
+                enemies[3].GetComponentInChildren<SpriteRenderer>().material = originalMaterial;
             }
         }
 
@@ -5997,133 +6046,16 @@ public class BattleSystem : MonoBehaviour
 
     public void SetDamagePopupTextOne(Vector3 _pos, string _textDisplayed, Color _color)
     {
-        damagePopup[0].transform.position = _pos;
-        damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
 
+        if (damagePopup[0].transform.position == Vector3.zero)
+        {
+            damagePopup[0].transform.position = _pos;
+            damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
+            damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
+
+
+        }
         dmgText1Active = true;
-
-    }
-
-    public void SetDamagePopupTextTwo(Vector3 _pos1, Vector3 _pos2, string _textDisplayed, Color _color)
-    {
-        damagePopup[0].transform.position = _pos1;
-        damagePopup[1].transform.position = _pos2;
-
-        damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[1].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-
-        damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[1].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-
-        dmgText1Active = true;
-        dmgText2Active = true;
-
-
-    }
-
-    public void SetDamagePopupTextThree(Vector3 _pos1, Vector3 _pos2, Vector3 _pos3, string _textDisplayed, Color _color)
-    {
-        damagePopup[0].transform.position = _pos1;
-        damagePopup[1].transform.position = _pos2;
-        damagePopup[2].transform.position = _pos3;
-
-        damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[1].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[2].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-
-        damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[1].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[2].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-
-        dmgText1Active = true;
-        dmgText2Active = true;
-        dmgText3Active = true;
-
-    }
-
-    public void SetDamagePopupTextFour(Vector3 _pos1, Vector3 _pos2, Vector3 _pos3, Vector3 _pos4, string _textDisplayed, Color _color)
-    {
-        damagePopup[0].transform.position = _pos1;
-        damagePopup[1].transform.position = _pos2;
-        damagePopup[2].transform.position = _pos3;
-        damagePopup[3].transform.position = _pos4;
-
-        damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[1].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[2].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[3].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-
-        damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[1].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[2].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[3].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-
-        dmgText1Active = true;
-        dmgText2Active = true;
-        dmgText3Active = true;
-        dmgText4Active = true;
-
-
-    }
-
-    public void SetDamagePopupTextFive(Vector3 _pos1, Vector3 _pos2, Vector3 _pos3, Vector3 _pos4, Vector3 _pos5, string _textDisplayed, Color _color)
-    {
-        damagePopup[0].transform.position = _pos1;
-        damagePopup[1].transform.position = _pos2;
-        damagePopup[2].transform.position = _pos3;
-        damagePopup[3].transform.position = _pos4;
-        damagePopup[4].transform.position = _pos5;
-
-        damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[1].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[2].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[3].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[4].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-
-        damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[1].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[2].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[3].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[4].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-
-        dmgText1Active = true;
-        dmgText2Active = true;
-        dmgText3Active = true;
-        dmgText4Active = true;
-        dmgText5Active = true;
-
-    }
-
-    public void SetDamagePopupTextSix(Vector3 _pos1, Vector3 _pos2, Vector3 _pos3, Vector3 _pos4, Vector3 _pos5, Vector3 _pos6, string _textDisplayed, Color _color)
-    {
-        damagePopup[0].transform.position = _pos1;
-        damagePopup[1].transform.position = _pos2;
-        damagePopup[2].transform.position = _pos3;
-        damagePopup[3].transform.position = _pos4;
-        damagePopup[4].transform.position = _pos5;
-        damagePopup[5].transform.position = _pos6;
-
-        damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[1].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[2].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[3].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[4].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[5].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-
-        damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[1].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[2].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[3].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[4].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[5].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-
-        dmgText1Active = true;
-        dmgText2Active = true;
-        dmgText3Active = true;
-        dmgText4Active = true;
-        dmgText5Active = true;
-        dmgText6Active = true;
     }
 
     public void SetDamagePopupTextAllTeam(string _textDisplayed, Color _color)
@@ -6152,112 +6084,6 @@ public class BattleSystem : MonoBehaviour
         if (activeParty.activeParty[2] != null && activeParty.activeParty[2].GetComponent<Character>().currentHealth > 0)
         {
             dmgText3Active = true;
-        }
-    }
-
-    public void SetDamagePopupTextAllEnemies(string _textDisplayed, Color _color)
-    {
-        damagePopup[3].transform.position = enemies[0].transform.position;
-        damagePopup[3].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[3].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-
-        if (enemies[1] != null)
-        {
-            damagePopup[4].transform.position = enemies[1].transform.position;
-            damagePopup[4].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-            damagePopup[4].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        }
-
-        if (enemies[2] != null)
-        {
-            damagePopup[5].transform.position = enemies[2].transform.position;
-            damagePopup[5].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-            damagePopup[5].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        }
-
-        if (enemies[3] != null)
-        {
-            damagePopup[6].transform.position = enemies[3].transform.position;
-            damagePopup[6].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-            damagePopup[6].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        }
-
-
-        if (enemies[0].currentHealth > 0)
-        {
-            dmgText4Active = true;
-        }
-        if (enemies[1] != null && enemies[1].currentHealth > 0)
-        {
-            dmgText5Active = true;
-        }
-        if (enemies[2] != null && enemies[2].currentHealth > 0)
-        {
-            dmgText6Active = true;
-        }
-        if (enemies[3] != null && enemies[3].currentHealth > 0)
-        {
-            dmgText7Active = true;
-        }
-
-
-    }
-
-    public void SetDamagePopupTextAll(string _textDisplayed, Color _color)
-    {
-        damagePopup[0].transform.position = Engine.e.activeParty.gameObject.transform.position;
-        damagePopup[1].transform.position = Engine.e.activePartyMember2.transform.position;
-        damagePopup[2].transform.position = Engine.e.activePartyMember3.transform.position;
-        damagePopup[3].transform.position = enemies[0].transform.position;
-        damagePopup[4].transform.position = enemies[1].transform.position;
-        damagePopup[5].transform.position = enemies[2].transform.position;
-        damagePopup[6].transform.position = enemies[3].transform.position;
-
-        damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[1].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[2].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[3].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[4].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[5].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-        damagePopup[6].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-
-        damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[1].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[2].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[3].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[4].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[5].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-        damagePopup[6].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
-
-        if (activeParty.activeParty[0].GetComponent<Character>().currentHealth > 0)
-        {
-            dmgText1Active = true;
-        }
-
-        if (activeParty.activeParty[1] != null && activeParty.activeParty[1].GetComponent<Character>().currentHealth > 0)
-        {
-            dmgText2Active = true;
-        }
-        if (activeParty.activeParty[2] != null && activeParty.activeParty[2].GetComponent<Character>().currentHealth > 0)
-        {
-            dmgText3Active = true;
-        }
-
-        if (enemies[0].currentHealth > 0)
-        {
-            dmgText4Active = true;
-        }
-        if (enemies[1] != null && enemies[1].currentHealth > 0)
-        {
-            dmgText5Active = true;
-        }
-        if (enemies[2] != null && enemies[2].currentHealth > 0)
-        {
-            dmgText6Active = true;
-        }
-        if (enemies[3] != null && enemies[3].currentHealth > 0)
-        {
-            dmgText7Active = true;
         }
     }
 

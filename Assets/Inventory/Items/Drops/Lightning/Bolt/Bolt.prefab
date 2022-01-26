@@ -31,7 +31,7 @@ RectTransform:
   m_GameObject: {fileID: 634046384593383041}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.7518797, y: 0.7518797, z: 0.7518797}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2061054983090957579}
   - {fileID: 8177794298302100833}
@@ -210,8 +210,8 @@ MonoBehaviour:
   support: 0
   targetAll: 0
   dropValue: 0
-  dropIndex: 0
-  isKnown: 0
+  dropIndex: 10
+  isKnown: 1
 --- !u!1 &4412401449860616489
 GameObject:
   m_ObjectHideFlags: 0

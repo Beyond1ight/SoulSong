@@ -189,7 +189,7 @@ MonoBehaviour:
   experiencePoints: 10
   dps: 1
   support: 0
-  targetAll: 1
+  targetAll: 0
   dropValue: 0
   dropIndex: 15
   isKnown: 0

@@ -268,6 +268,7 @@ public class Engine : MonoBehaviour
 
         playableCharacters[0].drops = new Drops[gameDrops.Length];
 
+        playableCharacters[0].drops[0] = gameDrops[0];
         playableCharacters[0].drops[1] = gameDrops[1];
         playableCharacters[0].drops[10] = gameDrops[10];
         gameDrops[10].isKnown = true;

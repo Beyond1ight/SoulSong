@@ -191,7 +191,7 @@ MonoBehaviour:
   support: 0
   targetAll: 0
   dropValue: 0
-  dropIndex: 0
+  dropIndex: 21
   isKnown: 0
 --- !u!95 &4913080752961065574
 Animator:

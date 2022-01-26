@@ -235,13 +235,13 @@ public class Enemy : MonoBehaviour
 
             Engine.e.battleSystem.damageTotal = adjustedPhysicalDmg;
             currentHealth -= adjustedPhysicalDmg;
-            Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, adjustedPhysicalDmg.ToString(), Color.white);
+            SetBattleDamagePopupText(adjustedPhysicalDmg.ToString(), Color.white);
         }
         else
         {
             adjustedPhysicalDmg = 0;
             battleSystem.dodgedAttack = true;
-            Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Dodged!", Color.white);
+            SetBattleDamagePopupText("Dodged!", Color.white);
 
         }
 
@@ -379,14 +379,14 @@ public class Enemy : MonoBehaviour
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.fireDropsLevel / 2)));
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * fireDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
-                Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, dropValueOutcome.ToString(), Color.white);
+                SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
             }
             else
             {
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.fireDropsLevel / 2)) + characterAttacking.fireDropAttackBonus);
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * fireDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
-                Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, dropValueOutcome.ToString(), Color.white);
+                SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
             }
         }
 
@@ -397,14 +397,14 @@ public class Enemy : MonoBehaviour
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.iceDropsLevel / 2)));
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * iceDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
-                Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, dropValueOutcome.ToString(), Color.white);
+                SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
             }
             else
             {
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.iceDropsLevel / 2)) + characterAttacking.iceDropAttackBonus);
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * iceDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
-                Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, dropValueOutcome.ToString(), Color.white);
+                SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
             }
         }
 
@@ -421,7 +421,7 @@ public class Enemy : MonoBehaviour
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.lightningDropsLevel / 2)) + characterAttacking.lightningDropAttackBonus);
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * lightningDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
-                Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, dropValueOutcome.ToString(), Color.white);
+                SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
             }
         }
 
@@ -432,14 +432,14 @@ public class Enemy : MonoBehaviour
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.waterDropsLevel / 2)));
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
-                Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, dropValueOutcome.ToString(), Color.white);
+                SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
             }
             else
             {
                 dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.waterDropsLevel / 2)) + characterAttacking.waterDropAttackBonus);
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
-                Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, dropValueOutcome.ToString(), Color.white);
+                SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
             }
         }
 
@@ -462,7 +462,7 @@ public class Enemy : MonoBehaviour
                         currentHealth -= Mathf.Round(damageTotal);
                     }
 
-                    Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, dropValueOutcome.ToString(), Color.white);
+                    SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
 
                     break;
                 case "Bio":
@@ -485,12 +485,12 @@ public class Enemy : MonoBehaviour
                             poisonDmg = ((poisonDmgCalculation) - (poisonDmgCalculation * poisonDefense / 100));
 
                         }
-                        Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Poisoned!", Color.white);
+                        SetBattleDamagePopupText("Poisoned!", Color.white);
                     }
                     else
                     {
 
-                        Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Resisted!", Color.white);
+                        SetBattleDamagePopupText("Resisted!", Color.white);
                     }
                     break;
                 case "Knockout":
@@ -503,11 +503,11 @@ public class Enemy : MonoBehaviour
                             isAsleep = true;
                             sleepTimer = 0;
 
-                            Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Sleeping!", Color.white);
+                            SetBattleDamagePopupText("Sleeping!", Color.white);
                         }
                         else
                         {
-                            Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Resisted!", Color.white);
+                            SetBattleDamagePopupText("Resisted!", Color.white);
                         }
                     }
                     break;
@@ -521,11 +521,11 @@ public class Enemy : MonoBehaviour
                             isConfused = true;
                             confuseTimer = 0;
 
-                            Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Confused!", Color.white);
+                            SetBattleDamagePopupText("Confused!", Color.white);
                         }
                         else
                         {
-                            Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Resisted!", Color.white);
+                            SetBattleDamagePopupText("Resisted!", Color.white);
                         }
                     }
                     break;
@@ -554,7 +554,7 @@ public class Enemy : MonoBehaviour
                         Debug.Log(damageTotal);
                     }
 
-                    Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, damageTotal.ToString(), Color.green);
+                    SetBattleDamagePopupText(damageTotal.ToString(), Color.green);
 
                     if (currentHealth >= maxHealth)
                     {
@@ -773,7 +773,7 @@ public class Enemy : MonoBehaviour
 
 
                 Engine.e.battleSystem.HandleItemAnim(spawnGOLoc, this.gameObject, item);
-                Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, item.itemPower.ToString(), Color.green);
+                SetBattleDamagePopupText(item.itemPower.ToString(), Color.green);
 
                 currentHealth += item.itemPower;
 
@@ -789,7 +789,7 @@ public class Enemy : MonoBehaviour
 
 
                 Engine.e.battleSystem.HandleItemAnim(spawnGOLoc, this.gameObject, item);
-                Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, item.itemPower.ToString(), Color.blue);
+                SetBattleDamagePopupText(item.itemPower.ToString(), Color.blue);
                 // Destroy(manaSprite, 1f);
 
 
@@ -827,7 +827,7 @@ public class Enemy : MonoBehaviour
                 {
 
                     Engine.e.battleSystem.HandleItemAnim(spawnGOLoc, this.gameObject, item);
-                    Engine.e.battleSystem.SetDamagePopupTextOne(this.transform.position, "Cured!", Color.green);
+                    SetBattleDamagePopupText("Cured!", Color.green);
                     // Destroy(antidote, 1f);
                     isPoisoned = false;
                     inflicted = false;
@@ -853,7 +853,7 @@ public class Enemy : MonoBehaviour
         damageTotal = Mathf.Round(power);
         Engine.e.battleSystem.damageTotal = damageTotal;
         currentHealth -= damageTotal;
-
+        SetBattleDamagePopupText(damageTotal.ToString(), Color.white);
         if (!battleSystem.skillRangedAttack)
         {
             if (currentHealth <= 0)
@@ -897,6 +897,43 @@ public class Enemy : MonoBehaviour
                 GetComponentInChildren<SpriteRenderer>().color = Color.white;
 
             }
+        }
+    }
+
+
+    public void SetBattleDamagePopupText(string _textDisplayed, Color _color)
+    {
+        if (groupIndex == 0)
+        {
+            Engine.e.battleSystem.damagePopup[3].transform.position = this.transform.position;
+            Engine.e.battleSystem.damagePopup[3].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
+            Engine.e.battleSystem.damagePopup[3].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
+
+            Engine.e.battleSystem.dmgText4Active = true;
+        }
+        if (groupIndex == 1)
+        {
+            Engine.e.battleSystem.damagePopup[4].transform.position = this.transform.position;
+            Engine.e.battleSystem.damagePopup[4].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
+            Engine.e.battleSystem.damagePopup[4].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
+
+            Engine.e.battleSystem.dmgText5Active = true;
+        }
+        if (groupIndex == 2)
+        {
+            Engine.e.battleSystem.damagePopup[5].transform.position = this.transform.position;
+            Engine.e.battleSystem.damagePopup[5].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
+            Engine.e.battleSystem.damagePopup[5].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
+
+            Engine.e.battleSystem.dmgText6Active = true;
+        }
+        if (groupIndex == 3)
+        {
+            Engine.e.battleSystem.damagePopup[6].transform.position = this.transform.position;
+            Engine.e.battleSystem.damagePopup[6].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
+            Engine.e.battleSystem.damagePopup[6].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
+
+            Engine.e.battleSystem.dmgText7Active = true;
         }
     }
 

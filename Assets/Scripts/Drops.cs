@@ -17,4 +17,8 @@ public class Drops : MonoBehaviour
     public bool isKnown = false;
 
 
+    public void SpriteDamageFlash()
+    {
+        GetComponent<DisplayedAnimationControl>().CallDamageFlash();
+    }
 }
