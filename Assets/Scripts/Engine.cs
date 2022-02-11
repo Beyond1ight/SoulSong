@@ -11,7 +11,6 @@ public class Engine : MonoBehaviour
 {
 
     // General Info
-    public GameObject fireDrop;
     public GameObject[] party;
     public ActiveParty activeParty;
     public Character[] playableCharacters;
@@ -59,7 +58,7 @@ public class Engine : MonoBehaviour
     public CinemachineVirtualCamera mainVirtualCamera;
     public Camera mainCamera;
     public GameObject activateArrangePartyButton,
-    activePartyMember2, activePartyMember3, itemMenuCharFirst, dropMenuCharFirst;
+    activePartyMember2, activePartyMember3, itemMenuCharFirst;
     public TextMeshProUGUI[] char1LevelUpPanelReference, char2LevelUpPanelReference, char3LevelUpPanelReference;
     public TextMeshProUGUI enemyLootReferenceG, enemyLootReferenceExp, battleHelp;
     Vector3 startingPos;
@@ -74,7 +73,6 @@ public class Engine : MonoBehaviour
     public GameObject[] itemConfirmUseButtons, itemDropConfirmUseButtons;
     public GameObject interactionPopup;
     public bool loadTimer = false;
-    public GameObject deathTimerPopup;
     public GameObject weatherRain;
 
     // Menu References
@@ -411,6 +409,8 @@ public class Engine : MonoBehaviour
 
         //playableCharacters[1].drops[10] = gameDrops[10];
         playableCharacters[1].drops[15] = gameDrops[15];
+        playableCharacters[1].drops[16] = gameDrops[16];
+
         /* playableCharacters[1].fireDrops = new Drops[10];
          playableCharacters[1].holyDrops = new Drops[10];
          playableCharacters[1].waterDrops = new Drops[10];
@@ -763,11 +763,13 @@ public class Engine : MonoBehaviour
                 //                gameDrops[15].isKnown = true;
                 gameSkills[5].isKnown = true;
                 playableCharacters[1].activePartyIndex = 1;
+                gridReference.charPaths[1].SetActive(true);
 
             }
             if (party[2] != null)
             {
                 ActivateArrangePartyButton();
+                gridReference.charPaths[2].SetActive(true);
 
                 if (playableCharacters[0].lvl > 1)
                 {
@@ -797,7 +799,7 @@ public class Engine : MonoBehaviour
                 activeParty.activeParty[2] = party[2].GetComponent<Character>().gameObject;
                 //      charAbilityButtons[2].SetActive(true);
                 //     charSkillTierButtons[2].SetActive(true);
-                gameDrops[20].isKnown = true;
+                //gameDrops[20].isKnown = true;
                 gameSkills[10].isKnown = true;
                 playableCharacters[2].activePartyIndex = 2;
 
@@ -807,6 +809,8 @@ public class Engine : MonoBehaviour
             if (party[3] != null)
             {
                 battleSystem.battleSwitchButtons = true;
+                gridReference.charPaths[3].SetActive(true);
+
                 if (playableCharacters[0].lvl < 99)
                 {
                     playableCharacters[3].lvl = playableCharacters[0].lvl + 1;
@@ -2292,6 +2296,8 @@ public class Engine : MonoBehaviour
             AddCharacterToParty("Riggs");
 
             activeParty.SetActiveParty();
+
+            gridReference.tier2Path.SetActive(true);
         }
 
         if (inWorldMap)

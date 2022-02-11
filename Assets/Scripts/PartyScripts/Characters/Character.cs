@@ -132,7 +132,7 @@ public class Character : MonoBehaviour
                     Engine.e.battleSystem.char1SkillTargetSupport = true;
                     Engine.e.battleSystem.char1Supporting = true;
 
-                    if (skillChoice.skillIndex == 21)
+                    if (skillChoice.skillIndex == 25)
                     {
                         Engine.e.battleSystem.charSkillSwitchCheck = true;
                         Engine.e.battleSystem.ActivateAvailableCharSwitchButtons();
@@ -168,7 +168,7 @@ public class Character : MonoBehaviour
                     Engine.e.battleSystem.char2SkillTargetSupport = true;
                     Engine.e.battleSystem.char2Supporting = true;
 
-                    if (skillChoice.skillIndex == 21)
+                    if (skillChoice.skillIndex == 25)
                     {
                         Engine.e.battleSystem.charSkillSwitchCheck = true;
                         Engine.e.battleSystem.ActivateAvailableCharSwitchButtons();
@@ -205,7 +205,7 @@ public class Character : MonoBehaviour
                     Engine.e.battleSystem.char3SkillTargetSupport = true;
                     Engine.e.battleSystem.char3Supporting = true;
 
-                    if (skillChoice.skillIndex == 21)
+                    if (skillChoice.skillIndex == 25)
                     {
                         Engine.e.battleSystem.charSkillSwitchCheck = true;
                         Engine.e.battleSystem.ActivateAvailableCharSwitchButtons();
@@ -845,19 +845,46 @@ public class Character : MonoBehaviour
 
         if (dropChoice.dropType == "Water")
         {
-            if (teamAttack)
+            if (dropChoice.dropName == "Bloom")
             {
-                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.waterDropsLevel / 2)) + characterAttacking.waterDropAttackBonus);
-                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
-                currentHealth -= Mathf.Round(damageTotal);
-                SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
+                if (teamAttack)
+                {
+                    dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.waterDropsLevel / 2)));
+                    damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
+                    currentHealth += damageTotal;
+
+                }
+                else
+                {
+                    dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.waterDropsLevel / 2)));
+                    damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
+                    currentHealth += damageTotal;
+                }
+
+                SetBattleDamagePopupText(damageTotal.ToString(), Color.green);
+
+                if (currentHealth >= maxHealth)
+                {
+                    currentHealth = maxHealth;
+                }
             }
             else
             {
-                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.waterDropsLevel / 2)));
-                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
-                currentHealth -= Mathf.Round(damageTotal);
-                SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
+                if (teamAttack)
+                {
+
+                    dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.waterDropsLevel / 2)) + characterAttacking.waterDropAttackBonus);
+                    damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
+                    currentHealth -= Mathf.Round(damageTotal);
+                    SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
+                }
+                else
+                {
+                    dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.waterDropsLevel / 2)));
+                    damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
+                    currentHealth -= Mathf.Round(damageTotal);
+                    SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
+                }
             }
         }
 

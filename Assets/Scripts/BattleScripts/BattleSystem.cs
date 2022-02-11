@@ -862,25 +862,22 @@ public class BattleSystem : MonoBehaviour
         {
             index = 0;
             characterAttacking = Engine.e.activeParty.gameObject;
-            attackingTeam = char1TargetingTeam;
             _characterAttacking = activeParty.activeParty[0].GetComponent<Character>();
         }
         if (currentInQueue == BattleState.CHAR2TURN)
         {
             index = 1;
             characterAttacking = Engine.e.activePartyMember2;
-            attackingTeam = char2TargetingTeam;
             _characterAttacking = activeParty.activeParty[1].GetComponent<Character>();
         }
         if (currentInQueue == BattleState.CHAR3TURN)
         {
             index = 2;
             characterAttacking = Engine.e.activePartyMember3;
-            attackingTeam = char3TargetingTeam;
             _characterAttacking = activeParty.activeParty[2].GetComponent<Character>();
         }
 
-        if (!attackingTeam)
+        if (!targetingTeam)
         {
             targetGOLoc = enemies[_target].gameObject;
 
@@ -1209,7 +1206,7 @@ public class BattleSystem : MonoBehaviour
             characterAttacking = Engine.e.activeParty.gameObject;
             characterAttackIndex = Engine.e.activeParty.activeParty[0].GetComponent<Character>();
 
-            if (!attackingTeam)
+            if (!targetingTeam)
             {
                 enemy = enemies[targetEnemy].GetComponent<Enemy>();
             }
@@ -1264,7 +1261,7 @@ public class BattleSystem : MonoBehaviour
             characterAttacking = Engine.e.activePartyMember3;
             characterAttackIndex = Engine.e.activeParty.activeParty[2].GetComponent<Character>();
 
-            if (!attackingTeam)
+            if (!targetingTeam)
             {
                 enemy = enemies[targetEnemy].GetComponent<Enemy>();
             }
@@ -1318,7 +1315,7 @@ public class BattleSystem : MonoBehaviour
 
             enemyGroup.moveToPosition = false;
 
-            if (!attackingTeam)
+            if (!targetingTeam)
             {
                 Vector3 targetPos = Vector3.MoveTowards(characterAttacking.GetComponent<Rigidbody2D>().transform.position, enemies[targetEnemy].transform.position, 8f * Time.deltaTime);
 
@@ -1519,7 +1516,7 @@ public class BattleSystem : MonoBehaviour
         || currentInQueue == BattleState.CHAR2TURN || currentInQueue == BattleState.CONFCHAR2
         || currentInQueue == BattleState.CHAR3TURN || currentInQueue == BattleState.CONFCHAR3)
         {
-            if (!attackingTeam)
+            if (!targetingTeam)
             {
                 if (lastDropChoice != null && !lastDropChoice.targetAll || lastSkillChoice != null && !lastSkillChoice.targetAll
                 || lastDropChoice == null && lastSkillChoice == null)
@@ -1574,7 +1571,7 @@ public class BattleSystem : MonoBehaviour
         }
         else
         {
-            if (!attackingTeam)
+            if (!targetingTeam)
             {
                 if (!lastDropChoice.targetAll)
                 {
@@ -1633,8 +1630,6 @@ public class BattleSystem : MonoBehaviour
         {
             state = BattleState.ATBCHECK;
         }
-
-        Debug.Log(animationTimer);
 
         if (animExists)
         {
@@ -2014,7 +2009,7 @@ public class BattleSystem : MonoBehaviour
 
                 switch (_skillChoice.skillIndex)
                 {
-                    case 21:
+                    case 25:
 
                         activeParty.activeParty[index].GetComponent<Character>().currentEnergy -= _skillChoice.skillCost;
 

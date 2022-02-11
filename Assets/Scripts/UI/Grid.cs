@@ -13,9 +13,9 @@ public class Grid : MonoBehaviour
     public GameObject[] connectionLines;
     public bool gridDisplayed, abilitiesListDisplayed, grieveScreen, macScreen, fieldScreen, riggsScreen;
     public int grievePosition, macPosition, fieldPosition, riggsPosition;
-    public GameObject cursor, helpReference, helpTextParentObj, abilitiesList;
+    public GameObject cursor, helpReference, helpTextParentObj, abilitiesList, tier2Path;
     public CinemachineVirtualCamera gridPerspective, centerOfGridPerspective;
-    public GameObject[] dropsButtons, skillButtons;
+    public GameObject[] dropsButtons, skillButtons, charPaths;
 
 
     private void Start()
