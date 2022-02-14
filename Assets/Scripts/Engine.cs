@@ -14,7 +14,7 @@ public class Engine : MonoBehaviour
     public GameObject[] party;
     public ActiveParty activeParty;
     public Character[] playableCharacters;
-    public Item[] charEquippedWeapons, charEquippedChestArmor;
+    public Item[] charEquippedWeapons, charEquippedChestArmor, charEquippedAccessory1, charEquippedAccessory2;
     public int partyMoney;
     public float timeOfDay;
     public string currentScene;
@@ -114,8 +114,9 @@ public class Engine : MonoBehaviour
         ClearGameQuests();
         SetDropIndexes();
         SetSkillIndexes();
-        SetParty();
         gridReference.SetupGrid();
+
+        SetParty();
         //abilityScreenReference.ClearNodeUnlocked();
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
@@ -157,11 +158,14 @@ public class Engine : MonoBehaviour
         partyInventoryReference.fieldWeapons = new FieldWeapons[partyInventoryReference.fieldWeaponInventorySlots.Length];
         partyInventoryReference.riggsWeapons = new RiggsWeapons[partyInventoryReference.riggsWeaponInventorySlots.Length];
         partyInventoryReference.chestArmor = new ChestArmor[partyInventoryReference.chestArmorInventorySlots.Length];
+        partyInventoryReference.accessories = new Accessory[partyInventoryReference.accessoryInventorySlots.Length];
 
         SetInventoryArrayPositions();
 
         charEquippedWeapons = new Item[playableCharacters.Length];
         charEquippedChestArmor = new Item[playableCharacters.Length];
+        charEquippedAccessory1 = new Item[playableCharacters.Length];
+        charEquippedAccessory2 = new Item[playableCharacters.Length];
 
         partyMoney = 0;
 
@@ -181,6 +185,11 @@ public class Engine : MonoBehaviour
         //partyInventoryReference.AddItemToInventory(gameArmor[0].GetComponent<ChestArmor>());
         //partyInventoryReference.AddItemToInventory(gameArmor[0].GetComponent<ChestArmor>()); // Depends If Mac Is In Party From Start
 
+        // Beginning Accessories 
+        playableCharacters[0].GetComponent<Grieve>().accessory1 = null;
+        playableCharacters[0].GetComponent<Grieve>().accessory2 = null;
+        playableCharacters[1].GetComponent<Mac>().accessory1 = null;
+        playableCharacters[1].GetComponent<Mac>().accessory2 = null;
 
         // Grieve
         playableCharacters[0].characterName = "Grieve";
@@ -1517,9 +1526,12 @@ public class Engine : MonoBehaviour
         partyInventoryReference.fieldWeapons = new FieldWeapons[partyInventoryReference.fieldWeaponInventorySlots.Length];
         partyInventoryReference.riggsWeapons = new RiggsWeapons[partyInventoryReference.riggsWeaponInventorySlots.Length];
         partyInventoryReference.chestArmor = new ChestArmor[partyInventoryReference.chestArmorInventorySlots.Length];
+        partyInventoryReference.accessories = new Accessory[partyInventoryReference.accessoryInventorySlots.Length];
 
         charEquippedWeapons = new Item[playableCharacters.Length];
         charEquippedChestArmor = new Item[playableCharacters.Length];
+        charEquippedAccessory1 = new Item[playableCharacters.Length];
+        charEquippedAccessory2 = new Item[playableCharacters.Length];
 
         adventureLogReference.questLog = new Quest[adventureLogReference.questSlots.Length];
         adventureLogReference.completedQuestLog = new Quest[adventureLogReference.completedQuestSlots.Length];
@@ -1598,6 +1610,7 @@ public class Engine : MonoBehaviour
                 party[i].GetComponent<Character>().drops = new Drops[gameDrops.Length];
                 party[i].GetComponent<Character>().skills = new Skills[gameSkills.Length];
 
+                gridReference.charPaths[i].SetActive(true);
                 //  party[i].GetComponent<Character>().holyDrops = new Drops[holyDrops.Length];
                 // party[i].GetComponent<Character>().waterDrops = new Drops[waterDrops.Length];
                 //  party[i].GetComponent<Character>().lightningDrops = new Drops[lightningDrops.Length];
@@ -1715,6 +1728,50 @@ public class Engine : MonoBehaviour
                             if (gameInventory[k].itemName == gameData.charChestArmorEquip[3])
                             {
                                 playableCharacters[3].GetComponent<Riggs>().EquipRiggsChestArmorOnLoad(gameInventory[k].GetComponent<ChestArmor>());
+                            }
+                        }
+
+                        // Accessory Equip
+                        if (gameInventory[k].itemName == gameData.charAccessory1Equip[0])
+                        {
+                            playableCharacters[0].GetComponent<Grieve>().EquipGrieveAccessory1OnLoad(gameInventory[k].GetComponent<Accessory>());
+                        }
+                        if (gameInventory[k].itemName == gameData.charAccessory2Equip[0])
+                        {
+                            playableCharacters[0].GetComponent<Grieve>().EquipGrieveAccessory2OnLoad(gameInventory[k].GetComponent<Accessory>());
+                        }
+
+                        if (party[1] != null)
+                        {
+                            if (gameInventory[k].itemName == gameData.charAccessory1Equip[1])
+                            {
+                                playableCharacters[1].GetComponent<Mac>().EquipMacAccessory1OnLoad(gameInventory[k].GetComponent<Accessory>());
+                            }
+                            if (gameInventory[k].itemName == gameData.charAccessory2Equip[1])
+                            {
+                                playableCharacters[1].GetComponent<Mac>().EquipMacAccessory2OnLoad(gameInventory[k].GetComponent<Accessory>());
+                            }
+                        }
+                        if (party[2] != null)
+                        {
+                            if (gameInventory[k].itemName == gameData.charAccessory1Equip[2])
+                            {
+                                playableCharacters[2].GetComponent<Field>().EquipFieldAccessory1OnLoad(gameInventory[k].GetComponent<Accessory>());
+                            }
+                            if (gameInventory[k].itemName == gameData.charAccessory2Equip[2])
+                            {
+                                playableCharacters[2].GetComponent<Field>().EquipFieldAccessory2OnLoad(gameInventory[k].GetComponent<Accessory>());
+                            }
+                        }
+                        if (party[3] != null)
+                        {
+                            if (gameInventory[k].itemName == gameData.charAccessory1Equip[3])
+                            {
+                                playableCharacters[3].GetComponent<Riggs>().EquipRiggsAccessory1OnLoad(gameInventory[k].GetComponent<Accessory>());
+                            }
+                            if (gameInventory[k].itemName == gameData.charAccessory2Equip[3])
+                            {
+                                playableCharacters[3].GetComponent<Riggs>().EquipRiggsAccessory2OnLoad(gameInventory[k].GetComponent<Accessory>());
                             }
                         }
                     }
@@ -2242,6 +2299,7 @@ public class Engine : MonoBehaviour
             partyInventoryReference.AddItemToInventory(gameInventory[0]);
             partyInventoryReference.AddItemToInventory(gameInventory[1]);
             partyInventoryReference.AddItemToInventory(gameInventory[3]);
+            partyInventoryReference.AddItemToInventory(gameInventory[28]);
 
             // partyInventoryReference.AddItemToInventory(gameInventory[2]);
             //partyInventoryReference.AddItemToInventory(gameInventory[3]);
@@ -2297,7 +2355,7 @@ public class Engine : MonoBehaviour
 
             activeParty.SetActiveParty();
 
-            gridReference.tier2Path.SetActive(true);
+            // gridReference.tier2Path.SetActive(true);
         }
 
         if (inWorldMap)

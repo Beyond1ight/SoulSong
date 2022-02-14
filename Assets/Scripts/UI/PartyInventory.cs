@@ -14,16 +14,17 @@ public class PartyInventory : MonoBehaviour
     public FieldWeapons[] fieldWeapons;
     public RiggsWeapons[] riggsWeapons;
     public ChestArmor[] chestArmor;
+    public Accessory[] accessories;
 
     public int grieveWeaponTotal, macWeaponTotal, fieldWeaponTotal, riggsWeaponTotal;
     public int chestArmorTotal;
-    public InventorySlot[] itemInventorySlots, chestArmorInventorySlots, grieveWeaponInventorySlots, macWeaponInventorySlots, fieldWeaponInventorySlots, riggsWeaponInventorySlots;
+    public InventorySlot[] itemInventorySlots, chestArmorInventorySlots, accessoryInventorySlots, grieveWeaponInventorySlots, macWeaponInventorySlots, fieldWeaponInventorySlots, riggsWeaponInventorySlots;
     public bool inventoryScreenSet, battleScreenInventorySet;
 
     public int indexReference;
     public int inventoryPointerIndex = 0, vertMove = 0;
     public RectTransform partyInventoryRectTransform, battleItemsRectTransform, grieveWeaponsRectTransform, macWeaponsRectTransform, fieldWeaponsRectTransform, riggsWeaponsRectTransform,
-    chestArmorRectTransform;
+    chestArmorRectTransform, accessoryRectTransform;
 
     bool pressUp, pressDown, pressRelease = false;
     public GameObject confirmDropCheck, confirmDropYesButton;
@@ -135,6 +136,20 @@ public class PartyInventory : MonoBehaviour
             else
             {
                 continueAdd = false;
+            }
+        }
+
+        if (item.GetComponent<Accessory>())
+        {
+            for (int i = 0; i < accessories.Length; i++)
+            {
+                if (accessories[i] == null)
+                {
+                    accessories[i] = item.GetComponent<Accessory>();
+                    accessoryInventorySlots[i].AddItem(item);
+                    //chestArmorTotal++;
+                    break;
+                }
             }
         }
 
@@ -375,6 +390,19 @@ public class PartyInventory : MonoBehaviour
                 }
             }
         }
+
+        if (item.GetComponent<Accessory>())
+        {
+            for (int i = 0; i < accessoryInventorySlots.Length; i++)
+            {
+                if (accessoryInventorySlots[i].GetComponent<InventorySlot>().item == item)
+                {
+                    accessoryInventorySlots[i].GetComponent<InventorySlot>().ClearSlot();
+                    accessories[i] = null;
+                    break;
+                }
+            }
+        }
     }
 
     public void OpenInventoryMenu()
@@ -441,7 +469,15 @@ public class PartyInventory : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(chestArmorInventorySlots[inventoryPointerIndex].gameObject);
     }
+    public void OpenAccessoryInventory()
+    {
+        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().ActivateArmorList(1);
+        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().inventoryPointerIndex = 0;
+        accessoryRectTransform.offsetMax = new Vector2(0, 0);
 
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(accessoryInventorySlots[inventoryPointerIndex].gameObject);
+    }
 
     // Handles Various Menu Navigation
     void HandleInventory()

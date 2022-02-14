@@ -372,6 +372,11 @@ public class Grid : MonoBehaviour
     {
         gridDisplayed = false;
 
+        for (int i = 1; i < charPaths.Length; i++)
+        {
+            charPaths[i].SetActive(false);
+        }
+
         for (int i = 0; i < connectionLines.Length; i++)
         {
             if (connectionLines[i] != null)

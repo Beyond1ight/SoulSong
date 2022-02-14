@@ -297,6 +297,8 @@ MonoBehaviour:
   canUseHolyDrops: 0
   weapon: {fileID: 7319004692465405328, guid: ab0ed2716eb3b457e947e63dfabc1642, type: 3}
   chestArmor: {fileID: 3137854586391407116, guid: 552a109bd39414d8180a998df500f23e, type: 3}
+  accessory1: {fileID: 0}
+  accessory2: {fileID: 0}
   skillIndex: 5
   skillTotal: 1
   poisonDmg: 0

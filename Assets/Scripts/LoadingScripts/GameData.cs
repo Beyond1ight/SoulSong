@@ -54,6 +54,7 @@ public class GameData
     public string riggsWeaponEquip;
 
     public string[] charChestArmorEquip;
+    public string[] charAccessory1Equip, charAccessory2Equip;
 
 
     public bool[] charInParty;
@@ -334,6 +335,8 @@ public class GameData
         riggsWeapons = new string[gameManager.partyInventoryReference.riggsWeaponInventorySlots.Length];
 
         charChestArmorEquip = new string[Engine.e.party.Length];
+        charAccessory1Equip = new string[Engine.e.party.Length];
+        charAccessory2Equip = new string[Engine.e.party.Length];
 
         // Items / Weapons / Armor
         for (int i = 0; i < partyInvNames.Length; i++)
@@ -367,6 +370,23 @@ public class GameData
             if (Engine.e.party[i] != null)
             {
                 charChestArmorEquip[i] = Engine.e.party[i].GetComponent<Character>().chestArmor.GetComponent<ChestArmor>().itemName;
+            }
+        }
+
+        // Equipped Accessory
+        for (int i = 0; i < charAccessory1Equip.Length; i++)
+        {
+            if (Engine.e.party[i] != null)
+            {
+                if (Engine.e.party[i].GetComponent<Character>().accessory1 != null)
+                {
+                    charAccessory1Equip[i] = Engine.e.party[i].GetComponent<Character>().accessory1.GetComponent<Accessory>().itemName;
+                }
+
+                if (Engine.e.party[i].GetComponent<Character>().accessory2 != null)
+                {
+                    charAccessory2Equip[i] = Engine.e.party[i].GetComponent<Character>().accessory2.GetComponent<Accessory>().itemName;
+                }
             }
         }
 

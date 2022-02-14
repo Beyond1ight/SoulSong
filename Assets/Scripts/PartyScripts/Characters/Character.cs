@@ -40,8 +40,7 @@ public class Character : MonoBehaviour
 
     public bool canUseFireDrops, canUseIceDrops, canUseLightningDrops, canUseWaterDrops, canUseShadowDrops, canUseHolyDrops = false;
 
-    public Item weapon;
-    public Item chestArmor;
+    public Item weapon, chestArmor, accessory1, accessory2;
     public int skillIndex;
     public int skillTotal;
     public float poisonDmg;

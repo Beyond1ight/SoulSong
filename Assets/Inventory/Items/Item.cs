@@ -23,7 +23,7 @@ public class Item : MonoBehaviour
     public float skillCostReduction;
     public AnimationClip animationClip;
 
-    public bool consumable, isDrop, weapon, chestArmor, useableOutOfBattle, targetAll;
+    public bool consumable, isDrop, weapon, chestArmor, accessory, useableOutOfBattle, targetAll;
 
     public void UseItemCheck()
     {

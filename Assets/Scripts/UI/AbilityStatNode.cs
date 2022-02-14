@@ -53,6 +53,7 @@ public class AbilityStatNode : MonoBehaviour
 
                     if (connectionCheck)
                     {
+
                         Engine.e.party[0].GetComponent<Character>().maxHealth += node.healthIncrease;
                         Engine.e.party[0].GetComponent<Character>().maxMana += node.manaIncrease;
                         Engine.e.party[0].GetComponent<Character>().maxEnergy += node.energyIncrease;
@@ -73,6 +74,7 @@ public class AbilityStatNode : MonoBehaviour
                                 Engine.e.party[0].GetComponent<Character>().drops[node.drop.dropIndex] = node.drop;
                             }
                         }
+
                         grieveUnlocked = true;
                         Debug.Log("Unlocked!");
 

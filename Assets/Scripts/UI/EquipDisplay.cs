@@ -9,15 +9,14 @@ public class EquipDisplay : MonoBehaviour
     public GameObject[] charSelectionButtons;
     public bool grieveScreen, macScreen, fieldScreen, riggsScreen;
     public GameObject[] weaponLists, armorLists;
-    public InventorySlot grieveEquippedWeapon, grieveEquippedChestArmor, macEquippedWeapon, macEquippedChestArmor,
-    fieldEquippedWeapon, fieldEquippedChestArmor, riggsEquippedWeapon, riggsEquippedChestArmor;
+    public InventorySlot equippedWeapon, equippedChestArmor, equippedAccessory1, equippedAccessory2;
     public TextMeshProUGUI[] charAttackStatsReference, charDefenseStatsReference, charAttackComparisonStats, charDefenseComparisonStats;
     public TextMeshProUGUI[] charTMP;
     public GameObject[] charNewWeaponNotif;
     public bool[] charNewWeapon;
     public GameObject[] equipmentDisplays;
     public bool grieveWeaponInventorySet, macWeaponInventorySet, fieldWeaponInventorySet, riggsWeaponInventorySet = false;
-    public bool chestArmorInventorySet = false;
+    public bool chestArmorInventorySet, accessory1InventorySet, accessory2InventorySet = false;
     bool pressUp, pressDown, pressRelease = false;
     public int inventoryPointerIndex = 0, vertMove = 0;
 
@@ -45,7 +44,7 @@ public class EquipDisplay : MonoBehaviour
         }
 
         EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(grieveEquippedWeapon.gameObject);
+        EventSystem.current.SetSelectedGameObject(equippedWeapon.gameObject);
 
     }
     public void SetMacScreen()
@@ -71,7 +70,7 @@ public class EquipDisplay : MonoBehaviour
         }
 
         EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(macEquippedWeapon.gameObject);
+        EventSystem.current.SetSelectedGameObject(equippedWeapon.gameObject);
 
     }
     public void SetFieldScreen()
@@ -98,7 +97,7 @@ public class EquipDisplay : MonoBehaviour
 
 
         EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(fieldEquippedWeapon.gameObject);
+        EventSystem.current.SetSelectedGameObject(equippedWeapon.gameObject);
 
 
     }
@@ -126,7 +125,7 @@ public class EquipDisplay : MonoBehaviour
         }
 
         EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(riggsEquippedWeapon.gameObject);
+        EventSystem.current.SetSelectedGameObject(equippedWeapon.gameObject);
 
     }
 
@@ -187,10 +186,6 @@ public class EquipDisplay : MonoBehaviour
 
     public void DisplayGrieveStats()
     {
-        equipmentDisplays[0].SetActive(true);
-        equipmentDisplays[1].SetActive(false);
-        equipmentDisplays[2].SetActive(false);
-        equipmentDisplays[3].SetActive(false);
 
         charAttackStatsReference[0].text = Engine.e.party[0].GetComponent<Character>().physicalDamage.ToString();
         charAttackStatsReference[1].text = Engine.e.party[0].GetComponent<Character>().firePhysicalAttackBonus.ToString();
@@ -206,9 +201,31 @@ public class EquipDisplay : MonoBehaviour
         charDefenseStatsReference[4].text = Engine.e.party[0].GetComponent<Character>().waterDefense + "%";
         charDefenseStatsReference[5].text = Engine.e.party[0].GetComponent<Character>().shadowDefense + "%";
 
-        grieveEquippedWeapon.itemName = grieveEquippedWeapon.GetComponent<InventorySlot>().itemName;
-        grieveEquippedChestArmor.itemName = grieveEquippedChestArmor.GetComponent<InventorySlot>().itemName;
+        equippedWeapon.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+        equippedChestArmor.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+        equippedAccessory1.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+        equippedAccessory2.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
 
+        equippedWeapon.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[0].GetComponent<Character>().weapon.itemName;
+        equippedChestArmor.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[0].GetComponent<Character>().chestArmor.itemName;
+
+        if (Engine.e.party[0].GetComponent<Character>().accessory1 != null)
+        {
+            equippedAccessory1.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[0].GetComponent<Character>().accessory1.itemName;
+        }
+        else
+        {
+            equippedAccessory1.itemName.GetComponentInChildren<TMP_Text>().text = "Nothing.";
+        }
+
+        if (Engine.e.party[0].GetComponent<Character>().accessory2 != null)
+        {
+            equippedAccessory2.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[0].GetComponent<Character>().accessory2.itemName;
+        }
+        else
+        {
+            equippedAccessory2.itemName.GetComponentInChildren<TMP_Text>().text = "Nothing.";
+        }
 
         ClearNewWeaponNotif();
 
@@ -219,10 +236,6 @@ public class EquipDisplay : MonoBehaviour
     }
     public void DisplayMacStats()
     {
-        equipmentDisplays[0].SetActive(false);
-        equipmentDisplays[1].SetActive(true);
-        equipmentDisplays[2].SetActive(false);
-        equipmentDisplays[3].SetActive(false);
 
         charAttackStatsReference[0].text = Engine.e.party[1].GetComponent<Character>().physicalDamage.ToString();
         charAttackStatsReference[1].text = Engine.e.party[1].GetComponent<Character>().firePhysicalAttackBonus.ToString();
@@ -238,9 +251,31 @@ public class EquipDisplay : MonoBehaviour
         charDefenseStatsReference[4].text = Engine.e.party[1].GetComponent<Character>().waterDefense + "%";
         charDefenseStatsReference[5].text = Engine.e.party[1].GetComponent<Character>().shadowDefense + "%";
 
-        macEquippedWeapon.itemName = macEquippedWeapon.GetComponent<InventorySlot>().itemName;
-        macEquippedChestArmor.itemName = macEquippedChestArmor.GetComponent<InventorySlot>().itemName;
+        equippedWeapon.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+        equippedChestArmor.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+        equippedAccessory1.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+        equippedAccessory2.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
 
+        equippedWeapon.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[1].GetComponent<Character>().weapon.itemName;
+        equippedChestArmor.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[1].GetComponent<Character>().chestArmor.itemName;
+
+        if (Engine.e.party[1].GetComponent<Character>().accessory1 != null)
+        {
+            equippedAccessory1.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[1].GetComponent<Character>().accessory1.itemName;
+        }
+        else
+        {
+            equippedAccessory1.itemName.GetComponentInChildren<TMP_Text>().text = "Nothing.";
+        }
+
+        if (Engine.e.party[1].GetComponent<Character>().accessory2 != null)
+        {
+            equippedAccessory2.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[1].GetComponent<Character>().accessory2.itemName;
+        }
+        else
+        {
+            equippedAccessory2.itemName.GetComponentInChildren<TMP_Text>().text = "Nothing.";
+        }
         ClearNewWeaponNotif();
         if (charNewWeapon[1] == true)
         {
@@ -249,10 +284,6 @@ public class EquipDisplay : MonoBehaviour
     }
     public void DisplayFieldStats()
     {
-        equipmentDisplays[0].SetActive(false);
-        equipmentDisplays[1].SetActive(false);
-        equipmentDisplays[2].SetActive(true);
-        equipmentDisplays[3].SetActive(false);
 
         charAttackStatsReference[0].text = Engine.e.party[2].GetComponent<Character>().physicalDamage.ToString();
         charAttackStatsReference[1].text = Engine.e.party[2].GetComponent<Character>().firePhysicalAttackBonus.ToString();
@@ -268,8 +299,31 @@ public class EquipDisplay : MonoBehaviour
         charDefenseStatsReference[4].text = Engine.e.party[2].GetComponent<Character>().waterDefense + "%";
         charDefenseStatsReference[5].text = Engine.e.party[2].GetComponent<Character>().shadowDefense + "%";
 
-        fieldEquippedWeapon.itemName = fieldEquippedWeapon.GetComponent<InventorySlot>().itemName;
-        fieldEquippedChestArmor.itemName = fieldEquippedChestArmor.GetComponent<InventorySlot>().itemName;
+        equippedWeapon.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+        equippedChestArmor.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+        equippedAccessory1.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+        equippedAccessory2.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+
+        equippedWeapon.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[2].GetComponent<Character>().weapon.itemName;
+        equippedChestArmor.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[2].GetComponent<Character>().chestArmor.itemName;
+
+        if (Engine.e.party[2].GetComponent<Character>().accessory1 != null)
+        {
+            equippedAccessory1.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[2].GetComponent<Character>().accessory1.itemName;
+        }
+        else
+        {
+            equippedAccessory1.itemName.GetComponentInChildren<TMP_Text>().text = "Nothing.";
+        }
+
+        if (Engine.e.party[2].GetComponent<Character>().accessory2 != null)
+        {
+            equippedAccessory2.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[2].GetComponent<Character>().accessory2.itemName;
+        }
+        else
+        {
+            equippedAccessory2.itemName.GetComponentInChildren<TMP_Text>().text = "Nothing.";
+        }
 
         ClearNewWeaponNotif();
         if (charNewWeapon[2] == true)
@@ -279,10 +333,6 @@ public class EquipDisplay : MonoBehaviour
     }
     public void DisplayRiggsStats()
     {
-        equipmentDisplays[0].SetActive(false);
-        equipmentDisplays[1].SetActive(false);
-        equipmentDisplays[2].SetActive(false);
-        equipmentDisplays[3].SetActive(true);
 
         charAttackStatsReference[0].text = Engine.e.party[3].GetComponent<Character>().physicalDamage.ToString();
         charAttackStatsReference[1].text = Engine.e.party[3].GetComponent<Character>().firePhysicalAttackBonus.ToString();
@@ -298,8 +348,31 @@ public class EquipDisplay : MonoBehaviour
         charDefenseStatsReference[4].text = Engine.e.party[3].GetComponent<Character>().waterDefense + "%";
         charDefenseStatsReference[5].text = Engine.e.party[3].GetComponent<Character>().shadowDefense + "%";
 
-        riggsEquippedWeapon.itemName = riggsEquippedWeapon.GetComponent<InventorySlot>().itemName;
-        riggsEquippedChestArmor.itemName = riggsEquippedChestArmor.GetComponent<InventorySlot>().itemName;
+        equippedWeapon.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+        equippedChestArmor.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+        equippedAccessory1.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+        equippedAccessory2.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+
+        equippedWeapon.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[3].GetComponent<Character>().weapon.itemName;
+        equippedChestArmor.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[3].GetComponent<Character>().chestArmor.itemName;
+
+        if (Engine.e.party[3].GetComponent<Character>().accessory1 != null)
+        {
+            equippedAccessory1.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[3].GetComponent<Character>().accessory1.itemName;
+        }
+        else
+        {
+            equippedAccessory1.itemName.GetComponentInChildren<TMP_Text>().text = "Nothing.";
+        }
+
+        if (Engine.e.party[3].GetComponent<Character>().accessory2 != null)
+        {
+            equippedAccessory2.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[3].GetComponent<Character>().accessory2.itemName;
+        }
+        else
+        {
+            equippedAccessory2.itemName.GetComponentInChildren<TMP_Text>().text = "Nothing.";
+        }
 
         ClearNewWeaponNotif();
         if (charNewWeapon[3] == true)
@@ -358,6 +431,16 @@ public class EquipDisplay : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void SetAccessory1Screen()
+    {
+        accessory1InventorySet = true;
+    }
+
+    public void SetAccessory2Screen()
+    {
+        accessory2InventorySet = true;
     }
 
     // Handles Various Menu Navigation
@@ -555,6 +638,45 @@ public class EquipDisplay : MonoBehaviour
 
             }
         }
+
+        if (accessory1InventorySet || accessory2InventorySet)
+        {
+            if (vertMove > 0 && pressDown)
+            {
+                pressDown = false;
+                if (inventoryPointerIndex < Engine.e.partyInventoryReference.accessoryInventorySlots.Length)
+                {
+                    inventoryPointerIndex += vertMove;
+
+                    EventSystem.current.SetSelectedGameObject(null);
+                    EventSystem.current.SetSelectedGameObject(Engine.e.partyInventoryReference.accessoryInventorySlots[inventoryPointerIndex].gameObject);
+
+                    if (inventoryPointerIndex > 5 && inventoryPointerIndex < Engine.e.partyInventoryReference.accessoryInventorySlots.Length)
+                    {
+                        Engine.e.partyInventoryReference.accessoryRectTransform.offsetMax -= new Vector2(0, -30);
+                    }
+                }
+            }
+
+            if (vertMove < 0 && pressUp)
+            {
+                pressUp = false;
+                if (inventoryPointerIndex > 0)
+                {
+                    inventoryPointerIndex += vertMove;
+
+                    EventSystem.current.SetSelectedGameObject(null);
+                    EventSystem.current.SetSelectedGameObject(Engine.e.partyInventoryReference.accessoryInventorySlots[inventoryPointerIndex].gameObject);
+
+
+                    if (inventoryPointerIndex >= 5 && inventoryPointerIndex > 0)
+                    {
+                        Engine.e.partyInventoryReference.accessoryRectTransform.offsetMax -= new Vector2(0, 30);
+                    }
+                }
+
+            }
+        }
     }
     public void ClearNewWeaponNotif()
     {
@@ -600,7 +722,7 @@ public class EquipDisplay : MonoBehaviour
     {
 
         if (grieveWeaponInventorySet || macWeaponInventorySet || fieldWeaponInventorySet || riggsWeaponInventorySet
-        || chestArmorInventorySet)
+        || chestArmorInventorySet || accessory1InventorySet || accessory2InventorySet)
         {
             if (Input.GetKeyDown(KeyCode.S))
             {

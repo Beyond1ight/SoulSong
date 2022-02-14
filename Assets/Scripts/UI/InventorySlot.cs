@@ -141,6 +141,445 @@ public class InventorySlot : MonoBehaviour
         }
     }
 
+    public void SetHelpTextAccessory()
+    {
+        float physicalAttComparisonCalculation = 0;
+        float fireAttComparisonCalculation = 0;
+        float iceAttComparisonCalculation = 0;
+        float lightningAttComparisonCalculation = 0;
+        float waterAttComparisonCalculation = 0;
+        float shadowAttComparisonCalculation = 0;
+
+        float physicalDefComparisonCalculation = 0;
+        float fireDefComparisonCalculation = 0;
+        float iceDefComparisonCalculation = 0;
+        float lightningDefComparisonCalculation = 0;
+        float waterDefComparisonCalculation = 0;
+        float shadowDefComparisonCalculation = 0;
+
+        if (item != null)
+        {
+            Engine.e.helpText.text = item.itemDescription;
+
+            if (Engine.e.equipMenuReference.accessory1InventorySet)
+            {
+                if (Engine.e.equipMenuReference.GetComponent<EquipDisplay>().grieveScreen)
+                {
+                    if (Engine.e.party[0].GetComponent<Character>().accessory1 != null)
+                    {
+                        physicalAttComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory1.GetComponent<Accessory>().physicalAttack - item.GetComponent<Accessory>().physicalAttack;
+                        fireAttComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory1.GetComponent<Accessory>().fireAttack - item.GetComponent<Accessory>().fireAttack;
+                        iceAttComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory1.GetComponent<Accessory>().iceAttack - item.GetComponent<Accessory>().iceAttack;
+                        lightningAttComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory1.GetComponent<Accessory>().lightningAttack - item.GetComponent<Accessory>().lightningAttack;
+                        waterAttComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory1.GetComponent<Accessory>().waterAttack - item.GetComponent<Accessory>().waterAttack;
+                        shadowAttComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory1.GetComponent<Accessory>().shadowAttack - item.GetComponent<Accessory>().shadowAttack;
+
+                        physicalDefComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory1.GetComponent<Accessory>().physicalArmor - item.GetComponent<Accessory>().physicalArmor;
+                        fireDefComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory1.GetComponent<Accessory>().fireDefense - item.GetComponent<Accessory>().fireDefense;
+                        iceDefComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory1.GetComponent<Accessory>().iceDefense - item.GetComponent<Accessory>().iceDefense;
+                        lightningDefComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory1.GetComponent<Accessory>().lightningDefense - item.GetComponent<Accessory>().lightningDefense;
+                        waterDefComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory1.GetComponent<Accessory>().waterDefense - item.GetComponent<Accessory>().waterDefense;
+                        shadowDefComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory1.GetComponent<Accessory>().shadowDefense - item.GetComponent<Accessory>().shadowDefense;
+
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[0].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().physicalDefense - physicalDefComparisonCalculation) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[1].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().fireDefense - fireDefComparisonCalculation) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[2].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().iceDefense - iceDefComparisonCalculation) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[3].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().lightningDefense - lightningDefComparisonCalculation) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[4].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().waterDefense - waterDefComparisonCalculation) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[5].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().shadowDefense - shadowDefComparisonCalculation) + "%";
+
+                        Engine.e.equipMenuReference.charAttackComparisonStats[0].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().physicalDamage - physicalAttComparisonCalculation).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[1].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().firePhysicalAttackBonus - fireAttComparisonCalculation).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[2].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().icePhysicalAttackBonus - iceAttComparisonCalculation).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[3].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().lightningPhysicalAttackBonus - lightningAttComparisonCalculation).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[4].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().waterPhysicalAttackBonus - waterAttComparisonCalculation).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[5].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().shadowPhysicalAttackBonus - shadowAttComparisonCalculation).ToString();
+                    }
+                    else
+                    {
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[0].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().physicalDefense + item.GetComponent<Accessory>().physicalArmor) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[1].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().fireDefense + item.GetComponent<Accessory>().fireDefense) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[2].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().iceDefense + item.GetComponent<Accessory>().iceDefense) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[3].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().lightningDefense + item.GetComponent<Accessory>().lightningDefense) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[4].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().waterDefense + item.GetComponent<Accessory>().waterDefense) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[5].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().shadowDefense + item.GetComponent<Accessory>().shadowDefense) + "%";
+
+                        Engine.e.equipMenuReference.charAttackComparisonStats[0].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().physicalDamage + item.GetComponent<Accessory>().physicalAttack).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[1].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().firePhysicalAttackBonus + item.GetComponent<Accessory>().fireAttack).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[2].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().icePhysicalAttackBonus + item.GetComponent<Accessory>().iceAttack).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[3].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().lightningPhysicalAttackBonus + item.GetComponent<Accessory>().lightningAttack).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[4].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().waterPhysicalAttackBonus + item.GetComponent<Accessory>().waterAttack).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[5].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().shadowPhysicalAttackBonus + item.GetComponent<Accessory>().shadowAttack).ToString();
+                    }
+
+                }
+
+                if (Engine.e.equipMenuReference.GetComponent<EquipDisplay>().macScreen)
+                {
+                    if (Engine.e.party[1].GetComponent<Character>().accessory1 != null)
+                    {
+                        physicalAttComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory1.GetComponent<Accessory>().physicalAttack - item.GetComponent<Accessory>().physicalAttack;
+                        fireAttComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory1.GetComponent<Accessory>().fireAttack - item.GetComponent<Accessory>().fireAttack;
+                        iceAttComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory1.GetComponent<Accessory>().iceAttack - item.GetComponent<Accessory>().iceAttack;
+                        lightningAttComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory1.GetComponent<Accessory>().lightningAttack - item.GetComponent<Accessory>().lightningAttack;
+                        waterAttComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory1.GetComponent<Accessory>().waterAttack - item.GetComponent<Accessory>().waterAttack;
+                        shadowAttComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory1.GetComponent<Accessory>().shadowAttack - item.GetComponent<Accessory>().shadowAttack;
+
+                        physicalDefComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory1.GetComponent<Accessory>().physicalArmor - item.GetComponent<Accessory>().physicalArmor;
+                        fireDefComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory1.GetComponent<Accessory>().fireDefense - item.GetComponent<Accessory>().fireDefense;
+                        iceDefComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory1.GetComponent<Accessory>().iceDefense - item.GetComponent<Accessory>().iceDefense;
+                        lightningDefComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory1.GetComponent<Accessory>().lightningDefense - item.GetComponent<Accessory>().lightningDefense;
+                        waterDefComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory1.GetComponent<Accessory>().waterDefense - item.GetComponent<Accessory>().waterDefense;
+                        shadowDefComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory1.GetComponent<Accessory>().shadowDefense - item.GetComponent<Accessory>().shadowDefense;
+
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[0].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().physicalDefense - physicalDefComparisonCalculation) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[1].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().fireDefense - fireDefComparisonCalculation) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[2].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().iceDefense - iceDefComparisonCalculation) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[3].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().lightningDefense - lightningDefComparisonCalculation) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[4].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().waterDefense - waterDefComparisonCalculation) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[5].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().shadowDefense - shadowDefComparisonCalculation) + "%";
+
+                        Engine.e.equipMenuReference.charAttackComparisonStats[0].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().physicalDamage - physicalAttComparisonCalculation).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[1].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().firePhysicalAttackBonus - fireAttComparisonCalculation).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[2].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().icePhysicalAttackBonus - iceAttComparisonCalculation).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[3].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().lightningPhysicalAttackBonus - lightningAttComparisonCalculation).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[4].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().waterPhysicalAttackBonus - waterAttComparisonCalculation).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[5].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().shadowPhysicalAttackBonus - shadowAttComparisonCalculation).ToString();
+
+                    }
+                    else
+                    {
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[0].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().physicalDefense + item.GetComponent<Accessory>().physicalArmor) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[1].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().fireDefense + item.GetComponent<Accessory>().fireDefense) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[2].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().iceDefense + item.GetComponent<Accessory>().iceDefense) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[3].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().lightningDefense + item.GetComponent<Accessory>().lightningDefense) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[4].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().waterDefense + item.GetComponent<Accessory>().waterDefense) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[5].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().shadowDefense + item.GetComponent<Accessory>().shadowDefense) + "%";
+
+                        Engine.e.equipMenuReference.charAttackComparisonStats[0].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().physicalDamage + item.GetComponent<Accessory>().physicalAttack).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[1].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().firePhysicalAttackBonus + item.GetComponent<Accessory>().fireAttack).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[2].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().icePhysicalAttackBonus + item.GetComponent<Accessory>().iceAttack).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[3].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().lightningPhysicalAttackBonus + item.GetComponent<Accessory>().lightningAttack).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[4].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().waterPhysicalAttackBonus + item.GetComponent<Accessory>().waterAttack).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[5].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().shadowPhysicalAttackBonus + item.GetComponent<Accessory>().shadowAttack).ToString();
+                    }
+                }
+
+                if (Engine.e.equipMenuReference.GetComponent<EquipDisplay>().fieldScreen)
+                {
+                    if (Engine.e.party[2].GetComponent<Character>().accessory1 != null)
+                    {
+                        physicalAttComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory1.GetComponent<Accessory>().physicalAttack - item.GetComponent<Accessory>().physicalAttack;
+                        fireAttComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory1.GetComponent<Accessory>().fireAttack - item.GetComponent<Accessory>().fireAttack;
+                        iceAttComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory1.GetComponent<Accessory>().iceAttack - item.GetComponent<Accessory>().iceAttack;
+                        lightningAttComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory1.GetComponent<Accessory>().lightningAttack - item.GetComponent<Accessory>().lightningAttack;
+                        waterAttComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory1.GetComponent<Accessory>().waterAttack - item.GetComponent<Accessory>().waterAttack;
+                        shadowAttComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory1.GetComponent<Accessory>().shadowAttack - item.GetComponent<Accessory>().shadowAttack;
+
+                        physicalDefComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory1.GetComponent<Accessory>().physicalArmor - item.GetComponent<Accessory>().physicalArmor;
+                        fireDefComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory1.GetComponent<Accessory>().fireDefense - item.GetComponent<Accessory>().fireDefense;
+                        iceDefComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory1.GetComponent<Accessory>().iceDefense - item.GetComponent<Accessory>().iceDefense;
+                        lightningDefComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory1.GetComponent<Accessory>().lightningDefense - item.GetComponent<Accessory>().lightningDefense;
+                        waterDefComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory1.GetComponent<Accessory>().waterDefense - item.GetComponent<Accessory>().waterDefense;
+                        shadowDefComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory1.GetComponent<Accessory>().shadowDefense - item.GetComponent<Accessory>().shadowDefense;
+
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[0].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().physicalDefense - physicalDefComparisonCalculation) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[1].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().fireDefense - fireDefComparisonCalculation) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[2].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().iceDefense - iceDefComparisonCalculation) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[3].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().lightningDefense - lightningDefComparisonCalculation) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[4].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().waterDefense - waterDefComparisonCalculation) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[5].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().shadowDefense - shadowDefComparisonCalculation) + "%";
+
+                        Engine.e.equipMenuReference.charAttackComparisonStats[0].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().physicalDamage - physicalAttComparisonCalculation).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[1].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().firePhysicalAttackBonus - fireAttComparisonCalculation).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[2].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().icePhysicalAttackBonus - iceAttComparisonCalculation).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[3].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().lightningPhysicalAttackBonus - lightningAttComparisonCalculation).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[4].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().waterPhysicalAttackBonus - waterAttComparisonCalculation).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[5].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().shadowPhysicalAttackBonus - shadowAttComparisonCalculation).ToString();
+                    }
+                    else
+                    {
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[0].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().physicalDefense + item.GetComponent<Accessory>().physicalArmor) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[1].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().fireDefense + item.GetComponent<Accessory>().fireDefense) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[2].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().iceDefense + item.GetComponent<Accessory>().iceDefense) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[3].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().lightningDefense + item.GetComponent<Accessory>().lightningDefense) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[4].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().waterDefense + item.GetComponent<Accessory>().waterDefense) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[5].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().shadowDefense + item.GetComponent<Accessory>().shadowDefense) + "%";
+
+                        Engine.e.equipMenuReference.charAttackComparisonStats[0].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().physicalDamage + item.GetComponent<Accessory>().physicalAttack).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[1].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().firePhysicalAttackBonus + item.GetComponent<Accessory>().fireAttack).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[2].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().icePhysicalAttackBonus + item.GetComponent<Accessory>().iceAttack).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[3].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().lightningPhysicalAttackBonus + item.GetComponent<Accessory>().lightningAttack).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[4].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().waterPhysicalAttackBonus + item.GetComponent<Accessory>().waterAttack).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[5].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().shadowPhysicalAttackBonus + item.GetComponent<Accessory>().shadowAttack).ToString();
+                    }
+                }
+
+
+                if (Engine.e.equipMenuReference.GetComponent<EquipDisplay>().riggsScreen)
+                {
+                    if (Engine.e.party[3].GetComponent<Character>().accessory1 != null)
+                    {
+                        physicalAttComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory1.GetComponent<Accessory>().physicalAttack - item.GetComponent<Accessory>().physicalAttack;
+                        fireAttComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory1.GetComponent<Accessory>().fireAttack - item.GetComponent<Accessory>().fireAttack;
+                        iceAttComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory1.GetComponent<Accessory>().iceAttack - item.GetComponent<Accessory>().iceAttack;
+                        lightningAttComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory1.GetComponent<Accessory>().lightningAttack - item.GetComponent<Accessory>().lightningAttack;
+                        waterAttComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory1.GetComponent<Accessory>().waterAttack - item.GetComponent<Accessory>().waterAttack;
+                        shadowAttComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory1.GetComponent<Accessory>().shadowAttack - item.GetComponent<Accessory>().shadowAttack;
+
+                        physicalDefComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory1.GetComponent<Accessory>().physicalArmor - item.GetComponent<Accessory>().physicalArmor;
+                        fireDefComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory1.GetComponent<Accessory>().fireDefense - item.GetComponent<Accessory>().fireDefense;
+                        iceDefComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory1.GetComponent<Accessory>().iceDefense - item.GetComponent<Accessory>().iceDefense;
+                        lightningDefComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory1.GetComponent<Accessory>().lightningDefense - item.GetComponent<Accessory>().lightningDefense;
+                        waterDefComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory1.GetComponent<Accessory>().waterDefense - item.GetComponent<Accessory>().waterDefense;
+                        shadowDefComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory1.GetComponent<Accessory>().shadowDefense - item.GetComponent<Accessory>().shadowDefense;
+
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[0].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().physicalDefense - physicalDefComparisonCalculation) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[1].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().fireDefense - fireDefComparisonCalculation) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[2].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().iceDefense - iceDefComparisonCalculation) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[3].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().lightningDefense - lightningDefComparisonCalculation) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[4].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().waterDefense - waterDefComparisonCalculation) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[5].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().shadowDefense - shadowDefComparisonCalculation) + "%";
+
+                        Engine.e.equipMenuReference.charAttackComparisonStats[0].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().physicalDamage - physicalAttComparisonCalculation).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[1].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().firePhysicalAttackBonus - fireAttComparisonCalculation).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[2].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().icePhysicalAttackBonus - iceAttComparisonCalculation).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[3].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().lightningPhysicalAttackBonus - lightningAttComparisonCalculation).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[4].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().waterPhysicalAttackBonus - waterAttComparisonCalculation).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[5].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().shadowPhysicalAttackBonus - shadowAttComparisonCalculation).ToString();
+
+                    }
+                    else
+                    {
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[0].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().physicalDefense + item.GetComponent<Accessory>().physicalArmor) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[1].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().fireDefense + item.GetComponent<Accessory>().fireDefense) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[2].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().iceDefense + item.GetComponent<Accessory>().iceDefense) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[3].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().lightningDefense + item.GetComponent<Accessory>().lightningDefense) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[4].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().waterDefense + item.GetComponent<Accessory>().waterDefense) + "%";
+                        Engine.e.equipMenuReference.charDefenseComparisonStats[5].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().shadowDefense + item.GetComponent<Accessory>().shadowDefense) + "%";
+
+                        Engine.e.equipMenuReference.charAttackComparisonStats[0].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().physicalDamage + item.GetComponent<Accessory>().physicalAttack).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[1].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().firePhysicalAttackBonus + item.GetComponent<Accessory>().fireAttack).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[2].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().icePhysicalAttackBonus + item.GetComponent<Accessory>().iceAttack).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[3].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().lightningPhysicalAttackBonus + item.GetComponent<Accessory>().lightningAttack).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[4].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().waterPhysicalAttackBonus + item.GetComponent<Accessory>().waterAttack).ToString();
+                        Engine.e.equipMenuReference.charAttackComparisonStats[5].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().shadowPhysicalAttackBonus + item.GetComponent<Accessory>().shadowAttack).ToString();
+                    }
+                }
+            }
+            else
+            {
+                if (Engine.e.equipMenuReference.accessory2InventorySet)
+                {
+                    if (Engine.e.equipMenuReference.GetComponent<EquipDisplay>().grieveScreen)
+                    {
+                        if (Engine.e.party[0].GetComponent<Character>().accessory2 != null)
+                        {
+                            physicalAttComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory2.GetComponent<Accessory>().physicalAttack - item.GetComponent<Accessory>().physicalAttack;
+                            fireAttComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory2.GetComponent<Accessory>().fireAttack - item.GetComponent<Accessory>().fireAttack;
+                            iceAttComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory2.GetComponent<Accessory>().iceAttack - item.GetComponent<Accessory>().iceAttack;
+                            lightningAttComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory2.GetComponent<Accessory>().lightningAttack - item.GetComponent<Accessory>().lightningAttack;
+                            waterAttComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory2.GetComponent<Accessory>().waterAttack - item.GetComponent<Accessory>().waterAttack;
+                            shadowAttComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory2.GetComponent<Accessory>().shadowAttack - item.GetComponent<Accessory>().shadowAttack;
+
+                            physicalDefComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory2.GetComponent<Accessory>().physicalArmor - item.GetComponent<Accessory>().physicalArmor;
+                            fireDefComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory2.GetComponent<Accessory>().fireDefense - item.GetComponent<Accessory>().fireDefense;
+                            iceDefComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory2.GetComponent<Accessory>().iceDefense - item.GetComponent<Accessory>().iceDefense;
+                            lightningDefComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory2.GetComponent<Accessory>().lightningDefense - item.GetComponent<Accessory>().lightningDefense;
+                            waterDefComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory2.GetComponent<Accessory>().waterDefense - item.GetComponent<Accessory>().waterDefense;
+                            shadowDefComparisonCalculation = Engine.e.party[0].GetComponent<Character>().accessory2.GetComponent<Accessory>().shadowDefense - item.GetComponent<Accessory>().shadowDefense;
+
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[0].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().physicalDefense - physicalDefComparisonCalculation) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[1].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().fireDefense - fireDefComparisonCalculation) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[2].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().iceDefense - iceDefComparisonCalculation) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[3].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().lightningDefense - lightningDefComparisonCalculation) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[4].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().waterDefense - waterDefComparisonCalculation) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[5].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().shadowDefense - shadowDefComparisonCalculation) + "%";
+
+                            Engine.e.equipMenuReference.charAttackComparisonStats[0].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().physicalDamage - physicalAttComparisonCalculation).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[1].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().firePhysicalAttackBonus - fireAttComparisonCalculation).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[2].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().icePhysicalAttackBonus - iceAttComparisonCalculation).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[3].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().lightningPhysicalAttackBonus - lightningAttComparisonCalculation).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[4].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().waterPhysicalAttackBonus - waterAttComparisonCalculation).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[5].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().shadowPhysicalAttackBonus - shadowAttComparisonCalculation).ToString();
+                        }
+                        else
+                        {
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[0].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().physicalDefense + item.GetComponent<Accessory>().physicalArmor) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[1].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().fireDefense + item.GetComponent<Accessory>().fireDefense) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[2].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().iceDefense + item.GetComponent<Accessory>().iceDefense) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[3].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().lightningDefense + item.GetComponent<Accessory>().lightningDefense) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[4].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().waterDefense + item.GetComponent<Accessory>().waterDefense) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[5].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().shadowDefense + item.GetComponent<Accessory>().shadowDefense) + "%";
+
+                            Engine.e.equipMenuReference.charAttackComparisonStats[0].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().physicalDamage + item.GetComponent<Accessory>().physicalAttack).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[1].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().firePhysicalAttackBonus + item.GetComponent<Accessory>().fireAttack).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[2].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().icePhysicalAttackBonus + item.GetComponent<Accessory>().iceAttack).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[3].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().lightningPhysicalAttackBonus + item.GetComponent<Accessory>().lightningAttack).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[4].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().waterPhysicalAttackBonus + item.GetComponent<Accessory>().waterAttack).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[5].text = " ->  " + (Engine.e.party[0].GetComponent<Character>().shadowPhysicalAttackBonus + item.GetComponent<Accessory>().shadowAttack).ToString();
+                        }
+                    }
+
+                    if (Engine.e.equipMenuReference.GetComponent<EquipDisplay>().macScreen)
+                    {
+                        if (Engine.e.party[1].GetComponent<Character>().accessory2 != null)
+                        {
+                            physicalAttComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory2.GetComponent<Accessory>().physicalAttack - item.GetComponent<Accessory>().physicalAttack;
+                            fireAttComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory2.GetComponent<Accessory>().fireAttack - item.GetComponent<Accessory>().fireAttack;
+                            iceAttComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory2.GetComponent<Accessory>().iceAttack - item.GetComponent<Accessory>().iceAttack;
+                            lightningAttComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory2.GetComponent<Accessory>().lightningAttack - item.GetComponent<Accessory>().lightningAttack;
+                            waterAttComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory2.GetComponent<Accessory>().waterAttack - item.GetComponent<Accessory>().waterAttack;
+                            shadowAttComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory2.GetComponent<Accessory>().shadowAttack - item.GetComponent<Accessory>().shadowAttack;
+
+                            physicalDefComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory2.GetComponent<Accessory>().physicalArmor - item.GetComponent<Accessory>().physicalArmor;
+                            fireDefComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory2.GetComponent<Accessory>().fireDefense - item.GetComponent<Accessory>().fireDefense;
+                            iceDefComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory2.GetComponent<Accessory>().iceDefense - item.GetComponent<Accessory>().iceDefense;
+                            lightningDefComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory2.GetComponent<Accessory>().lightningDefense - item.GetComponent<Accessory>().lightningDefense;
+                            waterDefComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory2.GetComponent<Accessory>().waterDefense - item.GetComponent<Accessory>().waterDefense;
+                            shadowDefComparisonCalculation = Engine.e.party[1].GetComponent<Character>().accessory2.GetComponent<Accessory>().shadowDefense - item.GetComponent<Accessory>().shadowDefense;
+
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[0].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().physicalDefense - physicalDefComparisonCalculation) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[1].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().fireDefense - fireDefComparisonCalculation) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[2].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().iceDefense - iceDefComparisonCalculation) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[3].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().lightningDefense - lightningDefComparisonCalculation) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[4].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().waterDefense - waterDefComparisonCalculation) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[5].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().shadowDefense - shadowDefComparisonCalculation) + "%";
+
+                            Engine.e.equipMenuReference.charAttackComparisonStats[0].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().physicalDamage - physicalAttComparisonCalculation).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[1].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().firePhysicalAttackBonus - fireAttComparisonCalculation).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[2].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().icePhysicalAttackBonus - iceAttComparisonCalculation).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[3].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().lightningPhysicalAttackBonus - lightningAttComparisonCalculation).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[4].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().waterPhysicalAttackBonus - waterAttComparisonCalculation).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[5].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().shadowPhysicalAttackBonus - shadowAttComparisonCalculation).ToString();
+                        }
+                        else
+                        {
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[0].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().physicalDefense + item.GetComponent<Accessory>().physicalArmor) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[1].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().fireDefense + item.GetComponent<Accessory>().fireDefense) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[2].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().iceDefense + item.GetComponent<Accessory>().iceDefense) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[3].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().lightningDefense + item.GetComponent<Accessory>().lightningDefense) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[4].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().waterDefense + item.GetComponent<Accessory>().waterDefense) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[5].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().shadowDefense + item.GetComponent<Accessory>().shadowDefense) + "%";
+
+                            Engine.e.equipMenuReference.charAttackComparisonStats[0].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().physicalDamage + item.GetComponent<Accessory>().physicalAttack).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[1].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().firePhysicalAttackBonus + item.GetComponent<Accessory>().fireAttack).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[2].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().icePhysicalAttackBonus + item.GetComponent<Accessory>().iceAttack).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[3].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().lightningPhysicalAttackBonus + item.GetComponent<Accessory>().lightningAttack).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[4].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().waterPhysicalAttackBonus + item.GetComponent<Accessory>().waterAttack).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[5].text = " ->  " + (Engine.e.party[1].GetComponent<Character>().shadowPhysicalAttackBonus + item.GetComponent<Accessory>().shadowAttack).ToString();
+                        }
+                    }
+
+                    if (Engine.e.equipMenuReference.GetComponent<EquipDisplay>().fieldScreen)
+                    {
+                        if (Engine.e.party[2].GetComponent<Character>().accessory2 != null)
+                        {
+                            physicalAttComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory2.GetComponent<Accessory>().physicalAttack - item.GetComponent<Accessory>().physicalAttack;
+                            fireAttComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory2.GetComponent<Accessory>().fireAttack - item.GetComponent<Accessory>().fireAttack;
+                            iceAttComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory2.GetComponent<Accessory>().iceAttack - item.GetComponent<Accessory>().iceAttack;
+                            lightningAttComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory2.GetComponent<Accessory>().lightningAttack - item.GetComponent<Accessory>().lightningAttack;
+                            waterAttComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory2.GetComponent<Accessory>().waterAttack - item.GetComponent<Accessory>().waterAttack;
+                            shadowAttComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory2.GetComponent<Accessory>().shadowAttack - item.GetComponent<Accessory>().shadowAttack;
+
+                            physicalDefComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory2.GetComponent<Accessory>().physicalArmor - item.GetComponent<Accessory>().physicalArmor;
+                            fireDefComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory2.GetComponent<Accessory>().fireDefense - item.GetComponent<Accessory>().fireDefense;
+                            iceDefComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory2.GetComponent<Accessory>().iceDefense - item.GetComponent<Accessory>().iceDefense;
+                            lightningDefComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory2.GetComponent<Accessory>().lightningDefense - item.GetComponent<Accessory>().lightningDefense;
+                            waterDefComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory2.GetComponent<Accessory>().waterDefense - item.GetComponent<Accessory>().waterDefense;
+                            shadowDefComparisonCalculation = Engine.e.party[2].GetComponent<Character>().accessory2.GetComponent<Accessory>().shadowDefense - item.GetComponent<Accessory>().shadowDefense;
+
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[0].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().physicalDefense - physicalDefComparisonCalculation) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[1].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().fireDefense - fireDefComparisonCalculation) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[2].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().iceDefense - iceDefComparisonCalculation) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[3].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().lightningDefense - lightningDefComparisonCalculation) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[4].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().waterDefense - waterDefComparisonCalculation) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[5].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().shadowDefense - shadowDefComparisonCalculation) + "%";
+
+                            Engine.e.equipMenuReference.charAttackComparisonStats[0].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().physicalDamage - physicalAttComparisonCalculation).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[1].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().firePhysicalAttackBonus - fireAttComparisonCalculation).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[2].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().icePhysicalAttackBonus - iceAttComparisonCalculation).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[3].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().lightningPhysicalAttackBonus - lightningAttComparisonCalculation).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[4].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().waterPhysicalAttackBonus - waterAttComparisonCalculation).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[5].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().shadowPhysicalAttackBonus - shadowAttComparisonCalculation).ToString();
+                        }
+                        else
+                        {
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[0].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().physicalDefense + item.GetComponent<Accessory>().physicalArmor) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[1].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().fireDefense + item.GetComponent<Accessory>().fireDefense) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[2].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().iceDefense + item.GetComponent<Accessory>().iceDefense) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[3].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().lightningDefense + item.GetComponent<Accessory>().lightningDefense) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[4].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().waterDefense + item.GetComponent<Accessory>().waterDefense) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[5].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().shadowDefense + item.GetComponent<Accessory>().shadowDefense) + "%";
+
+                            Engine.e.equipMenuReference.charAttackComparisonStats[0].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().physicalDamage + item.GetComponent<Accessory>().physicalAttack).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[1].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().firePhysicalAttackBonus + item.GetComponent<Accessory>().fireAttack).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[2].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().icePhysicalAttackBonus + item.GetComponent<Accessory>().iceAttack).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[3].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().lightningPhysicalAttackBonus + item.GetComponent<Accessory>().lightningAttack).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[4].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().waterPhysicalAttackBonus + item.GetComponent<Accessory>().waterAttack).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[5].text = " ->  " + (Engine.e.party[2].GetComponent<Character>().shadowPhysicalAttackBonus + item.GetComponent<Accessory>().shadowAttack).ToString();
+                        }
+                    }
+
+                    if (Engine.e.equipMenuReference.GetComponent<EquipDisplay>().riggsScreen)
+                    {
+                        if (Engine.e.party[3].GetComponent<Character>().accessory2 != null)
+                        {
+                            physicalAttComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory2.GetComponent<Accessory>().physicalAttack - item.GetComponent<Accessory>().physicalAttack;
+                            fireAttComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory2.GetComponent<Accessory>().fireAttack - item.GetComponent<Accessory>().fireAttack;
+                            iceAttComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory2.GetComponent<Accessory>().iceAttack - item.GetComponent<Accessory>().iceAttack;
+                            lightningAttComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory2.GetComponent<Accessory>().lightningAttack - item.GetComponent<Accessory>().lightningAttack;
+                            waterAttComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory2.GetComponent<Accessory>().waterAttack - item.GetComponent<Accessory>().waterAttack;
+                            shadowAttComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory2.GetComponent<Accessory>().shadowAttack - item.GetComponent<Accessory>().shadowAttack;
+
+                            physicalDefComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory2.GetComponent<Accessory>().physicalArmor - item.GetComponent<Accessory>().physicalArmor;
+                            fireDefComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory2.GetComponent<Accessory>().fireDefense - item.GetComponent<Accessory>().fireDefense;
+                            iceDefComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory2.GetComponent<Accessory>().iceDefense - item.GetComponent<Accessory>().iceDefense;
+                            lightningDefComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory2.GetComponent<Accessory>().lightningDefense - item.GetComponent<Accessory>().lightningDefense;
+                            waterDefComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory2.GetComponent<Accessory>().waterDefense - item.GetComponent<Accessory>().waterDefense;
+                            shadowDefComparisonCalculation = Engine.e.party[3].GetComponent<Character>().accessory2.GetComponent<Accessory>().shadowDefense - item.GetComponent<Accessory>().shadowDefense;
+
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[0].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().physicalDefense - physicalDefComparisonCalculation) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[1].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().fireDefense - fireDefComparisonCalculation) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[2].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().iceDefense - iceDefComparisonCalculation) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[3].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().lightningDefense - lightningDefComparisonCalculation) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[4].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().waterDefense - waterDefComparisonCalculation) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[5].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().shadowDefense - shadowDefComparisonCalculation) + "%";
+
+                            Engine.e.equipMenuReference.charAttackComparisonStats[0].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().physicalDamage - physicalAttComparisonCalculation).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[1].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().firePhysicalAttackBonus - fireAttComparisonCalculation).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[2].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().icePhysicalAttackBonus - iceAttComparisonCalculation).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[3].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().lightningPhysicalAttackBonus - lightningAttComparisonCalculation).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[4].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().waterPhysicalAttackBonus - waterAttComparisonCalculation).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[5].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().shadowPhysicalAttackBonus - shadowAttComparisonCalculation).ToString();
+                        }
+                        else
+                        {
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[0].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().physicalDefense + item.GetComponent<Accessory>().physicalArmor) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[1].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().fireDefense + item.GetComponent<Accessory>().fireDefense) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[2].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().iceDefense + item.GetComponent<Accessory>().iceDefense) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[3].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().lightningDefense + item.GetComponent<Accessory>().lightningDefense) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[4].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().waterDefense + item.GetComponent<Accessory>().waterDefense) + "%";
+                            Engine.e.equipMenuReference.charDefenseComparisonStats[5].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().shadowDefense + item.GetComponent<Accessory>().shadowDefense) + "%";
+
+                            Engine.e.equipMenuReference.charAttackComparisonStats[0].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().physicalDamage + item.GetComponent<Accessory>().physicalAttack).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[1].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().firePhysicalAttackBonus + item.GetComponent<Accessory>().fireAttack).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[2].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().icePhysicalAttackBonus + item.GetComponent<Accessory>().iceAttack).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[3].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().lightningPhysicalAttackBonus + item.GetComponent<Accessory>().lightningAttack).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[4].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().waterPhysicalAttackBonus + item.GetComponent<Accessory>().waterAttack).ToString();
+                            Engine.e.equipMenuReference.charAttackComparisonStats[5].text = " ->  " + (Engine.e.party[3].GetComponent<Character>().shadowPhysicalAttackBonus + item.GetComponent<Accessory>().shadowAttack).ToString();
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            Engine.e.helpText.text = string.Empty;
+        }
+    }
+
+
     public void SetHelpTextWeapons()
     {
         if (Engine.e.equipMenuReference.GetComponent<EquipDisplay>().grieveScreen)
@@ -281,6 +720,27 @@ public class InventorySlot : MonoBehaviour
         Engine.e.equipMenuReference.charDefenseComparisonStats[4].text = string.Empty;
         Engine.e.equipMenuReference.charDefenseComparisonStats[5].text = string.Empty;
     }
+    public void ClearHelpTextAccessory()
+    {
+
+        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().accessory1InventorySet = false;
+        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().accessory2InventorySet = false;
+
+        Engine.e.helpText.text = string.Empty;
+        Engine.e.equipMenuReference.charAttackComparisonStats[0].text = string.Empty;
+        Engine.e.equipMenuReference.charAttackComparisonStats[1].text = string.Empty;
+        Engine.e.equipMenuReference.charAttackComparisonStats[2].text = string.Empty;
+        Engine.e.equipMenuReference.charAttackComparisonStats[3].text = string.Empty;
+        Engine.e.equipMenuReference.charAttackComparisonStats[4].text = string.Empty;
+        Engine.e.equipMenuReference.charAttackComparisonStats[5].text = string.Empty;
+
+        Engine.e.equipMenuReference.charDefenseComparisonStats[0].text = string.Empty;
+        Engine.e.equipMenuReference.charDefenseComparisonStats[1].text = string.Empty;
+        Engine.e.equipMenuReference.charDefenseComparisonStats[2].text = string.Empty;
+        Engine.e.equipMenuReference.charDefenseComparisonStats[3].text = string.Empty;
+        Engine.e.equipMenuReference.charDefenseComparisonStats[4].text = string.Empty;
+        Engine.e.equipMenuReference.charDefenseComparisonStats[5].text = string.Empty;
+    }
 
     public void ClearHelpTextWeapons()
     {
@@ -392,6 +852,13 @@ public class InventorySlot : MonoBehaviour
 
                         ClearHelpTextChestArmor();
 
+                    }
+
+                    if (item.itemType == "Accessory")
+                    {
+                        item.GetComponent<Accessory>().DisplayAccessoryEquipCharacterTargets();
+
+                        ClearHelpTextAccessory();
                     }
                 }
             }

@@ -379,6 +379,8 @@ public class PauseMenu : MonoBehaviour
 
         uiReference.PlayTransition();
 
+        Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize = 150f;
+
         gridMenu.SetActive(true);
         Engine.e.gridReference.SetGrieveScreen();
         //Engine.e.abilityScreenReference.DisplayCharSelection();
