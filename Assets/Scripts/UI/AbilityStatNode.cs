@@ -57,7 +57,7 @@ public class AbilityStatNode : MonoBehaviour
                         Engine.e.party[0].GetComponent<Character>().maxHealth += node.healthIncrease;
                         Engine.e.party[0].GetComponent<Character>().maxMana += node.manaIncrease;
                         Engine.e.party[0].GetComponent<Character>().maxEnergy += node.energyIncrease;
-                        Engine.e.party[0].GetComponent<Character>().physicalDamage += node.strengthIncrease;
+                        Engine.e.party[0].GetComponent<Character>().strength += node.strengthIncrease;
 
                         if (node.skill != null)
                         {
@@ -122,7 +122,7 @@ public class AbilityStatNode : MonoBehaviour
                         Engine.e.party[1].GetComponent<Character>().maxHealth += node.healthIncrease;
                         Engine.e.party[1].GetComponent<Character>().maxMana += node.manaIncrease;
                         Engine.e.party[1].GetComponent<Character>().maxEnergy += node.energyIncrease;
-                        Engine.e.party[1].GetComponent<Character>().physicalDamage += node.strengthIncrease;
+                        Engine.e.party[1].GetComponent<Character>().strength += node.strengthIncrease;
 
                         if (node.skill != null)
                         {
@@ -184,7 +184,7 @@ public class AbilityStatNode : MonoBehaviour
                         Engine.e.party[2].GetComponent<Character>().maxHealth += node.healthIncrease;
                         Engine.e.party[2].GetComponent<Character>().maxMana += node.manaIncrease;
                         Engine.e.party[2].GetComponent<Character>().maxEnergy += node.energyIncrease;
-                        Engine.e.party[2].GetComponent<Character>().physicalDamage += node.strengthIncrease;
+                        Engine.e.party[2].GetComponent<Character>().strength += node.strengthIncrease;
 
                         if (node.skill != null)
                         {
@@ -243,7 +243,7 @@ public class AbilityStatNode : MonoBehaviour
                             Engine.e.party[3].GetComponent<Character>().maxHealth += node.healthIncrease;
                             Engine.e.party[3].GetComponent<Character>().maxMana += node.manaIncrease;
                             Engine.e.party[3].GetComponent<Character>().maxEnergy += node.energyIncrease;
-                            Engine.e.party[3].GetComponent<Character>().physicalDamage += node.strengthIncrease;
+                            Engine.e.party[3].GetComponent<Character>().strength += node.strengthIncrease;
 
                             if (node.skill != null)
                             {

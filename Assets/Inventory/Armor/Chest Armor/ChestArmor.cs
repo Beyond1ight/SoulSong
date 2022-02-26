@@ -7,8 +7,6 @@ using UnityEngine.EventSystems;
 
 public class ChestArmor : Item
 {
-    public bool isEquiped = false;
-    public string whoHasEquiped;
     public int physicalArmor;
     public float fireDefense;
     public float iceDefense;
@@ -16,9 +14,6 @@ public class ChestArmor : Item
     public float lightningDefense;
     public float shadowDefense;
     public float physicalAttackBonus, fireAttackBonus, waterAttackBonus, lightningAttackBonus, shadowAttackBonus, iceAttackBonus;
-    public DisplayText displayText;
-    public GameObject armorCloneReference;
-    public int gameArmorIndex;
 
     // CHANGE METHOD NAME
     public void DisplayArmorEquipCharacterTargets()

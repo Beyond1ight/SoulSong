@@ -173,16 +173,19 @@ public class BattleSystem : MonoBehaviour
                 Engine.e.party[i].GetComponent<Character>().maxHealthBase = Engine.e.party[i].GetComponent<Character>().maxHealth;
                 Engine.e.party[i].GetComponent<Character>().maxManaBase = Engine.e.party[i].GetComponent<Character>().maxMana;
                 Engine.e.party[i].GetComponent<Character>().maxEnergyBase = Engine.e.party[i].GetComponent<Character>().maxEnergy;
-                Engine.e.party[i].GetComponent<Character>().physicalDamageBase = Engine.e.party[i].GetComponent<Character>().physicalDamage;
+                Engine.e.party[i].GetComponent<Character>().strengthBase = Engine.e.party[i].GetComponent<Character>().strength;
+                Engine.e.party[i].GetComponent<Character>().intelligenceBase = Engine.e.party[i].GetComponent<Character>().intelligence;
                 Engine.e.party[i].GetComponent<Character>().dodgeChanceBase = Engine.e.party[i].GetComponent<Character>().dodgeChance;
                 Engine.e.party[i].GetComponent<Character>().critChanceBase = Engine.e.party[i].GetComponent<Character>().critChance;
                 Engine.e.party[i].GetComponent<Character>().hasteBase = Engine.e.party[i].GetComponent<Character>().haste;
+
                 Engine.e.party[i].GetComponent<Character>().firePhysicalAttackBonusBase = Engine.e.party[i].GetComponent<Character>().firePhysicalAttackBonus;
                 Engine.e.party[i].GetComponent<Character>().icePhysicalAttackBonusBase = Engine.e.party[i].GetComponent<Character>().icePhysicalAttackBonus;
                 Engine.e.party[i].GetComponent<Character>().lightningPhysicalAttackBonusBase = Engine.e.party[i].GetComponent<Character>().lightningPhysicalAttackBonus;
                 Engine.e.party[i].GetComponent<Character>().waterPhysicalAttackBonusBase = Engine.e.party[i].GetComponent<Character>().waterPhysicalAttackBonus;
                 Engine.e.party[i].GetComponent<Character>().shadowPhysicalAttackBonusBase = Engine.e.party[i].GetComponent<Character>().shadowPhysicalAttackBonus;
                 Engine.e.party[i].GetComponent<Character>().holyPhysicalAttackBonusBase = Engine.e.party[i].GetComponent<Character>().holyPhysicalAttackBonus;
+
                 Engine.e.party[i].GetComponent<Character>().fireDefenseBase = Engine.e.party[i].GetComponent<Character>().fireDefense;
                 Engine.e.party[i].GetComponent<Character>().iceDefenseBase = Engine.e.party[i].GetComponent<Character>().iceDefense;
                 Engine.e.party[i].GetComponent<Character>().lightningDefenseBase = Engine.e.party[i].GetComponent<Character>().lightningDefense;
@@ -287,7 +290,7 @@ public class BattleSystem : MonoBehaviour
                         //char1ATB += (activeParty.activeParty[0].GetComponent<Character>().haste * 10) / 50;
                         if (Engine.e.battleModeActive || !Engine.e.battleModeActive && !char2Ready && !char3Ready && !enemy1Ready && !enemy2Ready && !enemy3Ready && !enemy4Ready)
                         {
-                            char1ATB += activeParty.activeParty[0].GetComponent<Character>().haste * Time.deltaTime;
+                            char1ATB += activeParty.activeParty[0].GetComponent<Character>().haste * 10 / 25 * Time.deltaTime;
                             char1ATBGuage.value = char1ATB;
                         }
                     }
@@ -335,7 +338,7 @@ public class BattleSystem : MonoBehaviour
 
                             if (Engine.e.battleModeActive || !Engine.e.battleModeActive && !char1Ready && !char3Ready && !enemy1Ready && !enemy2Ready && !enemy3Ready && !enemy4Ready)
                             {
-                                char2ATB += activeParty.activeParty[1].GetComponent<Character>().haste * Time.deltaTime;
+                                char2ATB += activeParty.activeParty[1].GetComponent<Character>().haste * 10 / 25 * Time.deltaTime;
                                 char2ATBGuage.value = char2ATB;
                             }
                         }
@@ -385,7 +388,7 @@ public class BattleSystem : MonoBehaviour
                             if (Engine.e.battleModeActive || !Engine.e.battleModeActive && !char1Ready && !char2Ready && !enemy1Ready && !enemy2Ready && !enemy3Ready && !enemy4Ready)
                             {
 
-                                char3ATB += activeParty.activeParty[2].GetComponent<Character>().haste * Time.deltaTime;
+                                char3ATB += activeParty.activeParty[2].GetComponent<Character>().haste * 10 / 25 * Time.deltaTime;
                                 char3ATBGuage.value = char3ATB;
                             }
                         }
@@ -432,7 +435,7 @@ public class BattleSystem : MonoBehaviour
                         if (Engine.e.battleModeActive || !Engine.e.battleModeActive && !char1Ready && !char2Ready && !char3Ready && !enemy2Ready && !enemy3Ready && !enemy4Ready)
                         {
                             float randomVariation = Random.Range(0.65f, 1f);
-                            enemy1ATB += ((enemies[0].GetComponent<Enemy>().haste * randomVariation) * Time.deltaTime);
+                            enemy1ATB += ((enemies[0].GetComponent<Enemy>().haste * randomVariation) * 10 / 25 * Time.deltaTime);
                             enemy1ATBGuage.value = enemy1ATB;
                         }
                     }
@@ -456,7 +459,7 @@ public class BattleSystem : MonoBehaviour
                                 if (Engine.e.battleModeActive || !Engine.e.battleModeActive && !char1Ready && !char2Ready && !char3Ready && !enemy1Ready && !enemy3Ready && !enemy4Ready)
                                 {
                                     float randomVariation = Random.Range(0.65f, 1f);
-                                    enemy2ATB += ((enemies[1].GetComponent<Enemy>().haste * randomVariation) * Time.deltaTime);
+                                    enemy2ATB += ((enemies[1].GetComponent<Enemy>().haste * randomVariation) * 10 / 25 * Time.deltaTime);
                                     enemy2ATBGuage.value = enemy2ATB;
                                 }
                             }
@@ -482,7 +485,7 @@ public class BattleSystem : MonoBehaviour
                                 if (Engine.e.battleModeActive || !Engine.e.battleModeActive && !char1Ready && !char2Ready && !char3Ready && !enemy1Ready && !enemy2Ready && !enemy4Ready)
                                 {
                                     float randomVariation = Random.Range(0.65f, 1f);
-                                    enemy3ATB += ((enemies[2].GetComponent<Enemy>().haste * randomVariation) * Time.deltaTime);
+                                    enemy3ATB += ((enemies[2].GetComponent<Enemy>().haste * randomVariation) * 10 / 25 * Time.deltaTime);
                                     enemy3ATBGuage.value = enemy3ATB;
                                 }
                             }
@@ -507,7 +510,7 @@ public class BattleSystem : MonoBehaviour
                                 if (Engine.e.battleModeActive || !Engine.e.battleModeActive && !char1Ready && !char2Ready && !char3Ready && !enemy1Ready && !enemy2Ready && !enemy3Ready)
                                 {
                                     float randomVariation = Random.Range(0.65f, 1f);
-                                    enemy4ATB += ((enemies[3].GetComponent<Enemy>().haste * randomVariation) * Time.deltaTime);
+                                    enemy4ATB += ((enemies[3].GetComponent<Enemy>().haste * randomVariation) * 10 / 25 * Time.deltaTime);
                                     enemy4ATBGuage.value = enemy4ATB;
                                 }
                             }
@@ -944,11 +947,11 @@ public class BattleSystem : MonoBehaviour
                 switch (_skillChoice.skillIndex)
                 {
                     case 0: // Foebreak
-                        damageTotal = _characterAttacking.physicalDamage * 2;
+                        damageTotal = _characterAttacking.strength * 2;
                         break;
 
                     case 1: // Berserk
-                        damageTotal = Mathf.Round(_characterAttacking.physicalDamage + skillModifier / 2);
+                        damageTotal = Mathf.Round(_characterAttacking.strength + skillModifier / 2);
                         break;
                     case 10: // Steal
                         dontDisplayDmgPopup = true;
@@ -1329,7 +1332,7 @@ public class BattleSystem : MonoBehaviour
 
                     if (!charUsingSkill)
                     {
-                        enemy.TakePhysicalDamage(targetEnemy, characterAttackIndex.physicalDamage, characterAttackIndex.hitChance);
+                        enemy.TakePhysicalDamage(targetEnemy, characterAttackIndex.strength, characterAttackIndex.hitChance);
                     }
                     else
                     {
@@ -1422,7 +1425,7 @@ public class BattleSystem : MonoBehaviour
                     charAttacking = false;
                     charAtBattlePos = false;
 
-                    activeParty.activeParty[targetEnemy].GetComponent<Character>().TakePhysicalDamage(targetEnemy, characterAttackIndex.physicalDamage);
+                    activeParty.activeParty[targetEnemy].GetComponent<Character>().TakePhysicalDamage(targetEnemy, characterAttackIndex.strength);
 
 
 
@@ -1573,7 +1576,8 @@ public class BattleSystem : MonoBehaviour
         {
             if (!targetingTeam)
             {
-                if (!lastDropChoice.targetAll)
+                if (lastDropChoice != null && !lastDropChoice.targetAll || lastSkillChoice != null && !lastSkillChoice.targetAll
+                || lastSkillChoice == null && lastDropChoice == null)
                 {
                     if (_target == 0)
                     {
@@ -1606,7 +1610,8 @@ public class BattleSystem : MonoBehaviour
             }
             else
             {
-                if (!lastDropChoice.targetAll)
+                if (lastDropChoice != null && !lastDropChoice.targetAll || lastSkillChoice != null && !lastSkillChoice.targetAll
+                || lastDropChoice == null && lastSkillChoice == null)
                 {
                     enemies[_target].GetComponentInChildren<SpriteRenderer>().material = damageFlash;
                 }
@@ -2777,7 +2782,7 @@ public class BattleSystem : MonoBehaviour
 
                 if (!attackingTeam)
                 {
-                    isDead = activeParty.activeParty[randTarget].GetComponent<Character>().TakePhysicalDamage(randTarget, enemies[index].gameObject.GetComponent<Enemy>().physicalDamage);
+                    isDead = activeParty.activeParty[randTarget].GetComponent<Character>().TakePhysicalDamage(randTarget, enemies[index].gameObject.GetComponent<Enemy>().strength);
                 }
                 else
                 {
@@ -2842,7 +2847,7 @@ public class BattleSystem : MonoBehaviour
 
                     if (attackingTeam)
                     {
-                        activeParty.activeParty[randTarget].GetComponent<Character>().TakePhysicalDamage(randTarget, enemies[index].gameObject.GetComponent<Enemy>().physicalDamage);
+                        activeParty.activeParty[randTarget].GetComponent<Character>().TakePhysicalDamage(randTarget, enemies[index].gameObject.GetComponent<Enemy>().strength);
                     }
                     else
                     {
@@ -2859,7 +2864,7 @@ public class BattleSystem : MonoBehaviour
 
             if (!attackingTeam)
             {
-                activeParty.activeParty[randTarget].GetComponent<Character>().TakePhysicalDamage(randTarget, enemies[index].gameObject.GetComponent<Enemy>().physicalDamage);
+                activeParty.activeParty[randTarget].GetComponent<Character>().TakePhysicalDamage(randTarget, enemies[index].gameObject.GetComponent<Enemy>().strength);
             }
             else
             {
@@ -3426,7 +3431,7 @@ public class BattleSystem : MonoBehaviour
                         randTarget = char3Target;
                     }
 
-                    activeParty.activeParty[randTarget].GetComponent<Character>().TakePhysicalDamage(randTarget, Engine.e.activeParty.activeParty[index].GetComponent<Character>().physicalDamage);
+                    activeParty.activeParty[randTarget].GetComponent<Character>().TakePhysicalDamage(randTarget, Engine.e.activeParty.activeParty[index].GetComponent<Character>().strength);
                     attackingTeam = true;
 
                 }
@@ -3480,7 +3485,7 @@ public class BattleSystem : MonoBehaviour
                         randTarget = enemy4AttackTarget;
                     }
 
-                    activeParty.activeParty[randTarget].GetComponent<Character>().TakePhysicalDamage(randTarget, enemies[index].GetComponent<Enemy>().physicalDamage);
+                    activeParty.activeParty[randTarget].GetComponent<Character>().TakePhysicalDamage(randTarget, enemies[index].GetComponent<Enemy>().strength);
                 }   // Enemy is attacking themeselves
                 else
                 {
@@ -4730,7 +4735,9 @@ public class BattleSystem : MonoBehaviour
         charMoving = false;
         targetCheck = false;
         attackingTeam = false;
-        //targetAll = false;
+        lastDropChoice = null;  // Test this
+        lastSkillChoice = null; // Test this
+                                //targetAll = false;
         GameObject _characterAttacking = null;
         int index = 0;
 
@@ -5061,6 +5068,7 @@ public class BattleSystem : MonoBehaviour
         char3SkillSwitch = false;
 
         charSkillSwitchCheck = false;
+
         Engine.e.activeParty.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
         Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().color = Color.white;
         Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().color = Color.white;
@@ -5075,20 +5083,28 @@ public class BattleSystem : MonoBehaviour
                 //Engine.e.party[i].GetComponent<Character>().isConfused = false;
                 //Engine.e.party[i].GetComponent<Character>().miterInflicted = false;
                 //Engine.e.party[i].GetComponent<Character>().haltInflicted = false;
-                Engine.e.party[i].GetComponent<Character>().deathInflicted = false;
 
                 // Engine.e.party[i].GetComponent<Character>().inflicted = false;
                 //Engine.e.party[i].GetComponent<Character>().poisonDmg = 0;
                 //Engine.e.party[i].GetComponent<Character>().sleepTimer = 0;
                 //Engine.e.party[i].GetComponent<Character>().confuseTimer = 0;
+
+                // Negative Status Effects
+                Engine.e.party[i].GetComponent<Character>().deathInflicted = false;
                 Engine.e.party[i].GetComponent<Character>().deathTimer = 3;
+
+                // Beneficial Status Effects
+                Engine.e.party[i].GetComponent<Character>().isProtected = false;
+                Engine.e.party[i].GetComponent<Character>().isEncompassed = false;
+                Engine.e.party[i].GetComponent<Character>().isHastened = false;
 
                 Engine.e.party[i].GetComponent<SpriteRenderer>().color = Color.white;
 
                 Engine.e.party[i].GetComponent<Character>().maxHealth = Engine.e.party[i].GetComponent<Character>().maxHealthBase;
                 Engine.e.party[i].GetComponent<Character>().maxMana = Engine.e.party[i].GetComponent<Character>().maxManaBase;
                 Engine.e.party[i].GetComponent<Character>().maxEnergy = Engine.e.party[i].GetComponent<Character>().maxEnergyBase;
-                Engine.e.party[i].GetComponent<Character>().physicalDamage = Engine.e.party[i].GetComponent<Character>().physicalDamageBase;
+                Engine.e.party[i].GetComponent<Character>().strength = Engine.e.party[i].GetComponent<Character>().strengthBase;
+                Engine.e.party[i].GetComponent<Character>().intelligence = Engine.e.party[i].GetComponent<Character>().intelligenceBase;
                 Engine.e.party[i].GetComponent<Character>().dodgeChance = Engine.e.party[i].GetComponent<Character>().dodgeChanceBase;
                 Engine.e.party[i].GetComponent<Character>().critChance = Engine.e.party[i].GetComponent<Character>().critChanceBase;
                 Engine.e.party[i].GetComponent<Character>().haste = Engine.e.party[i].GetComponent<Character>().hasteBase;
@@ -5108,10 +5124,6 @@ public class BattleSystem : MonoBehaviour
                 Engine.e.party[i].GetComponent<Character>().poisonDefense = Engine.e.party[i].GetComponent<Character>().poisonDefenseBase;
                 Engine.e.party[i].GetComponent<Character>().confuseDefense = Engine.e.party[i].GetComponent<Character>().confuseDefenseBase;
                 Engine.e.party[i].GetComponent<Character>().deathDefense = Engine.e.party[i].GetComponent<Character>().deathDefenseBase;
-
-
-
-
 
             }
         }
@@ -6042,14 +6054,13 @@ public class BattleSystem : MonoBehaviour
     public void SetDamagePopupTextOne(Vector3 _pos, string _textDisplayed, Color _color)
     {
 
-        if (damagePopup[0].transform.position == Vector3.zero)
-        {
-            damagePopup[0].transform.position = _pos;
-            damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
-            damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
+
+        damagePopup[0].transform.position = _pos;
+        damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().color = _color;
+        damagePopup[0].transform.GetChild(0).GetComponent<TextMeshPro>().text = _textDisplayed;
 
 
-        }
+
         dmgText1Active = true;
     }
 

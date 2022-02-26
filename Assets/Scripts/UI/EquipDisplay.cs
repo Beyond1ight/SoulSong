@@ -15,8 +15,8 @@ public class EquipDisplay : MonoBehaviour
     public GameObject[] charNewWeaponNotif;
     public bool[] charNewWeapon;
     public GameObject[] equipmentDisplays;
-    public bool grieveWeaponInventorySet, macWeaponInventorySet, fieldWeaponInventorySet, riggsWeaponInventorySet = false;
-    public bool chestArmorInventorySet, accessory1InventorySet, accessory2InventorySet = false;
+    public bool weaponInventorySet = false;
+    public bool chestArmorInventorySet, legArmorInventorySet, accessory1InventorySet, accessory2InventorySet, removing = false;
     bool pressUp, pressDown, pressRelease = false;
     public int inventoryPointerIndex = 0, vertMove = 0;
 
@@ -129,26 +129,6 @@ public class EquipDisplay : MonoBehaviour
 
     }
 
-    public void ActivateWeaponList()
-    {
-        if (grieveScreen)
-        {
-            weaponLists[0].SetActive(true);
-        }
-        if (macScreen)
-        {
-            weaponLists[1].SetActive(true);
-        }
-        if (fieldScreen)
-        {
-            weaponLists[2].SetActive(true);
-        }
-        if (riggsScreen)
-        {
-            weaponLists[3].SetActive(true);
-        }
-        Engine.e.partyInventoryReference.OpenWeaponInventory();
-    }
 
     public void CloseChestArmorSelection()
     {
@@ -156,6 +136,32 @@ public class EquipDisplay : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
 
         armorLists[0].SetActive(false);
+
+        if (grieveScreen)
+        {
+            SetGrieveScreen();
+        }
+        if (macScreen)
+        {
+            SetMacScreen();
+        }
+        if (fieldScreen)
+        {
+            SetFieldScreen();
+        }
+        if (riggsScreen)
+        {
+            SetRiggsScreen();
+        }
+    }
+    public void CloseAccessorySelection()
+    {
+        accessory1InventorySet = false;
+        accessory2InventorySet = false;
+
+        EventSystem.current.SetSelectedGameObject(null);
+
+        armorLists[1].SetActive(false);
 
         if (grieveScreen)
         {
@@ -184,10 +190,18 @@ public class EquipDisplay : MonoBehaviour
         armorLists[armor].SetActive(false);
     }
 
+    public void SetRemovingBool()
+    {
+        removing = !removing;
+
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(equippedWeapon.gameObject);
+    }
+
     public void DisplayGrieveStats()
     {
 
-        charAttackStatsReference[0].text = Engine.e.party[0].GetComponent<Character>().physicalDamage.ToString();
+        charAttackStatsReference[0].text = Engine.e.party[0].GetComponent<Character>().strength.ToString();
         charAttackStatsReference[1].text = Engine.e.party[0].GetComponent<Character>().firePhysicalAttackBonus.ToString();
         charAttackStatsReference[2].text = Engine.e.party[0].GetComponent<Character>().icePhysicalAttackBonus.ToString();
         charAttackStatsReference[3].text = Engine.e.party[0].GetComponent<Character>().lightningPhysicalAttackBonus.ToString();
@@ -206,8 +220,22 @@ public class EquipDisplay : MonoBehaviour
         equippedAccessory1.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
         equippedAccessory2.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
 
-        equippedWeapon.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[0].GetComponent<Character>().weapon.itemName;
-        equippedChestArmor.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[0].GetComponent<Character>().chestArmor.itemName;
+        if (Engine.e.party[0].GetComponent<Character>().weapon != null)
+        {
+            equippedWeapon.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[0].GetComponent<Character>().weapon.itemName;
+        }
+        else
+        {
+            equippedWeapon.itemName.GetComponentInChildren<TMP_Text>().text = "Nothing.";
+        }
+        if (Engine.e.party[0].GetComponent<Character>().chestArmor != null)
+        {
+            equippedChestArmor.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[0].GetComponent<Character>().chestArmor.itemName;
+        }
+        else
+        {
+            equippedChestArmor.itemName.GetComponentInChildren<TMP_Text>().text = "Nothing.";
+        }
 
         if (Engine.e.party[0].GetComponent<Character>().accessory1 != null)
         {
@@ -237,7 +265,7 @@ public class EquipDisplay : MonoBehaviour
     public void DisplayMacStats()
     {
 
-        charAttackStatsReference[0].text = Engine.e.party[1].GetComponent<Character>().physicalDamage.ToString();
+        charAttackStatsReference[0].text = Engine.e.party[1].GetComponent<Character>().strength.ToString();
         charAttackStatsReference[1].text = Engine.e.party[1].GetComponent<Character>().firePhysicalAttackBonus.ToString();
         charAttackStatsReference[2].text = Engine.e.party[1].GetComponent<Character>().icePhysicalAttackBonus.ToString();
         charAttackStatsReference[3].text = Engine.e.party[1].GetComponent<Character>().lightningPhysicalAttackBonus.ToString();
@@ -285,7 +313,7 @@ public class EquipDisplay : MonoBehaviour
     public void DisplayFieldStats()
     {
 
-        charAttackStatsReference[0].text = Engine.e.party[2].GetComponent<Character>().physicalDamage.ToString();
+        charAttackStatsReference[0].text = Engine.e.party[2].GetComponent<Character>().strength.ToString();
         charAttackStatsReference[1].text = Engine.e.party[2].GetComponent<Character>().firePhysicalAttackBonus.ToString();
         charAttackStatsReference[2].text = Engine.e.party[2].GetComponent<Character>().icePhysicalAttackBonus.ToString();
         charAttackStatsReference[3].text = Engine.e.party[2].GetComponent<Character>().lightningPhysicalAttackBonus.ToString();
@@ -334,7 +362,7 @@ public class EquipDisplay : MonoBehaviour
     public void DisplayRiggsStats()
     {
 
-        charAttackStatsReference[0].text = Engine.e.party[3].GetComponent<Character>().physicalDamage.ToString();
+        charAttackStatsReference[0].text = Engine.e.party[3].GetComponent<Character>().strength.ToString();
         charAttackStatsReference[1].text = Engine.e.party[3].GetComponent<Character>().firePhysicalAttackBonus.ToString();
         charAttackStatsReference[2].text = Engine.e.party[3].GetComponent<Character>().icePhysicalAttackBonus.ToString();
         charAttackStatsReference[3].text = Engine.e.party[3].GetComponent<Character>().lightningPhysicalAttackBonus.ToString();
@@ -380,6 +408,11 @@ public class EquipDisplay : MonoBehaviour
             charNewWeaponNotif[3].SetActive(true);
         }
     }
+    public void ClearAccessoryBool()
+    {
+        Engine.e.equipMenuReference.accessory1InventorySet = false;
+        Engine.e.equipMenuReference.accessory2InventorySet = false;
+    }
 
     public void ClearBool()
     {
@@ -402,6 +435,11 @@ public class EquipDisplay : MonoBehaviour
         if (riggsScreen)
         {
             riggsScreen = !riggsScreen;
+        }
+
+        if (removing)
+        {
+            removing = false;
         }
     }
     public void ClearScreen()
@@ -447,22 +485,21 @@ public class EquipDisplay : MonoBehaviour
     void HandleInventory()
     {
 
-        // "Grieve Weapons Menu" Inventory
-        if (grieveWeaponInventorySet)
+        if (weaponInventorySet)
         {
             if (vertMove > 0 && pressDown)
             {
                 pressDown = false;
-                if (inventoryPointerIndex < Engine.e.partyInventoryReference.grieveWeaponInventorySlots.Length)
+                if (inventoryPointerIndex < Engine.e.partyInventoryReference.weaponInventorySlots.Length)
                 {
                     inventoryPointerIndex += vertMove;
 
                     EventSystem.current.SetSelectedGameObject(null);
-                    EventSystem.current.SetSelectedGameObject(Engine.e.partyInventoryReference.grieveWeaponInventorySlots[inventoryPointerIndex].gameObject);
+                    EventSystem.current.SetSelectedGameObject(Engine.e.partyInventoryReference.weaponInventorySlots[inventoryPointerIndex].gameObject);
 
-                    if (inventoryPointerIndex > 5 && inventoryPointerIndex < Engine.e.partyInventoryReference.grieveWeaponInventorySlots.Length)
+                    if (inventoryPointerIndex > 5 && inventoryPointerIndex < Engine.e.partyInventoryReference.weaponInventorySlots.Length)
                     {
-                        Engine.e.partyInventoryReference.grieveWeaponsRectTransform.offsetMax -= new Vector2(0, -30);
+                        Engine.e.partyInventoryReference.weaponRectTransform.offsetMax -= new Vector2(0, -30);
                     }
                 }
             }
@@ -475,126 +512,12 @@ public class EquipDisplay : MonoBehaviour
                     inventoryPointerIndex += vertMove;
 
                     EventSystem.current.SetSelectedGameObject(null);
-                    EventSystem.current.SetSelectedGameObject(Engine.e.partyInventoryReference.grieveWeaponInventorySlots[inventoryPointerIndex].gameObject);
+                    EventSystem.current.SetSelectedGameObject(Engine.e.partyInventoryReference.weaponInventorySlots[inventoryPointerIndex].gameObject);
 
 
                     if (inventoryPointerIndex >= 5 && inventoryPointerIndex > 0)
                     {
-                        Engine.e.partyInventoryReference.grieveWeaponsRectTransform.offsetMax -= new Vector2(0, 30);
-                    }
-                }
-            }
-        }
-
-        if (macWeaponInventorySet)
-        {
-            if (vertMove > 0 && pressDown)
-            {
-                pressDown = false;
-                if (inventoryPointerIndex < Engine.e.partyInventoryReference.macWeaponInventorySlots.Length)
-                {
-                    inventoryPointerIndex += vertMove;
-
-                    EventSystem.current.SetSelectedGameObject(null);
-                    EventSystem.current.SetSelectedGameObject(Engine.e.partyInventoryReference.macWeaponInventorySlots[inventoryPointerIndex].gameObject);
-
-                    if (inventoryPointerIndex > 5 && inventoryPointerIndex < Engine.e.partyInventoryReference.macWeaponInventorySlots.Length)
-                    {
-                        Engine.e.partyInventoryReference.macWeaponsRectTransform.offsetMax -= new Vector2(0, -30);
-                    }
-                }
-            }
-
-            if (vertMove < 0 && pressUp)
-            {
-                pressUp = false;
-                if (inventoryPointerIndex > 0)
-                {
-                    inventoryPointerIndex += vertMove;
-
-                    EventSystem.current.SetSelectedGameObject(null);
-                    EventSystem.current.SetSelectedGameObject(Engine.e.partyInventoryReference.macWeaponInventorySlots[inventoryPointerIndex].gameObject);
-
-
-                    if (inventoryPointerIndex >= 5 && inventoryPointerIndex > 0)
-                    {
-                        Engine.e.partyInventoryReference.macWeaponsRectTransform.offsetMax -= new Vector2(0, 30);
-                    }
-                }
-            }
-        }
-
-        if (fieldWeaponInventorySet)
-        {
-            if (vertMove > 0 && pressDown)
-            {
-                pressDown = false;
-                if (inventoryPointerIndex < Engine.e.partyInventoryReference.fieldWeaponInventorySlots.Length)
-                {
-                    inventoryPointerIndex += vertMove;
-
-                    EventSystem.current.SetSelectedGameObject(null);
-                    EventSystem.current.SetSelectedGameObject(Engine.e.partyInventoryReference.fieldWeaponInventorySlots[inventoryPointerIndex].gameObject);
-
-                    if (inventoryPointerIndex > 5 && inventoryPointerIndex < Engine.e.partyInventoryReference.fieldWeaponInventorySlots.Length)
-                    {
-                        Engine.e.partyInventoryReference.fieldWeaponsRectTransform.offsetMax -= new Vector2(0, -30);
-                    }
-                }
-            }
-
-            if (vertMove < 0 && pressUp)
-            {
-                pressUp = false;
-                if (inventoryPointerIndex > 0)
-                {
-                    inventoryPointerIndex += vertMove;
-
-                    EventSystem.current.SetSelectedGameObject(null);
-                    EventSystem.current.SetSelectedGameObject(Engine.e.partyInventoryReference.fieldWeaponInventorySlots[inventoryPointerIndex].gameObject);
-
-
-                    if (inventoryPointerIndex >= 5 && inventoryPointerIndex > 0)
-                    {
-                        Engine.e.partyInventoryReference.fieldWeaponsRectTransform.offsetMax -= new Vector2(0, 30);
-                    }
-                }
-            }
-        }
-
-        if (riggsWeaponInventorySet)
-        {
-            if (vertMove > 0 && pressDown)
-            {
-                pressDown = false;
-                if (inventoryPointerIndex < Engine.e.partyInventoryReference.riggsWeaponInventorySlots.Length)
-                {
-                    inventoryPointerIndex += vertMove;
-
-                    EventSystem.current.SetSelectedGameObject(null);
-                    EventSystem.current.SetSelectedGameObject(Engine.e.partyInventoryReference.riggsWeaponInventorySlots[inventoryPointerIndex].gameObject);
-
-                    if (inventoryPointerIndex > 5 && inventoryPointerIndex < Engine.e.partyInventoryReference.riggsWeaponInventorySlots.Length)
-                    {
-                        Engine.e.partyInventoryReference.riggsWeaponsRectTransform.offsetMax -= new Vector2(0, -30);
-                    }
-                }
-            }
-
-            if (vertMove < 0 && pressUp)
-            {
-                pressUp = false;
-                if (inventoryPointerIndex > 0)
-                {
-                    inventoryPointerIndex += vertMove;
-
-                    EventSystem.current.SetSelectedGameObject(null);
-                    EventSystem.current.SetSelectedGameObject(Engine.e.partyInventoryReference.riggsWeaponInventorySlots[inventoryPointerIndex].gameObject);
-
-
-                    if (inventoryPointerIndex >= 5 && inventoryPointerIndex > 0)
-                    {
-                        Engine.e.partyInventoryReference.riggsWeaponsRectTransform.offsetMax -= new Vector2(0, 30);
+                        Engine.e.partyInventoryReference.weaponRectTransform.offsetMax -= new Vector2(0, 30);
                     }
                 }
             }
@@ -721,8 +644,7 @@ public class EquipDisplay : MonoBehaviour
     void Update()
     {
 
-        if (grieveWeaponInventorySet || macWeaponInventorySet || fieldWeaponInventorySet || riggsWeaponInventorySet
-        || chestArmorInventorySet || accessory1InventorySet || accessory2InventorySet)
+        if (weaponInventorySet || chestArmorInventorySet || legArmorInventorySet || accessory1InventorySet || accessory2InventorySet)
         {
             if (Input.GetKeyDown(KeyCode.S))
             {

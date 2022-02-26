@@ -7,28 +7,160 @@ using UnityEngine.UI;
 public class Mac : Character
 {
 
-    public void AddMacSkill(int addSkillChoice)
+    public void RemoveWeapon()
     {
-        if (addSkillChoice == 0)
-        {
-        }
-    }
+        strength -= weapon.GetComponent<Weapon>().strengthBonus;
+        intelligence -= weapon.GetComponent<Weapon>().intelligenceBonus;
 
-    public void EquipMacWeapon(MacWeapons _weapon)
-    {
-
-        // Resetting Stats To Base Values
-        physicalDamage -= weapon.GetComponent<MacWeapons>().physicalAttack;
-        firePhysicalAttackBonus -= weapon.GetComponent<MacWeapons>().fireAttack;
-        waterPhysicalAttackBonus -= weapon.GetComponent<MacWeapons>().waterAttack;
-        lightningPhysicalAttackBonus -= weapon.GetComponent<MacWeapons>().lightningAttack;
-        shadowPhysicalAttackBonus -= weapon.GetComponent<MacWeapons>().shadowAttack;
-        icePhysicalAttackBonus -= weapon.GetComponent<MacWeapons>().iceAttack;
+        firePhysicalAttackBonus -= weapon.GetComponent<Weapon>().fireAttack;
+        waterPhysicalAttackBonus -= weapon.GetComponent<Weapon>().waterAttack;
+        lightningPhysicalAttackBonus -= weapon.GetComponent<Weapon>().lightningAttack;
+        shadowPhysicalAttackBonus -= weapon.GetComponent<Weapon>().shadowAttack;
+        icePhysicalAttackBonus -= weapon.GetComponent<Weapon>().iceAttack;
 
         // Swap Inventory Slots
-        Engine.e.partyInventoryReference.SubtractItemFromInventory(_weapon);
         Engine.e.partyInventoryReference.AddItemToInventory(weapon);
 
+        weapon = null;
+        Engine.e.charEquippedWeapons[1] = null;
+
+        Engine.e.equipMenuReference.DisplayMacStats();
+    }
+
+    public void RemoveChestArmor()
+    {
+        // Resetting Stats Back to Base Values
+        physicalDefense -= chestArmor.GetComponent<ChestArmor>().physicalArmor;
+        fireDefense -= chestArmor.GetComponent<ChestArmor>().fireDefense;
+        waterDefense -= chestArmor.GetComponent<ChestArmor>().waterDefense;
+        lightningDropsLevel -= chestArmor.GetComponent<ChestArmor>().lightningDefense;
+        shadowDefense -= chestArmor.GetComponent<ChestArmor>().shadowDefense;
+        iceDefense -= chestArmor.GetComponent<ChestArmor>().iceDefense;
+
+        fireDropAttackBonus -= chestArmor.GetComponent<ChestArmor>().fireAttackBonus;
+        waterDropAttackBonus -= chestArmor.GetComponent<ChestArmor>().waterAttackBonus;
+        lightningDropAttackBonus -= chestArmor.GetComponent<ChestArmor>().lightningAttackBonus;
+        shadowDropAttackBonus -= chestArmor.GetComponent<ChestArmor>().shadowAttackBonus;
+        iceDropAttackBonus -= chestArmor.GetComponent<ChestArmor>().iceAttackBonus;
+        skillCostReduction -= chestArmor.GetComponent<ChestArmor>().skillCostReduction;
+
+        // Swap Inventory Slots
+        Engine.e.partyInventoryReference.AddItemToInventory(chestArmor);
+
+        // Equip Armor
+        chestArmor = null;
+        Engine.e.charEquippedChestArmor[1] = null;
+
+        Engine.e.equipMenuReference.DisplayMacStats();
+
+    }
+    public void RemoveLegArmor()
+    {
+        // Resetting Stats Back to Base Values
+        physicalDefense -= chestArmor.GetComponent<LegArmor>().physicalArmor;
+        fireDefense -= chestArmor.GetComponent<LegArmor>().fireDefense;
+        waterDefense -= chestArmor.GetComponent<LegArmor>().waterDefense;
+        lightningDropsLevel -= chestArmor.GetComponent<LegArmor>().lightningDefense;
+        shadowDefense -= chestArmor.GetComponent<LegArmor>().shadowDefense;
+        iceDefense -= chestArmor.GetComponent<LegArmor>().iceDefense;
+
+        fireDropAttackBonus -= chestArmor.GetComponent<LegArmor>().fireAttackBonus;
+        waterDropAttackBonus -= chestArmor.GetComponent<LegArmor>().waterAttackBonus;
+        lightningDropAttackBonus -= chestArmor.GetComponent<LegArmor>().lightningAttackBonus;
+        shadowDropAttackBonus -= chestArmor.GetComponent<LegArmor>().shadowAttackBonus;
+        iceDropAttackBonus -= chestArmor.GetComponent<LegArmor>().iceAttackBonus;
+        skillCostReduction -= chestArmor.GetComponent<LegArmor>().skillCostReduction;
+
+        // Swap Inventory Slots
+        Engine.e.partyInventoryReference.AddItemToInventory(legArmor);
+
+        // Equip Armor
+        legArmor = null;
+        Engine.e.charEquippedLegArmor[1] = null;
+
+        Engine.e.equipMenuReference.DisplayMacStats();
+
+    }
+    public void RemoveAccessory1()
+    {
+        // Resetting Stats Back to Base Values
+        physicalDefense -= accessory1.GetComponent<Accessory>().physicalArmor;
+        fireDefense -= accessory1.GetComponent<Accessory>().fireDefense;
+        waterDefense -= accessory1.GetComponent<Accessory>().waterDefense;
+        lightningDropsLevel -= accessory1.GetComponent<Accessory>().lightningDefense;
+        shadowDefense -= accessory1.GetComponent<Accessory>().shadowDefense;
+        iceDefense -= accessory1.GetComponent<Accessory>().iceDefense;
+
+        strength -= accessory1.GetComponent<Accessory>().strengthBonus;
+        intelligence -= accessory1.GetComponent<Accessory>().intelligenceBonus;
+
+        fireDropAttackBonus -= accessory1.GetComponent<Accessory>().fireAttackBonus;
+        waterDropAttackBonus -= accessory1.GetComponent<Accessory>().waterAttackBonus;
+        lightningDropAttackBonus -= accessory1.GetComponent<Accessory>().lightningAttackBonus;
+        shadowDropAttackBonus -= accessory1.GetComponent<Accessory>().shadowAttackBonus;
+        iceDropAttackBonus -= accessory1.GetComponent<Accessory>().iceAttackBonus;
+        skillCostReduction -= accessory1.GetComponent<Accessory>().skillCostReduction;
+
+        // Swap Inventory Slots
+
+        Engine.e.partyInventoryReference.AddItemToInventory(accessory1);
+
+        accessory1 = null;
+        Engine.e.charEquippedAccessory1[1] = null;
+
+        Engine.e.equipMenuReference.DisplayMacStats();
+
+    }
+
+    public void RemoveAccessory2()
+    {
+        // Resetting Stats Back to Base Values
+        physicalDefense -= accessory2.GetComponent<Accessory>().physicalArmor;
+        fireDefense -= accessory2.GetComponent<Accessory>().fireDefense;
+        waterDefense -= accessory2.GetComponent<Accessory>().waterDefense;
+        lightningDropsLevel -= accessory2.GetComponent<Accessory>().lightningDefense;
+        shadowDefense -= accessory2.GetComponent<Accessory>().shadowDefense;
+        iceDefense -= accessory2.GetComponent<Accessory>().iceDefense;
+
+        strength -= accessory2.GetComponent<Accessory>().strengthBonus;
+        intelligence -= accessory2.GetComponent<Accessory>().intelligenceBonus;
+
+        fireDropAttackBonus -= accessory2.GetComponent<Accessory>().fireAttackBonus;
+        waterDropAttackBonus -= accessory2.GetComponent<Accessory>().waterAttackBonus;
+        lightningDropAttackBonus -= accessory2.GetComponent<Accessory>().lightningAttackBonus;
+        shadowDropAttackBonus -= accessory2.GetComponent<Accessory>().shadowAttackBonus;
+        iceDropAttackBonus -= accessory2.GetComponent<Accessory>().iceAttackBonus;
+        skillCostReduction -= accessory2.GetComponent<Accessory>().skillCostReduction;
+
+        // Swap Inventory Slots
+
+        Engine.e.partyInventoryReference.AddItemToInventory(accessory2);
+
+        accessory2 = null;
+        Engine.e.charEquippedAccessory2[1] = null;
+
+        Engine.e.equipMenuReference.DisplayMacStats();
+
+    }
+
+    public void EquipMacWeapon(Weapon _weapon)
+    {
+        if (weapon != null)
+        {
+            // Resetting Stats To Base Values
+            strength -= weapon.GetComponent<Weapon>().strengthBonus;
+            intelligence -= weapon.GetComponent<Weapon>().intelligenceBonus;
+
+            firePhysicalAttackBonus -= weapon.GetComponent<Weapon>().fireAttack;
+            waterPhysicalAttackBonus -= weapon.GetComponent<Weapon>().waterAttack;
+            lightningPhysicalAttackBonus -= weapon.GetComponent<Weapon>().lightningAttack;
+            shadowPhysicalAttackBonus -= weapon.GetComponent<Weapon>().shadowAttack;
+            icePhysicalAttackBonus -= weapon.GetComponent<Weapon>().iceAttack;
+
+            // Swap Inventory Slots
+            Engine.e.partyInventoryReference.AddItemToInventory(weapon);
+        }
+        Engine.e.partyInventoryReference.SubtractItemFromInventory(_weapon);
         //   Engine.e.equipMenuReference.GetComponent<EquipDisplay>().macEquippedWeapon.GetComponent<InventorySlot>().item = _weapon;
         //  Engine.e.equipMenuReference.GetComponent<EquipDisplay>().macEquippedWeapon.GetComponentInChildren<TMP_Text>().text = _weapon.itemName;
 
@@ -37,7 +169,9 @@ public class Mac : Character
         weapon = _weapon;
         Engine.e.charEquippedWeapons[1] = _weapon;
 
-        physicalDamage += _weapon.physicalAttack;
+        strength += _weapon.strengthBonus;
+        intelligence += _weapon.intelligenceBonus;
+
         firePhysicalAttackBonus += _weapon.fireAttack;
         waterPhysicalAttackBonus += _weapon.waterAttack;
         lightningPhysicalAttackBonus += _weapon.lightningAttack;
@@ -49,12 +183,12 @@ public class Mac : Character
 
         // Update Stats (visually) and Return To Equip Screen
         Engine.e.equipMenuReference.GetComponent<EquipDisplay>().DisplayMacStats();
-        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().weaponLists[1].SetActive(false);
+        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().weaponLists[0].SetActive(false);
         Engine.e.equipMenuReference.GetComponent<EquipDisplay>().SetMacScreen();
-        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().macWeaponInventorySet = false;
+        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().weaponInventorySet = false;
 
     }
-    public void EquipMacWeaponOnLoad(MacWeapons _weapon)
+    public void EquipMacWeaponOnLoad(Weapon _weapon)
     {
         weapon = _weapon;
         Engine.e.charEquippedWeapons[1] = _weapon;
@@ -120,7 +254,59 @@ public class Mac : Character
         //  Engine.e.equipMenuReference.GetComponent<EquipDisplay>().macEquippedChestArmor.GetComponent<InventorySlot>().item = _armor;
         //  Engine.e.equipMenuReference.GetComponent<EquipDisplay>().macEquippedChestArmor.GetComponentInChildren<TMP_Text>().text = _armor.itemName;
     }
+    public void EquipMacLegArmor(LegArmor _armor)
+    {
+        // Resetting Stats Back to Base Values
+        physicalDefense -= legArmor.GetComponent<LegArmor>().physicalArmor;
+        fireDefense -= legArmor.GetComponent<LegArmor>().fireDefense;
+        waterDefense -= legArmor.GetComponent<LegArmor>().waterDefense;
+        lightningDropsLevel -= legArmor.GetComponent<LegArmor>().lightningDefense;
+        shadowDefense -= legArmor.GetComponent<LegArmor>().shadowDefense;
+        iceDefense -= legArmor.GetComponent<LegArmor>().iceDefense;
 
+        fireDropAttackBonus -= legArmor.GetComponent<LegArmor>().fireAttackBonus;
+        waterDropAttackBonus -= legArmor.GetComponent<LegArmor>().waterAttackBonus;
+        lightningDropAttackBonus -= legArmor.GetComponent<LegArmor>().lightningAttackBonus;
+        shadowDropAttackBonus -= legArmor.GetComponent<LegArmor>().shadowAttackBonus;
+        iceDropAttackBonus -= legArmor.GetComponent<LegArmor>().iceAttackBonus;
+        skillCostReduction -= legArmor.GetComponent<LegArmor>().skillCostReduction;
+
+        // Swap Inventory Slots
+
+        Engine.e.partyInventoryReference.SubtractItemFromInventory(_armor);
+        Engine.e.partyInventoryReference.AddItemToInventory(legArmor);
+
+        // Equip Armor
+        legArmor = _armor;
+        Engine.e.charEquippedLegArmor[1] = _armor;
+
+        physicalDefense += legArmor.GetComponent<LegArmor>().physicalArmor;
+        fireDefense += legArmor.GetComponent<LegArmor>().fireDefense;
+        waterDefense += legArmor.GetComponent<LegArmor>().waterDefense;
+        lightningDefense += legArmor.GetComponent<LegArmor>().lightningDefense;
+        shadowDefense += legArmor.GetComponent<LegArmor>().shadowDefense;
+        iceDefense += legArmor.GetComponent<LegArmor>().iceDefense;
+        skillCostReduction += legArmor.GetComponent<LegArmor>().skillCostReduction;
+
+        fireDropAttackBonus += legArmor.GetComponent<LegArmor>().fireAttackBonus;
+        waterDropAttackBonus += legArmor.GetComponent<LegArmor>().waterAttackBonus;
+        lightningDropAttackBonus += legArmor.GetComponent<LegArmor>().lightningAttackBonus;
+        shadowDropAttackBonus += legArmor.GetComponent<LegArmor>().shadowAttackBonus;
+        iceDropAttackBonus += legArmor.GetComponent<LegArmor>().iceAttackBonus;
+
+        // Update Stats (visually) and Return To Equip Screen
+        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().DisplayMacStats();
+        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().armorLists[1].SetActive(false);
+        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().SetMacScreen();
+        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().legArmorInventorySet = false;
+        Engine.e.partyInventoryReference.indexReference = -1;
+    }
+
+    public void EquipMacLegArmorOnLoad(LegArmor _armor)
+    {
+        legArmor = _armor;
+        Engine.e.charEquippedLegArmor[1] = _armor;
+    }
     public void EquipMacAccessory1(Accessory _accessory)
     {
         if (accessory1 != null)
@@ -133,7 +319,9 @@ public class Mac : Character
             shadowDefense -= accessory1.GetComponent<Accessory>().shadowDefense;
             iceDefense -= accessory1.GetComponent<Accessory>().iceDefense;
 
-            physicalDamage -= accessory1.GetComponent<Accessory>().physicalAttack;
+            strength -= accessory1.GetComponent<Accessory>().strengthBonus;
+            intelligence -= accessory1.GetComponent<Accessory>().intelligenceBonus;
+
             fireDropAttackBonus -= accessory1.GetComponent<Accessory>().fireAttackBonus;
             waterDropAttackBonus -= accessory1.GetComponent<Accessory>().waterAttackBonus;
             lightningDropAttackBonus -= accessory1.GetComponent<Accessory>().lightningAttackBonus;
@@ -159,7 +347,9 @@ public class Mac : Character
         iceDefense += accessory1.GetComponent<Accessory>().iceDefense;
         skillCostReduction += accessory1.GetComponent<Accessory>().skillCostReduction;
 
-        physicalDamage += accessory1.GetComponent<Accessory>().physicalAttack;
+        strength += accessory1.GetComponent<Accessory>().strengthBonus;
+        intelligence += accessory1.GetComponent<Accessory>().intelligenceBonus;
+
         fireDropAttackBonus += accessory1.GetComponent<Accessory>().fireAttackBonus;
         waterDropAttackBonus += accessory1.GetComponent<Accessory>().waterAttackBonus;
         lightningDropAttackBonus += accessory1.GetComponent<Accessory>().lightningAttackBonus;
@@ -198,7 +388,9 @@ public class Mac : Character
             shadowDefense -= accessory2.GetComponent<Accessory>().shadowDefense;
             iceDefense -= accessory2.GetComponent<Accessory>().iceDefense;
 
-            physicalDamage -= accessory2.GetComponent<Accessory>().physicalAttack;
+            strength -= accessory2.GetComponent<Accessory>().strengthBonus;
+            intelligence -= accessory2.GetComponent<Accessory>().intelligenceBonus;
+
             fireDropAttackBonus -= accessory2.GetComponent<Accessory>().fireAttackBonus;
             waterDropAttackBonus -= accessory2.GetComponent<Accessory>().waterAttackBonus;
             lightningDropAttackBonus -= accessory2.GetComponent<Accessory>().lightningAttackBonus;
@@ -225,7 +417,9 @@ public class Mac : Character
         iceDefense += accessory2.GetComponent<Accessory>().iceDefense;
         skillCostReduction += accessory2.GetComponent<Accessory>().skillCostReduction;
 
-        physicalDamage += accessory2.GetComponent<Accessory>().physicalAttack;
+        strength += accessory2.GetComponent<Accessory>().strengthBonus;
+        intelligence += accessory2.GetComponent<Accessory>().intelligenceBonus;
+
         fireDropAttackBonus += accessory2.GetComponent<Accessory>().fireAttackBonus;
         waterDropAttackBonus += accessory2.GetComponent<Accessory>().waterAttackBonus;
         lightningDropAttackBonus += accessory2.GetComponent<Accessory>().lightningAttackBonus;

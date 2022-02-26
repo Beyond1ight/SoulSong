@@ -8,9 +8,15 @@ public class Enemy : MonoBehaviour
 {
     public string enemyName;
     public float currentHealth, maxHealth, currentMana, maxMana, haste, experiencePoints, choiceAttack, damageTotal, hitChance, poisonDmg;
-    public int lvl, physicalDamage, groupIndex, moneyLootAmount, sleepTimer, confuseTimer, deathTimer = 3;
+    public int lvl, strength, intelligence, groupIndex, moneyLootAmount, sleepTimer, confuseTimer, deathTimer = 3;
     public Drops[] drops;
+
+    // Negative Status Effects
     public bool isPoisoned, isConfused, isAsleep, deathInflicted, inflicted;
+
+    // Beneficial Status Effects
+    public bool isProtected, isEncompassed, isHastened;
+
     public float physicalDefense, dodgeChance, fireDefense, iceDefense, lightningDefense, waterDefense, shadowDefense, holyDefense, poisonDefense, sleepDefense, confuseDefense, deathDefense, instantDeathDefense,
     fireDropsLevel, iceDropsLevel, lightningDropsLevel, waterDropsLevel, shadowDropsLevel, holyDropsLevel, stealChance;
 
@@ -81,7 +87,7 @@ public class Enemy : MonoBehaviour
             {
                 Engine.e.battleSystem.enemyMoving = true;
                 Engine.e.battleSystem.enemyAttacking = true;
-                Engine.e.battleSystem.isDead = Engine.e.activeParty.activeParty[target].GetComponent<Character>().TakePhysicalDamage(target, physicalDamage);
+                Engine.e.battleSystem.isDead = Engine.e.activeParty.activeParty[target].GetComponent<Character>().TakePhysicalDamage(target, strength);
 
             }
             else
@@ -106,7 +112,7 @@ public class Enemy : MonoBehaviour
                 {
                     Engine.e.battleSystem.enemyMoving = true;
                     Engine.e.battleSystem.enemyAttacking = true;
-                    Engine.e.battleSystem.isDead = Engine.e.activeParty.activeParty[target].GetComponent<Character>().TakePhysicalDamage(target, GetComponent<Enemy>().physicalDamage);
+                    Engine.e.battleSystem.isDead = Engine.e.activeParty.activeParty[target].GetComponent<Character>().TakePhysicalDamage(target, GetComponent<Enemy>().strength);
                 }
             }
         }
@@ -114,7 +120,7 @@ public class Enemy : MonoBehaviour
         {
             Engine.e.battleSystem.enemyMoving = true;
             Engine.e.battleSystem.enemyAttacking = true;
-            Engine.e.battleSystem.isDead = Engine.e.activeParty.activeParty[target].GetComponent<Character>().TakePhysicalDamage(target, GetComponent<Enemy>().physicalDamage);
+            Engine.e.battleSystem.isDead = Engine.e.activeParty.activeParty[target].GetComponent<Character>().TakePhysicalDamage(target, GetComponent<Enemy>().strength);
         }
         Engine.e.battleSystem.partyCheckNext = false;
     }
@@ -320,22 +326,19 @@ public class Enemy : MonoBehaviour
         Character characterAttacking = null;
         Enemy enemyAttacking = null;
         bool teamAttack = false; // If "false," an active party member is attacking 
+        float characterIntelligenceScale = 0;
 
         if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR1TURN || Engine.e.battleSystem.currentInQueue == BattleState.CONFCHAR1)
         {
             currentIndex = 0;
-            characterAttacking = Engine.e.activeParty.activeParty[0].GetComponent<Character>();
-
         }
         if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR2TURN || Engine.e.battleSystem.currentInQueue == BattleState.CONFCHAR2)
         {
             currentIndex = 1;
-            characterAttacking = Engine.e.activeParty.activeParty[1].GetComponent<Character>();
         }
         if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR3TURN || Engine.e.battleSystem.currentInQueue == BattleState.CONFCHAR3)
         {
             currentIndex = 2;
-            characterAttacking = Engine.e.activeParty.activeParty[2].GetComponent<Character>();
         }
 
         if (Engine.e.battleSystem.currentInQueue == BattleState.ENEMY1TURN)
@@ -366,6 +369,7 @@ public class Enemy : MonoBehaviour
         if (!teamAttack)
         {
             characterAttacking = Engine.e.activeParty.activeParty[currentIndex].GetComponent<Character>();
+            characterIntelligenceScale = characterAttacking.intelligence * 2 / 6;
         }
         else
         {
@@ -383,7 +387,7 @@ public class Enemy : MonoBehaviour
             }
             else
             {
-                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.fireDropsLevel / 2)) + characterAttacking.fireDropAttackBonus);
+                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.fireDropsLevel / 2) * characterIntelligenceScale) + characterAttacking.fireDropAttackBonus);
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * fireDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
                 SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
@@ -401,7 +405,7 @@ public class Enemy : MonoBehaviour
             }
             else
             {
-                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.iceDropsLevel / 2)) + characterAttacking.iceDropAttackBonus);
+                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.iceDropsLevel / 2) * characterIntelligenceScale) + characterAttacking.iceDropAttackBonus);
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * iceDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
                 SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
@@ -418,7 +422,7 @@ public class Enemy : MonoBehaviour
             }
             else
             {
-                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.lightningDropsLevel / 2)) + characterAttacking.lightningDropAttackBonus);
+                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.lightningDropsLevel / 2) * characterIntelligenceScale) + characterAttacking.lightningDropAttackBonus);
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * lightningDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
                 SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
@@ -427,19 +431,53 @@ public class Enemy : MonoBehaviour
 
         if (dropChoice.dropType == "Water")
         {
-            if (teamAttack)
+            switch (dropChoice.dropName)
             {
-                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.waterDropsLevel / 2)));
-                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
-                currentHealth -= Mathf.Round(damageTotal);
-                SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
-            }
-            else
-            {
-                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.waterDropsLevel / 2)) + characterAttacking.waterDropAttackBonus);
-                damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
-                currentHealth -= Mathf.Round(damageTotal);
-                SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
+                case "Bloom":
+                    if (teamAttack)
+                    {
+                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.waterDropsLevel / 2)));
+                        damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
+                        currentHealth += damageTotal;
+                    }
+                    else
+                    {
+                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.waterDropsLevel / 2) * characterIntelligenceScale));
+                        damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
+                        currentHealth += damageTotal;
+                        Debug.Log(damageTotal);
+                    }
+
+                    SetBattleDamagePopupText(damageTotal.ToString(), Color.green);
+
+                    if (currentHealth >= maxHealth)
+                    {
+                        currentHealth = maxHealth;
+                    }
+                    break;
+
+                case "Bubble":
+                    if (teamAttack)
+                    {
+                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * enemyAttacking.waterDropsLevel / 2)));
+                        damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
+                        currentHealth -= damageTotal;
+                    }
+                    else
+                    {
+                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.waterDropsLevel / 2) * characterIntelligenceScale));
+                        damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
+                        currentHealth -= damageTotal;
+                        Debug.Log(damageTotal);
+                    }
+
+                    SetBattleDamagePopupText(damageTotal.ToString(), Color.green);
+
+                    if (currentHealth >= maxHealth)
+                    {
+                        currentHealth = maxHealth;
+                    }
+                    break;
             }
         }
 
@@ -457,7 +495,7 @@ public class Enemy : MonoBehaviour
                     }
                     else
                     {
-                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.shadowDropsLevel / 2)) + characterAttacking.shadowDropAttackBonus);
+                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.shadowDropsLevel / 2) * characterIntelligenceScale) + characterAttacking.shadowDropAttackBonus);
                         damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * shadowDefense / 100));
                         currentHealth -= Mathf.Round(damageTotal);
                     }
@@ -548,7 +586,7 @@ public class Enemy : MonoBehaviour
                     }
                     else
                     {
-                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.holyDropsLevel / 2)));
+                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.holyDropsLevel / 2) * characterIntelligenceScale));
                         damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * holyDefense / 100));
                         currentHealth += damageTotal;
                         Debug.Log(damageTotal);
@@ -665,6 +703,57 @@ public class Enemy : MonoBehaviour
             }
         }
 
+        if (dropChoice.dropType == "Ethereal")
+        {
+            switch (dropChoice.dropName)
+            {
+                case "Protect":
+
+                    if (!isProtected)
+                    {
+                        float defenseIncrease = physicalDefense + (physicalDefense * 40 / 100);
+                        physicalDefense = defenseIncrease;
+
+
+                        isProtected = true;
+                        SetBattleDamagePopupText("Protected!", Color.green);
+                    }
+                    break;
+                case "Encompass":
+
+                    if (!isEncompassed)
+                    {
+                        float fireDefenseIncrease = fireDefense + (fireDefense * 40 / 100);
+                        fireDefense = fireDefenseIncrease;
+                        float iceDefenseIncrease = iceDefense + (iceDefense * 40 / 100);
+                        iceDefense = fireDefenseIncrease;
+                        float lightningDefenseIncrease = lightningDefense + (lightningDefense * 40 / 100);
+                        lightningDefense = fireDefenseIncrease;
+                        float waterDefenseIncrease = waterDefense + (waterDefense * 40 / 100);
+                        waterDefense = fireDefenseIncrease;
+                        float shadowDefenseIncrease = shadowDefense + (shadowDefense * 40 / 100);
+                        shadowDefense = fireDefenseIncrease;
+                        float holyDefenseIncrease = holyDefense + (holyDefense * 40 / 100);
+                        holyDefense = fireDefenseIncrease;
+
+                        isEncompassed = true;
+                        SetBattleDamagePopupText("Encompassed!", Color.green);
+                    }
+                    break;
+                case "Adrenaline":
+
+                    if (!isHastened)
+                    {
+                        float hasteIncrease = Mathf.Round(haste + (haste * 25 / 100));
+                        haste = hasteIncrease;
+
+
+                        isHastened = true;
+                        SetBattleDamagePopupText("Hastened!", Color.green);
+                    }
+                    break;
+            }
+        }
 
         Engine.e.battleSystem.damageTotal = damageTotal;
 

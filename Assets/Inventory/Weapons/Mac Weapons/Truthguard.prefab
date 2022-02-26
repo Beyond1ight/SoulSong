@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1060045139638357172
+--- !u!1 &3117691980049923612
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,53 +8,53 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1060045139638357183}
-  - component: {fileID: 1060045139638357168}
-  - component: {fileID: 1060045139638357169}
-  - component: {fileID: 1060045139638357170}
-  - component: {fileID: 7319004692465405328}
+  - component: {fileID: 170034888371564292}
+  - component: {fileID: 3211247407719863084}
+  - component: {fileID: 1777029128650298545}
+  - component: {fileID: 6635024624483391068}
+  - component: {fileID: 950896583781284752}
   m_Layer: 5
-  m_Name: Truthguard
+  m_Name: Truthguard 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &1060045139638357183
+--- !u!224 &170034888371564292
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1060045139638357172}
+  m_GameObject: {fileID: 3117691980049923612}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.7518797, y: 0.7518797, z: 0.7518797}
   m_Children:
-  - {fileID: 1060045140950613925}
+  - {fileID: 7221767962953721635}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 26.8, y: -15}
+  m_AnchoredPosition: {x: 36.4, y: -15}
   m_SizeDelta: {x: 40, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &1060045139638357168
+--- !u!222 &3211247407719863084
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1060045139638357172}
+  m_GameObject: {fileID: 3117691980049923612}
   m_CullTransparentMesh: 1
---- !u!114 &1060045139638357169
+--- !u!114 &1777029128650298545
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1060045139638357172}
+  m_GameObject: {fileID: 3117691980049923612}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -78,13 +78,13 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1060045139638357170
+--- !u!114 &6635024624483391068
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1060045139638357172}
+  m_GameObject: {fileID: 3117691980049923612}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
@@ -118,13 +118,13 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 1060045139638357169}
+  m_TargetGraphic: {fileID: 1777029128650298545}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7319004692465405328}
-        m_TargetAssemblyTypeName: MacWeapons, Assembly-CSharp
-        m_MethodName: EquipMacWeapon
+      - m_Target: {fileID: 950896583781284752}
+        m_TargetAssemblyTypeName: Weapon, Assembly-CSharp
+        m_MethodName: EquipWeapon
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -134,51 +134,52 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &7319004692465405328
+--- !u!114 &950896583781284752
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1060045139638357172}
+  m_GameObject: {fileID: 3117691980049923612}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24a0c7961f30f4271964e38fcd8a3816, type: 3}
+  m_Script: {fileID: 11500000, guid: ef2bcfa057302463c85ce83537a0fbd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drop: {fileID: 0}
   itemName: Truthguard
-  itemDescription: Weapon
+  itemDescription: Mac Starting Weapon
   itemType: Weapon
-  itemValue: 50
+  itemValue: 0
   resaleValue: 0
   numberHeld: 0
   itemPower: 0
-  numberHeldDisplay: {fileID: 0}
   stackable: 0
-  inventoryButton: {fileID: 1060045139638357172}
-  inventoryButtonLogic: {fileID: 0}
   itemIndex: 0
-  inventoryButtonContainer: {fileID: 0}
-  anim: {fileID: 0}
-  isDrop: 0
   dropCostReduction: 0
   skillCostReduction: 0
+  animationClip: {fileID: 0}
   consumable: 0
-  drop: 0
+  isDrop: 0
   weapon: 1
   chestArmor: 0
-  macWeaponIndex: 0
-  isEquiped: 0
-  physicalAttack: 10
-  displayText: {fileID: 0}
-  macReference: {fileID: 2602189284047916200, guid: 61eb93b6d8f434749b7a7f91e1934586, type: 3}
-  weaponCloneReference: {fileID: 0}
+  accessory: 0
+  useableOutOfBattle: 0
+  targetAll: 0
+  weaponIndex: 0
+  grieveWeapon: 0
+  macWeapon: 1
+  fieldWeapon: 0
+  riggsWeapon: 0
+  solaceWeapon: 0
+  blueWeapon: 0
+  physicalAttack: 12
   fireAttack: 0
   iceAttack: 0
   waterAttack: 0
   lightningAttack: 0
   shadowAttack: 0
---- !u!1 &1060045140950613926
+--- !u!1 &9046940419069239111
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -186,9 +187,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1060045140950613925}
-  - component: {fileID: 1060045140950613923}
-  - component: {fileID: 1060045140950613924}
+  - component: {fileID: 7221767962953721635}
+  - component: {fileID: 1408874651919932581}
+  - component: {fileID: 1146894502220472292}
   m_Layer: 5
   m_Name: ItemName
   m_TagString: Untagged
@@ -196,40 +197,40 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &1060045140950613925
+--- !u!224 &7221767962953721635
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1060045140950613926}
+  m_GameObject: {fileID: 9046940419069239111}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1060045139638357183}
+  m_Father: {fileID: 170034888371564292}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 80.3, y: 0}
-  m_SizeDelta: {x: 79.9485, y: 0}
+  m_AnchoredPosition: {x: 52.5, y: 0}
+  m_SizeDelta: {x: 26.1, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &1060045140950613923
+--- !u!222 &1408874651919932581
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1060045140950613926}
+  m_GameObject: {fileID: 9046940419069239111}
   m_CullTransparentMesh: 1
---- !u!114 &1060045140950613924
+--- !u!114 &1146894502220472292
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1060045140950613926}
+  m_GameObject: {fileID: 9046940419069239111}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
@@ -243,7 +244,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Truthguard
+  m_text: 'Kaikri
 
 '
   m_isRightToLeft: 0

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6075365292892509266
+--- !u!1 &265013430527265051
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,11 +8,11 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6075365292892509273}
-  - component: {fileID: 6075365292892509270}
-  - component: {fileID: 6075365292892509271}
-  - component: {fileID: 6075365292892509268}
-  - component: {fileID: 6075365292892509267}
+  - component: {fileID: 265013430527265040}
+  - component: {fileID: 265013430527265055}
+  - component: {fileID: 265013430527265054}
+  - component: {fileID: 265013430527265053}
+  - component: {fileID: 3402342846047589264}
   m_Layer: 5
   m_Name: Blitz
   m_TagString: Untagged
@@ -20,41 +20,41 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &6075365292892509273
+--- !u!224 &265013430527265040
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6075365292892509266}
+  m_GameObject: {fileID: 265013430527265051}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.7518797, y: 0.7518797, z: 0.7518797}
   m_Children:
-  - {fileID: 6075365293664970563}
+  - {fileID: 265013431301732874}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 28.2, y: -15}
+  m_AnchoredPosition: {x: 27.6, y: -15}
   m_SizeDelta: {x: 40, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &6075365292892509270
+--- !u!222 &265013430527265055
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6075365292892509266}
+  m_GameObject: {fileID: 265013430527265051}
   m_CullTransparentMesh: 1
---- !u!114 &6075365292892509271
+--- !u!114 &265013430527265054
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6075365292892509266}
+  m_GameObject: {fileID: 265013430527265051}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -78,13 +78,13 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6075365292892509268
+--- !u!114 &265013430527265053
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6075365292892509266}
+  m_GameObject: {fileID: 265013430527265051}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
@@ -118,13 +118,13 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 6075365292892509271}
+  m_TargetGraphic: {fileID: 265013430527265054}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6075365292892509267}
-        m_TargetAssemblyTypeName: GrieveWeapons, Assembly-CSharp
-        m_MethodName: EquipGrieveWeapon
+      - m_Target: {fileID: 3402342846047589264}
+        m_TargetAssemblyTypeName: Weapon, Assembly-CSharp
+        m_MethodName: EquipWeapon
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -134,51 +134,52 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &6075365292892509267
+--- !u!114 &3402342846047589264
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6075365292892509266}
+  m_GameObject: {fileID: 265013430527265051}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 538b8d9b8b348403f83d5721ec01e52b, type: 3}
+  m_Script: {fileID: 11500000, guid: ef2bcfa057302463c85ce83537a0fbd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drop: {fileID: 0}
   itemName: Blitz
-  itemDescription: Weapon
+  itemDescription: Grieve Starting Weapon
   itemType: Weapon
-  itemValue: 50
+  itemValue: 0
   resaleValue: 0
   numberHeld: 0
   itemPower: 0
-  numberHeldDisplay: {fileID: 0}
   stackable: 0
-  inventoryButton: {fileID: 6075365292892509266}
-  inventoryButtonLogic: {fileID: 0}
   itemIndex: 0
-  inventoryButtonContainer: {fileID: 0}
-  anim: {fileID: 0}
-  isDrop: 0
   dropCostReduction: 0
   skillCostReduction: 0
+  animationClip: {fileID: 0}
   consumable: 0
-  drop: 0
+  isDrop: 0
   weapon: 1
   chestArmor: 0
-  grieveWeaponIndex: 0
-  isEquiped: 0
+  accessory: 0
+  useableOutOfBattle: 0
+  targetAll: 0
+  weaponIndex: 0
+  grieveWeapon: 1
+  macWeapon: 0
+  fieldWeapon: 0
+  riggsWeapon: 0
+  solaceWeapon: 0
+  blueWeapon: 0
   physicalAttack: 10
-  displayText: {fileID: 0}
-  grieveReference: {fileID: 8643373140373863403, guid: 825c093b7aea24b29bc69d81db702f65, type: 3}
-  weaponCloneReference: {fileID: 0}
   fireAttack: 0
   iceAttack: 0
   waterAttack: 0
   lightningAttack: 0
   shadowAttack: 0
---- !u!1 &6075365293664970560
+--- !u!1 &265013431301732873
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -186,9 +187,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6075365293664970563}
-  - component: {fileID: 6075365293664970565}
-  - component: {fileID: 6075365293664970562}
+  - component: {fileID: 265013431301732874}
+  - component: {fileID: 265013431301732876}
+  - component: {fileID: 265013431301732875}
   m_Layer: 5
   m_Name: ItemName
   m_TagString: Untagged
@@ -196,40 +197,40 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &6075365293664970563
+--- !u!224 &265013431301732874
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6075365293664970560}
+  m_GameObject: {fileID: 265013431301732873}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 6075365292892509273}
+  m_Father: {fileID: 265013430527265040}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 48.3, y: 0}
-  m_SizeDelta: {x: 16.8699, y: 0}
+  m_AnchoredPosition: {x: 75.9, y: 0}
+  m_SizeDelta: {x: 71.8803, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &6075365293664970565
+--- !u!222 &265013431301732876
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6075365293664970560}
+  m_GameObject: {fileID: 265013431301732873}
   m_CullTransparentMesh: 1
---- !u!114 &6075365293664970562
+--- !u!114 &265013431301732875
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6075365293664970560}
+  m_GameObject: {fileID: 265013431301732873}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
@@ -243,7 +244,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Blitz
+  m_text: Iron Blade
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -252,8 +253,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4281479730
+  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

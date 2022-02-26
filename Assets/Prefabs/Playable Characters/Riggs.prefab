@@ -101,12 +101,13 @@ MonoBehaviour:
   maxHealth: 200
   currentMana: 50
   maxMana: 50
-  currentEnergy: 24
+  currentEnergy: 25
   maxEnergy: 20
-  haste: 15
+  haste: 45
   experiencePoints: 0
   levelUpReq: 100
-  physicalDamage: 20
+  strength: 28
+  intelligence: 20
   dropCostReduction: 0
   skillCostReduction: 0
   fireDropsLevel: 1
@@ -153,11 +154,15 @@ MonoBehaviour:
   haltInflicted: 0
   deathInflicted: 0
   inflicted: 0
+  isProtected: 0
+  isEncompassed: 0
+  isHastened: 0
   availableSkillPoints: 0
   healthOffset: 30
   manaOffset: 0
   energyOffset: -20
-  strengthOffset: 10
+  strengthOffset: 20
+  intelligenceOffset: -15
   stealChance: 50
   physicalDefense: 15
   fireDefense: 2
@@ -165,7 +170,7 @@ MonoBehaviour:
   waterDefense: 2
   lightningDefense: 2
   shadowDefense: 2
-  holyDefense: 0
+  holyDefense: 2
   poisonDefense: 1
   sleepDefense: 1
   confuseDefense: 1
@@ -176,7 +181,8 @@ MonoBehaviour:
   maxHealthBase: 177
   maxManaBase: 52
   maxEnergyBase: 24
-  physicalDamageBase: 13
+  strengthBase: 0
+  intelligenceBase: 0
   dodgeChanceBase: 12
   critChanceBase: 10
   hasteBase: 15
@@ -264,8 +270,9 @@ MonoBehaviour:
   canUseWaterDrops: 0
   canUseShadowDrops: 1
   canUseHolyDrops: 1
-  weapon: {fileID: 705966592086626482, guid: cae9a2effec644240a829e01bf8dd999, type: 3}
+  weapon: {fileID: 1397153187241665155, guid: 43350d9d77b504351be6ffc5d99598ca, type: 3}
   chestArmor: {fileID: 475117527870452808, guid: c37cdb1cfe8e54b409308b0270b551c3, type: 3}
+  legArmor: {fileID: 0}
   accessory1: {fileID: 0}
   accessory2: {fileID: 0}
   skillIndex: 15

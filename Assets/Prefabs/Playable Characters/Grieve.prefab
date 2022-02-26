@@ -139,14 +139,15 @@ MonoBehaviour:
   lvl: 1
   currentHealth: 100
   maxHealth: 100
-  currentMana: 35
+  currentMana: 25
   maxMana: 35
   currentEnergy: 30
   maxEnergy: 30
-  haste: 17
+  haste: 60
   experiencePoints: 0
   levelUpReq: 100
-  physicalDamage: 20
+  strength: 15
+  intelligence: 14
   dropCostReduction: 0
   skillCostReduction: 0
   fireDropsLevel: 1
@@ -193,11 +194,15 @@ MonoBehaviour:
   haltInflicted: 0
   deathInflicted: 0
   inflicted: 0
+  isProtected: 1
+  isEncompassed: 0
+  isHastened: 0
   availableSkillPoints: 0
   healthOffset: 0
   manaOffset: -30
   energyOffset: 0
   strengthOffset: 0
+  intelligenceOffset: -10
   stealChance: 60
   physicalDefense: 7
   fireDefense: 1
@@ -205,7 +210,7 @@ MonoBehaviour:
   waterDefense: 1
   lightningDefense: 3
   shadowDefense: 3
-  holyDefense: 0
+  holyDefense: 1
   poisonDefense: 1
   sleepDefense: 1
   confuseDefense: 1
@@ -216,10 +221,11 @@ MonoBehaviour:
   maxHealthBase: 100
   maxManaBase: 35
   maxEnergyBase: 30
-  physicalDamageBase: 10
+  strengthBase: 15
+  intelligenceBase: 14
   dodgeChanceBase: 10
   critChanceBase: 15
-  hasteBase: 17
+  hasteBase: 50
   firePhysicalAttackBonusBase: 0
   icePhysicalAttackBonusBase: 0
   lightningPhysicalAttackBonusBase: 0
@@ -231,7 +237,7 @@ MonoBehaviour:
   lightningDefenseBase: 3
   waterDefenseBase: 1
   shadowDefenseBase: 3
-  holyDefenseBase: 0
+  holyDefenseBase: 1
   sleepDefenseBase: 1
   poisonDefenseBase: 1
   confuseDefenseBase: 1
@@ -250,7 +256,7 @@ MonoBehaviour:
   - {fileID: 4561571794371166769, guid: aa424de30ac5443eb81c992bf59a844b, type: 3}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 342956090473913710, guid: 15aa4c3b96aee47ac85490f94d664280, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -304,9 +310,10 @@ MonoBehaviour:
   canUseWaterDrops: 1
   canUseShadowDrops: 1
   canUseHolyDrops: 1
-  weapon: {fileID: 6075365292892509267, guid: 3df1b49a15c0a4fa7b1c86c96286159f, type: 3}
+  weapon: {fileID: 3402342846047589264, guid: 3df1b49a15c0a4fa7b1c86c96286159f, type: 3}
   chestArmor: {fileID: 3137854586391407116, guid: 552a109bd39414d8180a998df500f23e, type: 3}
-  accessory1: {fileID: 2424370254902980009, guid: ee6fc6ade54a2453bb068629e679d3b4, type: 3}
+  legArmor: {fileID: 0}
+  accessory1: {fileID: 0}
   accessory2: {fileID: 0}
   skillIndex: 0
   skillTotal: 1

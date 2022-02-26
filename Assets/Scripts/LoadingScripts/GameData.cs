@@ -44,13 +44,10 @@ public class GameData
     public float[] charFireDropAttackBonus, charWaterDropAttackBonus, charLightningDropAttackBonus, charShadowDropAttackBonus, charIceDropAttackBonus;
     public float[] charFirePhysicalAttackBonus, charWaterPhysicalAttackBonus, charLightningPhysicalAttackBonus, charShadowPhysicalAttackBonus, charIcePhysicalAttackBonus;
 
-    public string[] grieveWeapons;
+    public string[] weapons;
     public string grieveWeaponEquip;
-    public string[] macWeapons;
     public string macWeaponEquip;
-    public string[] fieldWeapons;
     public string fieldWeaponEquip;
-    public string[] riggsWeapons;
     public string riggsWeaponEquip;
 
     public string[] charChestArmorEquip;
@@ -201,7 +198,7 @@ public class GameData
                 charShadowPhysicalAttackBonus[i] = gameManager.party[i].GetComponent<Character>().shadowPhysicalAttackBonus;
                 charIcePhysicalAttackBonus[i] = gameManager.party[i].GetComponent<Character>().icePhysicalAttackBonus;
 
-                charPhysicalDamage[i] = gameManager.party[i].GetComponent<Character>().physicalDamage;
+                charPhysicalDamage[i] = gameManager.party[i].GetComponent<Character>().strength;
                 charXP[i] = gameManager.party[i].GetComponent<Character>().experiencePoints;
                 charLvlUpReq[i] = gameManager.party[i].GetComponent<Character>().levelUpReq;
                 charInParty[i] = gameManager.party[i].GetComponent<Character>().isInParty;
@@ -329,10 +326,7 @@ public class GameData
         partyInvNames = new string[gameManager.partyInventoryReference.partyInventory.Length];
         partyInvAmounts = new int[gameManager.partyInventoryReference.partyInventory.Length];
 
-        grieveWeapons = new string[gameManager.partyInventoryReference.grieveWeaponInventorySlots.Length];
-        macWeapons = new string[gameManager.partyInventoryReference.macWeaponInventorySlots.Length];
-        fieldWeapons = new string[gameManager.partyInventoryReference.fieldWeaponInventorySlots.Length];
-        riggsWeapons = new string[gameManager.partyInventoryReference.riggsWeaponInventorySlots.Length];
+        weapons = new string[gameManager.partyInventoryReference.weaponInventorySlots.Length];
 
         charChestArmorEquip = new string[Engine.e.party.Length];
         charAccessory1Equip = new string[Engine.e.party.Length];
@@ -349,19 +343,19 @@ public class GameData
         }
 
         // Equipped Weapons
-        grieveWeaponEquip = Engine.e.party[0].GetComponent<Character>().weapon.GetComponent<GrieveWeapons>().itemName;
+        grieveWeaponEquip = Engine.e.party[0].GetComponent<Character>().weapon.GetComponent<Weapon>().itemName;
 
         if (Engine.e.party[1] != null)
         {
-            macWeaponEquip = Engine.e.party[1].GetComponent<Character>().weapon.GetComponent<MacWeapons>().itemName;
+            macWeaponEquip = Engine.e.party[1].GetComponent<Character>().weapon.GetComponent<Weapon>().itemName;
         }
         if (Engine.e.party[2] != null)
         {
-            fieldWeaponEquip = Engine.e.party[2].GetComponent<Character>().weapon.GetComponent<FieldWeapons>().itemName;
+            fieldWeaponEquip = Engine.e.party[2].GetComponent<Character>().weapon.GetComponent<Weapon>().itemName;
         }
         if (Engine.e.party[3] != null)
         {
-            riggsWeaponEquip = Engine.e.party[3].GetComponent<Character>().weapon.GetComponent<RiggsWeapons>().itemName;
+            riggsWeaponEquip = Engine.e.party[3].GetComponent<Character>().weapon.GetComponent<Weapon>().itemName;
         }
 
         // Equipped Chest Armor

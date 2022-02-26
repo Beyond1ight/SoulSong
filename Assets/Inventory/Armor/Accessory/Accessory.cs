@@ -7,13 +7,13 @@ using UnityEngine.EventSystems;
 
 public class Accessory : Item
 {
-    public int physicalArmor, physicalAttack;
+    public int physicalArmor, strengthBonus, intelligenceBonus;
     public float fireDefense, fireAttack;
     public float iceDefense, iceAttack;
     public float waterDefense, waterAttack;
     public float lightningDefense, lightningAttack;
     public float shadowDefense, shadowAttack;
-    public float physicalAttackBonus, fireAttackBonus, waterAttackBonus, lightningAttackBonus, shadowAttackBonus, iceAttackBonus;
+    public float fireAttackBonus, waterAttackBonus, lightningAttackBonus, shadowAttackBonus, iceAttackBonus;
 
     // CHANGE METHOD NAME
     public void DisplayAccessoryEquipCharacterTargets()

@@ -9,21 +9,19 @@ using UnityEngine.EventSystems;
 public class PartyInventory : MonoBehaviour
 {
     public Item[] partyInventory;
-    public GrieveWeapons[] grieveWeapons;
-    public MacWeapons[] macWeapons;
-    public FieldWeapons[] fieldWeapons;
-    public RiggsWeapons[] riggsWeapons;
+
+    public Weapon[] weapons;
     public ChestArmor[] chestArmor;
     public Accessory[] accessories;
 
     public int grieveWeaponTotal, macWeaponTotal, fieldWeaponTotal, riggsWeaponTotal;
     public int chestArmorTotal;
-    public InventorySlot[] itemInventorySlots, chestArmorInventorySlots, accessoryInventorySlots, grieveWeaponInventorySlots, macWeaponInventorySlots, fieldWeaponInventorySlots, riggsWeaponInventorySlots;
+    public InventorySlot[] itemInventorySlots, chestArmorInventorySlots, accessoryInventorySlots, weaponInventorySlots;
     public bool inventoryScreenSet, battleScreenInventorySet;
 
     public int indexReference;
     public int inventoryPointerIndex = 0, vertMove = 0;
-    public RectTransform partyInventoryRectTransform, battleItemsRectTransform, grieveWeaponsRectTransform, macWeaponsRectTransform, fieldWeaponsRectTransform, riggsWeaponsRectTransform,
+    public RectTransform partyInventoryRectTransform, battleItemsRectTransform, weaponRectTransform,
     chestArmorRectTransform, accessoryRectTransform;
 
     bool pressUp, pressDown, pressRelease = false;
@@ -34,88 +32,20 @@ public class PartyInventory : MonoBehaviour
         //int firstNull = -1;
         bool continueAdd = true;
 
-        if (item.GetComponent<GrieveWeapons>())
-        {
-            if (grieveWeaponTotal < 10)
-            {
-                for (int i = 0; i < grieveWeapons.Length; i++)
-                {
-                    if (grieveWeapons[i] == null)
-                    {
-                        grieveWeapons[i] = item.GetComponent<GrieveWeapons>();
-                        grieveWeaponInventorySlots[i].AddItem(item);
-                        grieveWeaponTotal++;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                continueAdd = false;
-            }
-        }
 
-        if (item.GetComponent<MacWeapons>())
+        if (item.GetComponent<Weapon>())
         {
-            if (macWeaponTotal < 10)
-            {
-                for (int i = 0; i < macWeapons.Length; i++)
-                {
-                    if (macWeapons[i] == null)
-                    {
-                        macWeapons[i] = item.GetComponent<MacWeapons>();
-                        macWeaponInventorySlots[i].AddItem(item);
-                        macWeaponTotal++;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                continueAdd = false;
-            }
-        }
 
-        if (item.GetComponent<FieldWeapons>())
-        {
-            if (fieldWeaponTotal < 10)
+            for (int i = 0; i < chestArmor.Length; i++)
             {
-                for (int i = 0; i < fieldWeapons.Length; i++)
+                if (weapons[i] == null)
                 {
-                    if (fieldWeapons[i] == null)
-                    {
-                        fieldWeapons[i] = item.GetComponent<FieldWeapons>();
-                        fieldWeaponInventorySlots[i].AddItem(item);
-                        fieldWeaponTotal++;
-                        break;
-                    }
+                    weapons[i] = item.GetComponent<Weapon>();
+                    weaponInventorySlots[i].AddItem(item);
+                    break;
                 }
             }
-            else
-            {
-                continueAdd = false;
-            }
-        }
 
-        if (item.GetComponent<RiggsWeapons>())
-        {
-            if (riggsWeaponTotal < 10)
-            {
-                for (int i = 0; i < riggsWeapons.Length; i++)
-                {
-                    if (riggsWeapons[i] == null)
-                    {
-                        riggsWeapons[i] = item.GetComponent<RiggsWeapons>();
-                        riggsWeaponInventorySlots[i].AddItem(item);
-                        riggsWeaponTotal++;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                continueAdd = false;
-            }
         }
 
         if (item.GetComponent<ChestArmor>())
@@ -326,53 +256,14 @@ public class PartyInventory : MonoBehaviour
         }
 
 
-        if (item.GetComponent<GrieveWeapons>())
+        if (item.GetComponent<Weapon>())
         {
-            for (int i = 0; i < grieveWeaponInventorySlots.Length; i++)
+            for (int i = 0; i < weaponInventorySlots.Length; i++)
             {
-                if (grieveWeaponInventorySlots[i].item == item)
+                if (weaponInventorySlots[i].item == item)
                 {
-                    grieveWeaponInventorySlots[i].GetComponent<InventorySlot>().ClearSlot();
-                    grieveWeapons[i] = null;
-                    break;
-                }
-            }
-        }
-
-        if (item.GetComponent<MacWeapons>())
-        {
-            for (int i = 0; i < macWeaponInventorySlots.Length; i++)
-            {
-                if (macWeaponInventorySlots[i].GetComponent<InventorySlot>().item == item)
-                {
-                    macWeaponInventorySlots[i].GetComponent<InventorySlot>().ClearSlot();
-                    macWeapons[i] = null;
-                    break;
-                }
-            }
-        }
-
-        if (item.GetComponent<FieldWeapons>())
-        {
-            for (int i = 0; i < fieldWeaponInventorySlots.Length; i++)
-            {
-                if (fieldWeaponInventorySlots[i].GetComponent<InventorySlot>().item == item)
-                {
-                    fieldWeaponInventorySlots[i].GetComponent<InventorySlot>().ClearSlot();
-                    fieldWeapons[i] = null;
-                    break;
-                }
-            }
-        }
-
-        if (item.GetComponent<RiggsWeapons>())
-        {
-            for (int i = 0; i < riggsWeaponInventorySlots.Length; i++)
-            {
-                if (riggsWeaponInventorySlots[i].GetComponent<InventorySlot>().item == item)
-                {
-                    riggsWeaponInventorySlots[i].GetComponent<InventorySlot>().ClearSlot();
-                    riggsWeapons[i] = null;
+                    weaponInventorySlots[i].GetComponent<InventorySlot>().ClearSlot();
+                    weapons[i] = null;
                     break;
                 }
             }
@@ -428,55 +319,182 @@ public class PartyInventory : MonoBehaviour
     public void OpenWeaponInventory()
     {
 
-        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().inventoryPointerIndex = 0;
-
-        if (Engine.e.equipMenuReference.GetComponent<EquipDisplay>().grieveScreen)
+        if (!Engine.e.equipMenuReference.removing)
         {
-            grieveWeaponsRectTransform.offsetMax = new Vector2(0, 0);
+
+            Engine.e.equipMenuReference.GetComponent<EquipDisplay>().inventoryPointerIndex = 0;
+
+            weaponRectTransform.offsetMax = new Vector2(0, 0);
+            Engine.e.equipMenuReference.weaponLists[0].SetActive(true);
 
             EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(grieveWeaponInventorySlots[inventoryPointerIndex].gameObject);
+            EventSystem.current.SetSelectedGameObject(weaponInventorySlots[inventoryPointerIndex].gameObject);
+
         }
-        if (Engine.e.equipMenuReference.GetComponent<EquipDisplay>().macScreen)
+        else
         {
-            macWeaponsRectTransform.offsetMax = new Vector2(0, 0);
-
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(macWeaponInventorySlots[inventoryPointerIndex].gameObject);
-        }
-        if (Engine.e.equipMenuReference.GetComponent<EquipDisplay>().fieldScreen)
-        {
-            fieldWeaponsRectTransform.offsetMax = new Vector2(0, 0);
-
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(fieldWeaponInventorySlots[inventoryPointerIndex].gameObject);
-        }
-        if (Engine.e.equipMenuReference.GetComponent<EquipDisplay>().riggsScreen)
-        {
-            riggsWeaponsRectTransform.offsetMax = new Vector2(0, 0);
-
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(riggsWeaponInventorySlots[inventoryPointerIndex].gameObject);
+            if (Engine.e.equipMenuReference.grieveScreen)
+            {
+                if (Engine.e.party[0].GetComponent<Character>().weapon != null)
+                {
+                    Engine.e.party[0].GetComponent<Grieve>().RemoveWeapon();
+                }
+            }
+            if (Engine.e.equipMenuReference.macScreen)
+            {
+                if (Engine.e.party[1].GetComponent<Character>().weapon != null)
+                {
+                    Engine.e.party[1].GetComponent<Mac>().RemoveWeapon();
+                }
+            }
+            if (Engine.e.equipMenuReference.fieldScreen)
+            {
+                if (Engine.e.party[2].GetComponent<Character>().weapon != null)
+                {
+                    Engine.e.party[2].GetComponent<Field>().RemoveWeapon();
+                }
+            }
+            if (Engine.e.equipMenuReference.riggsScreen)
+            {
+                if (Engine.e.party[3].GetComponent<Character>().weapon != null)
+                {
+                    Engine.e.party[3].GetComponent<Riggs>().RemoveWeapon();
+                }
+            }
         }
     }
 
     public void OpenChestArmorInventory()
     {
-        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().ActivateArmorList(0);
-        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().inventoryPointerIndex = 0;
-        chestArmorRectTransform.offsetMax = new Vector2(0, 0);
+        if (!Engine.e.equipMenuReference.removing)
+        {
+            Engine.e.equipMenuReference.GetComponent<EquipDisplay>().ActivateArmorList(0);
+            Engine.e.equipMenuReference.GetComponent<EquipDisplay>().inventoryPointerIndex = 0;
+            chestArmorRectTransform.offsetMax = new Vector2(0, 0);
 
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(chestArmorInventorySlots[inventoryPointerIndex].gameObject);
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(chestArmorInventorySlots[inventoryPointerIndex].gameObject);
+        }
+        else
+        {
+            if (Engine.e.equipMenuReference.grieveScreen)
+            {
+                if (Engine.e.party[0].GetComponent<Character>().weapon != null)
+                {
+                    Engine.e.party[0].GetComponent<Grieve>().RemoveChestArmor();
+                }
+            }
+            if (Engine.e.equipMenuReference.macScreen)
+            {
+                if (Engine.e.party[1].GetComponent<Character>().weapon != null)
+                {
+                    Engine.e.party[1].GetComponent<Mac>().RemoveChestArmor();
+                }
+            }
+            if (Engine.e.equipMenuReference.fieldScreen)
+            {
+                if (Engine.e.party[2].GetComponent<Character>().weapon != null)
+                {
+                    Engine.e.party[2].GetComponent<Field>().RemoveChestArmor();
+                }
+            }
+            if (Engine.e.equipMenuReference.riggsScreen)
+            {
+                if (Engine.e.party[3].GetComponent<Character>().weapon != null)
+                {
+                    Engine.e.party[3].GetComponent<Riggs>().RemoveChestArmor();
+                }
+            }
+        }
     }
+
     public void OpenAccessoryInventory()
     {
-        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().ActivateArmorList(1);
-        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().inventoryPointerIndex = 0;
-        accessoryRectTransform.offsetMax = new Vector2(0, 0);
+        if (!Engine.e.equipMenuReference.removing)
+        {
+            Engine.e.equipMenuReference.GetComponent<EquipDisplay>().ActivateArmorList(1);
+            Engine.e.equipMenuReference.GetComponent<EquipDisplay>().inventoryPointerIndex = 0;
+            accessoryRectTransform.offsetMax = new Vector2(0, 0);
 
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(accessoryInventorySlots[inventoryPointerIndex].gameObject);
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(accessoryInventorySlots[inventoryPointerIndex].gameObject);
+        }
+        else
+        {
+            if (Engine.e.equipMenuReference.accessory1InventorySet)
+            {
+                if (Engine.e.equipMenuReference.grieveScreen)
+                {
+                    if (Engine.e.party[0].GetComponent<Grieve>().accessory1 != null)
+                    {
+                        Engine.e.party[0].GetComponent<Grieve>().RemoveAccessory1();
+                        Engine.e.equipMenuReference.accessory1InventorySet = false;
+                    }
+                }
+                if (Engine.e.equipMenuReference.macScreen)
+                {
+                    if (Engine.e.party[1].GetComponent<Mac>().accessory1 != null)
+                    {
+                        Engine.e.party[1].GetComponent<Mac>().RemoveAccessory1();
+                        Engine.e.equipMenuReference.accessory1InventorySet = false;
+                    }
+                }
+                if (Engine.e.equipMenuReference.fieldScreen)
+                {
+                    if (Engine.e.party[2].GetComponent<Field>().accessory1 != null)
+                    {
+                        Engine.e.party[2].GetComponent<Field>().RemoveAccessory1();
+                        Engine.e.equipMenuReference.accessory1InventorySet = false;
+                    }
+                }
+                if (Engine.e.equipMenuReference.riggsScreen)
+                {
+                    if (Engine.e.party[3].GetComponent<Riggs>().accessory1 != null)
+                    {
+                        Engine.e.party[3].GetComponent<Riggs>().RemoveAccessory1();
+                        Engine.e.equipMenuReference.accessory1InventorySet = false;
+                    }
+                }
+            }
+            else
+            {
+                if (Engine.e.equipMenuReference.accessory2InventorySet)
+                {
+                    if (Engine.e.equipMenuReference.grieveScreen)
+                    {
+                        if (Engine.e.party[0].GetComponent<Grieve>().accessory2 != null)
+                        {
+                            Engine.e.party[0].GetComponent<Grieve>().RemoveAccessory2();
+                            Engine.e.equipMenuReference.accessory2InventorySet = false;
+                        }
+                    }
+                    if (Engine.e.equipMenuReference.macScreen)
+                    {
+                        if (Engine.e.party[1].GetComponent<Mac>().accessory2 != null)
+                        {
+                            Engine.e.party[1].GetComponent<Mac>().RemoveAccessory2();
+                            Engine.e.equipMenuReference.accessory2InventorySet = false;
+                        }
+                    }
+                    if (Engine.e.equipMenuReference.fieldScreen)
+                    {
+                        if (Engine.e.party[2].GetComponent<Field>().accessory2 != null)
+                        {
+                            Engine.e.party[2].GetComponent<Field>().RemoveAccessory2();
+                            Engine.e.equipMenuReference.accessory2InventorySet = false;
+                        }
+                    }
+                    if (Engine.e.equipMenuReference.riggsScreen)
+                    {
+                        if (Engine.e.party[3].GetComponent<Riggs>().accessory2 != null)
+                        {
+                            Engine.e.party[3].GetComponent<Riggs>().RemoveAccessory2();
+                            Engine.e.equipMenuReference.accessory2InventorySet = false;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     // Handles Various Menu Navigation

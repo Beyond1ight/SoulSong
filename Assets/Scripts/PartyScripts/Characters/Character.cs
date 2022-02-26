@@ -10,7 +10,7 @@ public class Character : MonoBehaviour
     // General Information
     public string characterName;
     public int lvl;
-    public float currentHealth, maxHealth, currentMana, maxMana, currentEnergy, maxEnergy, haste, experiencePoints, levelUpReq, physicalDamage, dropCostReduction, skillCostReduction,
+    public float currentHealth, maxHealth, currentMana, maxMana, currentEnergy, maxEnergy, haste, experiencePoints, levelUpReq, strength, intelligence, dropCostReduction, skillCostReduction,
     fireDropsLevel, fireDropsExperience, fireDropsLvlReq, firePhysicalAttackBonus, fireDropAttackBonus,
     iceDropsLevel, iceDropsExperience, iceDropsLvlReq, icePhysicalAttackBonus, iceDropAttackBonus,
     waterDropsLevel, waterDropsExperience, waterDropsLvlReq, waterPhysicalAttackBonus, waterDropAttackBonus,
@@ -19,15 +19,21 @@ public class Character : MonoBehaviour
     holyDropsLevel, holyDropsExperience, holyDropsLvlReq, holyPhysicalAttackBonus, holyDropAttackBonus,
     skillScale;
     public bool healthCapped, manaCapped, energyCapped = true;
+
+    // Negative Status Effects
     public bool isInParty, isInActiveParty, isLeader, isPoisoned, isAsleep, isConfused, miterInflicted, haltInflicted, deathInflicted, inflicted;
+
+    // Beneficial Status Effects
+    public bool isProtected, isEncompassed, isHastened = false;
+
     public int availableSkillPoints;
-    public float healthOffset, manaOffset, energyOffset, strengthOffset, stealChance;
+    public float healthOffset, manaOffset, energyOffset, strengthOffset, intelligenceOffset, stealChance;
     // Defenses
     public float physicalDefense, fireDefense, iceDefense, waterDefense, lightningDefense, shadowDefense, holyDefense,
     poisonDefense, sleepDefense, confuseDefense, deathDefense, dodgeChance, hitChance, critChance;
 
     // Default values (before any boosts). Mainly to reset values after status effects wear off
-    public float maxHealthBase, maxManaBase, maxEnergyBase, physicalDamageBase, dodgeChanceBase, critChanceBase,
+    public float maxHealthBase, maxManaBase, maxEnergyBase, strengthBase, intelligenceBase, dodgeChanceBase, critChanceBase,
     hasteBase, firePhysicalAttackBonusBase, icePhysicalAttackBonusBase, lightningPhysicalAttackBonusBase, waterPhysicalAttackBonusBase,
     shadowPhysicalAttackBonusBase, holyPhysicalAttackBonusBase, fireDefenseBase, iceDefenseBase, lightningDefenseBase, waterDefenseBase,
     shadowDefenseBase, holyDefenseBase, sleepDefenseBase, poisonDefenseBase, confuseDefenseBase, deathDefenseBase;
@@ -40,7 +46,7 @@ public class Character : MonoBehaviour
 
     public bool canUseFireDrops, canUseIceDrops, canUseLightningDrops, canUseWaterDrops, canUseShadowDrops, canUseHolyDrops = false;
 
-    public Item weapon, chestArmor, accessory1, accessory2;
+    public Item weapon, chestArmor, legArmor, accessory1, accessory2;
     public int skillIndex;
     public int skillTotal;
     public float poisonDmg;
@@ -720,6 +726,7 @@ public class Character : MonoBehaviour
         Enemy enemyAttacking = null;
         bool teamAttack = false; // If "false," an active party member is attacking 
         float damageTotal = 0;
+        float characterIntelligenceScale = 0f;
 
         if (Engine.e.battleSystem.currentInQueue == BattleState.CHAR1TURN || Engine.e.battleSystem.currentInQueue == BattleState.CONFCHAR1)
         {
@@ -776,6 +783,7 @@ public class Character : MonoBehaviour
         if (teamAttack)
         {
             characterAttacking = Engine.e.activeParty.activeParty[currentIndex].GetComponent<Character>();
+            characterIntelligenceScale = characterAttacking.intelligence * 2 / 6;
         }
         else
         {
@@ -786,7 +794,7 @@ public class Character : MonoBehaviour
         {
             if (teamAttack)
             {
-                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.fireDropsLevel / 2)) + characterAttacking.fireDropAttackBonus);
+                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.fireDropsLevel / 2) * characterIntelligenceScale) + characterAttacking.fireDropAttackBonus);
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * fireDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
                 SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
@@ -806,7 +814,7 @@ public class Character : MonoBehaviour
         {
             if (teamAttack)
             {
-                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.iceDropsLevel / 2)) + characterAttacking.iceDropAttackBonus);
+                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.iceDropsLevel / 2) * characterIntelligenceScale) + characterAttacking.iceDropAttackBonus);
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * iceDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
                 SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
@@ -828,7 +836,7 @@ public class Character : MonoBehaviour
 
             if (teamAttack)
             {
-                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.lightningDropsLevel / 2)) + characterAttacking.lightningDropAttackBonus);
+                dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.lightningDropsLevel / 2) * characterIntelligenceScale) + characterAttacking.lightningDropAttackBonus);
                 damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * lightningDefense / 100));
                 currentHealth -= Mathf.Round(damageTotal);
                 SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
@@ -848,7 +856,7 @@ public class Character : MonoBehaviour
             {
                 if (teamAttack)
                 {
-                    dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.waterDropsLevel / 2)));
+                    dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.waterDropsLevel / 2) * characterIntelligenceScale));
                     damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
                     currentHealth += damageTotal;
 
@@ -872,7 +880,7 @@ public class Character : MonoBehaviour
                 if (teamAttack)
                 {
 
-                    dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.waterDropsLevel / 2)) + characterAttacking.waterDropAttackBonus);
+                    dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.waterDropsLevel / 2) * characterIntelligenceScale) + characterAttacking.waterDropAttackBonus);
                     damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * waterDefense / 100));
                     currentHealth -= Mathf.Round(damageTotal);
                     SetBattleDamagePopupText(dropValueOutcome.ToString(), Color.white);
@@ -894,7 +902,7 @@ public class Character : MonoBehaviour
                 case "Dark Embrace":
                     if (teamAttack)
                     {
-                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.shadowDropsLevel / 2)) + characterAttacking.shadowDropAttackBonus);
+                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.shadowDropsLevel / 2) * characterIntelligenceScale) + characterAttacking.shadowDropAttackBonus);
                         damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * shadowDefense / 100));
                         currentHealth -= Mathf.Round(damageTotal);
                     }
@@ -1007,7 +1015,7 @@ public class Character : MonoBehaviour
 
                     if (teamAttack)
                     {
-                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.holyDropsLevel / 2)));
+                        dropValueOutcome = Mathf.Round(dropChoice.dropPower + ((dropChoice.dropPower * characterAttacking.holyDropsLevel / 2) * characterIntelligenceScale));
                         damageTotal = Mathf.Round((dropValueOutcome) - (dropValueOutcome * holyDefense / 100));
                         currentHealth += damageTotal;
 
@@ -1104,6 +1112,58 @@ public class Character : MonoBehaviour
                     SetBattleDamagePopupText("Cured!", Color.green);
                     inflicted = false;
 
+                    break;
+            }
+        }
+
+        if (dropChoice.dropType == "Ethereal")
+        {
+            switch (dropChoice.dropName)
+            {
+                case "Protect":
+
+                    if (!isProtected)
+                    {
+                        float defenseIncrease = physicalDefense + (physicalDefense * 40 / 100);
+                        physicalDefense = defenseIncrease;
+
+                        isProtected = true;
+
+                        SetBattleDamagePopupText("Protected!", Color.green);
+                    }
+                    break;
+                case "Encompass":
+
+                    if (!isEncompassed)
+                    {
+                        float fireDefenseIncrease = fireDefense + (fireDefense * 40 / 100);
+                        fireDefense = fireDefenseIncrease;
+                        float iceDefenseIncrease = iceDefense + (iceDefense * 40 / 100);
+                        iceDefense = fireDefenseIncrease;
+                        float lightningDefenseIncrease = lightningDefense + (lightningDefense * 40 / 100);
+                        lightningDefense = fireDefenseIncrease;
+                        float waterDefenseIncrease = waterDefense + (waterDefense * 40 / 100);
+                        waterDefense = fireDefenseIncrease;
+                        float shadowDefenseIncrease = shadowDefense + (shadowDefense * 40 / 100);
+                        shadowDefense = fireDefenseIncrease;
+                        float holyDefenseIncrease = holyDefense + (holyDefense * 40 / 100);
+                        holyDefense = fireDefenseIncrease;
+
+                        isEncompassed = true;
+                        SetBattleDamagePopupText("Encompassed!", Color.green);
+                    }
+                    break;
+                case "Adrenaline":
+
+                    if (!isHastened)
+                    {
+                        float hasteIncrease = Mathf.Round(haste + (haste * 25 / 100));
+                        haste = hasteIncrease;
+
+
+                        isHastened = true;
+                        SetBattleDamagePopupText("Hastened!", Color.green);
+                    }
                     break;
             }
         }
@@ -1326,5 +1386,10 @@ public class Character : MonoBehaviour
     {
         skills[_skill.skillIndex] = _skill;
         _skill.isKnown = true;
+    }
+
+    public void EquipWeapon()
+    {
+
     }
 }

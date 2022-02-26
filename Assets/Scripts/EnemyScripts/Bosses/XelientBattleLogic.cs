@@ -53,7 +53,7 @@ public class XelientBattleLogic : MonoBehaviour
             {
                 Engine.e.battleSystem.enemyMoving = true;
                 Engine.e.battleSystem.enemyAttacking = true;
-                Engine.e.battleSystem.isDead = Engine.e.activeParty.activeParty[target].GetComponent<Character>().TakePhysicalDamage(target, enemy.physicalDamage);
+                Engine.e.battleSystem.isDead = Engine.e.activeParty.activeParty[target].GetComponent<Character>().TakePhysicalDamage(target, enemy.strength);
 
                 moveCounter++;
             }
@@ -80,7 +80,7 @@ public class XelientBattleLogic : MonoBehaviour
                 {
                     Engine.e.battleSystem.enemyMoving = true;
                     Engine.e.battleSystem.enemyAttacking = true;
-                    Engine.e.battleSystem.isDead = Engine.e.activeParty.activeParty[target].GetComponent<Character>().TakePhysicalDamage(target, enemy.physicalDamage);
+                    Engine.e.battleSystem.isDead = Engine.e.activeParty.activeParty[target].GetComponent<Character>().TakePhysicalDamage(target, enemy.strength);
                 }
                 moveCounter++;
             }
@@ -105,7 +105,7 @@ public class XelientBattleLogic : MonoBehaviour
                 {
                     Engine.e.battleSystem.enemyMoving = true;
                     Engine.e.battleSystem.enemyAttacking = true;
-                    Engine.e.battleSystem.isDead = Engine.e.activeParty.activeParty[target].GetComponent<Character>().TakePhysicalDamage(target, enemy.physicalDamage);
+                    Engine.e.battleSystem.isDead = Engine.e.activeParty.activeParty[target].GetComponent<Character>().TakePhysicalDamage(target, enemy.strength);
                 }
                 moveCounter = 0;
             }

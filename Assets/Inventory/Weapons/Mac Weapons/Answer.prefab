@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1916304141300166430
+--- !u!1 &2047463160281921339
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,11 +8,11 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1916304141300166421}
-  - component: {fileID: 1916304141300166426}
-  - component: {fileID: 1916304141300166427}
-  - component: {fileID: 1916304141300166424}
-  - component: {fileID: 8195512266114281018}
+  - component: {fileID: 3851243330909742627}
+  - component: {fileID: 1999294991703317003}
+  - component: {fileID: 3424721575629413782}
+  - component: {fileID: 7726522259471703931}
+  - component: {fileID: 4187234761876615863}
   m_Layer: 5
   m_Name: Answer
   m_TagString: Untagged
@@ -20,41 +20,41 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &1916304141300166421
+--- !u!224 &3851243330909742627
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1916304141300166430}
+  m_GameObject: {fileID: 2047463160281921339}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.7518797, y: 0.7518797, z: 0.7518797}
   m_Children:
-  - {fileID: 1916304142611323919}
+  - {fileID: 5987138781841452548}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 26.8, y: -15}
+  m_AnchoredPosition: {x: 36.4, y: -15}
   m_SizeDelta: {x: 40, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &1916304141300166426
+--- !u!222 &1999294991703317003
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1916304141300166430}
+  m_GameObject: {fileID: 2047463160281921339}
   m_CullTransparentMesh: 1
---- !u!114 &1916304141300166427
+--- !u!114 &3424721575629413782
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1916304141300166430}
+  m_GameObject: {fileID: 2047463160281921339}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -78,13 +78,13 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1916304141300166424
+--- !u!114 &7726522259471703931
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1916304141300166430}
+  m_GameObject: {fileID: 2047463160281921339}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
@@ -118,13 +118,13 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 1916304141300166427}
+  m_TargetGraphic: {fileID: 3424721575629413782}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8195512266114281018}
-        m_TargetAssemblyTypeName: MacWeapons, Assembly-CSharp
-        m_MethodName: EquipMacWeapon
+      - m_Target: {fileID: 4187234761876615863}
+        m_TargetAssemblyTypeName: Weapon, Assembly-CSharp
+        m_MethodName: EquipWeapon
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -134,51 +134,52 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &8195512266114281018
+--- !u!114 &4187234761876615863
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1916304141300166430}
+  m_GameObject: {fileID: 2047463160281921339}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24a0c7961f30f4271964e38fcd8a3816, type: 3}
+  m_Script: {fileID: 11500000, guid: ef2bcfa057302463c85ce83537a0fbd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drop: {fileID: 0}
   itemName: Answer
-  itemDescription: Weapon
+  itemDescription: Mac Ultimate Weapon
   itemType: Weapon
   itemValue: 0
   resaleValue: 0
   numberHeld: 0
   itemPower: 0
-  numberHeldDisplay: {fileID: 0}
   stackable: 0
-  inventoryButton: {fileID: 1916304141300166430}
-  inventoryButtonLogic: {fileID: 0}
   itemIndex: 0
-  inventoryButtonContainer: {fileID: 0}
-  anim: {fileID: 0}
-  isDrop: 0
-  dropCostReduction: 99
+  dropCostReduction: 1
   skillCostReduction: 0
+  animationClip: {fileID: 0}
   consumable: 0
-  drop: 0
+  isDrop: 0
   weapon: 1
   chestArmor: 0
-  macWeaponIndex: 2
-  isEquiped: 0
-  physicalAttack: 250
-  displayText: {fileID: 0}
-  macReference: {fileID: 2602189284047916200, guid: 61eb93b6d8f434749b7a7f91e1934586, type: 3}
-  weaponCloneReference: {fileID: 0}
-  fireAttack: 0
-  iceAttack: 0
-  waterAttack: 0
-  lightningAttack: 0
-  shadowAttack: 0
---- !u!1 &1916304142611323916
+  accessory: 0
+  useableOutOfBattle: 0
+  targetAll: 0
+  weaponIndex: 0
+  grieveWeapon: 0
+  macWeapon: 1
+  fieldWeapon: 0
+  riggsWeapon: 0
+  solaceWeapon: 0
+  blueWeapon: 0
+  physicalAttack: 200
+  fireAttack: 50
+  iceAttack: 50
+  waterAttack: 50
+  lightningAttack: 50
+  shadowAttack: 50
+--- !u!1 &5378275230932670048
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -186,9 +187,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1916304142611323919}
-  - component: {fileID: 1916304142611323913}
-  - component: {fileID: 1916304142611323918}
+  - component: {fileID: 5987138781841452548}
+  - component: {fileID: 2639985396356060546}
+  - component: {fileID: 4090639321748199107}
   m_Layer: 5
   m_Name: ItemName
   m_TagString: Untagged
@@ -196,40 +197,40 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &1916304142611323919
+--- !u!224 &5987138781841452548
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1916304142611323916}
+  m_GameObject: {fileID: 5378275230932670048}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1916304141300166421}
+  m_Father: {fileID: 3851243330909742627}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 80.3, y: 0}
-  m_SizeDelta: {x: 79.9485, y: 0}
+  m_AnchoredPosition: {x: 52.5, y: 0}
+  m_SizeDelta: {x: 26.1, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &1916304142611323913
+--- !u!222 &2639985396356060546
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1916304142611323916}
+  m_GameObject: {fileID: 5378275230932670048}
   m_CullTransparentMesh: 1
---- !u!114 &1916304142611323918
+--- !u!114 &4090639321748199107
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1916304142611323916}
+  m_GameObject: {fileID: 5378275230932670048}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
@@ -243,7 +244,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Answer
+  m_text: 'Kaikri
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
