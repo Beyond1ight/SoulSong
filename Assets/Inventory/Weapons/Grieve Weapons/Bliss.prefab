@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5653515134273544705}
   - component: {fileID: 7129016287176456332}
   m_Layer: 5
-  m_Name: Bliss 1
+  m_Name: Bliss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -166,19 +166,24 @@ MonoBehaviour:
   accessory: 0
   useableOutOfBattle: 0
   targetAll: 0
-  weaponIndex: 0
   grieveWeapon: 1
   macWeapon: 0
   fieldWeapon: 0
   riggsWeapon: 0
   solaceWeapon: 0
   blueWeapon: 0
-  physicalAttack: 500
+  weightClassification: Weightless
+  strengthBonus: 450
+  intelligenceBonus: 0
+  weight: 0
   fireAttack: 0
   iceAttack: 0
   waterAttack: 0
   lightningAttack: 0
   shadowAttack: 0
+  mainHand: 1
+  offHand: 0
+  twoHand: 0
 --- !u!1 &5653515135043506453
 GameObject:
   m_ObjectHideFlags: 0

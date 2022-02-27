@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4775429350969249615}
   - component: {fileID: 1397153187241665155}
   m_Layer: 5
-  m_Name: Masamune 1
+  m_Name: Masamune
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -166,19 +166,24 @@ MonoBehaviour:
   accessory: 0
   useableOutOfBattle: 0
   targetAll: 0
-  weaponIndex: 0
   grieveWeapon: 0
   macWeapon: 0
   fieldWeapon: 0
   riggsWeapon: 1
   solaceWeapon: 0
   blueWeapon: 0
-  physicalAttack: 15
+  weightClassification: Heavy
+  strengthBonus: 10
+  intelligenceBonus: 0
+  weight: 10
   fireAttack: 0
   iceAttack: 0
   waterAttack: 0
   lightningAttack: 0
   shadowAttack: 0
+  mainHand: 1
+  offHand: 0
+  twoHand: 1
 --- !u!1 &7195868663840015956
 GameObject:
   m_ObjectHideFlags: 0

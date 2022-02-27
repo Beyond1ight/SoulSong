@@ -37,20 +37,20 @@ public class SavePoint : MonoBehaviour
         {
             Engine.e.ableToSave = true;
 
-            for (int i = 0; i < Engine.e.party.Length; i++)
-            {
-                if (Engine.e.party[i] != null)
-                {
-                    if (Engine.e.party[i].GetComponent<Character>().weapon == null)
-                    {
-                        Engine.e.party[i].GetComponent<Character>().weapon = Engine.e.charEquippedWeapons[i].GetComponent<Item>();
-                    }
-                    if (Engine.e.party[i].GetComponent<Character>().chestArmor == null)
-                    {
-                        Engine.e.party[i].GetComponent<Character>().chestArmor = Engine.e.charEquippedChestArmor[i].GetComponent<ChestArmor>();
-                    }
-                }
-            }
+            /* for (int i = 0; i < Engine.e.party.Length; i++)
+             {
+                 if (Engine.e.party[i] != null)
+                 {
+                     if (Engine.e.party[i].GetComponent<Character>().weapon == null)
+                     {
+                         Engine.e.party[i].GetComponent<Character>().weapon = Engine.e.charEquippedWeapons[i].GetComponent<Item>();
+                     }
+                     if (Engine.e.party[i].GetComponent<Character>().chestArmor == null)
+                     {
+                         Engine.e.party[i].GetComponent<Character>().chestArmor = Engine.e.charEquippedChestArmor[i].GetComponent<ChestArmor>();
+                     }
+                 }
+             }*/
             if (Engine.e.currentScene != currentScene || Engine.e.currentScene == string.Empty)
             {
                 SetSaveScene();

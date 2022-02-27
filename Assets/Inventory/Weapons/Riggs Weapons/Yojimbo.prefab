@@ -302,16 +302,21 @@ MonoBehaviour:
   accessory: 0
   useableOutOfBattle: 0
   targetAll: 0
-  weaponIndex: 0
   grieveWeapon: 0
   macWeapon: 0
   fieldWeapon: 0
   riggsWeapon: 1
   solaceWeapon: 0
   blueWeapon: 0
-  physicalAttack: 600
+  weightClassification: Weightless
+  strengthBonus: 500
+  intelligenceBonus: 0
+  weight: 0
   fireAttack: 0
   iceAttack: 0
   waterAttack: 0
   lightningAttack: 0
   shadowAttack: 0
+  mainHand: 1
+  offHand: 0
+  twoHand: 1

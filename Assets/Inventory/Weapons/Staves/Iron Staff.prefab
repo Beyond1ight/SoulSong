@@ -152,7 +152,7 @@ MonoBehaviour:
   itemType: Weapon
   itemValue: 0
   resaleValue: 0
-  numberHeld: 0
+  numberHeld: 2
   itemPower: 0
   stackable: 0
   itemIndex: 0
@@ -172,13 +172,18 @@ MonoBehaviour:
   riggsWeapon: 1
   solaceWeapon: 1
   blueWeapon: 1
-  strengthBonus: 0
+  weightClassification: Heavy
+  strengthBonus: 8
   intelligenceBonus: 10
+  weight: 10
   fireAttack: 0
   iceAttack: 0
   waterAttack: 0
   lightningAttack: 0
   shadowAttack: 0
+  mainHand: 1
+  offHand: 0
+  twoHand: 1
 --- !u!1 &7729162418508170926
 GameObject:
   m_ObjectHideFlags: 0

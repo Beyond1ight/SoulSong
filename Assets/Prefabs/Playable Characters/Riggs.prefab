@@ -103,7 +103,7 @@ MonoBehaviour:
   maxMana: 50
   currentEnergy: 25
   maxEnergy: 20
-  haste: 45
+  haste: 42
   experiencePoints: 0
   levelUpReq: 100
   strength: 28
@@ -144,6 +144,8 @@ MonoBehaviour:
   healthCapped: 1
   manaCapped: 1
   energyCapped: 1
+  canUse2HWeapon: 1
+  canDualWield: 0
   isInParty: 0
   isInActiveParty: 0
   isLeader: 0
@@ -270,7 +272,8 @@ MonoBehaviour:
   canUseWaterDrops: 0
   canUseShadowDrops: 1
   canUseHolyDrops: 1
-  weapon: {fileID: 1397153187241665155, guid: 43350d9d77b504351be6ffc5d99598ca, type: 3}
+  weaponRight: {fileID: 1397153187241665155, guid: 43350d9d77b504351be6ffc5d99598ca, type: 3}
+  weaponLeft: {fileID: 0}
   chestArmor: {fileID: 475117527870452808, guid: c37cdb1cfe8e54b409308b0270b551c3, type: 3}
   legArmor: {fileID: 0}
   accessory1: {fileID: 0}

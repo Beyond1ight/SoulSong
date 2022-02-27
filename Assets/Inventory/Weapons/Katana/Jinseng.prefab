@@ -152,10 +152,10 @@ MonoBehaviour:
   itemType: Weapon
   itemValue: 0
   resaleValue: 0
-  numberHeld: 0
+  numberHeld: 2
   itemPower: 0
   stackable: 0
-  itemIndex: 0
+  itemIndex: -1
   dropCostReduction: 0
   skillCostReduction: 0
   animationClip: {fileID: 0}
@@ -166,19 +166,24 @@ MonoBehaviour:
   accessory: 0
   useableOutOfBattle: 0
   targetAll: 0
-  weaponIndex: 0
   grieveWeapon: 1
   macWeapon: 1
   fieldWeapon: 1
   riggsWeapon: 1
   solaceWeapon: 1
   blueWeapon: 1
-  physicalAttack: 20
+  weightClassification: Heavy
+  strengthBonus: 15
+  intelligenceBonus: 0
+  weight: 10
   fireAttack: 5
   iceAttack: 0
   waterAttack: 0
   lightningAttack: 0
   shadowAttack: 0
+  mainHand: 1
+  offHand: 0
+  twoHand: 1
 --- !u!1 &6837126494308097159
 GameObject:
   m_ObjectHideFlags: 0

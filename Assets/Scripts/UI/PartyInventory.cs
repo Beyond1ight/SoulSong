@@ -318,47 +318,88 @@ public class PartyInventory : MonoBehaviour
 
     public void OpenWeaponInventory()
     {
-
         if (!Engine.e.equipMenuReference.removing)
         {
-
+            Engine.e.equipMenuReference.GetComponent<EquipDisplay>().weaponLists[0].SetActive(true);
             Engine.e.equipMenuReference.GetComponent<EquipDisplay>().inventoryPointerIndex = 0;
-
-            weaponRectTransform.offsetMax = new Vector2(0, 0);
-            Engine.e.equipMenuReference.weaponLists[0].SetActive(true);
+            accessoryRectTransform.offsetMax = new Vector2(0, 0);
 
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(weaponInventorySlots[inventoryPointerIndex].gameObject);
-
         }
         else
         {
-            if (Engine.e.equipMenuReference.grieveScreen)
+            if (Engine.e.equipMenuReference.weaponRightInventorySet)
             {
-                if (Engine.e.party[0].GetComponent<Character>().weapon != null)
+                if (Engine.e.equipMenuReference.grieveScreen)
                 {
-                    Engine.e.party[0].GetComponent<Grieve>().RemoveWeapon();
+                    if (Engine.e.party[0].GetComponent<Grieve>().weaponRight != null)
+                    {
+                        Engine.e.party[0].GetComponent<Grieve>().RemoveWeaponRight();
+                        Engine.e.equipMenuReference.weaponRightInventorySet = false;
+                    }
+                }
+                if (Engine.e.equipMenuReference.macScreen)
+                {
+                    if (Engine.e.party[1].GetComponent<Mac>().weaponRight != null)
+                    {
+                        Engine.e.party[1].GetComponent<Mac>().RemoveWeaponRight();
+                        Engine.e.equipMenuReference.weaponRightInventorySet = false;
+                    }
+                }
+                if (Engine.e.equipMenuReference.fieldScreen)
+                {
+                    if (Engine.e.party[2].GetComponent<Field>().weaponRight != null)
+                    {
+                        Engine.e.party[2].GetComponent<Field>().RemoveWeaponRight();
+                        Engine.e.equipMenuReference.weaponRightInventorySet = false;
+                    }
+                }
+                if (Engine.e.equipMenuReference.riggsScreen)
+                {
+                    if (Engine.e.party[3].GetComponent<Riggs>().weaponRight != null)
+                    {
+                        Engine.e.party[3].GetComponent<Riggs>().RemoveWeaponRight();
+                        Engine.e.equipMenuReference.weaponRightInventorySet = false;
+                    }
                 }
             }
-            if (Engine.e.equipMenuReference.macScreen)
+            else
             {
-                if (Engine.e.party[1].GetComponent<Character>().weapon != null)
+                if (Engine.e.equipMenuReference.weaponLeftInventorySet)
                 {
-                    Engine.e.party[1].GetComponent<Mac>().RemoveWeapon();
-                }
-            }
-            if (Engine.e.equipMenuReference.fieldScreen)
-            {
-                if (Engine.e.party[2].GetComponent<Character>().weapon != null)
-                {
-                    Engine.e.party[2].GetComponent<Field>().RemoveWeapon();
-                }
-            }
-            if (Engine.e.equipMenuReference.riggsScreen)
-            {
-                if (Engine.e.party[3].GetComponent<Character>().weapon != null)
-                {
-                    Engine.e.party[3].GetComponent<Riggs>().RemoveWeapon();
+                    if (Engine.e.equipMenuReference.grieveScreen)
+                    {
+                        if (Engine.e.party[0].GetComponent<Grieve>().weaponLeft != null)
+                        {
+                            Engine.e.party[0].GetComponent<Grieve>().RemoveWeaponLeft();
+                            Engine.e.equipMenuReference.weaponLeftInventorySet = false;
+                        }
+                    }
+                    if (Engine.e.equipMenuReference.macScreen)
+                    {
+                        if (Engine.e.party[1].GetComponent<Mac>().weaponLeft != null)
+                        {
+                            Engine.e.party[1].GetComponent<Mac>().RemoveWeaponLeft();
+                            Engine.e.equipMenuReference.weaponLeftInventorySet = false;
+                        }
+                    }
+                    if (Engine.e.equipMenuReference.fieldScreen)
+                    {
+                        if (Engine.e.party[2].GetComponent<Field>().weaponLeft != null)
+                        {
+                            Engine.e.party[2].GetComponent<Field>().RemoveWeaponLeft();
+                            Engine.e.equipMenuReference.weaponLeftInventorySet = false;
+                        }
+                    }
+                    if (Engine.e.equipMenuReference.riggsScreen)
+                    {
+                        if (Engine.e.party[3].GetComponent<Riggs>().weaponLeft != null)
+                        {
+                            Engine.e.party[3].GetComponent<Riggs>().RemoveWeaponLeft();
+                            Engine.e.equipMenuReference.weaponLeftInventorySet = false;
+                        }
+                    }
                 }
             }
         }
@@ -379,28 +420,28 @@ public class PartyInventory : MonoBehaviour
         {
             if (Engine.e.equipMenuReference.grieveScreen)
             {
-                if (Engine.e.party[0].GetComponent<Character>().weapon != null)
+                if (Engine.e.party[0].GetComponent<Character>().chestArmor != null)
                 {
                     Engine.e.party[0].GetComponent<Grieve>().RemoveChestArmor();
                 }
             }
             if (Engine.e.equipMenuReference.macScreen)
             {
-                if (Engine.e.party[1].GetComponent<Character>().weapon != null)
+                if (Engine.e.party[1].GetComponent<Character>().chestArmor != null)
                 {
                     Engine.e.party[1].GetComponent<Mac>().RemoveChestArmor();
                 }
             }
             if (Engine.e.equipMenuReference.fieldScreen)
             {
-                if (Engine.e.party[2].GetComponent<Character>().weapon != null)
+                if (Engine.e.party[2].GetComponent<Character>().chestArmor != null)
                 {
                     Engine.e.party[2].GetComponent<Field>().RemoveChestArmor();
                 }
             }
             if (Engine.e.equipMenuReference.riggsScreen)
             {
-                if (Engine.e.party[3].GetComponent<Character>().weapon != null)
+                if (Engine.e.party[3].GetComponent<Character>().chestArmor != null)
                 {
                     Engine.e.party[3].GetComponent<Riggs>().RemoveChestArmor();
                 }

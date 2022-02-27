@@ -45,15 +45,15 @@ public class GameData
     public float[] charFirePhysicalAttackBonus, charWaterPhysicalAttackBonus, charLightningPhysicalAttackBonus, charShadowPhysicalAttackBonus, charIcePhysicalAttackBonus;
 
     public string[] weapons;
-    public string grieveWeaponEquip;
-    public string macWeaponEquip;
-    public string fieldWeaponEquip;
-    public string riggsWeaponEquip;
+    public string grieveWeaponRightEquip, grieveWeaponLeftEquip;
+    public string macWeaponRightEquip, macWeaponLeftEquip;
+    public string fieldWeaponRightEquip, fieldWeaponLeftEquip;
+    public string riggsWeaponRightEquip, riggsWeaponLeftEquip;
 
     public string[] charChestArmorEquip;
     public string[] charAccessory1Equip, charAccessory2Equip;
 
-
+    public bool[] canUse2HWeapon, canDualWield;
     public bool[] charInParty;
     public string[] activeParty;
     public bool arrangePartyButtonActive;
@@ -151,6 +151,8 @@ public class GameData
         charAvailableSkillPoints = new int[gameManager.party.Length];
         charStealChance = new float[gameManager.party.Length];
 
+        canUse2HWeapon = new bool[Engine.e.party.Length];
+        canDualWield = new bool[Engine.e.party.Length];
 
         battleModeActive = gameManager.battleModeActive;
         arrangePartyButtonActive = gameManager.arrangePartyButtonActive;
@@ -197,6 +199,9 @@ public class GameData
                 charLightningPhysicalAttackBonus[i] = gameManager.party[i].GetComponent<Character>().lightningPhysicalAttackBonus;
                 charShadowPhysicalAttackBonus[i] = gameManager.party[i].GetComponent<Character>().shadowPhysicalAttackBonus;
                 charIcePhysicalAttackBonus[i] = gameManager.party[i].GetComponent<Character>().icePhysicalAttackBonus;
+
+                canUse2HWeapon[i] = Engine.e.party[i].GetComponent<Character>().canUse2HWeapon;
+                canDualWield[i] = Engine.e.party[i].GetComponent<Character>().canDualWield;
 
                 charPhysicalDamage[i] = gameManager.party[i].GetComponent<Character>().strength;
                 charXP[i] = gameManager.party[i].GetComponent<Character>().experiencePoints;
@@ -322,7 +327,6 @@ public class GameData
             }
         }
 
-
         partyInvNames = new string[gameManager.partyInventoryReference.partyInventory.Length];
         partyInvAmounts = new int[gameManager.partyInventoryReference.partyInventory.Length];
 
@@ -343,19 +347,24 @@ public class GameData
         }
 
         // Equipped Weapons
-        grieveWeaponEquip = Engine.e.party[0].GetComponent<Character>().weapon.GetComponent<Weapon>().itemName;
+        grieveWeaponRightEquip = Engine.e.party[0].GetComponent<Character>().weaponRight.GetComponent<Weapon>().itemName;
+        grieveWeaponLeftEquip = Engine.e.party[0].GetComponent<Character>().weaponLeft.GetComponent<Weapon>().itemName;
 
         if (Engine.e.party[1] != null)
         {
-            macWeaponEquip = Engine.e.party[1].GetComponent<Character>().weapon.GetComponent<Weapon>().itemName;
+            macWeaponRightEquip = Engine.e.party[1].GetComponent<Character>().weaponRight.GetComponent<Weapon>().itemName;
+            macWeaponLeftEquip = Engine.e.party[1].GetComponent<Character>().weaponLeft.GetComponent<Weapon>().itemName;
+
         }
         if (Engine.e.party[2] != null)
         {
-            fieldWeaponEquip = Engine.e.party[2].GetComponent<Character>().weapon.GetComponent<Weapon>().itemName;
+            fieldWeaponRightEquip = Engine.e.party[2].GetComponent<Character>().weaponRight.GetComponent<Weapon>().itemName;
+            fieldWeaponLeftEquip = Engine.e.party[2].GetComponent<Character>().weaponLeft.GetComponent<Weapon>().itemName;
         }
         if (Engine.e.party[3] != null)
         {
-            riggsWeaponEquip = Engine.e.party[3].GetComponent<Character>().weapon.GetComponent<Weapon>().itemName;
+            riggsWeaponRightEquip = Engine.e.party[3].GetComponent<Character>().weaponRight.GetComponent<Weapon>().itemName;
+            riggsWeaponLeftEquip = Engine.e.party[3].GetComponent<Character>().weaponLeft.GetComponent<Weapon>().itemName;
         }
 
         // Equipped Chest Armor

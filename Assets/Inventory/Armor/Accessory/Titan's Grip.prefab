@@ -288,10 +288,10 @@ MonoBehaviour:
   itemType: Accessory
   itemValue: 0
   resaleValue: 0
-  numberHeld: 2
+  numberHeld: 11
   itemPower: 0
   stackable: 0
-  itemIndex: 0
+  itemIndex: 4
   dropCostReduction: 0
   skillCostReduction: 0
   animationClip: {fileID: 0}
@@ -303,7 +303,8 @@ MonoBehaviour:
   useableOutOfBattle: 0
   targetAll: 0
   physicalArmor: 0
-  physicalAttack: 10
+  strengthBonus: 10
+  intelligenceBonus: 0
   fireDefense: 0
   fireAttack: 0
   iceDefense: 0
@@ -314,7 +315,6 @@ MonoBehaviour:
   lightningAttack: 0
   shadowDefense: 0
   shadowAttack: 0
-  physicalAttackBonus: 0
   fireAttackBonus: 0
   waterAttackBonus: 0
   lightningAttackBonus: 0

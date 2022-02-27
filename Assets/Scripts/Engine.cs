@@ -14,7 +14,7 @@ public class Engine : MonoBehaviour
     public GameObject[] party;
     public ActiveParty activeParty;
     public Character[] playableCharacters;
-    public Item[] charEquippedWeapons, charEquippedChestArmor, charEquippedLegArmor, charEquippedAccessory1, charEquippedAccessory2;
+    public Item[] charEquippedWeaponRight, charEquippedWeaponLeft, charEquippedChestArmor, charEquippedLegArmor, charEquippedAccessory1, charEquippedAccessory2;
     public int partyMoney;
     public float timeOfDay;
     public string currentScene;
@@ -161,35 +161,14 @@ public class Engine : MonoBehaviour
 
         SetInventoryArrayPositions();
 
-        charEquippedWeapons = new Item[playableCharacters.Length];
+        charEquippedWeaponRight = new Item[playableCharacters.Length];
+        charEquippedWeaponLeft = new Item[playableCharacters.Length];
         charEquippedChestArmor = new Item[playableCharacters.Length];
         charEquippedLegArmor = new Item[playableCharacters.Length];
         charEquippedAccessory1 = new Item[playableCharacters.Length];
         charEquippedAccessory2 = new Item[playableCharacters.Length];
 
         partyMoney = 0;
-
-        //Beginning Weapons
-        playableCharacters[0].GetComponent<Grieve>().EquipGrieveWeaponOnLoad(gameWeapons[1].GetComponent<Weapon>());
-        playableCharacters[1].GetComponent<Mac>().EquipMacWeaponOnLoad(gameWeapons[3].GetComponent<Weapon>());
-        playableCharacters[2].GetComponent<Field>().EquipFieldWeaponOnLoad(gameWeapons[4].GetComponent<Weapon>());
-        playableCharacters[3].GetComponent<Riggs>().EquipRiggsWeaponOnLoad(gameWeapons[6].GetComponent<Weapon>());
-        // partyInventoryReference.AddItemToInventory(gameWeapons[0].GetComponent<Weapon>());
-        //partyInventoryReference.AddItemToInventory(gameWeapons[3].GetComponent<Weapon>()); // Depends If Mac Is In Party From Start
-
-        //Beginning Armor
-        playableCharacters[0].GetComponent<Grieve>().EquipGrieveChestArmorOnLoad(gameChestArmor[0].GetComponent<ChestArmor>());
-        playableCharacters[1].GetComponent<Mac>().EquipMacChestArmorOnLoad(gameChestArmor[0].GetComponent<ChestArmor>());
-        playableCharacters[2].GetComponent<Field>().EquipFieldChestArmorOnLoad(gameChestArmor[0].GetComponent<ChestArmor>());
-        playableCharacters[3].GetComponent<Riggs>().EquipRiggsChestArmorOnLoad(gameChestArmor[1].GetComponent<ChestArmor>());
-        //partyInventoryReference.AddItemToInventory(gameArmor[0].GetComponent<ChestArmor>());
-        //partyInventoryReference.AddItemToInventory(gameArmor[0].GetComponent<ChestArmor>()); // Depends If Mac Is In Party From Start
-
-        // Beginning Accessories 
-        playableCharacters[0].GetComponent<Grieve>().accessory1 = null;
-        playableCharacters[0].GetComponent<Grieve>().accessory2 = null;
-        playableCharacters[1].GetComponent<Mac>().accessory1 = null;
-        playableCharacters[1].GetComponent<Mac>().accessory2 = null;
 
         // Grieve
         playableCharacters[0].characterName = "Grieve";
@@ -206,7 +185,7 @@ public class Engine : MonoBehaviour
         playableCharacters[0].currentMana = playableCharacters[0].maxMana;
         playableCharacters[0].maxEnergy = Mathf.Round(energyCurve.Evaluate(playableCharacters[0].lvl) + (energyCurve.Evaluate(playableCharacters[0].lvl) * (playableCharacters[0].energyOffset / 100)));
         playableCharacters[0].currentEnergy = playableCharacters[0].maxEnergy;
-        playableCharacters[0].haste = 50;
+        playableCharacters[0].haste = 56;
         playableCharacters[0].critChance = 15;
         playableCharacters[0].strength = Mathf.Round(strengthCurve.Evaluate(playableCharacters[0].lvl) + +(strengthCurve.Evaluate(playableCharacters[0].lvl) * (playableCharacters[0].strengthOffset / 100)));
         playableCharacters[0].intelligence = Mathf.Round(intelligenceCurve.Evaluate(playableCharacters[0].lvl) + +(intelligenceCurve.Evaluate(playableCharacters[0].lvl) * (playableCharacters[0].intelligenceOffset / 100)));
@@ -237,7 +216,8 @@ public class Engine : MonoBehaviour
         playableCharacters[0].sleepDefense = 1f;
         playableCharacters[0].confuseDefense = 1f;
 
-
+        playableCharacters[0].canDualWield = false;
+        playableCharacters[0].canUse2HWeapon = false;
 
         playableCharacters[0].canUseFireDrops = true;
         playableCharacters[0].canUseHolyDrops = true;
@@ -389,7 +369,7 @@ public class Engine : MonoBehaviour
         playableCharacters[1].currentMana = playableCharacters[1].maxMana;
         playableCharacters[1].maxEnergy = Mathf.Round(energyCurve.Evaluate(playableCharacters[1].lvl) + (energyCurve.Evaluate(playableCharacters[1].lvl) * (playableCharacters[1].energyOffset / 100)));
         playableCharacters[1].currentEnergy = playableCharacters[1].maxEnergy;
-        playableCharacters[1].haste = 50;
+        playableCharacters[1].haste = 46;
         playableCharacters[1].critChance = 10;
         playableCharacters[1].strength = Mathf.Round(strengthCurve.Evaluate(playableCharacters[1].lvl) + +(strengthCurve.Evaluate(playableCharacters[1].lvl) * (playableCharacters[1].strengthOffset / 100)));
         playableCharacters[1].intelligence = Mathf.Round(intelligenceCurve.Evaluate(playableCharacters[1].lvl) + +(intelligenceCurve.Evaluate(playableCharacters[1].lvl) * (playableCharacters[1].intelligenceOffset / 100)));
@@ -421,7 +401,8 @@ public class Engine : MonoBehaviour
         playableCharacters[1].sleepDefense = 1f;
         playableCharacters[1].confuseDefense = 1f;
 
-
+        playableCharacters[1].canDualWield = false;
+        playableCharacters[1].canUse2HWeapon = true;
 
         playableCharacters[1].canUseFireDrops = false;
         playableCharacters[1].canUseHolyDrops = false;
@@ -530,7 +511,7 @@ public class Engine : MonoBehaviour
         playableCharacters[2].currentMana = playableCharacters[2].maxMana;
         playableCharacters[2].maxEnergy = 50f;
         playableCharacters[2].currentEnergy = playableCharacters[2].maxEnergy;
-        playableCharacters[2].haste = 55;
+        playableCharacters[2].haste = 60;
         playableCharacters[2].critChance = 10;
         playableCharacters[2].strength = Mathf.Round(strengthCurve.Evaluate(playableCharacters[2].lvl) + +(strengthCurve.Evaluate(playableCharacters[2].lvl) * (playableCharacters[2].strengthOffset / 100)));
         playableCharacters[2].intelligence = Mathf.Round(intelligenceCurve.Evaluate(playableCharacters[2].lvl) + +(intelligenceCurve.Evaluate(playableCharacters[2].lvl) * (playableCharacters[2].intelligenceOffset / 100)));
@@ -563,7 +544,8 @@ public class Engine : MonoBehaviour
         playableCharacters[2].sleepDefense = 1f;
         playableCharacters[2].confuseDefense = 1f;
 
-
+        playableCharacters[2].canUse2HWeapon = false;
+        playableCharacters[2].canDualWield = true;
 
         playableCharacters[2].canUseFireDrops = false;
         playableCharacters[2].canUseHolyDrops = false;
@@ -668,7 +650,7 @@ public class Engine : MonoBehaviour
         playableCharacters[3].maxMana = 50f;
         playableCharacters[3].currentMana = playableCharacters[3].maxMana;
         playableCharacters[3].maxEnergy = 20f;
-        playableCharacters[3].haste = 45;
+        playableCharacters[3].haste = 42;
         playableCharacters[3].critChance = 10;
         playableCharacters[3].strength = Mathf.Round(strengthCurve.Evaluate(playableCharacters[3].lvl) + +(strengthCurve.Evaluate(playableCharacters[3].lvl) * (playableCharacters[3].strengthOffset / 100)));
         playableCharacters[3].intelligence = Mathf.Round(intelligenceCurve.Evaluate(playableCharacters[3].lvl) + +(intelligenceCurve.Evaluate(playableCharacters[3].lvl) * (playableCharacters[3].intelligenceOffset / 100)));
@@ -700,6 +682,8 @@ public class Engine : MonoBehaviour
         playableCharacters[3].sleepDefense = 1f;
         playableCharacters[3].confuseDefense = 1f;
 
+        playableCharacters[3].canUse2HWeapon = true;
+        playableCharacters[3].canDualWield = false;
 
         playableCharacters[3].canUseFireDrops = false;
         playableCharacters[3].canUseHolyDrops = true;
@@ -789,7 +773,32 @@ public class Engine : MonoBehaviour
 
 
         party[0] = playableCharacters[0].GetComponent<Character>().gameObject;
+
         AddCharacterToParty("Mac");
+
+        //Beginning Weapons
+        playableCharacters[0].GetComponent<Grieve>().EquipGrieveWeaponRightOnLoad(gameWeapons[1].GetComponent<Weapon>());
+        playableCharacters[1].GetComponent<Mac>().EquipMacWeaponRightOnLoad(gameWeapons[3].GetComponent<Weapon>());
+        playableCharacters[2].GetComponent<Field>().EquipFieldWeaponRightOnLoad(gameWeapons[4].GetComponent<Weapon>());
+        playableCharacters[3].GetComponent<Riggs>().EquipRiggsWeaponRightOnLoad(gameWeapons[6].GetComponent<Weapon>());
+        // partyInventoryReference.AddItemToInventory(gameWeapons[0].GetComponent<Weapon>());
+        //partyInventoryReference.AddItemToInventory(gameWeapons[3].GetComponent<Weapon>()); // Depends If Mac Is In Party From Start
+
+        //Beginning Armor
+        playableCharacters[0].GetComponent<Grieve>().EquipGrieveChestArmorOnLoad(gameChestArmor[0].GetComponent<ChestArmor>());
+        playableCharacters[1].GetComponent<Mac>().EquipMacChestArmorOnLoad(gameChestArmor[0].GetComponent<ChestArmor>());
+        playableCharacters[2].GetComponent<Field>().EquipFieldChestArmorOnLoad(gameChestArmor[0].GetComponent<ChestArmor>());
+        playableCharacters[3].GetComponent<Riggs>().EquipRiggsChestArmorOnLoad(gameChestArmor[1].GetComponent<ChestArmor>());
+        //partyInventoryReference.AddItemToInventory(gameArmor[0].GetComponent<ChestArmor>());
+        //partyInventoryReference.AddItemToInventory(gameArmor[0].GetComponent<ChestArmor>()); // Depends If Mac Is In Party From Start
+
+        // Beginning Accessories 
+        playableCharacters[0].GetComponent<Grieve>().accessory1 = null;
+        playableCharacters[0].GetComponent<Grieve>().accessory2 = null;
+        playableCharacters[0].GetComponent<Grieve>().weaponLeft = null;
+        playableCharacters[1].GetComponent<Mac>().accessory1 = null;
+        playableCharacters[1].GetComponent<Mac>().accessory2 = null;
+        playableCharacters[1].GetComponent<Mac>().weaponLeft = null;
         // party[1] = playableCharacters[1].GetComponent<Character>().gameObject;
 
     }
@@ -1575,7 +1584,8 @@ public class Engine : MonoBehaviour
         partyInventoryReference.chestArmor = new ChestArmor[partyInventoryReference.chestArmorInventorySlots.Length];
         partyInventoryReference.accessories = new Accessory[partyInventoryReference.accessoryInventorySlots.Length];
 
-        charEquippedWeapons = new Item[playableCharacters.Length];
+        charEquippedWeaponRight = new Item[playableCharacters.Length];
+        charEquippedWeaponLeft = new Item[playableCharacters.Length];
         charEquippedChestArmor = new Item[playableCharacters.Length];
         charEquippedAccessory1 = new Item[playableCharacters.Length];
         charEquippedAccessory2 = new Item[playableCharacters.Length];
@@ -1641,6 +1651,9 @@ public class Engine : MonoBehaviour
                 party[i].GetComponent<Character>().experiencePoints = gameData.charXP[i];
                 party[i].GetComponent<Character>().levelUpReq = gameData.charLvlUpReq[i];
                 party[i].GetComponent<Character>().isInParty = gameData.charInParty[i];
+
+                party[i].GetComponent<Character>().canDualWield = gameData.canDualWield[i];
+                party[i].GetComponent<Character>().canUse2HWeapon = gameData.canUse2HWeapon[i];
 
                 party[i].GetComponent<Character>().dodgeChance = gameData.charDodgeChance[i];
                 party[i].GetComponent<Character>().physicalDefense = gameData.charPhysicalDefense[i];
@@ -1725,27 +1738,27 @@ public class Engine : MonoBehaviour
                         }
 
                         // Weapon Equip
-                        if (gameInventory[k].itemName == gameData.grieveWeaponEquip)
+                        // if (gameInventory[k].itemName == gameData.grieveWeaponEquip)
                         {
                             //  playableCharacters[0].GetComponent<Grieve>().EquipGrieveWeaponOnLoad(gameInventory[k].GetComponent<GrieveWeapons>());
                         }
                         if (party[1] != null)
                         {
-                            if (gameInventory[k].itemName == gameData.macWeaponEquip)
+                            //     if (gameInventory[k].itemName == gameData.macWeaponEquip)
                             {
                                 //      playableCharacters[1].GetComponent<Mac>().EquipMacWeaponOnLoad(gameInventory[k].GetComponent<MacWeapons>());
                             }
                         }
                         if (party[2] != null)
                         {
-                            if (gameInventory[k].itemName == gameData.fieldWeaponEquip)
+                            //    if (gameInventory[k].itemName == gameData.fieldWeaponEquip)
                             {
                                 //        playableCharacters[2].GetComponent<Field>().EquipFieldWeaponOnLoad(gameInventory[k].GetComponent<FieldWeapons>());
                             }
                         }
                         if (party[3] != null)
                         {
-                            if (gameInventory[k].itemName == gameData.riggsWeaponEquip)
+                            //   if (gameInventory[k].itemName == gameData.riggsWeaponEquip)
                             {
                                 //       playableCharacters[3].GetComponent<Riggs>().EquipRiggsWeaponOnLoad(gameInventory[k].GetComponent<RiggsWeapons>());
                             }
@@ -2337,6 +2350,8 @@ public class Engine : MonoBehaviour
             partyInventoryReference.AddItemToInventory(gameInventory[17]);
             partyInventoryReference.AddItemToInventory(gameInventory[17]);
             partyInventoryReference.AddItemToInventory(gameInventory[29]);
+            partyInventoryReference.AddItemToInventory(gameInventory[33]);
+            partyInventoryReference.AddItemToInventory(gameInventory[34]);
 
             // partyInventoryReference.AddItemToInventory(gameInventory[2]);
             //partyInventoryReference.AddItemToInventory(gameInventory[3]);

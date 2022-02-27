@@ -7,22 +7,45 @@ using UnityEngine.UI;
 public class Field : Character
 {
 
-    public void RemoveWeapon()
-    {
-        strength -= weapon.GetComponent<Weapon>().strengthBonus;
-        intelligence -= weapon.GetComponent<Weapon>().intelligenceBonus;
 
-        firePhysicalAttackBonus -= weapon.GetComponent<Weapon>().fireAttack;
-        waterPhysicalAttackBonus -= weapon.GetComponent<Weapon>().waterAttack;
-        lightningPhysicalAttackBonus -= weapon.GetComponent<Weapon>().lightningAttack;
-        shadowPhysicalAttackBonus -= weapon.GetComponent<Weapon>().shadowAttack;
-        icePhysicalAttackBonus -= weapon.GetComponent<Weapon>().iceAttack;
+    public void RemoveWeaponRight()
+    {
+        strength -= weaponRight.GetComponent<Weapon>().strengthBonus;
+        intelligence -= weaponRight.GetComponent<Weapon>().intelligenceBonus;
+
+        firePhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().fireAttack;
+        waterPhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().waterAttack;
+        lightningPhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().lightningAttack;
+        shadowPhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().shadowAttack;
+        icePhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().iceAttack;
+        haste += weaponRight.GetComponent<Weapon>().weight;
 
         // Swap Inventory Slots
-        Engine.e.partyInventoryReference.AddItemToInventory(weapon);
+        Engine.e.partyInventoryReference.AddItemToInventory(weaponRight);
 
-        weapon = null;
-        Engine.e.charEquippedWeapons[2] = null;
+        weaponRight = null;
+        Engine.e.charEquippedWeaponRight[2] = null;
+
+        Engine.e.equipMenuReference.DisplayFieldStats();
+    }
+
+    public void RemoveWeaponLeft()
+    {
+        strength -= weaponLeft.GetComponent<Weapon>().strengthBonus;
+        intelligence -= weaponLeft.GetComponent<Weapon>().intelligenceBonus;
+
+        firePhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().fireAttack;
+        waterPhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().waterAttack;
+        lightningPhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().lightningAttack;
+        shadowPhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().shadowAttack;
+        icePhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().iceAttack;
+        haste += weaponRight.GetComponent<Weapon>().weight;
+
+        // Swap Inventory Slots
+        Engine.e.partyInventoryReference.AddItemToInventory(weaponLeft);
+
+        weaponLeft = null;
+        Engine.e.charEquippedWeaponLeft[2] = null;
 
         Engine.e.equipMenuReference.DisplayFieldStats();
     }
@@ -142,58 +165,129 @@ public class Field : Character
 
     }
 
-    public void EquipFieldWeapon(Weapon _weapon)
+    public void EquipFieldWeaponRight(Weapon _weapon)
     {
-        if (weapon != null)
+        if (_weapon.twoHand && !canUse2HWeapon || _weapon.offHand && !_weapon.mainHand)
+        {
+            return;
+        }
+        else
+        {
+            if (weaponLeft != null && _weapon.twoHand && canUse2HWeapon)
+            {
+                RemoveWeaponLeft();
+            }
+        }
+        if (weaponRight != null)
         {
             // Resetting Stats To Base Values
-            strength -= weapon.GetComponent<Weapon>().strengthBonus;
-            intelligence -= weapon.GetComponent<Weapon>().intelligenceBonus;
+            strength -= weaponRight.GetComponent<Weapon>().strengthBonus;
+            intelligence -= weaponRight.GetComponent<Weapon>().intelligenceBonus;
+            firePhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().fireAttack;
+            waterPhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().waterAttack;
+            lightningPhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().lightningAttack;
+            shadowPhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().shadowAttack;
+            icePhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().iceAttack;
 
-            firePhysicalAttackBonus -= weapon.GetComponent<Weapon>().fireAttack;
-            waterPhysicalAttackBonus -= weapon.GetComponent<Weapon>().waterAttack;
-            lightningPhysicalAttackBonus -= weapon.GetComponent<Weapon>().lightningAttack;
-            shadowPhysicalAttackBonus -= weapon.GetComponent<Weapon>().shadowAttack;
-            icePhysicalAttackBonus -= weapon.GetComponent<Weapon>().iceAttack;
+            haste += weaponRight.GetComponent<Weapon>().weight;
 
-            // Swap Inventory Slots
-            Engine.e.partyInventoryReference.AddItemToInventory(weapon);
+            Engine.e.partyInventoryReference.AddItemToInventory(weaponRight);
         }
+        // Swap Inventory Slots
         Engine.e.partyInventoryReference.SubtractItemFromInventory(_weapon);
-        //       Engine.e.equipMenuReference.GetComponent<EquipDisplay>().fieldEquippedWeapon.GetComponent<InventorySlot>().item = _weapon;
-        //        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().fieldEquippedWeapon.GetComponentInChildren<TMP_Text>().text = _weapon.itemName;
-
 
         // Equip Weapon
-        weapon = _weapon;
-        Engine.e.charEquippedWeapons[2] = _weapon;
+        weaponRight = _weapon;
+        Engine.e.charEquippedWeaponRight[2] = _weapon;
 
         strength += _weapon.strengthBonus;
         intelligence += _weapon.intelligenceBonus;
-
         firePhysicalAttackBonus += _weapon.fireAttack;
         waterPhysicalAttackBonus += _weapon.waterAttack;
         lightningPhysicalAttackBonus += _weapon.lightningAttack;
         shadowPhysicalAttackBonus += _weapon.shadowAttack;
         icePhysicalAttackBonus += _weapon.iceAttack;
 
+        haste -= weaponRight.GetComponent<Weapon>().weight;
+
         // Set Array Position For New (Equipped) Weapon
-        weapon.itemIndex = -1;
+        // weapon.itemIndex = -1;
 
         // Update Stats (visually) and Return To Equip Screen
         Engine.e.equipMenuReference.GetComponent<EquipDisplay>().DisplayFieldStats();
         Engine.e.equipMenuReference.GetComponent<EquipDisplay>().weaponLists[0].SetActive(false);
         Engine.e.equipMenuReference.GetComponent<EquipDisplay>().SetFieldScreen();
-        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().weaponInventorySet = false;
+        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().weaponRightInventorySet = false;
+
+        Engine.e.partyInventoryReference.indexReference = -1;
 
     }
-
-    public void EquipFieldWeaponOnLoad(Weapon _weapon)
+    public void EquipFieldWeaponLeft(Weapon _weapon)
     {
-        weapon = _weapon;
-        Engine.e.charEquippedWeapons[2] = _weapon;
-        //       Engine.e.equipMenuReference.GetComponent<EquipDisplay>().fieldEquippedWeapon.GetComponent<InventorySlot>().item = _weapon;
-        //       Engine.e.equipMenuReference.GetComponent<EquipDisplay>().fieldEquippedWeapon.GetComponentInChildren<TMP_Text>().text = _weapon.itemName;
+        if (_weapon.twoHand || !_weapon.offHand && _weapon.mainHand || _weapon.mainHand && _weapon.offHand && !canDualWield)
+        {
+            return;
+        }
+        else
+        {
+            if (weaponLeft != null)
+            {
+                // Resetting Stats To Base Values
+                strength -= weaponLeft.GetComponent<Weapon>().strengthBonus;
+                intelligence -= weaponLeft.GetComponent<Weapon>().intelligenceBonus;
+                firePhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().fireAttack;
+                waterPhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().waterAttack;
+                lightningPhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().lightningAttack;
+                shadowPhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().shadowAttack;
+                icePhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().iceAttack;
+
+                haste += weaponLeft.GetComponent<Weapon>().weight;
+
+                Engine.e.partyInventoryReference.AddItemToInventory(weaponLeft);
+            }
+            // Swap Inventory Slots
+            Engine.e.partyInventoryReference.SubtractItemFromInventory(_weapon);
+
+            // Equip Weapon
+            weaponLeft = _weapon;
+            Engine.e.charEquippedWeaponLeft[2] = _weapon;
+
+            strength += _weapon.strengthBonus;
+            intelligence += _weapon.intelligenceBonus;
+            firePhysicalAttackBonus += _weapon.fireAttack;
+            waterPhysicalAttackBonus += _weapon.waterAttack;
+            lightningPhysicalAttackBonus += _weapon.lightningAttack;
+            shadowPhysicalAttackBonus += _weapon.shadowAttack;
+            icePhysicalAttackBonus += _weapon.iceAttack;
+
+            haste -= weaponLeft.GetComponent<Weapon>().weight;
+
+            // Set Array Position For New (Equipped) Weapon
+            // weapon.itemIndex = -1;
+
+            // Update Stats (visually) and Return To Equip Screen
+            Engine.e.equipMenuReference.GetComponent<EquipDisplay>().DisplayFieldStats();
+            Engine.e.equipMenuReference.GetComponent<EquipDisplay>().weaponLists[0].SetActive(false);
+            Engine.e.equipMenuReference.GetComponent<EquipDisplay>().SetFieldScreen();
+            Engine.e.equipMenuReference.GetComponent<EquipDisplay>().weaponLeftInventorySet = false;
+
+            Engine.e.partyInventoryReference.indexReference = -1;
+        }
+    }
+
+    public void EquipFieldWeaponRightOnLoad(Weapon _weapon)
+    {
+
+        weaponRight = _weapon;
+        Engine.e.charEquippedWeaponRight[2] = _weapon;
+
+    }
+    public void EquipFieldWeaponLeftOnLoad(Weapon _weapon)
+    {
+
+        weaponLeft = _weapon;
+        Engine.e.charEquippedWeaponLeft[2] = _weapon;
+
     }
     public void EquipFieldChestArmor(ChestArmor _armor)
     {

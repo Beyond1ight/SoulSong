@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6635024624483391068}
   - component: {fileID: 950896583781284752}
   m_Layer: 5
-  m_Name: Truthguard 1
+  m_Name: Truthguard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,10 +152,10 @@ MonoBehaviour:
   itemType: Weapon
   itemValue: 0
   resaleValue: 0
-  numberHeld: 0
+  numberHeld: 2
   itemPower: 0
   stackable: 0
-  itemIndex: 0
+  itemIndex: -1
   dropCostReduction: 0
   skillCostReduction: 0
   animationClip: {fileID: 0}
@@ -166,19 +166,24 @@ MonoBehaviour:
   accessory: 0
   useableOutOfBattle: 0
   targetAll: 0
-  weaponIndex: 0
   grieveWeapon: 0
   macWeapon: 1
   fieldWeapon: 0
   riggsWeapon: 0
   solaceWeapon: 0
   blueWeapon: 0
-  physicalAttack: 12
+  weightClassification: Heavy
+  strengthBonus: 6
+  intelligenceBonus: 0
+  weight: 10
   fireAttack: 0
   iceAttack: 0
   waterAttack: 0
   lightningAttack: 0
   shadowAttack: 0
+  mainHand: 1
+  offHand: 1
+  twoHand: 0
 --- !u!1 &9046940419069239111
 GameObject:
   m_ObjectHideFlags: 0

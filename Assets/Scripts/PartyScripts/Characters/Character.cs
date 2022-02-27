@@ -19,6 +19,7 @@ public class Character : MonoBehaviour
     holyDropsLevel, holyDropsExperience, holyDropsLvlReq, holyPhysicalAttackBonus, holyDropAttackBonus,
     skillScale;
     public bool healthCapped, manaCapped, energyCapped = true;
+    public bool canUse2HWeapon, canDualWield = false;
 
     // Negative Status Effects
     public bool isInParty, isInActiveParty, isLeader, isPoisoned, isAsleep, isConfused, miterInflicted, haltInflicted, deathInflicted, inflicted;
@@ -46,7 +47,7 @@ public class Character : MonoBehaviour
 
     public bool canUseFireDrops, canUseIceDrops, canUseLightningDrops, canUseWaterDrops, canUseShadowDrops, canUseHolyDrops = false;
 
-    public Item weapon, chestArmor, legArmor, accessory1, accessory2;
+    public Item weaponRight, weaponLeft, chestArmor, legArmor, accessory1, accessory2;
     public int skillIndex;
     public int skillTotal;
     public float poisonDmg;

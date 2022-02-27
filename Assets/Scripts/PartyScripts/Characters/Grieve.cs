@@ -7,22 +7,44 @@ using UnityEngine.EventSystems;
 public class Grieve : Character
 {
 
-    public void RemoveWeapon()
+    public void RemoveWeaponRight()
     {
-        strength -= weapon.GetComponent<Weapon>().strengthBonus;
-        intelligence -= weapon.GetComponent<Weapon>().intelligenceBonus;
+        strength -= weaponRight.GetComponent<Weapon>().strengthBonus;
+        intelligence -= weaponRight.GetComponent<Weapon>().intelligenceBonus;
 
-        firePhysicalAttackBonus -= weapon.GetComponent<Weapon>().fireAttack;
-        waterPhysicalAttackBonus -= weapon.GetComponent<Weapon>().waterAttack;
-        lightningPhysicalAttackBonus -= weapon.GetComponent<Weapon>().lightningAttack;
-        shadowPhysicalAttackBonus -= weapon.GetComponent<Weapon>().shadowAttack;
-        icePhysicalAttackBonus -= weapon.GetComponent<Weapon>().iceAttack;
+        firePhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().fireAttack;
+        waterPhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().waterAttack;
+        lightningPhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().lightningAttack;
+        shadowPhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().shadowAttack;
+        icePhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().iceAttack;
+        haste += weaponRight.GetComponent<Weapon>().weight;
 
         // Swap Inventory Slots
-        Engine.e.partyInventoryReference.AddItemToInventory(weapon);
+        Engine.e.partyInventoryReference.AddItemToInventory(weaponRight);
 
-        weapon = null;
-        Engine.e.charEquippedWeapons[0] = null;
+        weaponRight = null;
+        Engine.e.charEquippedWeaponRight[0] = null;
+
+        Engine.e.equipMenuReference.DisplayGrieveStats();
+    }
+
+    public void RemoveWeaponLeft()
+    {
+        strength -= weaponLeft.GetComponent<Weapon>().strengthBonus;
+        intelligence -= weaponLeft.GetComponent<Weapon>().intelligenceBonus;
+
+        firePhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().fireAttack;
+        waterPhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().waterAttack;
+        lightningPhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().lightningAttack;
+        shadowPhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().shadowAttack;
+        icePhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().iceAttack;
+        haste += weaponLeft.GetComponent<Weapon>().weight;
+
+        // Swap Inventory Slots
+        Engine.e.partyInventoryReference.AddItemToInventory(weaponLeft);
+
+        weaponLeft = null;
+        Engine.e.charEquippedWeaponLeft[0] = null;
 
         Engine.e.equipMenuReference.DisplayGrieveStats();
     }
@@ -143,28 +165,41 @@ public class Grieve : Character
 
     }
 
-    public void EquipGrieveWeapon(Weapon _weapon)
+    public void EquipGrieveWeaponRight(Weapon _weapon)
     {
+        if (_weapon.twoHand && !canUse2HWeapon || _weapon.offHand && !_weapon.mainHand)
+        {
+            return;
+        }
+        else
+        {
+            if (weaponLeft != null && _weapon.twoHand && canUse2HWeapon)
+            {
+                RemoveWeaponLeft();
+            }
+        }
 
-        if (weapon != null)
+        if (weaponRight != null)
         {
             // Resetting Stats To Base Values
-            strength -= weapon.GetComponent<Weapon>().strengthBonus;
-            intelligence -= weapon.GetComponent<Weapon>().intelligenceBonus;
-            firePhysicalAttackBonus -= weapon.GetComponent<Weapon>().fireAttack;
-            waterPhysicalAttackBonus -= weapon.GetComponent<Weapon>().waterAttack;
-            lightningPhysicalAttackBonus -= weapon.GetComponent<Weapon>().lightningAttack;
-            shadowPhysicalAttackBonus -= weapon.GetComponent<Weapon>().shadowAttack;
-            icePhysicalAttackBonus -= weapon.GetComponent<Weapon>().iceAttack;
+            strength -= weaponRight.GetComponent<Weapon>().strengthBonus;
+            intelligence -= weaponRight.GetComponent<Weapon>().intelligenceBonus;
+            firePhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().fireAttack;
+            waterPhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().waterAttack;
+            lightningPhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().lightningAttack;
+            shadowPhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().shadowAttack;
+            icePhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().iceAttack;
 
-            Engine.e.partyInventoryReference.AddItemToInventory(weapon);
+            haste += weaponRight.GetComponent<Weapon>().weight;
+
+            Engine.e.partyInventoryReference.AddItemToInventory(weaponRight);
         }
         // Swap Inventory Slots
         Engine.e.partyInventoryReference.SubtractItemFromInventory(_weapon);
 
         // Equip Weapon
-        weapon = _weapon;
-        Engine.e.charEquippedWeapons[0] = _weapon;
+        weaponRight = _weapon;
+        Engine.e.charEquippedWeaponRight[0] = _weapon;
 
         strength += _weapon.strengthBonus;
         intelligence += _weapon.intelligenceBonus;
@@ -173,6 +208,9 @@ public class Grieve : Character
         lightningPhysicalAttackBonus += _weapon.lightningAttack;
         shadowPhysicalAttackBonus += _weapon.shadowAttack;
         icePhysicalAttackBonus += _weapon.iceAttack;
+
+        haste -= weaponRight.GetComponent<Weapon>().weight;
+
         // Set Array Position For New (Equipped) Weapon
         // weapon.itemIndex = -1;
 
@@ -180,16 +218,78 @@ public class Grieve : Character
         Engine.e.equipMenuReference.GetComponent<EquipDisplay>().DisplayGrieveStats();
         Engine.e.equipMenuReference.GetComponent<EquipDisplay>().weaponLists[0].SetActive(false);
         Engine.e.equipMenuReference.GetComponent<EquipDisplay>().SetGrieveScreen();
-        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().weaponInventorySet = false;
+        Engine.e.equipMenuReference.GetComponent<EquipDisplay>().weaponRightInventorySet = false;
 
         Engine.e.partyInventoryReference.indexReference = -1;
 
     }
-
-    public void EquipGrieveWeaponOnLoad(Weapon _weapon)
+    public void EquipGrieveWeaponLeft(Weapon _weapon)
     {
-        weapon = _weapon;
-        Engine.e.charEquippedWeapons[0] = _weapon;
+        if (_weapon.twoHand || !_weapon.offHand && _weapon.mainHand || _weapon.mainHand && _weapon.offHand && !canDualWield)
+        {
+            return;
+        }
+        else
+        {
+            if (weaponLeft != null)
+            {
+                // Resetting Stats To Base Values
+                strength -= weaponLeft.GetComponent<Weapon>().strengthBonus;
+                intelligence -= weaponLeft.GetComponent<Weapon>().intelligenceBonus;
+                firePhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().fireAttack;
+                waterPhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().waterAttack;
+                lightningPhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().lightningAttack;
+                shadowPhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().shadowAttack;
+                icePhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().iceAttack;
+
+                haste += weaponLeft.GetComponent<Weapon>().weight;
+
+                Engine.e.partyInventoryReference.AddItemToInventory(weaponLeft);
+            }
+            // Swap Inventory Slots
+            Engine.e.partyInventoryReference.SubtractItemFromInventory(_weapon);
+
+            // Equip Weapon
+            weaponLeft = _weapon;
+            Engine.e.charEquippedWeaponLeft[0] = _weapon;
+
+            strength += _weapon.strengthBonus;
+            intelligence += _weapon.intelligenceBonus;
+            firePhysicalAttackBonus += _weapon.fireAttack;
+            waterPhysicalAttackBonus += _weapon.waterAttack;
+            lightningPhysicalAttackBonus += _weapon.lightningAttack;
+            shadowPhysicalAttackBonus += _weapon.shadowAttack;
+            icePhysicalAttackBonus += _weapon.iceAttack;
+
+            haste -= weaponLeft.GetComponent<Weapon>().weight;
+
+            // Set Array Position For New (Equipped) Weapon
+            // weapon.itemIndex = -1;
+
+            // Update Stats (visually) and Return To Equip Screen
+            Engine.e.equipMenuReference.GetComponent<EquipDisplay>().DisplayGrieveStats();
+            Engine.e.equipMenuReference.GetComponent<EquipDisplay>().weaponLists[0].SetActive(false);
+            Engine.e.equipMenuReference.GetComponent<EquipDisplay>().SetGrieveScreen();
+            Engine.e.equipMenuReference.GetComponent<EquipDisplay>().weaponLeftInventorySet = false;
+
+            Engine.e.partyInventoryReference.indexReference = -1;
+
+        }
+    }
+
+    public void EquipGrieveWeaponRightOnLoad(Weapon _weapon)
+    {
+
+        weaponRight = _weapon;
+        Engine.e.charEquippedWeaponRight[0] = _weapon;
+
+    }
+    public void EquipGrieveWeaponLeftOnLoad(Weapon _weapon)
+    {
+
+        weaponLeft = _weapon;
+        Engine.e.charEquippedWeaponLeft[0] = _weapon;
+
     }
 
     public void EquipGrieveChestArmor(ChestArmor _armor)
