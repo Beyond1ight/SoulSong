@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1038069508201074008}
   - component: {fileID: 5393878151980453813}
   - component: {fileID: 2016754205308363385}
+  - component: {fileID: -2642165976518311694}
   m_Layer: 5
   m_Name: Iron Staff
   m_TagString: Untagged
@@ -152,13 +153,13 @@ MonoBehaviour:
   itemType: Weapon
   itemValue: 0
   resaleValue: 0
-  numberHeld: 2
+  numberHeld: 0
   itemPower: 0
   stackable: 0
   itemIndex: 0
   dropCostReduction: 0
   skillCostReduction: 0
-  animationClip: {fileID: 0}
+  animationClip: {fileID: 7400000, guid: 1cdd9b222593543199ca7861d9856058, type: 2}
   consumable: 0
   isDrop: 0
   weapon: 1
@@ -184,6 +185,25 @@ MonoBehaviour:
   mainHand: 1
   offHand: 0
   twoHand: 1
+--- !u!95 &-2642165976518311694
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4434625555663546357}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4cabdf369e54044b7b3d2c061069320f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &7729162418508170926
 GameObject:
   m_ObjectHideFlags: 0

@@ -139,11 +139,11 @@ MonoBehaviour:
   lvl: 1
   currentHealth: 100
   maxHealth: 100
-  currentMana: 25
+  currentMana: 35
   maxMana: 35
   currentEnergy: 30
   maxEnergy: 30
-  haste: 70
+  haste: 56
   experiencePoints: 0
   levelUpReq: 100
   strength: 15
@@ -198,7 +198,7 @@ MonoBehaviour:
   inflicted: 0
   isProtected: 0
   isEncompassed: 0
-  isHastened: 1
+  isHastened: 0
   availableSkillPoints: 0
   healthOffset: 0
   manaOffset: -30
@@ -256,7 +256,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 4561571794371166769, guid: aa424de30ac5443eb81c992bf59a844b, type: 3}
-  - {fileID: 342956090473913710, guid: 15aa4c3b96aee47ac85490f94d664280, type: 3}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

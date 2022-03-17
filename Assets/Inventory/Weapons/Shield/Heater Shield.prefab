@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2057028229636434756}
   - component: {fileID: 6354888486123366825}
   - component: {fileID: 655007332429546597}
+  - component: {fileID: -3454800326327414249}
   m_Layer: 5
   m_Name: Heater Shield
   m_TagString: Untagged
@@ -158,7 +159,7 @@ MonoBehaviour:
   itemIndex: 0
   dropCostReduction: 0
   skillCostReduction: 0
-  animationClip: {fileID: 0}
+  animationClip: {fileID: 7400000, guid: 1cdd9b222593543199ca7861d9856058, type: 2}
   consumable: 0
   isDrop: 0
   weapon: 1
@@ -184,6 +185,25 @@ MonoBehaviour:
   mainHand: 0
   offHand: 1
   twoHand: 0
+--- !u!95 &-3454800326327414249
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3414021550366687721}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4cabdf369e54044b7b3d2c061069320f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8766395993591242930
 GameObject:
   m_ObjectHideFlags: 0

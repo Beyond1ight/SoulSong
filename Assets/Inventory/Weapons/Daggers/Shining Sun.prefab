@@ -149,6 +149,7 @@ GameObject:
   - component: {fileID: 8458296721019938270}
   - component: {fileID: 3593020535477036851}
   - component: {fileID: 6988159428540091135}
+  - component: {fileID: 5865733392375982783}
   m_Layer: 5
   m_Name: Shining Sun
   m_TagString: Untagged
@@ -288,13 +289,13 @@ MonoBehaviour:
   itemType: Weapon
   itemValue: 0
   resaleValue: 0
-  numberHeld: 2
+  numberHeld: 0
   itemPower: 0
   stackable: 0
   itemIndex: 0
   dropCostReduction: 0
   skillCostReduction: 0
-  animationClip: {fileID: 0}
+  animationClip: {fileID: 7400000, guid: b60dfd913b6694126a77e749d132f587, type: 2}
   consumable: 0
   isDrop: 0
   weapon: 1
@@ -320,3 +321,22 @@ MonoBehaviour:
   mainHand: 1
   offHand: 1
   twoHand: 0
+--- !u!95 &5865733392375982783
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5083696226129547123}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 14ea8ab250a5a449b82b645c82e9fb86, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

@@ -1332,7 +1332,13 @@ public class BattleSystem : MonoBehaviour
 
                     if (!charUsingSkill)
                     {
+                        if (characterAttackIndex.GetComponent<Character>().weaponRight.GetComponent<Weapon>() != null)
+                        {
+                            HandleMeleeAttackAnim(characterAttacking, enemies[targetEnemy].gameObject, characterAttackIndex.GetComponent<Character>().weaponRight.GetComponent<Weapon>());
+                        }
+
                         enemy.TakePhysicalDamage(targetEnemy, characterAttackIndex.strength, characterAttackIndex.hitChance);
+
                     }
                     else
                     {
@@ -5793,6 +5799,11 @@ public class BattleSystem : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void HandleMeleeAttackAnim(GameObject _spawnLoc, GameObject _targetLoc, Weapon weapon)
+    {
+        battleAnimationsReference.StartMeleeAttackAnimation(_spawnLoc, _targetLoc, weapon);
     }
 
     public void HandleItemAnim(GameObject _spawnLoc, GameObject _targetLoc, Item _item)

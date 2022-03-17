@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 502338961156033954}
   - component: {fileID: 4775429350969249615}
   - component: {fileID: 1397153187241665155}
+  - component: {fileID: 5937593564885202651}
   m_Layer: 5
   m_Name: Masamune
   m_TagString: Untagged
@@ -158,7 +159,7 @@ MonoBehaviour:
   itemIndex: 0
   dropCostReduction: 0
   skillCostReduction: 0
-  animationClip: {fileID: 0}
+  animationClip: {fileID: 7400000, guid: b60dfd913b6694126a77e749d132f587, type: 2}
   consumable: 0
   isDrop: 0
   weapon: 1
@@ -184,6 +185,25 @@ MonoBehaviour:
   mainHand: 1
   offHand: 0
   twoHand: 1
+--- !u!95 &5937593564885202651
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3825148563387049743}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 14ea8ab250a5a449b82b645c82e9fb86, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &7195868663840015956
 GameObject:
   m_ObjectHideFlags: 0

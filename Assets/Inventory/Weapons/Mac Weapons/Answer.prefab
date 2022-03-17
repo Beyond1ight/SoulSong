@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3424721575629413782}
   - component: {fileID: 7726522259471703931}
   - component: {fileID: 4187234761876615863}
+  - component: {fileID: 1868141339277155299}
   m_Layer: 5
   m_Name: Answer
   m_TagString: Untagged
@@ -158,7 +159,7 @@ MonoBehaviour:
   itemIndex: 0
   dropCostReduction: 1
   skillCostReduction: 0
-  animationClip: {fileID: 0}
+  animationClip: {fileID: 7400000, guid: 1cdd9b222593543199ca7861d9856058, type: 2}
   consumable: 0
   isDrop: 0
   weapon: 1
@@ -184,6 +185,25 @@ MonoBehaviour:
   mainHand: 1
   offHand: 0
   twoHand: 1
+--- !u!95 &1868141339277155299
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2047463160281921339}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4cabdf369e54044b7b3d2c061069320f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &5378275230932670048
 GameObject:
   m_ObjectHideFlags: 0
