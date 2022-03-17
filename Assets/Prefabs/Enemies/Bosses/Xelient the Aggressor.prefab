@@ -65,29 +65,31 @@ MonoBehaviour:
   maxHealth: 1000
   currentMana: 500
   maxMana: 500
-  haste: 8
+  haste: 30
   experiencePoints: 500
   choiceAttack: 0
   damageTotal: 0
   hitChance: 99
   poisonDmg: 0
   lvl: 5
-  physicalDamage: 30
+  strength: 20
+  intelligence: 10
   groupIndex: -1
   moneyLootAmount: 1000
   sleepTimer: 0
   confuseTimer: 0
   deathTimer: 3
   drops:
-  - {fileID: 11400000, guid: 3592519a364064da4bc7bbbebcbed1f6, type: 2}
-  - {fileID: 11400000, guid: eaf944b95521b408790e43b275c3e83f, type: 2}
-  - {fileID: 11400000, guid: f925fe39fda49454abd0dfe3fec0ced2, type: 2}
+  - {fileID: -7424321726332762986, guid: ff5ada3450a564f1bb7faf34210022e1, type: 3}
+  - {fileID: 75677074133245748, guid: 3be602a3cc95143ec96f22e804f02c79, type: 3}
   isPoisoned: 0
   isConfused: 0
   isAsleep: 0
   deathInflicted: 0
   inflicted: 0
-  deathTimerPopup: {fileID: 0}
+  isProtected: 0
+  isEncompassed: 0
+  isHastened: 0
   physicalDefense: 25
   dodgeChance: 5
   fireDefense: 1
@@ -100,6 +102,7 @@ MonoBehaviour:
   sleepDefense: 100
   confuseDefense: 100
   deathDefense: 100
+  instantDeathDefense: 0
   fireDropsLevel: 0
   iceDropsLevel: 0
   lightningDropsLevel: 0
@@ -115,6 +118,7 @@ MonoBehaviour:
   enemyPos: {fileID: 1037391276048387307}
   worldZone: SampleScene
   currentBattlePos: {x: 0, y: 0, z: 0}
+  enemyContext: {fileID: 0}
 --- !u!50 &2904692726886898307
 Rigidbody2D:
   serializedVersion: 4

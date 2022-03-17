@@ -347,24 +347,47 @@ public class GameData
         }
 
         // Equipped Weapons
-        grieveWeaponRightEquip = Engine.e.party[0].GetComponent<Character>().weaponRight.GetComponent<Weapon>().itemName;
-        grieveWeaponLeftEquip = Engine.e.party[0].GetComponent<Character>().weaponLeft.GetComponent<Weapon>().itemName;
+        if (Engine.e.party[0].GetComponent<Character>().weaponRight != null)
+        {
+            grieveWeaponRightEquip = Engine.e.party[0].GetComponent<Character>().weaponRight.GetComponent<Weapon>().itemName;
+        }
+        if (Engine.e.party[0].GetComponent<Character>().weaponLeft != null)
+        {
+            grieveWeaponLeftEquip = Engine.e.party[0].GetComponent<Character>().weaponLeft.GetComponent<Weapon>().itemName;
+        }
 
         if (Engine.e.party[1] != null)
         {
-            macWeaponRightEquip = Engine.e.party[1].GetComponent<Character>().weaponRight.GetComponent<Weapon>().itemName;
-            macWeaponLeftEquip = Engine.e.party[1].GetComponent<Character>().weaponLeft.GetComponent<Weapon>().itemName;
-
+            if (Engine.e.party[1].GetComponent<Character>().weaponRight != null)
+            {
+                macWeaponRightEquip = Engine.e.party[1].GetComponent<Character>().weaponRight.GetComponent<Weapon>().itemName;
+            }
+            if (Engine.e.party[1].GetComponent<Character>().weaponLeft != null)
+            {
+                macWeaponLeftEquip = Engine.e.party[1].GetComponent<Character>().weaponLeft.GetComponent<Weapon>().itemName;
+            }
         }
         if (Engine.e.party[2] != null)
         {
-            fieldWeaponRightEquip = Engine.e.party[2].GetComponent<Character>().weaponRight.GetComponent<Weapon>().itemName;
-            fieldWeaponLeftEquip = Engine.e.party[2].GetComponent<Character>().weaponLeft.GetComponent<Weapon>().itemName;
+            if (Engine.e.party[2].GetComponent<Character>().weaponRight != null)
+            {
+                fieldWeaponRightEquip = Engine.e.party[2].GetComponent<Character>().weaponRight.GetComponent<Weapon>().itemName;
+            }
+            if (Engine.e.party[2].GetComponent<Character>().weaponLeft != null)
+            {
+                fieldWeaponLeftEquip = Engine.e.party[2].GetComponent<Character>().weaponLeft.GetComponent<Weapon>().itemName;
+            }
         }
         if (Engine.e.party[3] != null)
         {
-            riggsWeaponRightEquip = Engine.e.party[3].GetComponent<Character>().weaponRight.GetComponent<Weapon>().itemName;
-            riggsWeaponLeftEquip = Engine.e.party[3].GetComponent<Character>().weaponLeft.GetComponent<Weapon>().itemName;
+            if (Engine.e.party[3].GetComponent<Character>().weaponRight != null)
+            {
+                riggsWeaponRightEquip = Engine.e.party[3].GetComponent<Character>().weaponRight.GetComponent<Weapon>().itemName;
+            }
+            if (Engine.e.party[3].GetComponent<Character>().weaponLeft != null)
+            {
+                riggsWeaponLeftEquip = Engine.e.party[3].GetComponent<Character>().weaponLeft.GetComponent<Weapon>().itemName;
+            }
         }
 
         // Equipped Chest Armor

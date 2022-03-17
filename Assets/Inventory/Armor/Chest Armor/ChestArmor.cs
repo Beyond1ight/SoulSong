@@ -14,6 +14,7 @@ public class ChestArmor : Item
     public float lightningDefense;
     public float shadowDefense;
     public float physicalAttackBonus, fireAttackBonus, waterAttackBonus, lightningAttackBonus, shadowAttackBonus, iceAttackBonus;
+    public float poisonDefense, deathDefense, confuseDefense, sleepDefense;
 
     // CHANGE METHOD NAME
     public void DisplayArmorEquipCharacterTargets()

@@ -218,7 +218,7 @@ MonoBehaviour:
   intelligenceBase: 17
   dodgeChanceBase: 10
   critChanceBase: 10
-  hasteBase: 50
+  hasteBase: 46
   firePhysicalAttackBonusBase: 0
   icePhysicalAttackBonusBase: 0
   lightningPhysicalAttackBonusBase: 0

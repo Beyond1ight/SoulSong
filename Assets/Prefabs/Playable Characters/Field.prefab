@@ -222,11 +222,11 @@ MonoBehaviour:
   maxHealthBase: 80
   maxManaBase: 50
   maxEnergyBase: 36
-  strengthBase: 13
+  strengthBase: 14
   intelligenceBase: 19
   dodgeChanceBase: 15
   critChanceBase: 10
-  hasteBase: 15
+  hasteBase: 60
   firePhysicalAttackBonusBase: 0
   icePhysicalAttackBonusBase: 0
   lightningPhysicalAttackBonusBase: 0
@@ -238,10 +238,10 @@ MonoBehaviour:
   lightningDefenseBase: 1
   waterDefenseBase: 1
   shadowDefenseBase: 3
-  holyDefenseBase: 0
-  sleepDefenseBase: 1
+  holyDefenseBase: 1
+  sleepDefenseBase: 0.5
   poisonDefenseBase: 2
-  confuseDefenseBase: 1
+  confuseDefenseBase: 1.5
   deathDefenseBase: 0
   drops:
   - {fileID: 0}
@@ -312,7 +312,7 @@ MonoBehaviour:
   canUseShadowDrops: 1
   canUseHolyDrops: 0
   weaponRight: {fileID: 429192258145557918, guid: b0ce1421d18cc4821b3a5e9374928554, type: 3}
-  weaponLeft: {fileID: 0}
+  weaponLeft: {fileID: 6988159428540091135, guid: 10d0d3dcd429143899705eca5756f3f9, type: 3}
   chestArmor: {fileID: 3137854586391407116, guid: 552a109bd39414d8180a998df500f23e, type: 3}
   legArmor: {fileID: 0}
   accessory1: {fileID: 0}

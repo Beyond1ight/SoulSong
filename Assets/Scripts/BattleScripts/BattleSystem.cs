@@ -5445,6 +5445,11 @@ public class BattleSystem : MonoBehaviour
                 activeParty.activeParty[0].GetComponent<SpriteRenderer>().color = Color.grey;
 
             }
+
+            if (char1Ready)
+            {
+                DeactivateChar1MenuButtons();
+            }
         }
 
         if (activeParty.activeParty[0].GetComponent<Character>().isPoisoned)

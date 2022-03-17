@@ -2352,6 +2352,7 @@ public class Engine : MonoBehaviour
             partyInventoryReference.AddItemToInventory(gameInventory[29]);
             partyInventoryReference.AddItemToInventory(gameInventory[33]);
             partyInventoryReference.AddItemToInventory(gameInventory[34]);
+            partyInventoryReference.AddItemToInventory(gameInventory[35]);
 
             // partyInventoryReference.AddItemToInventory(gameInventory[2]);
             //partyInventoryReference.AddItemToInventory(gameInventory[3]);

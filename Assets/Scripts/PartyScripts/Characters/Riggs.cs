@@ -57,6 +57,11 @@ public class Riggs : Character
         shadowDefense -= chestArmor.GetComponent<ChestArmor>().shadowDefense;
         iceDefense -= chestArmor.GetComponent<ChestArmor>().iceDefense;
 
+        sleepDefense -= chestArmor.GetComponent<ChestArmor>().sleepDefense;
+        poisonDefense -= chestArmor.GetComponent<ChestArmor>().poisonDefense;
+        confuseDefense -= chestArmor.GetComponent<ChestArmor>().confuseDefense;
+        deathDefense -= chestArmor.GetComponent<ChestArmor>().deathDefense;
+
         fireDropAttackBonus -= chestArmor.GetComponent<ChestArmor>().fireAttackBonus;
         waterDropAttackBonus -= chestArmor.GetComponent<ChestArmor>().waterAttackBonus;
         lightningDropAttackBonus -= chestArmor.GetComponent<ChestArmor>().lightningAttackBonus;
@@ -229,6 +234,26 @@ public class Riggs : Character
         }
         else
         {
+            if (weaponRight != null && weaponRight.GetComponent<Weapon>().twoHand)
+            {
+                // Resetting Stats To Base Values
+                strength -= weaponRight.GetComponent<Weapon>().strengthBonus;
+                intelligence -= weaponRight.GetComponent<Weapon>().intelligenceBonus;
+                firePhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().fireAttack;
+                waterPhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().waterAttack;
+                lightningPhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().lightningAttack;
+                shadowPhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().shadowAttack;
+                icePhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().iceAttack;
+
+                haste += weaponRight.GetComponent<Weapon>().weight;
+
+                Engine.e.partyInventoryReference.AddItemToInventory(weaponRight);
+
+                Engine.e.charEquippedWeaponRight[3] = null;
+
+                weaponRight = null;
+            }
+
             if (weaponLeft != null)
             {
                 // Resetting Stats To Base Values
@@ -298,6 +323,11 @@ public class Riggs : Character
         shadowDefense -= chestArmor.GetComponent<ChestArmor>().shadowDefense;
         iceDefense -= chestArmor.GetComponent<ChestArmor>().iceDefense;
 
+        sleepDefense -= chestArmor.GetComponent<ChestArmor>().sleepDefense;
+        poisonDefense -= chestArmor.GetComponent<ChestArmor>().poisonDefense;
+        confuseDefense -= chestArmor.GetComponent<ChestArmor>().confuseDefense;
+        deathDefense -= chestArmor.GetComponent<ChestArmor>().deathDefense;
+
         fireDropAttackBonus -= chestArmor.GetComponent<ChestArmor>().fireAttackBonus;
         waterDropAttackBonus -= chestArmor.GetComponent<ChestArmor>().waterAttackBonus;
         lightningDropAttackBonus -= chestArmor.GetComponent<ChestArmor>().lightningAttackBonus;
@@ -324,6 +354,11 @@ public class Riggs : Character
         shadowDefense += chestArmor.GetComponent<ChestArmor>().shadowDefense;
         iceDefense += chestArmor.GetComponent<ChestArmor>().iceDefense;
         skillCostReduction += chestArmor.GetComponent<ChestArmor>().skillCostReduction;
+
+        sleepDefense += chestArmor.GetComponent<ChestArmor>().sleepDefense;
+        poisonDefense += chestArmor.GetComponent<ChestArmor>().poisonDefense;
+        confuseDefense += chestArmor.GetComponent<ChestArmor>().confuseDefense;
+        deathDefense += chestArmor.GetComponent<ChestArmor>().deathDefense;
 
         fireDropAttackBonus += chestArmor.GetComponent<ChestArmor>().fireAttackBonus;
         waterDropAttackBonus += chestArmor.GetComponent<ChestArmor>().waterAttackBonus;

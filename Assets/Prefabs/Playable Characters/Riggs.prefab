@@ -101,7 +101,7 @@ MonoBehaviour:
   maxHealth: 200
   currentMana: 50
   maxMana: 50
-  currentEnergy: 25
+  currentEnergy: 24
   maxEnergy: 20
   haste: 42
   experiencePoints: 0
@@ -183,11 +183,11 @@ MonoBehaviour:
   maxHealthBase: 177
   maxManaBase: 52
   maxEnergyBase: 24
-  strengthBase: 0
-  intelligenceBase: 0
+  strengthBase: 23
+  intelligenceBase: 20
   dodgeChanceBase: 12
   critChanceBase: 10
-  hasteBase: 15
+  hasteBase: 42
   firePhysicalAttackBonusBase: 0
   icePhysicalAttackBonusBase: 0
   lightningPhysicalAttackBonusBase: 0
@@ -199,10 +199,10 @@ MonoBehaviour:
   lightningDefenseBase: 2
   waterDefenseBase: 2
   shadowDefenseBase: 2
-  holyDefenseBase: 0
-  sleepDefenseBase: 1
+  holyDefenseBase: 2
+  sleepDefenseBase: 0.5
   poisonDefenseBase: 1
-  confuseDefenseBase: 1
+  confuseDefenseBase: 1.5
   deathDefenseBase: 0
   drops:
   - {fileID: 0}

@@ -951,6 +951,7 @@ public class Character : MonoBehaviour
                             isAsleep = true;
                             sleepTimer = 0;
                             SetBattleDamagePopupText("Sleeping!", Color.white);
+
                         }
                         else
                         {

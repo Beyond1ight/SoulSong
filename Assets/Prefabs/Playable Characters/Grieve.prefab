@@ -139,11 +139,11 @@ MonoBehaviour:
   lvl: 1
   currentHealth: 100
   maxHealth: 100
-  currentMana: 35
+  currentMana: 25
   maxMana: 35
   currentEnergy: 30
   maxEnergy: 30
-  haste: 49
+  haste: 70
   experiencePoints: 0
   levelUpReq: 100
   strength: 15
@@ -198,7 +198,7 @@ MonoBehaviour:
   inflicted: 0
   isProtected: 0
   isEncompassed: 0
-  isHastened: 0
+  isHastened: 1
   availableSkillPoints: 0
   healthOffset: 0
   manaOffset: -30
@@ -227,7 +227,7 @@ MonoBehaviour:
   intelligenceBase: 14
   dodgeChanceBase: 10
   critChanceBase: 15
-  hasteBase: 50
+  hasteBase: 56
   firePhysicalAttackBonusBase: 0
   icePhysicalAttackBonusBase: 0
   lightningPhysicalAttackBonusBase: 0
@@ -256,7 +256,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 4561571794371166769, guid: aa424de30ac5443eb81c992bf59a844b, type: 3}
-  - {fileID: 0}
+  - {fileID: 342956090473913710, guid: 15aa4c3b96aee47ac85490f94d664280, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -313,7 +313,7 @@ MonoBehaviour:
   canUseShadowDrops: 1
   canUseHolyDrops: 1
   weaponRight: {fileID: 3402342846047589264, guid: 3df1b49a15c0a4fa7b1c86c96286159f, type: 3}
-  weaponLeft: {fileID: 655007332429546597, guid: 6c7963e9c1f1245029f5b330911a3e95, type: 3}
+  weaponLeft: {fileID: 0}
   chestArmor: {fileID: 3137854586391407116, guid: 552a109bd39414d8180a998df500f23e, type: 3}
   legArmor: {fileID: 0}
   accessory1: {fileID: 0}
