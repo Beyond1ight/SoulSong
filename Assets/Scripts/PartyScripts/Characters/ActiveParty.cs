@@ -32,7 +32,6 @@ public class ActiveParty : MonoBehaviour
                     {
                         activeParty[j] = gameManager.party[j];
                         Engine.e.party[j].GetComponent<Character>().isInActiveParty = true;
-
                         if (activeParty[1] != null)
                         {
                             activePartyMember2.GetComponent<APFollow>().SetSprite(1);
@@ -159,7 +158,6 @@ public class ActiveParty : MonoBehaviour
 
     public void InstantiateBattleLeader(int index)
     {
-
         activeParty[0].GetComponent<Character>().isInActiveParty = false;
         activeParty[0] = Engine.e.party[index];
         activeParty[0].GetComponent<Character>().isInActiveParty = true;
@@ -192,6 +190,7 @@ public class ActiveParty : MonoBehaviour
 
 
     }
+        
     public void InstantiateBattleActiveParty3(int index)
     {
 
