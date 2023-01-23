@@ -183,8 +183,8 @@ MonoBehaviour:
   maxHealthBase: 177
   maxManaBase: 52
   maxEnergyBase: 24
-  strengthBase: 23
-  intelligenceBase: 20
+  strengthBase: 20
+  intelligenceBase: 14
   dodgeChanceBase: 12
   critChanceBase: 10
   hasteBase: 42
@@ -200,9 +200,9 @@ MonoBehaviour:
   waterDefenseBase: 2
   shadowDefenseBase: 2
   holyDefenseBase: 2
-  sleepDefenseBase: 0.5
+  sleepDefenseBase: 1
   poisonDefenseBase: 1
-  confuseDefenseBase: 1.5
+  confuseDefenseBase: 1
   deathDefenseBase: 0
   drops:
   - {fileID: 0}

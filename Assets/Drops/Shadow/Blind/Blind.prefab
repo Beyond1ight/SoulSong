@@ -147,6 +147,8 @@ GameObject:
   - component: {fileID: 9129207775515824837}
   - component: {fileID: 4238093884713600177}
   - component: {fileID: 4578763779470949902}
+  - component: {fileID: 6056226606670618592}
+  - component: {fileID: -3529895131193459805}
   m_Layer: 5
   m_Name: Blind
   m_TagString: Untagged
@@ -281,7 +283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a12f0bf76724406e930c5dad2c2677b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drop: {fileID: 11400000, guid: f925fe39fda49454abd0dfe3fec0ced2, type: 2}
+  drop: {fileID: 0}
   itemName: Blind
   itemDescription: Inflicts Confuse on the target.
   itemType: Drop
@@ -291,14 +293,60 @@ MonoBehaviour:
   itemPower: 0
   stackable: 1
   itemIndex: 3
-  anim: {fileID: 2918370110406061600, guid: dc2ba961ee0a5410facb4c25d6a966f1, type: 3}
   dropCostReduction: 0
   skillCostReduction: 0
+  animationClip: {fileID: 0}
   consumable: 0
   isDrop: 1
   weapon: 0
   chestArmor: 0
+  accessory: 0
   useableOutOfBattle: 1
+  targetAll: 0
+--- !u!114 &6056226606670618592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2481041936030337747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fe3b0f5cbfbd4cdf97b8641e2e88eab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropType: Shadow
+  dropName: Blind
+  dropDescription: Confuse
+  dropCost: 25
+  dropPower: 0
+  dotDmg: 0
+  experiencePoints: 20
+  dps: 1
+  support: 0
+  targetAll: 0
+  dropValue: 0
+  dropIndex: 0
+  isKnown: 0
+--- !u!95 &-3529895131193459805
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2481041936030337747}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 28282db1e2acb427e93aa33e4e099b70, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &5218330032137352721
 GameObject:
   m_ObjectHideFlags: 0

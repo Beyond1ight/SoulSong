@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 5729014339959868311}
   - component: {fileID: 855756244121263587}
   - component: {fileID: 1061709661092046684}
+  - component: {fileID: -912158237834329040}
+  - component: {fileID: -3602092745756455759}
   m_Layer: 5
   m_Name: Bio
   m_TagString: Untagged
@@ -147,7 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a12f0bf76724406e930c5dad2c2677b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drop: {fileID: 11400000, guid: eaf944b95521b408790e43b275c3e83f, type: 2}
+  drop: {fileID: 0}
   itemName: Bio
   itemDescription: Inflicts Poison on the target.
   itemType: Drop
@@ -157,14 +159,60 @@ MonoBehaviour:
   itemPower: 0
   stackable: 1
   itemIndex: 1
-  anim: {fileID: 2918370110406061600, guid: dc2ba961ee0a5410facb4c25d6a966f1, type: 3}
   dropCostReduction: 0
   skillCostReduction: 0
+  animationClip: {fileID: 0}
   consumable: 0
   isDrop: 1
   weapon: 0
   chestArmor: 0
+  accessory: 0
   useableOutOfBattle: 1
+  targetAll: 0
+--- !u!95 &-912158237834329040
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395716026516640641}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 28282db1e2acb427e93aa33e4e099b70, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-3602092745756455759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395716026516640641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fe3b0f5cbfbd4cdf97b8641e2e88eab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dropType: Shadow
+  dropName: Bio
+  dropDescription: Poison
+  dropCost: 20
+  dropPower: 0
+  dotDmg: 10
+  experiencePoints: 15
+  dps: 1
+  support: 0
+  targetAll: 0
+  dropValue: 0
+  dropIndex: 10
+  isKnown: 1
 --- !u!1 &2786037372692425769
 GameObject:
   m_ObjectHideFlags: 0

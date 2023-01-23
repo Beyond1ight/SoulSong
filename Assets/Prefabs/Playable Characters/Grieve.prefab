@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 10292a7c138744a09ae2ee3e7b07a2ca, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -191,11 +191,11 @@ MonoBehaviour:
   isLeader: 1
   isPoisoned: 0
   isAsleep: 0
-  isConfused: 0
+  isConfused: 1
   miterInflicted: 0
   haltInflicted: 0
   deathInflicted: 0
-  inflicted: 0
+  inflicted: 1
   isProtected: 0
   isEncompassed: 0
   isHastened: 0

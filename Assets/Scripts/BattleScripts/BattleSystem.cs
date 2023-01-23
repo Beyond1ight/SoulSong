@@ -1292,7 +1292,7 @@ public class BattleSystem : MonoBehaviour
 
             if (Engine.e.battleModeActive && !activeParty.activeParty[index].GetComponent<Character>().isConfused)
             {
-                //    ActiveCheckNext();
+                //ActiveCheckNext();
                 //state = BattleState.ATBCHECK;
 
             }
@@ -1724,6 +1724,7 @@ public class BattleSystem : MonoBehaviour
         GameObject _characterLoc = null;
         int target = 0;
         Character _characterAttacking = null;
+        GameObject _charTargetLoc = null;
 
         if (currentInQueue == BattleState.CONFCHAR1)
         {
@@ -1762,6 +1763,7 @@ public class BattleSystem : MonoBehaviour
             physicalAttack = true;
             charAttacking = true;
             targetCheck = true;
+            //animExists = true;
 
         }
         else
@@ -1781,17 +1783,32 @@ public class BattleSystem : MonoBehaviour
 
                 if (lastDropChoice != null)
                 {
-                    //HandleDropAnim(_characterLoc, lastDropChoice);
-
                     if (attackingTeam)
                     {
                         physicalAttack = false;
                         activeParty.activeParty[target].GetComponent<Character>().DropEffect(lastDropChoice);
+
+                        if (target == 0)
+                        {
+                            _charTargetLoc = Engine.e.activeParty.gameObject;
+                        }
+                        if (target == 1)
+                        {
+                            _charTargetLoc = Engine.e.activePartyMember2.gameObject;
+                        }
+                        if (target == 2)
+                        {
+                            _charTargetLoc = Engine.e.activePartyMember3.gameObject;
+                        }
+
+                        HandleDropAnim(_characterLoc, _charTargetLoc, lastDropChoice);
+
                     }
                     else
                     {
 
                         enemies[target].gameObject.GetComponent<Enemy>().DropEffect(lastDropChoice);
+                        HandleDropAnim(_characterLoc, enemies[target].gameObject, lastDropChoice);
 
                         if (enemies[target].gameObject.GetComponent<Enemy>().currentHealth <= 0)
                         {
@@ -1808,10 +1825,12 @@ public class BattleSystem : MonoBehaviour
 
                 confuseAttack = false;
                 Debug.Log("Cost: " + lastDropChoice.dropCost);
+                Debug.Log("Drop Name: " + lastDropChoice.dropName);
 
                 activeParty.activeParty[index].GetComponent<Character>().currentMana -= Mathf.Round(lastDropChoice.dropCost
             - (lastDropChoice.dropCost * activeParty.activeParty[index].GetComponent<Character>().dropCostReduction / 100) + 0.45f);
 
+                //                animExists = true;
                 confuseAttack = false;
             }
             else
