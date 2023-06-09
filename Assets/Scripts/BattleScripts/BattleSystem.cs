@@ -277,7 +277,7 @@ public class BattleSystem : MonoBehaviour
         {
             if (state == currentInQueue && state != BattleState.ATBCHECK)
             {
-                state = BattleState.ATBCHECK;
+                state = BattleState.ATBCHECK; 
             }
 
             if (!battleQueue.Contains(BattleState.CHAR1TURN) && !battleQueue.Contains(BattleState.CONFCHAR1))
@@ -1831,7 +1831,6 @@ public class BattleSystem : MonoBehaviour
             - (lastDropChoice.dropCost * activeParty.activeParty[index].GetComponent<Character>().dropCostReduction / 100) + 0.45f);
 
                 //                animExists = true;
-                confuseAttack = false;
             }
             else
             {
@@ -2406,7 +2405,7 @@ public class BattleSystem : MonoBehaviour
 
                 isDead = Engine.e.activeParty.activeParty[target].GetComponent<Character>().TakePhysicalDamage(target, damageTotal);
 
-
+                animExists = true;
                 if (dodgedAttack == true)
                 {
                     dodgedAttack = false;

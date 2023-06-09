@@ -11,11 +11,12 @@ public class Grid : MonoBehaviour
 {
     public AbilityStatNode[] nodes;
     public GameObject[] connectionLines;
+    public GameObject[] classProgressionBars;
     public bool gridDisplayed, abilitiesListDisplayed, grieveScreen, macScreen, fieldScreen, riggsScreen;
     public int grievePosition, macPosition, fieldPosition, riggsPosition;
     public GameObject cursor, helpReference, helpTextParentObj, abilitiesList, tier2Path;
     public CinemachineVirtualCamera gridPerspective, centerOfGridPerspective;
-    public GameObject[] dropsButtons, skillButtons, charPaths;
+    public GameObject[] dropsButtons, skillButtons, classPaths;
 
 
     private void Start()
@@ -30,22 +31,38 @@ public class Grid : MonoBehaviour
         fieldScreen = false;
         riggsScreen = false;
 
+        for (int i = 0; i < Engine.e.charClasses.Length; i++)
+        {
+            if (Engine.e.playableCharacters[0].characterClass[i] == true && Engine.e.playableCharacters[0].classEXP[i] == 100f)
+            {
+                Engine.e.playableCharacters[0].canSelectNewClass = true;
+            }
+            else
+            {
+                Engine.e.playableCharacters[0].canSelectNewClass = false;
+            }
+        }
+
+        for (int i = 0; i < classProgressionBars.Length; i++)
+        {
+            classProgressionBars[i].GetComponent<Slider>().value = Engine.e.playableCharacters[0].classEXP[i];
+        }
+
         for (int i = 0; i < nodes.Length; i++)
         {
-            if (nodes[i].node != null)
+
+            if (nodes[i].grieveUnlocked)
             {
-                if (nodes[i].grieveUnlocked)
+                for (int k = 0; k < nodes[i].connectionLines.Length; k++)
                 {
-                    for (int k = 0; k < nodes[i].connectionLines.Length; k++)
+                    if (nodes[i].connectionLines[k] != null)
                     {
-                        if (nodes[i].connectionLines[k] != null)
-                        {
-                            nodes[i].connectionLines[k].GetComponent<SpriteShapeRenderer>().color = Color.cyan;
-                        }
+                        nodes[i].connectionLines[k].GetComponent<SpriteShapeRenderer>().color = Color.cyan;
                     }
                 }
             }
         }
+
 
         for (int i = 0; i < dropsButtons.Length; i++)
         {
@@ -116,6 +133,23 @@ public class Grid : MonoBehaviour
         fieldScreen = false;
         riggsScreen = false;
 
+        for (int i = 0; i < Engine.e.charClasses.Length; i++)
+        {
+            if (Engine.e.playableCharacters[1].characterClass[i] == true && Engine.e.playableCharacters[1].classEXP[i] == 100f)
+            {
+                Engine.e.playableCharacters[1].canSelectNewClass = true;
+            }
+            else
+            {
+                Engine.e.playableCharacters[1].canSelectNewClass = false;
+            }
+        }
+
+        for (int i = 0; i < classProgressionBars.Length; i++)
+        {
+            classProgressionBars[i].GetComponent<Slider>().value = Engine.e.playableCharacters[1].classEXP[i];
+        }
+
         for (int i = 0; i < nodes.Length; i++)
         {
             if (nodes[i].node != null)
@@ -180,6 +214,23 @@ public class Grid : MonoBehaviour
         fieldScreen = true;
         riggsScreen = false;
 
+        for (int i = 0; i < Engine.e.charClasses.Length; i++)
+        {
+            if (Engine.e.playableCharacters[2].characterClass[i] == true && Engine.e.playableCharacters[2].classEXP[i] == 100f)
+            {
+                Engine.e.playableCharacters[2].canSelectNewClass = true;
+            }
+            else
+            {
+                Engine.e.playableCharacters[2].canSelectNewClass = false;
+            }
+        }
+
+        for (int i = 0; i < classProgressionBars.Length; i++)
+        {
+            classProgressionBars[i].GetComponent<Slider>().value = Engine.e.playableCharacters[2].classEXP[i];
+        }
+
         for (int i = 0; i < nodes.Length; i++)
         {
             if (nodes[i].node != null)
@@ -243,6 +294,23 @@ public class Grid : MonoBehaviour
         macScreen = false;
         fieldScreen = false;
         riggsScreen = true;
+
+        for (int i = 0; i < Engine.e.charClasses.Length; i++)
+        {
+            if (Engine.e.playableCharacters[3].characterClass[i] == true && Engine.e.playableCharacters[3].classEXP[i] == 100f)
+            {
+                Engine.e.playableCharacters[3].canSelectNewClass = true;
+            }
+            else
+            {
+                Engine.e.playableCharacters[3].canSelectNewClass = false;
+            }
+        }
+
+        for (int i = 0; i < classProgressionBars.Length; i++)
+        {
+            classProgressionBars[i].GetComponent<Slider>().value = Engine.e.playableCharacters[3].classEXP[i];
+        }
 
         for (int i = 0; i < nodes.Length; i++)
         {
@@ -372,9 +440,9 @@ public class Grid : MonoBehaviour
     {
         gridDisplayed = false;
 
-        for (int i = 1; i < charPaths.Length; i++)
+        for (int i = 1; i < classPaths.Length; i++)
         {
-            charPaths[i].SetActive(false);
+            classPaths[i].SetActive(false);
         }
 
         for (int i = 0; i < connectionLines.Length; i++)
@@ -388,35 +456,41 @@ public class Grid : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < nodes.Length; i++)
+        for (int i = 0; i < classProgressionBars.Length; i++)
         {
-
-            nodes[i].GetComponent<SpriteRenderer>().color = Color.red;
-            nodes[i].grieveUnlocked = false;
-            nodes[i].macUnlocked = false;
-            nodes[i].fieldUnlocked = false;
-            nodes[i].riggsUnlocked = false;
-
-            if (nodes[i].nodeIndex == 0 || nodes[i].nodeIndex == -1)
-                nodes[i].nodeIndex = i;
+            classProgressionBars[i].GetComponent<Slider>().value = 0;
         }
 
-        nodes[0].grieveUnlocked = true;
-        nodes[1].macUnlocked = true;
-        nodes[2].fieldUnlocked = true;
-        nodes[3].riggsUnlocked = true;
+        for (int i = 0; i < nodes.Length; i++)
+        {
+            if (nodes[i] != null)
+            {
+                nodes[i].GetComponent<SpriteRenderer>().color = Color.red;
+                nodes[i].grieveUnlocked = false;
+                nodes[i].macUnlocked = false;
+                nodes[i].fieldUnlocked = false;
+                nodes[i].riggsUnlocked = false;
 
-        grievePosition = 0;
-        macPosition = 1;
-        fieldPosition = 2;
-        riggsPosition = 3;
+                if (nodes[i].nodeIndex == 0 || nodes[i].nodeIndex == -1)
+                    nodes[i].nodeIndex = i;
+            }
+        }
+        // nodes[0].grieveUnlocked = true;
+        //nodes[1].macUnlocked = true;
+        //nodes[2].fieldUnlocked = true;
+        // nodes[3].riggsUnlocked = true;
+
+        //grievePosition = 0;
+        // macPosition = 1;
+        // fieldPosition = 2;
+        // riggsPosition = 3;
 
         // Not sure why this needs to happen, but it does
         Engine.e.gridReference.gameObject.SetActive(true);
         Engine.e.gridReference.gameObject.SetActive(false);
 
-        gridPerspective.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 150f;
-        centerOfGridPerspective.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 2000f;
+        gridPerspective.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 50000f;
+        centerOfGridPerspective.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 100000;
 
     }
 

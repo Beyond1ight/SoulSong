@@ -13,7 +13,7 @@ public class GridCursorMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.MovePosition(rb.position + movement.normalized * speed * Time.fixedDeltaTime);
+        rb.MovePosition(rb.position + (movement * 3) * speed * Time.fixedDeltaTime);
 
     }
 

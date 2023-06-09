@@ -25,7 +25,6 @@ public class Engine : MonoBehaviour
     public bool battleModeActive = true;
     public bool aboveLayer = false;
     public bool autoSaveReady, recentAutoSave = false;
-
     // Stat Curves
     [SerializeField]
     AnimationCurve healthCurve, manaCurve, energyCurve, strengthCurve, intelligenceCurve;
@@ -63,6 +62,8 @@ public class Engine : MonoBehaviour
     public TextMeshProUGUI enemyLootReferenceG, enemyLootReferenceExp, battleHelp;
     Vector3 startingPos;
     public System.Random randomIndex;
+    public CharacterClass charClassReference;
+    public string[] charClasses;
 
     // Shopping
     public bool selling = false;
@@ -117,6 +118,7 @@ public class Engine : MonoBehaviour
         gridReference.SetupGrid();
 
         SetParty();
+        SetClasses();
         //abilityScreenReference.ClearNodeUnlocked();
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
@@ -160,6 +162,7 @@ public class Engine : MonoBehaviour
         partyInventoryReference.accessories = new Accessory[partyInventoryReference.accessoryInventorySlots.Length];
 
         SetInventoryArrayPositions();
+        ResetCharClasses();
 
         charEquippedWeaponRight = new Item[playableCharacters.Length];
         charEquippedWeaponLeft = new Item[playableCharacters.Length];
@@ -172,6 +175,10 @@ public class Engine : MonoBehaviour
 
         // Grieve
         playableCharacters[0].characterName = "Grieve";
+        playableCharacters[0].characterClass[0] = true;
+        playableCharacters[0].currentClass = "Soldier";
+        playableCharacters[0].classEXP[0] = 1f;
+
         playableCharacters[0].lvl = 1;
         playableCharacters[0].healthOffset = 0f;
         playableCharacters[0].manaOffset = -30f;
@@ -356,6 +363,10 @@ public class Engine : MonoBehaviour
 
         // Mac
         playableCharacters[1].characterName = "Mac";
+        playableCharacters[1].currentClass = "Mage";
+        playableCharacters[1].characterClass[4] = true;
+        playableCharacters[1].classEXP[4] = 1f;
+
         playableCharacters[1].lvl = 1;
         playableCharacters[1].healthOffset = -20f;
         playableCharacters[1].manaOffset = 20f;
@@ -498,6 +509,10 @@ public class Engine : MonoBehaviour
 
         //Field
         playableCharacters[2].characterName = "Field";
+        playableCharacters[2].currentClass = "Thief";
+        playableCharacters[2].characterClass[3] = true;
+        playableCharacters[2].classEXP[3] = 1f;
+
         playableCharacters[2].lvl = 3;
         playableCharacters[2].healthOffset = -20f;
         playableCharacters[2].manaOffset = 0f;
@@ -638,6 +653,11 @@ public class Engine : MonoBehaviour
 
         //Riggs
         playableCharacters[3].characterName = "Riggs";
+        playableCharacters[3].currentClass = "Rōnin";
+        playableCharacters[3].characterClass[6] = true;
+        playableCharacters[3].classEXP[6] = 1f;
+
+
         playableCharacters[3].lvl = 5;
         playableCharacters[3].healthOffset = 30f;
         playableCharacters[3].manaOffset = 0f;
@@ -820,13 +840,13 @@ public class Engine : MonoBehaviour
                 //                gameDrops[15].isKnown = true;
                 gameSkills[5].isKnown = true;
                 playableCharacters[1].activePartyIndex = 1;
-                gridReference.charPaths[1].SetActive(true);
+                gridReference.classPaths[3].SetActive(true);
 
             }
             if (party[2] != null)
             {
                 ActivateArrangePartyButton();
-                gridReference.charPaths[2].SetActive(true);
+                gridReference.classPaths[2].SetActive(true);
 
                 if (playableCharacters[0].lvl > 1)
                 {
@@ -861,6 +881,7 @@ public class Engine : MonoBehaviour
                 //gameDrops[20].isKnown = true;
                 gameSkills[10].isKnown = true;
                 playableCharacters[2].activePartyIndex = 2;
+                gridReference.classPaths[2].SetActive(true);
 
                 activeParty.SetActivePartyIndexes();
 
@@ -868,7 +889,7 @@ public class Engine : MonoBehaviour
             if (party[3] != null)
             {
                 battleSystem.battleSwitchButtons = true;
-                gridReference.charPaths[3].SetActive(true);
+                gridReference.classPaths[3].SetActive(true);
 
                 if (playableCharacters[0].lvl < 99)
                 {
@@ -899,6 +920,7 @@ public class Engine : MonoBehaviour
                 //         gameDrops[25].isKnown = true;
                 gameSkills[15].isKnown = true;
                 playableCharacters[3].activePartyIndex = -1;
+                gridReference.classPaths[5].SetActive(true);
 
             }
         }
@@ -1550,6 +1572,26 @@ public class Engine : MonoBehaviour
         SceneManager.UnloadSceneAsync(scene);
     }
 
+    public void SetClasses()
+    {
+        charClasses = new string[12];
+
+        charClasses[0] = "Soldier";
+        charClasses[1] = "Shaman";
+        charClasses[2] = "Thief";
+        charClasses[3] = "Mage";
+        charClasses[4] = "Assassin";
+        charClasses[5] = "Ronin";
+
+        charClasses[6] = "Monk";
+        charClasses[7] = "Watcher";
+        charClasses[8] = "Quickpocket";
+        charClasses[9] = "Evoker";
+        charClasses[10] = "Shinobi";
+        charClasses[11] = "Bushi";
+
+    }
+
     // Establishes a new Save File by storing the data found in the GameData class.
     public void SaveGame(int saveSlot)
     {
@@ -1670,7 +1712,7 @@ public class Engine : MonoBehaviour
                 party[i].GetComponent<Character>().drops = new Drops[gameDrops.Length];
                 party[i].GetComponent<Character>().skills = new Skills[gameSkills.Length];
 
-                gridReference.charPaths[i].SetActive(true);
+                gridReference.classPaths[i].SetActive(true);
                 //  party[i].GetComponent<Character>().holyDrops = new Drops[holyDrops.Length];
                 // party[i].GetComponent<Character>().waterDrops = new Drops[waterDrops.Length];
                 //  party[i].GetComponent<Character>().lightningDrops = new Drops[lightningDrops.Length];
@@ -2274,6 +2316,20 @@ public class Engine : MonoBehaviour
         }
     }
 
+    public void ResetCharClasses()
+    {
+        for (int i = 0; i < playableCharacters.Length; i++)
+        {
+            playableCharacters[i].currentClass = string.Empty;
+
+            for (int k = 0; k < charClasses.Length; k++)
+            {
+                Debug.Log(i + " " + k);
+                playableCharacters[i].characterClass[k] = false;
+                playableCharacters[i].classEXP[k] = 0f;
+            }
+        }
+    }
     void ClearHelpText()
     {
         helpText.text = string.Empty;
@@ -2320,7 +2376,9 @@ public class Engine : MonoBehaviour
         {
             if (timeOfDay > 650 || timeOfDay < 400)
             {
-                timeOfDay += Time.deltaTime / 2;
+                //timeOfDay += Time.deltaTime / 2;
+                timeOfDay += Time.deltaTime * 2;
+
             }
             else
             {

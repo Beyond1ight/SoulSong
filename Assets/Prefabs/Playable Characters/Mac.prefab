@@ -127,8 +127,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: Mac
+  characterClass: 000000000100000000000000
+  classEXP:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 1
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  currentClass: Mage
   lvl: 1
-  currentHealth: -106
+  currentHealth: 80
   maxHealth: 80
   currentMana: 60
   maxMana: 60
@@ -177,6 +192,7 @@ MonoBehaviour:
   energyCapped: 1
   canUse2HWeapon: 1
   canDualWield: 0
+  canSelectNewClass: 0
   isInParty: 1
   isInActiveParty: 1
   isLeader: 0

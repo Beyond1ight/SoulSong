@@ -9,8 +9,12 @@ public class Character : MonoBehaviour
 
     // General Information
     public string characterName;
+    public bool[] characterClass;
+    public float[] classEXP;
+    public string currentClass;
     public int lvl;
-    public float currentHealth, maxHealth, currentMana, maxMana, currentEnergy, maxEnergy, haste, experiencePoints, levelUpReq, strength, intelligence, dropCostReduction, skillCostReduction,
+    public float currentHealth, maxHealth, currentMana, maxMana, currentEnergy, maxEnergy, haste, experiencePoints, levelUpReq,
+    strength, intelligence, dropCostReduction, skillCostReduction,
     fireDropsLevel, fireDropsExperience, fireDropsLvlReq, firePhysicalAttackBonus, fireDropAttackBonus,
     iceDropsLevel, iceDropsExperience, iceDropsLvlReq, icePhysicalAttackBonus, iceDropAttackBonus,
     waterDropsLevel, waterDropsExperience, waterDropsLvlReq, waterPhysicalAttackBonus, waterDropAttackBonus,
@@ -20,6 +24,7 @@ public class Character : MonoBehaviour
     skillScale;
     public bool healthCapped, manaCapped, energyCapped = true;
     public bool canUse2HWeapon, canDualWield = false;
+    public bool canSelectNewClass = false;
 
     // Negative Status Effects
     public bool isInParty, isInActiveParty, isLeader, isPoisoned, isAsleep, isConfused, miterInflicted, haltInflicted, deathInflicted, inflicted;
@@ -1391,6 +1396,11 @@ public class Character : MonoBehaviour
     }
 
     public void EquipWeapon()
+    {
+
+    }
+
+    public void SetCurrentClass()
     {
 
     }

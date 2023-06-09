@@ -135,6 +135,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: Field
+  characterClass: 000000010000000000000000
+  classEXP:
+  - 0
+  - 0
+  - 0
+  - 1
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  currentClass: Thief
   lvl: 3
   currentHealth: 80
   maxHealth: 80
@@ -185,6 +200,7 @@ MonoBehaviour:
   energyCapped: 1
   canUse2HWeapon: 0
   canDualWield: 1
+  canSelectNewClass: 0
   isInParty: 1
   isInActiveParty: 1
   isLeader: 0
