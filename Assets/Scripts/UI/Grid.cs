@@ -16,7 +16,7 @@ public class Grid : MonoBehaviour
     public int grievePosition, macPosition, fieldPosition, riggsPosition;
     public GameObject cursor, helpReference, helpTextParentObj, abilitiesList, tier2Path;
     public CinemachineVirtualCamera gridPerspective, centerOfGridPerspective;
-    public GameObject[] dropsButtons, skillButtons, classPaths;
+    public GameObject[] dropsButtons, skillButtons, classPaths, classConnectionToMiddle, baseClassConnectionToComboClass;
 
 
     private void Start()
@@ -33,6 +33,15 @@ public class Grid : MonoBehaviour
 
         for (int i = 0; i < Engine.e.charClasses.Length; i++)
         {
+            if (Engine.e.playableCharacters[0].classUnlocked[i] == true)
+            {
+                classConnectionToMiddle[i].SetActive(true);
+            }
+            else
+            {
+                classConnectionToMiddle[i].SetActive(false);
+            }
+
             if (Engine.e.playableCharacters[0].characterClass[i] == true && Engine.e.playableCharacters[0].classEXP[i] == 100f)
             {
                 Engine.e.playableCharacters[0].canSelectNewClass = true;
@@ -135,6 +144,15 @@ public class Grid : MonoBehaviour
 
         for (int i = 0; i < Engine.e.charClasses.Length; i++)
         {
+            if (Engine.e.playableCharacters[1].classUnlocked[i] == true)
+            {
+                classConnectionToMiddle[i].SetActive(true);
+            }
+            else
+            {
+                classConnectionToMiddle[i].SetActive(false);
+            }
+
             if (Engine.e.playableCharacters[1].characterClass[i] == true && Engine.e.playableCharacters[1].classEXP[i] == 100f)
             {
                 Engine.e.playableCharacters[1].canSelectNewClass = true;
@@ -216,6 +234,15 @@ public class Grid : MonoBehaviour
 
         for (int i = 0; i < Engine.e.charClasses.Length; i++)
         {
+            if (Engine.e.playableCharacters[2].classUnlocked[i] == true)
+            {
+                classConnectionToMiddle[i].SetActive(true);
+            }
+            else
+            {
+                classConnectionToMiddle[i].SetActive(false);
+            }
+
             if (Engine.e.playableCharacters[2].characterClass[i] == true && Engine.e.playableCharacters[2].classEXP[i] == 100f)
             {
                 Engine.e.playableCharacters[2].canSelectNewClass = true;
@@ -297,6 +324,15 @@ public class Grid : MonoBehaviour
 
         for (int i = 0; i < Engine.e.charClasses.Length; i++)
         {
+            if (Engine.e.playableCharacters[3].classUnlocked[i] == true)
+            {
+                classConnectionToMiddle[i].SetActive(true);
+            }
+            else
+            {
+                classConnectionToMiddle[i].SetActive(false);
+            }
+
             if (Engine.e.playableCharacters[3].characterClass[i] == true && Engine.e.playableCharacters[3].classEXP[i] == 100f)
             {
                 Engine.e.playableCharacters[3].canSelectNewClass = true;
@@ -489,8 +525,8 @@ public class Grid : MonoBehaviour
         Engine.e.gridReference.gameObject.SetActive(true);
         Engine.e.gridReference.gameObject.SetActive(false);
 
-        gridPerspective.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 50000f;
-        centerOfGridPerspective.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 100000;
+        gridPerspective.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 6000f;
+        centerOfGridPerspective.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 20000f;
 
     }
 

@@ -20,6 +20,7 @@ public class Engine : MonoBehaviour
     public string currentScene;
     public bool inBattle = false;
     public bool indoors = false;
+    public bool inTown = false;
     public bool inWorldMap = false;
     public bool inRange = false;
     public bool battleModeActive = true;
@@ -78,6 +79,7 @@ public class Engine : MonoBehaviour
 
     // Menu References
     public PartyInventory partyInventoryReference;
+    public PauseMenu pauseMenuReference;
     public AdventureLog adventureLogReference;
     public EquipDisplay equipMenuReference;
     public FileMenu fileMenuReference;
@@ -117,8 +119,8 @@ public class Engine : MonoBehaviour
         SetSkillIndexes();
         gridReference.SetupGrid();
 
-        SetParty();
         SetClasses();
+        SetParty();
         //abilityScreenReference.ClearNodeUnlocked();
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
@@ -178,6 +180,7 @@ public class Engine : MonoBehaviour
         playableCharacters[0].characterClass[0] = true;
         playableCharacters[0].currentClass = "Soldier";
         playableCharacters[0].classEXP[0] = 1f;
+        playableCharacters[0].classUnlocked[0] = true;
 
         playableCharacters[0].lvl = 1;
         playableCharacters[0].healthOffset = 0f;
@@ -364,8 +367,9 @@ public class Engine : MonoBehaviour
         // Mac
         playableCharacters[1].characterName = "Mac";
         playableCharacters[1].currentClass = "Mage";
-        playableCharacters[1].characterClass[4] = true;
-        playableCharacters[1].classEXP[4] = 1f;
+        playableCharacters[1].characterClass[3] = true;
+        playableCharacters[1].classEXP[3] = 1f;
+        playableCharacters[1].classUnlocked[3] = true;
 
         playableCharacters[1].lvl = 1;
         playableCharacters[1].healthOffset = -20f;
@@ -510,8 +514,9 @@ public class Engine : MonoBehaviour
         //Field
         playableCharacters[2].characterName = "Field";
         playableCharacters[2].currentClass = "Thief";
-        playableCharacters[2].characterClass[3] = true;
-        playableCharacters[2].classEXP[3] = 1f;
+        playableCharacters[2].characterClass[2] = true;
+        playableCharacters[2].classEXP[2] = 1f;
+        playableCharacters[2].classUnlocked[2] = true;
 
         playableCharacters[2].lvl = 3;
         playableCharacters[2].healthOffset = -20f;
@@ -654,8 +659,9 @@ public class Engine : MonoBehaviour
         //Riggs
         playableCharacters[3].characterName = "Riggs";
         playableCharacters[3].currentClass = "Rōnin";
-        playableCharacters[3].characterClass[6] = true;
-        playableCharacters[3].classEXP[6] = 1f;
+        playableCharacters[3].characterClass[5] = true;
+        playableCharacters[3].classEXP[5] = 1f;
+        playableCharacters[3].classUnlocked[5] = true;
 
 
         playableCharacters[3].lvl = 5;
@@ -1576,6 +1582,11 @@ public class Engine : MonoBehaviour
     {
         charClasses = new string[12];
 
+        for (int i = 0; i < playableCharacters.Length; i++)
+        {
+            playableCharacters[i].classUnlocked = new bool[charClasses.Length];
+        }
+
         charClasses[0] = "Soldier";
         charClasses[1] = "Shaman";
         charClasses[2] = "Thief";
@@ -2372,7 +2383,7 @@ public class Engine : MonoBehaviour
             mainCamera.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 2;
         }
 
-        if (gameStart)
+        if (gameStart && !pauseMenuReference.isPaused && !inTown)
         {
             if (timeOfDay > 650 || timeOfDay < 400)
             {

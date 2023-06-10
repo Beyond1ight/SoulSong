@@ -14,7 +14,7 @@ public class Load : MonoBehaviour
     public bool loaded;
     public bool unloaded;
     public Animator transition;
-    public bool indoors;
+    public bool indoors, inTown;
     public bool worldMap = false;
 
     private void OnTriggerStay2D(Collider2D other)
@@ -160,6 +160,15 @@ public class Load : MonoBehaviour
                     }
                     else
                     {
+                        if (inTown)
+                        {
+                            Engine.e.inTown = true;
+                        }
+                        else
+                        {
+                            Engine.e.inTown = false;
+                        }
+
                         if (Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 10f)
                         {
                             Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 6.5f;

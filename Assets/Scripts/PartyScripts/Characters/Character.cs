@@ -12,6 +12,7 @@ public class Character : MonoBehaviour
     public bool[] characterClass;
     public float[] classEXP;
     public string currentClass;
+    public bool[] classUnlocked;
     public int lvl;
     public float currentHealth, maxHealth, currentMana, maxMana, currentEnergy, maxEnergy, haste, experiencePoints, levelUpReq,
     strength, intelligence, dropCostReduction, skillCostReduction,

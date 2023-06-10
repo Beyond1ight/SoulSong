@@ -151,6 +151,7 @@ MonoBehaviour:
   - 0
   - 0
   currentClass: Soldier
+  classUnlocked: 010000000000000000000000
   lvl: 1
   currentHealth: 100
   maxHealth: 100

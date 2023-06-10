@@ -379,7 +379,7 @@ public class PauseMenu : MonoBehaviour
 
         uiReference.PlayTransition();
 
-        Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize = 50000f;
+        Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize = 6000f;
 
         gridMenu.SetActive(true);
         Engine.e.gridReference.SetGrieveScreen();
@@ -405,7 +405,7 @@ public class PauseMenu : MonoBehaviour
 
         uiReference.PlayTransition();
 
-        Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize = 50000f;
+        Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize = 6000f;
 
         Engine.e.gridReference.SetMacScreen();
 
@@ -428,7 +428,7 @@ public class PauseMenu : MonoBehaviour
         }
         uiReference.PlayTransition();
 
-        Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize = 50000f;
+        Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize = 6000f;
 
         Engine.e.gridReference.SetFieldScreen();
 
@@ -452,7 +452,7 @@ public class PauseMenu : MonoBehaviour
 
         uiReference.PlayTransition();
 
-        Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize = 50000f;
+        Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize = 6000f;
 
         Engine.e.gridReference.SetRiggsScreen();
 
@@ -477,7 +477,7 @@ public class PauseMenu : MonoBehaviour
         //Engine.e.gridReference.SetSolaceScreen();
         uiReference.PlayTransition();
 
-        Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize = 50000f;
+        Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize = 6000f;
 
         gridMenu.SetActive(true);
         Engine.e.canvasReference.SetActive(false);

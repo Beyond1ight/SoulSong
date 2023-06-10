@@ -96,9 +96,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: Riggs
-  characterClass: 000000000000010000000000
+  characterClass: 000000000001000000000000
   classEXP:
-  - 0
   - 0
   - 0
   - 0
@@ -110,7 +109,9 @@ MonoBehaviour:
   - 0
   - 0
   - 0
+  - 0
   currentClass: "R\u014Dnin"
+  classUnlocked: 000000000001000000000000
   lvl: 5
   currentHealth: 200
   maxHealth: 200

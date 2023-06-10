@@ -21,7 +21,7 @@ public class GridCursor : MonoBehaviour
 
 
             transform.position = cursorPos;
-            cursorSprite.transform.localPosition = new Vector2(-1, 0);
+            cursorSprite.transform.localPosition = new Vector2(-1.3f, 0);
             nodeSet = true;
             helpText.SetActive(true);
         }

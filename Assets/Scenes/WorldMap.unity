@@ -309,6 +309,7 @@ MonoBehaviour:
   unloaded: 0
   transition: {fileID: 1670266932}
   indoors: 0
+  inTown: 1
   worldMap: 0
 --- !u!1 &421298893
 GameObject:
@@ -531,6 +532,7 @@ MonoBehaviour:
   unloaded: 0
   transition: {fileID: 1982995609}
   indoors: 1
+  inTown: 0
   worldMap: 0
 --- !u!1 &1000804782
 GameObject:
@@ -1032,6 +1034,7 @@ MonoBehaviour:
   unloaded: 0
   transition: {fileID: 1724577745}
   indoors: 0
+  inTown: 1
   worldMap: 0
 --- !u!61 &1444008428
 BoxCollider2D:
