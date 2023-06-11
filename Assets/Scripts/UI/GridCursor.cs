@@ -5,7 +5,8 @@ using UnityEngine.UI;
 using TMPro;
 public class GridCursor : MonoBehaviour
 {
-    public AbilityStatNode currentNode;
+    public AbilityStatNode currentAbilityStatNode;
+    public ClassSelectNode currentClassSelectNode;
     public GameObject cursorSprite, helpText;
     public bool nodeSet;
     //public AbilityStatNode[] nodeDirections;
@@ -13,11 +14,11 @@ public class GridCursor : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.tag == "Grid Node" && !Engine.e.gridReference.cursor.GetComponent<GridCursorMovement>().isMoving && !nodeSet)
+        if (other.tag == "Grid AbilityStat Node" && !Engine.e.gridReference.cursor.GetComponent<GridCursorMovement>().isMoving && !nodeSet)
         {
-            currentNode = other.GetComponent<AbilityStatNode>();
+            currentAbilityStatNode = other.GetComponent<AbilityStatNode>();
 
-            Vector3 cursorPos = new Vector3(currentNode.transform.position.x, currentNode.transform.position.y, -5);
+            Vector3 cursorPos = new Vector3(currentAbilityStatNode.transform.position.x, currentAbilityStatNode.transform.position.y, -5);
 
 
             transform.position = cursorPos;
@@ -25,13 +26,29 @@ public class GridCursor : MonoBehaviour
             nodeSet = true;
             helpText.SetActive(true);
         }
+        else
+        {
+            if (other.tag == "Grid Class Node" && !Engine.e.gridReference.cursor.GetComponent<GridCursorMovement>().isMoving && !nodeSet)
+            {
+                currentClassSelectNode = other.GetComponent<ClassSelectNode>();
+
+                Vector3 cursorPos = new Vector3(currentClassSelectNode.transform.position.x, currentClassSelectNode.transform.position.y, -5);
+
+
+                transform.position = cursorPos;
+                cursorSprite.transform.localPosition = new Vector2(-1.3f, 0);
+                nodeSet = true;
+                helpText.SetActive(true);
+            }
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.tag == "Grid Node" && Engine.e.gridReference.cursor.GetComponent<GridCursorMovement>().isMoving && nodeSet)
+        if (other.tag == "Grid AbilityStat Node" || other.tag == "Grid Class Node" && Engine.e.gridReference.cursor.GetComponent<GridCursorMovement>().isMoving && nodeSet)
         {
-            currentNode = null;
+            currentAbilityStatNode = null;
+            currentClassSelectNode = null;
             cursorSprite.transform.localPosition = new Vector2(0, 0);
             nodeSet = false;
             helpText.SetActive(false);
@@ -86,41 +103,81 @@ public class GridCursor : MonoBehaviour
 
     public void DisplayNodeInformation()
     {
-        if (currentNode != null)
+        if (currentAbilityStatNode != null)
         {
-            if (currentNode.node != null)
+            if (currentAbilityStatNode.node != null)
             {
-                if (currentNode.node.nodeName == string.Empty)
+                if (currentAbilityStatNode.node.nodeName == string.Empty)
                 {
                     if (helpText.GetComponentInChildren<TextMeshProUGUI>().text != "Name not set.")
                         helpText.GetComponentInChildren<TextMeshProUGUI>().text = "Name not set.";
                 }
                 else
                 {
-                    if (helpText.GetComponentInChildren<TextMeshProUGUI>().text != currentNode.node.nodeName + " - " + currentNode.node.nodeDescription)
-                        helpText.GetComponentInChildren<TextMeshProUGUI>().text = currentNode.node.nodeName + " - " + currentNode.node.nodeDescription;
+                    if (helpText.GetComponentInChildren<TextMeshProUGUI>().text != currentAbilityStatNode.node.nodeName + " - " + currentAbilityStatNode.node.nodeDescription)
+                    {
+                        if (currentAbilityStatNode != null)
+                        {
+                            helpText.GetComponentInChildren<TextMeshProUGUI>().text = currentAbilityStatNode.node.nodeName + " - " + currentAbilityStatNode.node.nodeDescription;
+                        }
+                    }
                 }
             }
-            else
+        }
+        else
+        {
+            if (helpText.GetComponentInChildren<TextMeshProUGUI>().text != "Node not set.")
+                helpText.GetComponentInChildren<TextMeshProUGUI>().text = "Node not set.";
+        }
+
+        if (currentClassSelectNode != null)
+        {
+            if (currentClassSelectNode.node != null)
             {
-                if (helpText.GetComponentInChildren<TextMeshProUGUI>().text != "Node not set.")
-                    helpText.GetComponentInChildren<TextMeshProUGUI>().text = "Node not set.";
+                if (currentClassSelectNode.node.className == string.Empty)
+                {
+                    if (helpText.GetComponentInChildren<TextMeshProUGUI>().text != "Name not set.")
+                        helpText.GetComponentInChildren<TextMeshProUGUI>().text = "Name not set.";
+                }
+                else
+                {
+                    if (helpText.GetComponentInChildren<TextMeshProUGUI>().text != currentClassSelectNode.node.className + " - " + currentClassSelectNode.node.classDescription)
+                    {
+                        if (currentClassSelectNode != null)
+                        {
+                            helpText.GetComponentInChildren<TextMeshProUGUI>().text = currentClassSelectNode.node.className + " - " + currentClassSelectNode.node.classDescription;
+                        }
+                    }
+                }
             }
+        }
+        else
+        {
+            if (helpText.GetComponentInChildren<TextMeshProUGUI>().text != "Class not set.")
+                helpText.GetComponentInChildren<TextMeshProUGUI>().text = "Class not set.";
         }
     }
 
+
     public void ClearNodeInformation()
     {
-        if (currentNode == null && helpText.GetComponentInChildren<TextMeshProUGUI>().text != string.Empty)
+        if (currentAbilityStatNode == null || currentClassSelectNode == null && helpText.GetComponentInChildren<TextMeshProUGUI>().text != string.Empty)
         {
             helpText.GetComponentInChildren<TextMeshProUGUI>().text = string.Empty;
         }
     }
     public void OnClickEvent()
     {
-        if (currentNode != null && !Engine.e.gridReference.abilitiesListDisplayed)
+        if (currentAbilityStatNode != null && !Engine.e.gridReference.abilitiesListDisplayed)
         {
-            currentNode.OnClickEvent();
+            currentAbilityStatNode.OnClickEvent();
+        }
+        else
+        {
+            if (currentClassSelectNode != null && !Engine.e.gridReference.abilitiesListDisplayed)
+            {
+                currentClassSelectNode.OnClickEvent();
+            }
         }
     }
 }

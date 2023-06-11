@@ -104,7 +104,7 @@ public class Grid : MonoBehaviour
         }
 
         //cursor.GetComponent<GridCursorMovement>().isMoving = false;
-        cursor.GetComponent<GridCursor>().currentNode = nodes[grievePosition];
+        cursor.GetComponent<GridCursor>().currentAbilityStatNode = nodes[grievePosition];
         Vector3 cursorPos = new Vector3(nodes[grievePosition].transform.position.x, nodes[grievePosition].transform.position.y, -5);
 
         cursor.transform.position = cursorPos;
@@ -215,7 +215,7 @@ public class Grid : MonoBehaviour
             }
         }
         //cursor.GetComponent<GridCursorMovement>().isMoving = false;
-        cursor.GetComponent<GridCursor>().currentNode = nodes[macPosition];
+        cursor.GetComponent<GridCursor>().currentAbilityStatNode = nodes[macPosition];
         Vector3 cursorPos = new Vector3(nodes[macPosition].transform.position.x, nodes[macPosition].transform.position.y, -5);
 
         cursor.transform.position = cursorPos;
@@ -306,7 +306,7 @@ public class Grid : MonoBehaviour
         }
 
         //cursor.GetComponent<GridCursorMovement>().isMoving = false;
-        cursor.GetComponent<GridCursor>().currentNode = nodes[fieldPosition];
+        cursor.GetComponent<GridCursor>().currentAbilityStatNode = nodes[fieldPosition];
         Vector3 cursorPos = new Vector3(nodes[fieldPosition].transform.position.x, nodes[fieldPosition].transform.position.y, -5);
 
         cursor.transform.position = cursorPos;
@@ -395,7 +395,7 @@ public class Grid : MonoBehaviour
             }
         }
         //cursor.GetComponent<GridCursorMovement>().isMoving = false;
-        cursor.GetComponent<GridCursor>().currentNode = nodes[riggsPosition];
+        cursor.GetComponent<GridCursor>().currentAbilityStatNode = nodes[riggsPosition];
         Vector3 cursorPos = new Vector3(nodes[riggsPosition].transform.position.x, nodes[riggsPosition].transform.position.y, -5);
 
         cursor.transform.position = cursorPos;
@@ -566,7 +566,7 @@ public class Grid : MonoBehaviour
             {
                 if (nodes[i].node.drop == _drop)
                 {
-                    cursor.GetComponent<GridCursor>().currentNode = nodes[i];
+                    cursor.GetComponent<GridCursor>().currentAbilityStatNode = nodes[i];
                     Vector3 cursorPos = new Vector3(nodes[i].transform.position.x, nodes[i].transform.position.y, -5);
 
                     cursor.transform.position = cursorPos;
@@ -589,7 +589,7 @@ public class Grid : MonoBehaviour
             {
                 if (nodes[i].node.skill == _skill)
                 {
-                    cursor.GetComponent<GridCursor>().currentNode = nodes[i];
+                    cursor.GetComponent<GridCursor>().currentAbilityStatNode = nodes[i];
                     Vector3 cursorPos = new Vector3(nodes[i].transform.position.x, nodes[i].transform.position.y, -5);
 
                     cursor.transform.position = cursorPos;

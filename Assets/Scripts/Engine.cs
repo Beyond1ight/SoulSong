@@ -178,9 +178,9 @@ public class Engine : MonoBehaviour
         // Grieve
         playableCharacters[0].characterName = "Grieve";
         playableCharacters[0].characterClass[0] = true;
-        playableCharacters[0].currentClass = "Soldier";
-        playableCharacters[0].classEXP[0] = 1f;
-        playableCharacters[0].classUnlocked[0] = true;
+        //playableCharacters[0].currentClass = "Soldier";
+        //playableCharacters[0].classEXP[0] = 1f;
+        //playableCharacters[0].classUnlocked[0] = true;
 
         playableCharacters[0].lvl = 1;
         playableCharacters[0].healthOffset = 0f;
@@ -2477,7 +2477,6 @@ public class Engine : MonoBehaviour
             AddCharacterToParty("Riggs");
 
             activeParty.SetActiveParty();
-
             // gridReference.tier2Path.SetActive(true);
         }
 

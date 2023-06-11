@@ -53,7 +53,7 @@ public class GridCursorMovement : MonoBehaviour
 
         if (Engine.e.gridReference.gridDisplayed)
         {
-            if (GetComponent<GridCursor>().currentNode != null)
+            if (GetComponent<GridCursor>().currentAbilityStatNode != null || GetComponent<GridCursor>().currentClassSelectNode != null)
             {
                 GetComponent<GridCursor>().DisplayNodeInformation();
             }

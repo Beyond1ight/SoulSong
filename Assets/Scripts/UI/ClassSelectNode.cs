@@ -37,6 +37,9 @@ public class ClassSelectNode : MonoBehaviour
             {
                 if (!grieveUnlocked)
                 {
+                    Engine.e.playableCharacters[0].classUnlocked[nodeIndex] = true;
+                    Engine.e.playableCharacters[0].currentClass = node.className;
+
                     for (int i = 0; i < connectedNodes.Length; i++)
                     {
                         if (connectedNodes[i].grieveUnlocked)

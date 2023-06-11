@@ -11,6 +11,8 @@ TagManager:
   - PartyMember3
   - Grid Node
   - Camera Bounding Collision
+  - Grid AbilityStat Node
+  - Grid Class Node
   layers:
   - Default
   - TransparentFX
