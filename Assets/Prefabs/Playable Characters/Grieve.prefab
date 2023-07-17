@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: Grieve
-  characterClass: 010000000000000000000000
+  characterClass: 000000000000010000000000
   classEXP:
   - 1
   - 0
@@ -151,7 +151,7 @@ MonoBehaviour:
   - 0
   - 0
   currentClass: Soldier
-  classUnlocked: 010000000000000000000000
+  classCompleted: 000000000000000000000000
   lvl: 1
   currentHealth: 100
   maxHealth: 100

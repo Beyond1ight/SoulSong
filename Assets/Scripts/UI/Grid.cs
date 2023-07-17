@@ -38,7 +38,7 @@ public class Grid : MonoBehaviour
 
         for (int i = 0; i < Engine.e.charClasses.Length; i++)
         {
-            if (Engine.e.playableCharacters[0].classUnlocked[i] == true)
+            if (Engine.e.playableCharacters[0].classCompleted[i] == true)
             {
                 classConnectionToMiddle[i].SetActive(true);
             }
@@ -162,7 +162,7 @@ public class Grid : MonoBehaviour
 
         for (int i = 0; i < Engine.e.charClasses.Length; i++)
         {
-            if (Engine.e.playableCharacters[1].classUnlocked[i] == true)
+            if (Engine.e.playableCharacters[1].classCompleted[i] == true)
             {
                 classConnectionToMiddle[i].SetActive(true);
             }
@@ -264,7 +264,7 @@ public class Grid : MonoBehaviour
 
         for (int i = 0; i < Engine.e.charClasses.Length; i++)
         {
-            if (Engine.e.playableCharacters[2].classUnlocked[i] == true)
+            if (Engine.e.playableCharacters[2].classCompleted[i] == true)
             {
                 classConnectionToMiddle[i].SetActive(true);
             }
@@ -364,7 +364,7 @@ public class Grid : MonoBehaviour
 
         for (int i = 0; i < Engine.e.charClasses.Length; i++)
         {
-            if (Engine.e.playableCharacters[3].classUnlocked[i] == true)
+            if (Engine.e.playableCharacters[3].classCompleted[i] == true)
             {
                 classConnectionToMiddle[i].SetActive(true);
             }
@@ -463,7 +463,7 @@ public class Grid : MonoBehaviour
 
         for (int i = 0; i < Engine.e.charClasses.Length; i++)
         {
-            if (Engine.e.playableCharacters[4].classUnlocked[i] == true)
+            if (Engine.e.playableCharacters[4].classCompleted[i] == true)
             {
                 classConnectionToMiddle[i].SetActive(true);
             }
@@ -563,7 +563,7 @@ public class Grid : MonoBehaviour
 
         for (int i = 0; i < Engine.e.charClasses.Length; i++)
         {
-            if (Engine.e.playableCharacters[5].classUnlocked[i] == true)
+            if (Engine.e.playableCharacters[5].classCompleted[i] == true)
             {
                 classConnectionToMiddle[i].SetActive(true);
             }

@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: c444285f61806404ab93d7663c49a3eb, type: 3}
-  m_Color: {r: 0, g: 0.5101355, b: 0.8396226, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -96,13 +96,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: Blue
-  characterClass: 000000000001000000000000
+  characterClass: 000000000100000000000000
   classEXP:
   - 0
   - 0
   - 0
   - 0
-  - 0
+  - 1
   - 0
   - 0
   - 0
@@ -111,54 +111,54 @@ MonoBehaviour:
   - 0
   - 0
   currentClass: Assassin
-  classUnlocked: 000000000001000000000000
-  lvl: 0
-  currentHealth: 0
-  maxHealth: 0
-  currentMana: 0
-  maxMana: 0
-  currentEnergy: 0
-  maxEnergy: 0
-  haste: 0
+  classCompleted: 000000000000000000000000
+  lvl: 1
+  currentHealth: 80
+  maxHealth: 80
+  currentMana: 60
+  maxMana: 60
+  currentEnergy: 30
+  maxEnergy: 30
+  haste: 46
   experiencePoints: 0
-  levelUpReq: 0
-  strength: 0
-  intelligence: 0
+  levelUpReq: 100
+  strength: 14
+  intelligence: 17
   dropCostReduction: 0
   skillCostReduction: 0
-  fireDropsLevel: 0
+  fireDropsLevel: 1
   fireDropsExperience: 0
-  fireDropsLvlReq: 0
+  fireDropsLvlReq: 50
   firePhysicalAttackBonus: 0
   fireDropAttackBonus: 0
-  iceDropsLevel: 0
+  iceDropsLevel: 1
   iceDropsExperience: 0
-  iceDropsLvlReq: 0
+  iceDropsLvlReq: 50
   icePhysicalAttackBonus: 0
   iceDropAttackBonus: 0
-  waterDropsLevel: 0
+  waterDropsLevel: 5
   waterDropsExperience: 0
-  waterDropsLvlReq: 0
+  waterDropsLvlReq: 50
   waterPhysicalAttackBonus: 0
   waterDropAttackBonus: 0
-  lightningDropsLevel: 0
+  lightningDropsLevel: 2
   lightningDropsExperience: 0
-  lightningDropsLvlReq: 0
+  lightningDropsLvlReq: 50
   lightningPhysicalAttackBonus: 0
   lightningDropAttackBonus: 0
-  shadowDropsLevel: 0
+  shadowDropsLevel: 1
   shadowDropsExperience: 0
-  shadowDropsLvlReq: 0
+  shadowDropsLvlReq: 50
   shadowPhysicalAttackBonus: 0
   shadowDropAttackBonus: 0
-  holyDropsLevel: 0
+  holyDropsLevel: 1
   holyDropsExperience: 0
-  holyDropsLvlReq: 0
+  holyDropsLvlReq: 50
   holyPhysicalAttackBonus: 0
   holyDropAttackBonus: 0
-  skillScale: 0
-  healthCapped: 0
-  manaCapped: 0
+  skillScale: 1
+  healthCapped: 1
+  manaCapped: 1
   energyCapped: 1
   canUse2HWeapon: 0
   canDualWield: 0
@@ -177,49 +177,49 @@ MonoBehaviour:
   isEncompassed: 0
   isHastened: 0
   availableSkillPoints: 0
-  healthOffset: 0
-  manaOffset: 0
+  healthOffset: -20
+  manaOffset: 20
   energyOffset: 0
-  strengthOffset: 0
-  intelligenceOffset: 0
-  stealChance: 0
-  physicalDefense: 0
-  fireDefense: 0
-  iceDefense: 0
-  waterDefense: 0
-  lightningDefense: 0
-  shadowDefense: 0
-  holyDefense: 0
-  poisonDefense: 0
-  sleepDefense: 0
-  confuseDefense: 0
+  strengthOffset: -10
+  intelligenceOffset: 15
+  stealChance: 60
+  physicalDefense: 6
+  fireDefense: 2
+  iceDefense: 1
+  waterDefense: 2
+  lightningDefense: 2
+  shadowDefense: 1
+  holyDefense: 1
+  poisonDefense: 1
+  sleepDefense: 1
+  confuseDefense: 1
   deathDefense: 0
-  dodgeChance: 0
+  dodgeChance: 10
   hitChance: 0
-  critChance: 0
-  maxHealthBase: 0
-  maxManaBase: 0
-  maxEnergyBase: 0
-  strengthBase: 0
-  intelligenceBase: 0
-  dodgeChanceBase: 0
-  critChanceBase: 0
-  hasteBase: 0
+  critChance: 10
+  maxHealthBase: 171
+  maxManaBase: 63
+  maxEnergyBase: 30
+  strengthBase: 15
+  intelligenceBase: 20
+  dodgeChanceBase: 10
+  critChanceBase: 10
+  hasteBase: 46
   firePhysicalAttackBonusBase: 0
   icePhysicalAttackBonusBase: 0
   lightningPhysicalAttackBonusBase: 0
   waterPhysicalAttackBonusBase: 0
   shadowPhysicalAttackBonusBase: 0
   holyPhysicalAttackBonusBase: 0
-  fireDefenseBase: 0
-  iceDefenseBase: 0
-  lightningDefenseBase: 0
-  waterDefenseBase: 0
-  shadowDefenseBase: 0
-  holyDefenseBase: 0
-  sleepDefenseBase: 0
-  poisonDefenseBase: 0
-  confuseDefenseBase: 0
+  fireDefenseBase: 2
+  iceDefenseBase: 1
+  lightningDefenseBase: 2
+  waterDefenseBase: 2
+  shadowDefenseBase: 1
+  holyDefenseBase: 1
+  sleepDefenseBase: 1
+  poisonDefenseBase: 1
+  confuseDefenseBase: 1
   deathDefenseBase: 0
   drops:
   - {fileID: 0}
@@ -283,20 +283,20 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  canUseFireDrops: 0
+  canUseFireDrops: 1
   canUseIceDrops: 0
   canUseLightningDrops: 0
   canUseWaterDrops: 0
   canUseShadowDrops: 0
   canUseHolyDrops: 0
-  weaponRight: {fileID: 0}
+  weaponRight: {fileID: 3303077775849668216, guid: 589197a13c8d04f26a1e6940769f7200, type: 3}
   weaponLeft: {fileID: 0}
-  chestArmor: {fileID: 0}
+  chestArmor: {fileID: 475117527870452808, guid: c37cdb1cfe8e54b409308b0270b551c3, type: 3}
   legArmor: {fileID: 0}
   accessory1: {fileID: 0}
   accessory2: {fileID: 0}
-  skillIndex: 0
-  skillTotal: 0
+  skillIndex: 5
+  skillTotal: 1
   poisonDmg: 0
   sleepTimer: 0
   confuseTimer: 0

@@ -110,8 +110,8 @@ MonoBehaviour:
   - 0
   - 0
   - 0
-  currentClass: "R\u014Dnin"
-  classUnlocked: 000000000001000000000000
+  currentClass: Ronin
+  classCompleted: 000000000000000000000000
   lvl: 5
   currentHealth: 200
   maxHealth: 200
@@ -303,4 +303,4 @@ MonoBehaviour:
   deathTimer: 3
   activePartyIndex: -1
   partyIndex: 3
-  inSwitchQueue: 0
+  inSwitchQueue: 1

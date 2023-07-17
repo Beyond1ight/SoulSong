@@ -7,7 +7,7 @@ public class GameData
 {
     public static GameData gameData;
     public string[] charNames;
-    public string[] charClass;
+    public string[] currentCharClass;
     public float[] charMaxHealth;
     public float[] charCurrentHealth;
     public float[] charMaxMana;
@@ -23,13 +23,7 @@ public class GameData
     public float[] charStealChance;
     public float[] charHaste;
 
-    public bool[] classUnlockedGrieve;
-    public bool[] classUnlockedMac;
-    public bool[] classUnlockedField;
-    public bool[] classUnlockedRiggs;
-    public bool[] classUnlockedSolace;
-    public bool[] classUnlockedBlue;
-
+    public bool[] classCompleteGrieve, classCompleteMac, classCompleteField, classCompleteRiggs, classCompleteSolace, classCompleteBlue;
 
     public float[] charDodgeChance;
     public float[] charPhysicalDefense;
@@ -58,6 +52,8 @@ public class GameData
     public string macWeaponRightEquip, macWeaponLeftEquip;
     public string fieldWeaponRightEquip, fieldWeaponLeftEquip;
     public string riggsWeaponRightEquip, riggsWeaponLeftEquip;
+    public string solaceWeaponRightEquip, solaceWeaponLeftEquip;
+    public string blueWeaponRightEquip, blueWeaponLeftEquip;
 
     public string[] charChestArmorEquip;
     public string[] charAccessory1Equip, charAccessory2Equip;
@@ -94,14 +90,14 @@ public class GameData
         charMaxHealth = new float[gameManager.party.Length];
         charMaxMana = new float[gameManager.party.Length];
         charLvl = new int[gameManager.party.Length];
-        charClass = new string[gameManager.party.Length];
+        currentCharClass = new string[gameManager.party.Length];
 
-        classUnlockedGrieve = new bool[gameManager.charClasses.Length];
-        classUnlockedMac = new bool[gameManager.charClasses.Length];
-        classUnlockedField = new bool[gameManager.charClasses.Length];
-        classUnlockedRiggs = new bool[gameManager.charClasses.Length];
-        classUnlockedSolace = new bool[gameManager.charClasses.Length];
-        classUnlockedBlue = new bool[gameManager.charClasses.Length];
+        classCompleteGrieve = new bool[gameManager.charClasses.Length];
+        classCompleteMac = new bool[gameManager.charClasses.Length];
+        classCompleteField = new bool[gameManager.charClasses.Length];
+        classCompleteRiggs = new bool[gameManager.charClasses.Length];
+        classCompleteSolace = new bool[gameManager.charClasses.Length];
+        classCompleteBlue = new bool[gameManager.charClasses.Length];
 
         charFireDropLevel = new float[gameManager.party.Length];
         charWaterDropLevel = new float[gameManager.party.Length];
@@ -183,7 +179,7 @@ public class GameData
                 charMaxHealth[i] = gameManager.party[i].GetComponent<Character>().maxHealth;
                 charMaxMana[i] = gameManager.party[i].GetComponent<Character>().maxMana;
                 charLvl[i] = gameManager.party[i].GetComponent<Character>().lvl;
-                charClass[i] = gameManager.party[i].GetComponent<Character>().currentClass;
+                currentCharClass[i] = gameManager.party[i].GetComponent<Character>().currentClass;
 
                 charFireDropLevel[i] = gameManager.party[i].GetComponent<Character>().fireDropsLevel;
                 charWaterDropLevel[i] = gameManager.party[i].GetComponent<Character>().waterDropsLevel;
@@ -242,33 +238,36 @@ public class GameData
                 charStealChance[i] = gameManager.party[i].GetComponent<Character>().stealChance;
                 charHaste[i] = gameManager.party[i].GetComponent<Character>().haste;
 
-                for (int f = 0; f < gameManager.party[i].GetComponent<Character>().classUnlocked.Length; f++)
-                {
-                    classUnlockedGrieve[f] = gameManager.party[0].GetComponent<Character>().classUnlocked[f];
 
+                currentCharClass[i] = gameManager.party[i].GetComponent<Character>().currentClass;
+
+
+                for (int f = 0; f < gameManager.party[i].GetComponent<Character>().classCompleted.Length; f++)
+                {
+                    if (gameManager.party[0] != null)
+                    {
+                        classCompleteGrieve[f] = gameManager.party[0].GetComponent<Character>().classCompleted[f];
+                    }
                     if (gameManager.party[1] != null)
                     {
-                        classUnlockedMac[f] = gameManager.party[1].GetComponent<Character>().classUnlocked[f];
+                        classCompleteMac[f] = gameManager.party[1].GetComponent<Character>().classCompleted[f];
                     }
-
                     if (gameManager.party[2] != null)
                     {
-                        classUnlockedField[f] = gameManager.party[2].GetComponent<Character>().classUnlocked[f];
+                        classCompleteField[f] = gameManager.party[2].GetComponent<Character>().classCompleted[f];
                     }
                     if (gameManager.party[3] != null)
                     {
-                        classUnlockedRiggs[f] = gameManager.party[3].GetComponent<Character>().classUnlocked[f];
+                        classCompleteRiggs[f] = gameManager.party[3].GetComponent<Character>().classCompleted[f];
                     }
                     if (gameManager.party[4] != null)
                     {
-                        classUnlockedSolace[f] = gameManager.playableCharacters[4].GetComponent<Character>().classUnlocked[f];
+                        classCompleteSolace[f] = gameManager.playableCharacters[4].GetComponent<Character>().classCompleted[f];
                     }
                     if (gameManager.party[5] != null)
                     {
-                        classUnlockedBlue[f] = gameManager.playableCharacters[5].GetComponent<Character>().classUnlocked[f];
+                        classCompleteBlue[f] = gameManager.playableCharacters[5].GetComponent<Character>().classCompleted[f];
                     }
-
-
                 }
 
                 for (int f = 0; f < Engine.e.party[i].GetComponent<Character>().drops.Length; f++)
@@ -369,7 +368,7 @@ public class GameData
                           }
                       }
                   }
-  */
+        */
                 partySize++;
             }
         }
@@ -398,20 +397,16 @@ public class GameData
         {
             grieveWeaponRightEquip = Engine.e.party[0].GetComponent<Character>().weaponRight.GetComponent<Weapon>().itemName;
         }
-        if (Engine.e.party[0].GetComponent<Character>().weaponLeft != null)
+        /*if (Engine.e.party[0].GetComponent<Character>().weaponLeft != null)
         {
             grieveWeaponLeftEquip = Engine.e.party[0].GetComponent<Character>().weaponLeft.GetComponent<Weapon>().itemName;
-        }
+        }*/
 
         if (Engine.e.party[1] != null)
         {
             if (Engine.e.party[1].GetComponent<Character>().weaponRight != null)
             {
                 macWeaponRightEquip = Engine.e.party[1].GetComponent<Character>().weaponRight.GetComponent<Weapon>().itemName;
-            }
-            if (Engine.e.party[1].GetComponent<Character>().weaponLeft != null)
-            {
-                macWeaponLeftEquip = Engine.e.party[1].GetComponent<Character>().weaponLeft.GetComponent<Weapon>().itemName;
             }
         }
         if (Engine.e.party[2] != null)
@@ -420,10 +415,6 @@ public class GameData
             {
                 fieldWeaponRightEquip = Engine.e.party[2].GetComponent<Character>().weaponRight.GetComponent<Weapon>().itemName;
             }
-            if (Engine.e.party[2].GetComponent<Character>().weaponLeft != null)
-            {
-                fieldWeaponLeftEquip = Engine.e.party[2].GetComponent<Character>().weaponLeft.GetComponent<Weapon>().itemName;
-            }
         }
         if (Engine.e.party[3] != null)
         {
@@ -431,9 +422,19 @@ public class GameData
             {
                 riggsWeaponRightEquip = Engine.e.party[3].GetComponent<Character>().weaponRight.GetComponent<Weapon>().itemName;
             }
-            if (Engine.e.party[3].GetComponent<Character>().weaponLeft != null)
+        }
+        if (Engine.e.party[4] != null)
+        {
+            if (Engine.e.party[4].GetComponent<Character>().weaponRight != null)
             {
-                riggsWeaponLeftEquip = Engine.e.party[3].GetComponent<Character>().weaponLeft.GetComponent<Weapon>().itemName;
+                solaceWeaponRightEquip = Engine.e.party[4].GetComponent<Character>().weaponRight.GetComponent<Weapon>().itemName;
+            }
+        }
+        if (Engine.e.party[5] != null)
+        {
+            if (Engine.e.party[5].GetComponent<Character>().weaponRight != null)
+            {
+                blueWeaponRightEquip = Engine.e.party[5].GetComponent<Character>().weaponRight.GetComponent<Weapon>().itemName;
             }
         }
 
@@ -474,6 +475,8 @@ public class GameData
         charNodePositions[1] = Engine.e.gridReference.macPosition;
         charNodePositions[2] = Engine.e.gridReference.fieldPosition;
         charNodePositions[3] = Engine.e.gridReference.riggsPosition;
+        charNodePositions[4] = Engine.e.gridReference.solacePosition;
+        charNodePositions[3] = Engine.e.gridReference.bluePosition;
 
         for (int i = 0; i < Engine.e.gridReference.nodes.Length; i++)
         {

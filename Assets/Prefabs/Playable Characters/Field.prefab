@@ -150,7 +150,7 @@ MonoBehaviour:
   - 0
   - 0
   currentClass: Thief
-  classUnlocked: 000001000000000000000000
+  classCompleted: 000000000000000000000000
   lvl: 3
   currentHealth: 80
   maxHealth: 80

@@ -181,7 +181,7 @@ public class Engine : MonoBehaviour
         playableCharacters[0].characterClass[0] = true;
         playableCharacters[0].currentClass = "Soldier";
         playableCharacters[0].classEXP[0] = 1f;
-        playableCharacters[0].classUnlocked[0] = true;
+        // playableCharacters[0].classCompleted[0] = true;
 
         playableCharacters[0].lvl = 1;
         playableCharacters[0].healthOffset = 0f;
@@ -370,7 +370,6 @@ public class Engine : MonoBehaviour
         playableCharacters[1].currentClass = "Mage";
         playableCharacters[1].characterClass[3] = true;
         playableCharacters[1].classEXP[3] = 1f;
-        playableCharacters[1].classUnlocked[3] = true;
 
         playableCharacters[1].lvl = 1;
         playableCharacters[1].healthOffset = -20f;
@@ -517,7 +516,6 @@ public class Engine : MonoBehaviour
         playableCharacters[2].currentClass = "Thief";
         playableCharacters[2].characterClass[2] = true;
         playableCharacters[2].classEXP[2] = 1f;
-        playableCharacters[2].classUnlocked[2] = true;
 
         playableCharacters[2].lvl = 3;
         playableCharacters[2].healthOffset = -20f;
@@ -659,10 +657,9 @@ public class Engine : MonoBehaviour
 
         //Riggs
         playableCharacters[3].characterName = "Riggs";
-        playableCharacters[3].currentClass = "Rōnin";
+        playableCharacters[3].currentClass = "Ronin";
         playableCharacters[3].characterClass[5] = true;
         playableCharacters[3].classEXP[5] = 1f;
-        playableCharacters[3].classUnlocked[5] = true;
 
 
         playableCharacters[3].lvl = 5;
@@ -803,7 +800,6 @@ public class Engine : MonoBehaviour
         playableCharacters[4].currentClass = "Shaman";
         playableCharacters[4].characterClass[3] = true;
         playableCharacters[4].classEXP[1] = 1f;
-        playableCharacters[4].classUnlocked[1] = true;
 
         playableCharacters[4].lvl = 1;
         playableCharacters[4].healthOffset = -20f;
@@ -949,7 +945,6 @@ public class Engine : MonoBehaviour
         playableCharacters[5].currentClass = "Assassin";
         playableCharacters[5].characterClass[4] = true;
         playableCharacters[5].classEXP[4] = 1f;
-        playableCharacters[5].classUnlocked[4] = true;
 
         playableCharacters[5].lvl = 1;
         playableCharacters[5].healthOffset = -20f;
@@ -1099,6 +1094,9 @@ public class Engine : MonoBehaviour
         playableCharacters[1].GetComponent<Mac>().EquipMacWeaponRightOnLoad(gameWeapons[3].GetComponent<Weapon>());
         playableCharacters[2].GetComponent<Field>().EquipFieldWeaponRightOnLoad(gameWeapons[4].GetComponent<Weapon>());
         playableCharacters[3].GetComponent<Riggs>().EquipRiggsWeaponRightOnLoad(gameWeapons[6].GetComponent<Weapon>());
+        playableCharacters[4].GetComponent<Solace>().EquipSolaceWeaponRightOnLoad(gameWeapons[12].GetComponent<Weapon>());
+        playableCharacters[5].GetComponent<Blue>().EquipBlueWeaponRightOnLoad(gameWeapons[13].GetComponent<Weapon>());
+
         // partyInventoryReference.AddItemToInventory(gameWeapons[0].GetComponent<Weapon>());
         //partyInventoryReference.AddItemToInventory(gameWeapons[3].GetComponent<Weapon>()); // Depends If Mac Is In Party From Start
 
@@ -1107,6 +1105,9 @@ public class Engine : MonoBehaviour
         playableCharacters[1].GetComponent<Mac>().EquipMacChestArmorOnLoad(gameChestArmor[0].GetComponent<ChestArmor>());
         playableCharacters[2].GetComponent<Field>().EquipFieldChestArmorOnLoad(gameChestArmor[0].GetComponent<ChestArmor>());
         playableCharacters[3].GetComponent<Riggs>().EquipRiggsChestArmorOnLoad(gameChestArmor[1].GetComponent<ChestArmor>());
+        playableCharacters[4].GetComponent<Solace>().EquipSolaceChestArmorOnLoad(gameChestArmor[1].GetComponent<ChestArmor>());
+        playableCharacters[5].GetComponent<Blue>().EquipBlueChestArmorOnLoad(gameChestArmor[1].GetComponent<ChestArmor>());
+
         //partyInventoryReference.AddItemToInventory(gameArmor[0].GetComponent<ChestArmor>());
         //partyInventoryReference.AddItemToInventory(gameArmor[0].GetComponent<ChestArmor>()); // Depends If Mac Is In Party From Start
 
@@ -1947,11 +1948,6 @@ public class Engine : MonoBehaviour
     {
         charClasses = new string[12];
 
-        for (int i = 0; i < playableCharacters.Length; i++)
-        {
-            playableCharacters[i].classUnlocked = new bool[charClasses.Length];
-        }
-
         charClasses[0] = "Soldier";
         charClasses[1] = "Shaman";
         charClasses[2] = "Thief";
@@ -1965,6 +1961,21 @@ public class Engine : MonoBehaviour
         charClasses[9] = "Evoker";
         charClasses[10] = "Shinobi";
         charClasses[11] = "Bushi";
+
+        for (int i = 0; i < playableCharacters.Length; i++)
+        {
+            playableCharacters[i].classCompleted = new bool[charClasses.Length];
+            playableCharacters[i].characterClass = new bool[charClasses.Length];
+
+        }
+
+        playableCharacters[0].characterClass[0].Equals(true);
+        playableCharacters[1].characterClass[3].Equals(true);
+        playableCharacters[2].characterClass[2].Equals(true);
+        playableCharacters[3].characterClass[5].Equals(true);
+        playableCharacters[4].characterClass[1].Equals(true);
+        playableCharacters[5].characterClass[4].Equals(true);
+
 
     }
 
@@ -2024,7 +2035,7 @@ public class Engine : MonoBehaviour
                 party[i].GetComponent<Character>().maxMana = gameData.charMaxMana[i];
                 party[i].GetComponent<Character>().currentMana = gameData.charMaxMana[i];
                 party[i].GetComponent<Character>().lvl = gameData.charLvl[i];
-                party[i].GetComponent<Character>().currentClass = gameData.charClass[i];
+                party[i].GetComponent<Character>().currentClass = gameData.currentCharClass[i];
                 party[i].GetComponent<Character>().skillScale = gameData.charSkillScale[i];
                 party[i].GetComponent<Character>().skillIndex = gameData.charSkillIndex[i];
                 party[i].GetComponent<Character>().availableSkillPoints = gameData.charAvailableSkillPoints[i];
@@ -2097,31 +2108,43 @@ public class Engine : MonoBehaviour
 
 
                 // Classes
+                party[i].GetComponent<Character>().currentClass = gameData.currentCharClass[i];
+                party[i].GetComponent<Character>().classCompleted = new bool[charClasses.Length];
+
                 for (int classes = 0; classes < charClasses.Length; classes++)
                 {
-                    party[0].GetComponent<Character>().classUnlocked[classes] = gameData.classUnlockedGrieve[classes];
+                    if (party[i].GetComponent<Character>().currentClass == charClasses[classes])
+                    {
+                        party[i].GetComponent<Character>().characterClass[classes].Equals(true);
+                    }
+                }
 
+                for (int f = 0; f < party[i].GetComponent<Character>().classCompleted.Length; f++)
+                {
+                    if (party[0] != null)
+                    {
+                        party[0].GetComponent<Character>().classCompleted[f] = gameData.classCompleteGrieve[f];
+                    }
                     if (party[1] != null)
                     {
-                        party[1].GetComponent<Character>().classUnlocked[classes] = gameData.classUnlockedMac[classes];
+                        party[1].GetComponent<Character>().classCompleted[f] = gameData.classCompleteMac[f];
                     }
                     if (party[2] != null)
                     {
-                        party[2].GetComponent<Character>().classUnlocked[classes] = gameData.classUnlockedField[classes];
+                        party[2].GetComponent<Character>().classCompleted[f] = gameData.classCompleteField[f];
                     }
                     if (party[3] != null)
                     {
-                        party[3].GetComponent<Character>().classUnlocked[classes] = gameData.classUnlockedRiggs[classes];
+                        party[3].GetComponent<Character>().classCompleted[f] = gameData.classCompleteRiggs[f];
                     }
                     if (party[4] != null)
                     {
-                        party[4].GetComponent<Character>().classUnlocked[classes] = gameData.classUnlockedSolace[classes];
+                        party[4].GetComponent<Character>().classCompleted[f] = gameData.classCompleteSolace[f];
                     }
                     if (party[5] != null)
                     {
-                        party[5].GetComponent<Character>().classUnlocked[classes] = gameData.classUnlockedBlue[classes];
+                        party[5].GetComponent<Character>().classCompleted[f] = gameData.classCompleteBlue[f];
                     }
-
                 }
 
                 // Drops
@@ -2484,11 +2507,9 @@ public class Engine : MonoBehaviour
     // Establishes a battle by communicating with the BattleSystem class.
     public void BeginBattle()
     {
+        StartCoroutine(battleSystem.SetupBattle());
         battleMenu.battleMenuUI.SetActive(true);
         storeDialogueReference.gameObject.SetActive(false);
-        battleSystem.hud.SetEnemyGroupHUD();
-        battleSystem.hud.SetPlayerHUD();
-        StartCoroutine(battleSystem.SetupBattle());
         //battleMusic.Play();
 
     }
@@ -2510,6 +2531,9 @@ public class Engine : MonoBehaviour
         partyInventoryReference.macWeaponTotal = 0;
         partyInventoryReference.fieldWeaponTotal = 0;
         partyInventoryReference.riggsWeaponTotal = 0;
+        partyInventoryReference.solaceWeaponTotal = 0;
+        partyInventoryReference.blueWeaponTotal = 0;
+
         partyInventoryReference.chestArmorTotal = 0;
 
     }
@@ -2607,6 +2631,14 @@ public class Engine : MonoBehaviour
         if (index == 3)
         {
             DisplayRiggsInventoryStats();
+        }
+        if (index == 4)
+        {
+            DisplaySolaceInventoryStats();
+        }
+        if (index == 5)
+        {
+            DisplayBlueInventoryStats();
         }
     }
 

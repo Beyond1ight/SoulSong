@@ -140,6 +140,9 @@ public class BattleSystem : MonoBehaviour
         Engine.e.activePartyMember2.GetComponent<BoxCollider2D>().enabled = false;
         Engine.e.activePartyMember3.GetComponent<BoxCollider2D>().enabled = false;
 
+        hud.SetEnemyGroupHUD();
+        hud.SetPlayerHUD();
+
         charAttacking = false;
         enemyAttacking = false;
         enemyAtBattlePos = true;
