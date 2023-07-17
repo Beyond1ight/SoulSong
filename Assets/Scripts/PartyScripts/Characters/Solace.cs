@@ -27,26 +27,6 @@ public class Solace : Character
         Engine.e.equipMenuReference.DisplaySolaceStats();
     }
 
-    public void RemoveWeaponLeft()
-    {
-        strength -= weaponLeft.GetComponent<Weapon>().strengthBonus;
-        intelligence -= weaponLeft.GetComponent<Weapon>().intelligenceBonus;
-
-        firePhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().fireAttack;
-        waterPhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().waterAttack;
-        lightningPhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().lightningAttack;
-        shadowPhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().shadowAttack;
-        icePhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().iceAttack;
-        haste += weaponRight.GetComponent<Weapon>().weight;
-
-        // Swap Inventory Slots
-        Engine.e.partyInventoryReference.AddItemToInventory(weaponLeft);
-
-        weaponLeft = null;
-        Engine.e.charEquippedWeaponLeft[4] = null;
-
-        Engine.e.equipMenuReference.DisplaySolaceStats();
-    }
     public void RemoveChestArmor()
     {
         // Resetting Stats Back to Base Values
@@ -174,13 +154,6 @@ public class Solace : Character
         {
             return;
         }
-        else
-        {
-            if (weaponLeft != null && _weapon.twoHand && canUse2HWeapon)
-            {
-                RemoveWeaponLeft();
-            }
-        }
 
         if (weaponRight != null)
         {
@@ -202,7 +175,7 @@ public class Solace : Character
 
         // Equip Weapon
         weaponRight = _weapon;
-        Engine.e.charEquippedWeaponRight[3] = _weapon;
+        Engine.e.charEquippedWeaponRight[4] = _weapon;
 
         strength += _weapon.strengthBonus;
         intelligence += _weapon.intelligenceBonus;
@@ -327,7 +300,7 @@ public class Solace : Character
 
         // Equip Armor
         legArmor = _armor;
-        Engine.e.charEquippedLegArmor[3] = _armor;
+        Engine.e.charEquippedLegArmor[4] = _armor;
 
         physicalDefense += legArmor.GetComponent<LegArmor>().physicalArmor;
         fireDefense += legArmor.GetComponent<LegArmor>().fireDefense;

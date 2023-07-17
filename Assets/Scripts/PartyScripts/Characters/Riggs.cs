@@ -27,26 +27,6 @@ public class Riggs : Character
         Engine.e.equipMenuReference.DisplayRiggsStats();
     }
 
-    public void RemoveWeaponLeft()
-    {
-        strength -= weaponLeft.GetComponent<Weapon>().strengthBonus;
-        intelligence -= weaponLeft.GetComponent<Weapon>().intelligenceBonus;
-
-        firePhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().fireAttack;
-        waterPhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().waterAttack;
-        lightningPhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().lightningAttack;
-        shadowPhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().shadowAttack;
-        icePhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().iceAttack;
-        haste += weaponRight.GetComponent<Weapon>().weight;
-
-        // Swap Inventory Slots
-        Engine.e.partyInventoryReference.AddItemToInventory(weaponLeft);
-
-        weaponLeft = null;
-        Engine.e.charEquippedWeaponLeft[3] = null;
-
-        Engine.e.equipMenuReference.DisplayRiggsStats();
-    }
     public void RemoveChestArmor()
     {
         // Resetting Stats Back to Base Values
@@ -170,17 +150,6 @@ public class Riggs : Character
 
     public void EquipRiggsWeaponRight(Weapon _weapon)
     {
-        if (_weapon.twoHand && !canUse2HWeapon || _weapon.offHand && !_weapon.mainHand)
-        {
-            return;
-        }
-        else
-        {
-            if (weaponLeft != null && _weapon.twoHand && canUse2HWeapon)
-            {
-                RemoveWeaponLeft();
-            }
-        }
 
         if (weaponRight != null)
         {
@@ -226,78 +195,6 @@ public class Riggs : Character
         Engine.e.partyInventoryReference.indexReference = -1;
 
     }
-    public void EquipRiggsWeaponLeft(Weapon _weapon)
-    {
-        if (_weapon.twoHand || !_weapon.offHand && _weapon.mainHand || _weapon.mainHand && _weapon.offHand && !canDualWield)
-        {
-            return;
-        }
-        else
-        {
-            if (weaponRight != null && weaponRight.GetComponent<Weapon>().twoHand)
-            {
-                // Resetting Stats To Base Values
-                strength -= weaponRight.GetComponent<Weapon>().strengthBonus;
-                intelligence -= weaponRight.GetComponent<Weapon>().intelligenceBonus;
-                firePhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().fireAttack;
-                waterPhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().waterAttack;
-                lightningPhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().lightningAttack;
-                shadowPhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().shadowAttack;
-                icePhysicalAttackBonus -= weaponRight.GetComponent<Weapon>().iceAttack;
-
-                haste += weaponRight.GetComponent<Weapon>().weight;
-
-                Engine.e.partyInventoryReference.AddItemToInventory(weaponRight);
-
-                Engine.e.charEquippedWeaponRight[3] = null;
-
-                weaponRight = null;
-            }
-
-            if (weaponLeft != null)
-            {
-                // Resetting Stats To Base Values
-                strength -= weaponLeft.GetComponent<Weapon>().strengthBonus;
-                intelligence -= weaponLeft.GetComponent<Weapon>().intelligenceBonus;
-                firePhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().fireAttack;
-                waterPhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().waterAttack;
-                lightningPhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().lightningAttack;
-                shadowPhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().shadowAttack;
-                icePhysicalAttackBonus -= weaponLeft.GetComponent<Weapon>().iceAttack;
-
-                haste += weaponLeft.GetComponent<Weapon>().weight;
-
-                Engine.e.partyInventoryReference.AddItemToInventory(weaponLeft);
-            }
-            // Swap Inventory Slots
-            Engine.e.partyInventoryReference.SubtractItemFromInventory(_weapon);
-
-            // Equip Weapon
-            weaponLeft = _weapon;
-            Engine.e.charEquippedWeaponLeft[3] = _weapon;
-
-            strength += _weapon.strengthBonus;
-            intelligence += _weapon.intelligenceBonus;
-            firePhysicalAttackBonus += _weapon.fireAttack;
-            waterPhysicalAttackBonus += _weapon.waterAttack;
-            lightningPhysicalAttackBonus += _weapon.lightningAttack;
-            shadowPhysicalAttackBonus += _weapon.shadowAttack;
-            icePhysicalAttackBonus += _weapon.iceAttack;
-
-            haste -= weaponLeft.GetComponent<Weapon>().weight;
-
-            // Set Array Position For New (Equipped) Weapon
-            // weapon.itemIndex = -1;
-
-            // Update Stats (visually) and Return To Equip Screen
-            Engine.e.equipMenuReference.GetComponent<EquipDisplay>().DisplayRiggsStats();
-            Engine.e.equipMenuReference.GetComponent<EquipDisplay>().weaponLists[0].SetActive(false);
-            Engine.e.equipMenuReference.GetComponent<EquipDisplay>().SetRiggsScreen();
-            Engine.e.equipMenuReference.GetComponent<EquipDisplay>().weaponLeftInventorySet = false;
-
-            Engine.e.partyInventoryReference.indexReference = -1;
-        }
-    }
 
     public void EquipRiggsWeaponRightOnLoad(Weapon _weapon)
     {
@@ -306,13 +203,7 @@ public class Riggs : Character
         Engine.e.charEquippedWeaponRight[3] = _weapon;
 
     }
-    public void EquipRiggsWeaponLeftOnLoad(Weapon _weapon)
-    {
 
-        weaponLeft = _weapon;
-        Engine.e.charEquippedWeaponLeft[3] = _weapon;
-
-    }
     public void EquipRiggsChestArmor(ChestArmor _armor)
     {
         // Resetting Stats Back to Base Values

@@ -20,48 +20,38 @@ public class Weapon : Item
         {
             Engine.e.party[0].GetComponent<Grieve>().EquipGrieveWeaponRight(this);
         }
-        else
+        /*else
         {
             if (Engine.e.equipMenuReference.grieveScreen && grieveWeapon && Engine.e.equipMenuReference.weaponLeftInventorySet)
             {
                 Engine.e.party[0].GetComponent<Grieve>().EquipGrieveWeaponLeft(this);
             }
-        }
+        }*/
 
         if (Engine.e.equipMenuReference.macScreen && macWeapon && Engine.e.equipMenuReference.weaponRightInventorySet)
         {
             Engine.e.party[1].GetComponent<Mac>().EquipMacWeaponRight(this);
-        }
-        else
-        {
-            if (Engine.e.equipMenuReference.macScreen && macWeapon && Engine.e.equipMenuReference.weaponLeftInventorySet)
-            {
-                Engine.e.party[1].GetComponent<Mac>().EquipMacWeaponLeft(this);
-            }
         }
 
         if (Engine.e.equipMenuReference.fieldScreen && fieldWeapon && Engine.e.equipMenuReference.weaponRightInventorySet)
         {
             Engine.e.party[2].GetComponent<Field>().EquipFieldWeaponRight(this);
         }
-        else
-        {
-            if (Engine.e.equipMenuReference.fieldScreen && fieldWeapon && Engine.e.equipMenuReference.weaponLeftInventorySet)
-            {
-                Engine.e.party[2].GetComponent<Field>().EquipFieldWeaponLeft(this);
-            }
-        }
 
         if (Engine.e.equipMenuReference.riggsScreen && riggsWeapon && Engine.e.equipMenuReference.weaponRightInventorySet)
         {
             Engine.e.party[3].GetComponent<Riggs>().EquipRiggsWeaponRight(this);
         }
-        else
+
+        if (Engine.e.equipMenuReference.solaceScreen && solaceWeapon && Engine.e.equipMenuReference.weaponRightInventorySet)
         {
-            if (Engine.e.equipMenuReference.riggsScreen && riggsWeapon && Engine.e.equipMenuReference.weaponLeftInventorySet)
-            {
-                Engine.e.party[3].GetComponent<Riggs>().EquipRiggsWeaponLeft(this);
-            }
+            Engine.e.party[4].GetComponent<Solace>().EquipSolaceWeaponRight(this);
         }
+
+        if (Engine.e.equipMenuReference.blueScreen && blueWeapon && Engine.e.equipMenuReference.weaponRightInventorySet)
+        {
+            Engine.e.party[5].GetComponent<Blue>().EquipBlueWeaponRight(this);
+        }
+
     }
 }

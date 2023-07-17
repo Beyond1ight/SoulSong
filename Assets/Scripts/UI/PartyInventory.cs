@@ -380,7 +380,7 @@ public class PartyInventory : MonoBehaviour
                     }
                 }
             }
-            else
+            /*else
             {
                 if (Engine.e.equipMenuReference.weaponLeftInventorySet)
                 {
@@ -417,7 +417,7 @@ public class PartyInventory : MonoBehaviour
                         }
                     }
                 }
-            }
+            }*/
         }
     }
 

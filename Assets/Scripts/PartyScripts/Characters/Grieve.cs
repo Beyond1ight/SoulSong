@@ -28,7 +28,7 @@ public class Grieve : Character
         Engine.e.equipMenuReference.DisplayGrieveStats();
     }
 
-    public void RemoveWeaponLeft()
+    /*public void RemoveWeaponLeft()
     {
         strength -= weaponLeft.GetComponent<Weapon>().strengthBonus;
         intelligence -= weaponLeft.GetComponent<Weapon>().intelligenceBonus;
@@ -47,7 +47,7 @@ public class Grieve : Character
         Engine.e.charEquippedWeaponLeft[0] = null;
 
         Engine.e.equipMenuReference.DisplayGrieveStats();
-    }
+    }*/
 
     public void RemoveChestArmor()
     {
@@ -172,7 +172,7 @@ public class Grieve : Character
 
     public void EquipGrieveWeaponRight(Weapon _weapon)
     {
-        if (_weapon.twoHand && !canUse2HWeapon || _weapon.offHand && !_weapon.mainHand)
+        /*if (_weapon.twoHand && !canUse2HWeapon || _weapon.offHand && !_weapon.mainHand)
         {
             return;
         }
@@ -182,7 +182,7 @@ public class Grieve : Character
             {
                 RemoveWeaponLeft();
             }
-        }
+        }*/
 
         if (weaponRight != null)
         {
@@ -228,7 +228,7 @@ public class Grieve : Character
         Engine.e.partyInventoryReference.indexReference = -1;
 
     }
-    public void EquipGrieveWeaponLeft(Weapon _weapon)
+    /*public void EquipGrieveWeaponLeft(Weapon _weapon)
     {
         if (_weapon.twoHand || !_weapon.offHand && _weapon.mainHand || _weapon.mainHand && _weapon.offHand && !canDualWield)
         {
@@ -300,7 +300,7 @@ public class Grieve : Character
             Engine.e.partyInventoryReference.indexReference = -1;
 
         }
-    }
+    }*/
 
     public void EquipGrieveWeaponRightOnLoad(Weapon _weapon)
     {
@@ -309,13 +309,13 @@ public class Grieve : Character
         Engine.e.charEquippedWeaponRight[0] = _weapon;
 
     }
-    public void EquipGrieveWeaponLeftOnLoad(Weapon _weapon)
+    /*public void EquipGrieveWeaponLeftOnLoad(Weapon _weapon)
     {
 
         weaponLeft = _weapon;
         Engine.e.charEquippedWeaponLeft[0] = _weapon;
 
-    }
+    }*/
 
     public void EquipGrieveChestArmor(ChestArmor _armor)
     {

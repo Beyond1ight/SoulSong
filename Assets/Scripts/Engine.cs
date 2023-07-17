@@ -2763,7 +2763,6 @@ public class Engine : MonoBehaviour
 
             for (int k = 0; k < charClasses.Length; k++)
             {
-                Debug.Log(i + " " + k);
                 playableCharacters[i].characterClass[k] = false;
                 playableCharacters[i].classEXP[k] = 0f;
             }
