@@ -7,6 +7,7 @@ public class GameData
 {
     public static GameData gameData;
     public string[] charNames;
+    public string[] charClass;
     public float[] charMaxHealth;
     public float[] charCurrentHealth;
     public float[] charMaxMana;
@@ -21,6 +22,14 @@ public class GameData
     public int[] charAvailableSkillPoints;
     public float[] charStealChance;
     public float[] charHaste;
+
+    public bool[] classUnlockedGrieve;
+    public bool[] classUnlockedMac;
+    public bool[] classUnlockedField;
+    public bool[] classUnlockedRiggs;
+    public bool[] classUnlockedSolace;
+    public bool[] classUnlockedBlue;
+
 
     public float[] charDodgeChance;
     public float[] charPhysicalDefense;
@@ -85,6 +94,14 @@ public class GameData
         charMaxHealth = new float[gameManager.party.Length];
         charMaxMana = new float[gameManager.party.Length];
         charLvl = new int[gameManager.party.Length];
+        charClass = new string[gameManager.party.Length];
+
+        classUnlockedGrieve = new bool[gameManager.charClasses.Length];
+        classUnlockedMac = new bool[gameManager.charClasses.Length];
+        classUnlockedField = new bool[gameManager.charClasses.Length];
+        classUnlockedRiggs = new bool[gameManager.charClasses.Length];
+        classUnlockedSolace = new bool[gameManager.charClasses.Length];
+        classUnlockedBlue = new bool[gameManager.charClasses.Length];
 
         charFireDropLevel = new float[gameManager.party.Length];
         charWaterDropLevel = new float[gameManager.party.Length];
@@ -166,6 +183,7 @@ public class GameData
                 charMaxHealth[i] = gameManager.party[i].GetComponent<Character>().maxHealth;
                 charMaxMana[i] = gameManager.party[i].GetComponent<Character>().maxMana;
                 charLvl[i] = gameManager.party[i].GetComponent<Character>().lvl;
+                charClass[i] = gameManager.party[i].GetComponent<Character>().currentClass;
 
                 charFireDropLevel[i] = gameManager.party[i].GetComponent<Character>().fireDropsLevel;
                 charWaterDropLevel[i] = gameManager.party[i].GetComponent<Character>().waterDropsLevel;
@@ -223,6 +241,35 @@ public class GameData
                 charAvailableSkillPoints[i] = gameManager.party[i].GetComponent<Character>().availableSkillPoints;
                 charStealChance[i] = gameManager.party[i].GetComponent<Character>().stealChance;
                 charHaste[i] = gameManager.party[i].GetComponent<Character>().haste;
+
+                for (int f = 0; f < gameManager.party[i].GetComponent<Character>().classUnlocked.Length; f++)
+                {
+                    classUnlockedGrieve[f] = gameManager.party[0].GetComponent<Character>().classUnlocked[f];
+
+                    if (gameManager.party[1] != null)
+                    {
+                        classUnlockedMac[f] = gameManager.party[1].GetComponent<Character>().classUnlocked[f];
+                    }
+
+                    if (gameManager.party[2] != null)
+                    {
+                        classUnlockedField[f] = gameManager.party[2].GetComponent<Character>().classUnlocked[f];
+                    }
+                    if (gameManager.party[3] != null)
+                    {
+                        classUnlockedRiggs[f] = gameManager.party[3].GetComponent<Character>().classUnlocked[f];
+                    }
+                    if (gameManager.party[4] != null)
+                    {
+                        classUnlockedSolace[f] = gameManager.playableCharacters[4].GetComponent<Character>().classUnlocked[f];
+                    }
+                    if (gameManager.party[5] != null)
+                    {
+                        classUnlockedBlue[f] = gameManager.playableCharacters[5].GetComponent<Character>().classUnlocked[f];
+                    }
+
+
+                }
 
                 for (int f = 0; f < Engine.e.party[i].GetComponent<Character>().drops.Length; f++)
                 {

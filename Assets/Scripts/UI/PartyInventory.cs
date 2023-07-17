@@ -14,7 +14,7 @@ public class PartyInventory : MonoBehaviour
     public ChestArmor[] chestArmor;
     public Accessory[] accessories;
 
-    public int grieveWeaponTotal, macWeaponTotal, fieldWeaponTotal, riggsWeaponTotal;
+    public int grieveWeaponTotal, macWeaponTotal, fieldWeaponTotal, riggsWeaponTotal, solaceWeaponTotal, blueWeaponTotal;
     public int chestArmorTotal;
     public InventorySlot[] itemInventorySlots, chestArmorInventorySlots, accessoryInventorySlots, weaponInventorySlots;
     public bool inventoryScreenSet, battleScreenInventorySet;
@@ -363,6 +363,22 @@ public class PartyInventory : MonoBehaviour
                         Engine.e.equipMenuReference.weaponRightInventorySet = false;
                     }
                 }
+                if (Engine.e.equipMenuReference.solaceScreen)
+                {
+                    if (Engine.e.party[4].GetComponent<Solace>().weaponRight != null)
+                    {
+                        Engine.e.party[4].GetComponent<Solace>().RemoveWeaponRight();
+                        Engine.e.equipMenuReference.weaponRightInventorySet = false;
+                    }
+                }
+                if (Engine.e.equipMenuReference.blueScreen)
+                {
+                    if (Engine.e.party[5].GetComponent<Blue>().weaponRight != null)
+                    {
+                        Engine.e.party[5].GetComponent<Blue>().RemoveWeaponRight();
+                        Engine.e.equipMenuReference.weaponRightInventorySet = false;
+                    }
+                }
             }
             else
             {
@@ -446,6 +462,20 @@ public class PartyInventory : MonoBehaviour
                     Engine.e.party[3].GetComponent<Riggs>().RemoveChestArmor();
                 }
             }
+            if (Engine.e.equipMenuReference.solaceScreen)
+            {
+                if (Engine.e.party[4].GetComponent<Character>().chestArmor != null)
+                {
+                    Engine.e.party[4].GetComponent<Solace>().RemoveChestArmor();
+                }
+            }
+            if (Engine.e.equipMenuReference.blueScreen)
+            {
+                if (Engine.e.party[5].GetComponent<Character>().chestArmor != null)
+                {
+                    Engine.e.party[5].GetComponent<Blue>().RemoveChestArmor();
+                }
+            }
         }
     }
 
@@ -496,6 +526,22 @@ public class PartyInventory : MonoBehaviour
                         Engine.e.equipMenuReference.accessory1InventorySet = false;
                     }
                 }
+                if (Engine.e.equipMenuReference.solaceScreen)
+                {
+                    if (Engine.e.party[4].GetComponent<Solace>().accessory1 != null)
+                    {
+                        Engine.e.party[4].GetComponent<Solace>().RemoveAccessory1();
+                        Engine.e.equipMenuReference.accessory1InventorySet = false;
+                    }
+                }
+                if (Engine.e.equipMenuReference.blueScreen)
+                {
+                    if (Engine.e.party[5].GetComponent<Blue>().accessory1 != null)
+                    {
+                        Engine.e.party[5].GetComponent<Blue>().RemoveAccessory1();
+                        Engine.e.equipMenuReference.accessory1InventorySet = false;
+                    }
+                }
             }
             else
             {
@@ -530,6 +576,22 @@ public class PartyInventory : MonoBehaviour
                         if (Engine.e.party[3].GetComponent<Riggs>().accessory2 != null)
                         {
                             Engine.e.party[3].GetComponent<Riggs>().RemoveAccessory2();
+                            Engine.e.equipMenuReference.accessory2InventorySet = false;
+                        }
+                    }
+                    if (Engine.e.equipMenuReference.solaceScreen)
+                    {
+                        if (Engine.e.party[4].GetComponent<Solace>().accessory2 != null)
+                        {
+                            Engine.e.party[4].GetComponent<Solace>().RemoveAccessory2();
+                            Engine.e.equipMenuReference.accessory2InventorySet = false;
+                        }
+                    }
+                    if (Engine.e.equipMenuReference.blueScreen)
+                    {
+                        if (Engine.e.party[5].GetComponent<Blue>().accessory2 != null)
+                        {
+                            Engine.e.party[5].GetComponent<Blue>().RemoveAccessory2();
                             Engine.e.equipMenuReference.accessory2InventorySet = false;
                         }
                     }

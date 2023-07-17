@@ -9,6 +9,7 @@ public class GridCursorMovement : MonoBehaviour
     public float speed;
     public Rigidbody2D rb;
     public Vector2 movement;
+    public Vector3 grievePos, macPos, fieldPos, riggsPos, solacePos, bluePos;
     public bool isMoving, switchingChar = false;
 
     void FixedUpdate()
@@ -21,6 +22,42 @@ public class GridCursorMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Grieve Default Pos
+        // -7, 391
+        if (Engine.e.gridReference.grieveScreen)
+        {
+            grievePos = this.transform.position;
+        }
+        //Mac Default Pos
+        // -7, -703
+        if (Engine.e.gridReference.macScreen)
+        {
+            macPos = this.transform.position;
+        }
+        // Field Default Pos
+        // 466, -430
+        if (Engine.e.gridReference.fieldScreen)
+        {
+            fieldPos = this.transform.position;
+        }
+        // Riggs Default Pos
+        // -481, 124
+        if (Engine.e.gridReference.riggsScreen)
+        {
+            riggsPos = this.transform.position;
+        }
+        // Solace Default Pos
+        // 466, 121
+        if (Engine.e.gridReference.solaceScreen)
+        {
+            solacePos = this.transform.position;
+        }
+        // Blue Default Pos
+        // -481, -428
+        if (Engine.e.gridReference.blueScreen)
+        {
+            bluePos = this.transform.position;
+        }
 
         if (!Engine.e.gridReference.abilitiesListDisplayed)
         {

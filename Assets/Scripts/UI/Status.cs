@@ -6,11 +6,12 @@ using TMPro;
 public class Status : MonoBehaviour
 {
     public GameObject[] charSelectionButtons;
-    public TextMeshProUGUI lvl, hp, mp, enr, expTillNextLvl, dropCostReduction, skillCostReduction;
+    public TextMeshProUGUI currentClass, lvl, hp, mp, enr, expTillNextLvl, dropCostReduction, skillCostReduction;
     public TextMeshProUGUI[] dropLevels, dropExperience, attackStats, defenseStats, resistances, additionalStats;
 
     public void DisplayStats(int charIndex)
     {
+        currentClass.text = "(" + Engine.e.party[charIndex].GetComponent<Character>().currentClass + ")";
         lvl.text = "Lvl: " + Engine.e.party[charIndex].GetComponent<Character>().lvl;
         hp.text = "HP: " + Engine.e.party[charIndex].GetComponent<Character>().currentHealth + " / " + Engine.e.party[charIndex].GetComponent<Character>().maxHealth;
         mp.text = "MP: " + Engine.e.party[charIndex].GetComponent<Character>().currentMana + " / " + Engine.e.party[charIndex].GetComponent<Character>().maxMana;

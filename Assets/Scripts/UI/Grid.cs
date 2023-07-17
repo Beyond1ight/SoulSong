@@ -12,11 +12,11 @@ public class Grid : MonoBehaviour
     public AbilityStatNode[] nodes;
     public GameObject[] connectionLines;
     public GameObject[] classProgressionBars;
-    public bool gridDisplayed, abilitiesListDisplayed, grieveScreen, macScreen, fieldScreen, riggsScreen;
-    public int grievePosition, macPosition, fieldPosition, riggsPosition;
-    public GameObject cursor, helpReference, helpTextParentObj, abilitiesList, tier2Path;
+    public bool gridDisplayed, abilitiesListDisplayed, grieveScreen, macScreen, fieldScreen, riggsScreen, solaceScreen, blueScreen;
+    public int grievePosition, macPosition, fieldPosition, riggsPosition, solacePosition, bluePosition;
+    public GameObject cursor, helpReference, helpTextParentObj, helpTextCharName, abilitiesList, tier2Path;
     public CinemachineVirtualCamera gridPerspective, centerOfGridPerspective;
-    public GameObject[] dropsButtons, skillButtons, classPaths, classConnectionToMiddle, baseClassConnectionToComboClass;
+    public GameObject[] dropsButtons, skillButtons, classPaths, classConnectionToMiddle, baseClassConnectionToComboClass, charStartingNodes;
 
 
     private void Start()
@@ -30,6 +30,11 @@ public class Grid : MonoBehaviour
         macScreen = false;
         fieldScreen = false;
         riggsScreen = false;
+        solaceScreen = false;
+        blueScreen = false;
+        //helpTextCharName.GetComponent<TextMeshProUGUI>().text = string.Empty;
+        //helpTextCharName.GetComponent<TextMeshProUGUI>().text = Engine.e.playableCharacters[0].characterName;
+        helpReference.GetComponentInChildren<TextMeshProUGUI>().text = string.Empty;
 
         for (int i = 0; i < Engine.e.charClasses.Length; i++)
         {
@@ -104,10 +109,18 @@ public class Grid : MonoBehaviour
         }
 
         //cursor.GetComponent<GridCursorMovement>().isMoving = false;
-        cursor.GetComponent<GridCursor>().currentAbilityStatNode = nodes[grievePosition];
-        Vector3 cursorPos = new Vector3(nodes[grievePosition].transform.position.x, nodes[grievePosition].transform.position.y, -5);
+        //cursor.GetComponent<GridCursor>().currentAbilityStatNode = nodes[grievePosition];
 
-        cursor.transform.position = cursorPos;
+        if (cursor.GetComponent<GridCursorMovement>().grievePos == Vector3.zero)
+        {
+            Vector3 cursorPos = new Vector3(charStartingNodes[0].transform.position.x, charStartingNodes[0].transform.position.y, -5);
+            cursor.transform.position = cursorPos;
+        }
+        else
+        {
+            cursor.transform.position = cursor.GetComponent<GridCursorMovement>().grievePos;
+        }
+
         cursor.GetComponent<GridCursorMovement>().switchingChar = false;
         Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
         Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 1;
@@ -141,6 +154,11 @@ public class Grid : MonoBehaviour
         macScreen = true;
         fieldScreen = false;
         riggsScreen = false;
+        solaceScreen = false;
+        blueScreen = false;
+        //helpTextCharName.GetComponent<TextMeshProUGUI>().text = string.Empty;
+        //helpTextCharName.GetComponent<TextMeshProUGUI>().text = Engine.e.playableCharacters[1].characterName;
+        helpReference.GetComponentInChildren<TextMeshProUGUI>().text = string.Empty;
 
         for (int i = 0; i < Engine.e.charClasses.Length; i++)
         {
@@ -214,11 +232,17 @@ public class Grid : MonoBehaviour
                 }
             }
         }
-        //cursor.GetComponent<GridCursorMovement>().isMoving = false;
-        cursor.GetComponent<GridCursor>().currentAbilityStatNode = nodes[macPosition];
-        Vector3 cursorPos = new Vector3(nodes[macPosition].transform.position.x, nodes[macPosition].transform.position.y, -5);
 
-        cursor.transform.position = cursorPos;
+        if (cursor.GetComponent<GridCursorMovement>().macPos == Vector3.zero)
+        {
+            Vector3 cursorPos = new Vector3(charStartingNodes[1].transform.position.x, charStartingNodes[1].transform.position.y, -5);
+            cursor.transform.position = cursorPos;
+        }
+        else
+        {
+            cursor.transform.position = cursor.GetComponent<GridCursorMovement>().macPos;
+        }
+
         cursor.GetComponent<GridCursorMovement>().switchingChar = false;
         Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
         Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 1;
@@ -231,6 +255,12 @@ public class Grid : MonoBehaviour
         macScreen = false;
         fieldScreen = true;
         riggsScreen = false;
+        solaceScreen = false;
+        blueScreen = false;
+        // helpTextCharName.GetComponent<TextMeshProUGUI>().text = string.Empty;
+        // helpTextCharName.GetComponent<TextMeshProUGUI>().text = Engine.e.playableCharacters[2].characterName;
+
+        helpReference.GetComponentInChildren<TextMeshProUGUI>().text = string.Empty;
 
         for (int i = 0; i < Engine.e.charClasses.Length; i++)
         {
@@ -305,11 +335,15 @@ public class Grid : MonoBehaviour
             }
         }
 
-        //cursor.GetComponent<GridCursorMovement>().isMoving = false;
-        cursor.GetComponent<GridCursor>().currentAbilityStatNode = nodes[fieldPosition];
-        Vector3 cursorPos = new Vector3(nodes[fieldPosition].transform.position.x, nodes[fieldPosition].transform.position.y, -5);
-
-        cursor.transform.position = cursorPos;
+        if (cursor.GetComponent<GridCursorMovement>().macPos == Vector3.zero)
+        {
+            Vector3 cursorPos = new Vector3(charStartingNodes[2].transform.position.x, charStartingNodes[2].transform.position.y, -5);
+            cursor.transform.position = cursorPos;
+        }
+        else
+        {
+            cursor.transform.position = cursor.GetComponent<GridCursorMovement>().macPos;
+        }
         cursor.GetComponent<GridCursorMovement>().switchingChar = false;
         Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
         Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 1;
@@ -321,6 +355,12 @@ public class Grid : MonoBehaviour
         macScreen = false;
         fieldScreen = false;
         riggsScreen = true;
+        solaceScreen = false;
+        blueScreen = false;
+        //helpTextCharName.GetComponent<TextMeshProUGUI>().text = string.Empty;
+        //helpTextCharName.GetComponent<TextMeshProUGUI>().text = Engine.e.playableCharacters[3].characterName;
+
+        helpReference.GetComponentInChildren<TextMeshProUGUI>().text = string.Empty;
 
         for (int i = 0; i < Engine.e.charClasses.Length; i++)
         {
@@ -394,11 +434,214 @@ public class Grid : MonoBehaviour
                 }
             }
         }
-        //cursor.GetComponent<GridCursorMovement>().isMoving = false;
-        cursor.GetComponent<GridCursor>().currentAbilityStatNode = nodes[riggsPosition];
-        Vector3 cursorPos = new Vector3(nodes[riggsPosition].transform.position.x, nodes[riggsPosition].transform.position.y, -5);
+        if (cursor.GetComponent<GridCursorMovement>().riggsPos == Vector3.zero)
+        {
+            Vector3 cursorPos = new Vector3(charStartingNodes[3].transform.position.x, charStartingNodes[3].transform.position.y, -5);
+            cursor.transform.position = cursorPos;
+        }
+        else
+        {
+            cursor.transform.position = cursor.GetComponent<GridCursorMovement>().riggsPos;
+        }
+        cursor.GetComponent<GridCursorMovement>().switchingChar = false;
+        Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
+        Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 1;
+    }
 
-        cursor.transform.position = cursorPos;
+    public void SetSolaceScreen()
+    {
+        grieveScreen = false;
+        macScreen = false;
+        fieldScreen = false;
+        riggsScreen = false;
+        solaceScreen = true;
+        blueScreen = false;
+        //helpTextCharName.GetComponent<TextMeshProUGUI>().text = string.Empty;
+        //helpTextCharName.GetComponent<TextMeshProUGUI>().text = Engine.e.playableCharacters[3].characterName;
+
+        helpReference.GetComponentInChildren<TextMeshProUGUI>().text = string.Empty;
+
+        for (int i = 0; i < Engine.e.charClasses.Length; i++)
+        {
+            if (Engine.e.playableCharacters[4].classUnlocked[i] == true)
+            {
+                classConnectionToMiddle[i].SetActive(true);
+            }
+            else
+            {
+                classConnectionToMiddle[i].SetActive(false);
+            }
+
+            if (Engine.e.playableCharacters[4].characterClass[i] == true && Engine.e.playableCharacters[4].classEXP[i] == 100f)
+            {
+                Engine.e.playableCharacters[4].canSelectNewClass = true;
+            }
+            else
+            {
+                Engine.e.playableCharacters[4].canSelectNewClass = false;
+            }
+        }
+
+        for (int i = 0; i < classProgressionBars.Length; i++)
+        {
+            classProgressionBars[i].GetComponent<Slider>().value = Engine.e.playableCharacters[4].classEXP[i];
+        }
+
+        for (int i = 0; i < nodes.Length; i++)
+        {
+            if (nodes[i].node != null)
+            {
+                if (nodes[i].riggsUnlocked)
+                {
+                    for (int k = 0; k < nodes[i].connectionLines.Length; k++)
+                    {
+                        if (nodes[i].connectionLines[k] != null)
+                        {
+                            nodes[i].connectionLines[k].GetComponent<SpriteShapeRenderer>().color = Color.yellow;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < dropsButtons.Length; i++)
+        {
+            if (dropsButtons[i].GetComponent<PauseMenuDropsUIHolder>().drop != null)
+            {
+                if (Engine.e.party[4].GetComponent<Character>().KnowsDrop(dropsButtons[i].GetComponent<PauseMenuDropsUIHolder>().drop))
+                {
+                    dropsButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                }
+                else
+                {
+                    dropsButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.gray;
+                }
+            }
+        }
+
+        for (int i = 0; i < skillButtons.Length; i++)
+        {
+            if (skillButtons[i].GetComponent<PauseMenuSkillsUIHolder>().skill != null)
+            {
+                if (Engine.e.party[4].GetComponent<Character>().KnowsSkill(skillButtons[i].GetComponent<PauseMenuSkillsUIHolder>().skill))
+                {
+                    skillButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                }
+                else
+                {
+                    skillButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.gray;
+                }
+            }
+        }
+        if (cursor.GetComponent<GridCursorMovement>().solacePos == Vector3.zero)
+        {
+            Vector3 cursorPos = new Vector3(charStartingNodes[4].transform.position.x, charStartingNodes[4].transform.position.y, -5);
+            cursor.transform.position = cursorPos;
+        }
+        else
+        {
+            cursor.transform.position = cursor.GetComponent<GridCursorMovement>().solacePos;
+        }
+        cursor.GetComponent<GridCursorMovement>().switchingChar = false;
+        Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
+        Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 1;
+    }
+    public void SetBlueScreen()
+    {
+        grieveScreen = false;
+        macScreen = false;
+        fieldScreen = false;
+        riggsScreen = false;
+        solaceScreen = false;
+        blueScreen = true;
+
+        helpReference.GetComponentInChildren<TextMeshProUGUI>().text = string.Empty;
+
+        //helpTextCharName.GetComponent<TextMeshProUGUI>().text = string.Empty;
+        //helpTextCharName.GetComponent<TextMeshProUGUI>().text = Engine.e.playableCharacters[3].characterName;
+
+
+        for (int i = 0; i < Engine.e.charClasses.Length; i++)
+        {
+            if (Engine.e.playableCharacters[5].classUnlocked[i] == true)
+            {
+                classConnectionToMiddle[i].SetActive(true);
+            }
+            else
+            {
+                classConnectionToMiddle[i].SetActive(false);
+            }
+
+            if (Engine.e.playableCharacters[5].characterClass[i] == true && Engine.e.playableCharacters[5].classEXP[i] == 100f)
+            {
+                Engine.e.playableCharacters[5].canSelectNewClass = true;
+            }
+            else
+            {
+                Engine.e.playableCharacters[5].canSelectNewClass = false;
+            }
+        }
+
+        for (int i = 0; i < classProgressionBars.Length; i++)
+        {
+            classProgressionBars[i].GetComponent<Slider>().value = Engine.e.playableCharacters[5].classEXP[i];
+        }
+
+        for (int i = 0; i < nodes.Length; i++)
+        {
+            if (nodes[i].node != null)
+            {
+                if (nodes[i].riggsUnlocked)
+                {
+                    for (int k = 0; k < nodes[i].connectionLines.Length; k++)
+                    {
+                        if (nodes[i].connectionLines[k] != null)
+                        {
+                            nodes[i].connectionLines[k].GetComponent<SpriteShapeRenderer>().color = Color.yellow;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < dropsButtons.Length; i++)
+        {
+            if (dropsButtons[i].GetComponent<PauseMenuDropsUIHolder>().drop != null)
+            {
+                if (Engine.e.party[5].GetComponent<Character>().KnowsDrop(dropsButtons[i].GetComponent<PauseMenuDropsUIHolder>().drop))
+                {
+                    dropsButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                }
+                else
+                {
+                    dropsButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.gray;
+                }
+            }
+        }
+
+        for (int i = 0; i < skillButtons.Length; i++)
+        {
+            if (skillButtons[i].GetComponent<PauseMenuSkillsUIHolder>().skill != null)
+            {
+                if (Engine.e.party[5].GetComponent<Character>().KnowsSkill(skillButtons[i].GetComponent<PauseMenuSkillsUIHolder>().skill))
+                {
+                    skillButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                }
+                else
+                {
+                    skillButtons[i].GetComponentInChildren<TextMeshProUGUI>().color = Color.gray;
+                }
+            }
+        }
+        if (cursor.GetComponent<GridCursorMovement>().bluePos == Vector3.zero)
+        {
+            Vector3 cursorPos = new Vector3(charStartingNodes[5].transform.position.x, charStartingNodes[5].transform.position.y, -5);
+            cursor.transform.position = cursorPos;
+        }
+        else
+        {
+            cursor.transform.position = cursor.GetComponent<GridCursorMovement>().bluePos;
+        }
         cursor.GetComponent<GridCursorMovement>().switchingChar = false;
         Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_XDamping = 1;
         Engine.e.gridReference.gridPerspective.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 1;
@@ -445,6 +688,8 @@ public class Grid : MonoBehaviour
         Engine.e.gridReference.gameObject.SetActive(false);
         gridDisplayed = false;
         abilitiesListDisplayed = false;
+
+        helpReference.GetComponentInChildren<TextMeshProUGUI>().text = string.Empty;
 
         Time.timeScale = 0f;
 

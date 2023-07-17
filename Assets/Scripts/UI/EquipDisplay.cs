@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class EquipDisplay : MonoBehaviour
 {
     public GameObject[] charSelectionButtons;
-    public bool grieveScreen, macScreen, fieldScreen, riggsScreen;
+    public bool grieveScreen, macScreen, fieldScreen, riggsScreen, solaceScreen, blueScreen;
     public GameObject[] weaponLists, armorLists;
     public InventorySlot equippedWeaponRight, equippedWeaponLeft, equippedChestArmor, equippedAccessory1, equippedAccessory2;
     public TextMeshProUGUI[] charAttackStatsReference, charDefenseStatsReference, charAttackComparisonStats, charDefenseComparisonStats;
@@ -26,6 +26,8 @@ public class EquipDisplay : MonoBehaviour
         macScreen = false;
         fieldScreen = false;
         riggsScreen = false;
+        solaceScreen = false;
+        blueScreen = false;
 
 
         if (Engine.e.party[1] != null)
@@ -52,6 +54,8 @@ public class EquipDisplay : MonoBehaviour
         macScreen = true;
         fieldScreen = false;
         riggsScreen = false;
+        solaceScreen = false;
+        blueScreen = false;
 
         if (Engine.e.party[0] != null)
         {
@@ -78,6 +82,8 @@ public class EquipDisplay : MonoBehaviour
         macScreen = false;
         fieldScreen = true;
         riggsScreen = false;
+        solaceScreen = false;
+        blueScreen = false;
 
         if (Engine.e.party[0] != null)
         {
@@ -106,6 +112,68 @@ public class EquipDisplay : MonoBehaviour
         macScreen = false;
         fieldScreen = false;
         riggsScreen = true;
+        solaceScreen = false;
+        blueScreen = false;
+
+        if (Engine.e.party[0] != null)
+        {
+            charTMP[0].color = Color.gray;
+        }
+
+        if (Engine.e.party[1] != null)
+        {
+            charTMP[1].color = Color.gray;
+
+        }
+        if (Engine.e.party[2] != null)
+        {
+            charTMP[2].color = Color.gray;
+
+        }
+
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(equippedWeaponRight.gameObject);
+
+    }
+
+    public void SetSolaceScreen()
+    {
+        grieveScreen = false;
+        macScreen = false;
+        fieldScreen = false;
+        riggsScreen = false;
+        solaceScreen = true;
+        blueScreen = false;
+
+        if (Engine.e.party[0] != null)
+        {
+            charTMP[0].color = Color.gray;
+        }
+
+        if (Engine.e.party[1] != null)
+        {
+            charTMP[1].color = Color.gray;
+
+        }
+        if (Engine.e.party[2] != null)
+        {
+            charTMP[2].color = Color.gray;
+
+        }
+
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(equippedWeaponRight.gameObject);
+
+    }
+
+    public void SetBlueScreen()
+    {
+        grieveScreen = false;
+        macScreen = false;
+        fieldScreen = false;
+        riggsScreen = false;
+        solaceScreen = false;
+        blueScreen = true;
 
         if (Engine.e.party[0] != null)
         {
@@ -520,6 +588,158 @@ public class EquipDisplay : MonoBehaviour
         if (charNewWeapon[3] == true)
         {
             charNewWeaponNotif[3].SetActive(true);
+        }
+    }
+
+    public void DisplaySolaceStats()
+    {
+
+        charAttackStatsReference[0].text = Engine.e.party[4].GetComponent<Character>().strength.ToString();
+        charAttackStatsReference[1].text = Engine.e.party[4].GetComponent<Character>().intelligence.ToString();
+        charAttackStatsReference[2].text = Engine.e.party[4].GetComponent<Character>().firePhysicalAttackBonus.ToString();
+        charAttackStatsReference[3].text = Engine.e.party[4].GetComponent<Character>().icePhysicalAttackBonus.ToString();
+        charAttackStatsReference[4].text = Engine.e.party[4].GetComponent<Character>().lightningPhysicalAttackBonus.ToString();
+        charAttackStatsReference[5].text = Engine.e.party[4].GetComponent<Character>().waterPhysicalAttackBonus.ToString();
+        charAttackStatsReference[6].text = Engine.e.party[4].GetComponent<Character>().shadowPhysicalAttackBonus.ToString();
+
+        charDefenseStatsReference[0].text = Engine.e.party[4].GetComponent<Character>().physicalDefense + "%";
+        charDefenseStatsReference[1].text = Engine.e.party[4].GetComponent<Character>().fireDefense + "%";
+        charDefenseStatsReference[2].text = Engine.e.party[4].GetComponent<Character>().iceDefense + "%";
+        charDefenseStatsReference[3].text = Engine.e.party[4].GetComponent<Character>().lightningDefense + "%";
+        charDefenseStatsReference[4].text = Engine.e.party[4].GetComponent<Character>().waterDefense + "%";
+        charDefenseStatsReference[5].text = Engine.e.party[4].GetComponent<Character>().shadowDefense + "%";
+
+        equippedWeaponRight.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+        equippedWeaponLeft.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+        equippedChestArmor.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+        equippedAccessory1.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+        equippedAccessory2.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+
+        if (Engine.e.party[4].GetComponent<Character>().weaponRight != null)
+        {
+            equippedWeaponRight.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[4].GetComponent<Character>().weaponRight.itemName;
+        }
+        else
+        {
+            equippedWeaponRight.itemName.GetComponentInChildren<TMP_Text>().text = "Nothing.";
+        }
+
+        if (Engine.e.party[4].GetComponent<Character>().weaponLeft != null)
+        {
+            equippedWeaponLeft.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[4].GetComponent<Character>().weaponLeft.itemName;
+        }
+        else
+        {
+            equippedWeaponLeft.itemName.GetComponentInChildren<TMP_Text>().text = "Nothing.";
+        }
+
+        if (Engine.e.party[4].GetComponent<Character>().chestArmor != null)
+        {
+            equippedChestArmor.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[4].GetComponent<Character>().chestArmor.itemName;
+        }
+        else
+        {
+            equippedChestArmor.itemName.GetComponentInChildren<TMP_Text>().text = "Nothing.";
+        }
+
+        if (Engine.e.party[4].GetComponent<Character>().accessory1 != null)
+        {
+            equippedAccessory1.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[4].GetComponent<Character>().accessory1.itemName;
+        }
+        else
+        {
+            equippedAccessory1.itemName.GetComponentInChildren<TMP_Text>().text = "Nothing.";
+        }
+
+        if (Engine.e.party[4].GetComponent<Character>().accessory2 != null)
+        {
+            equippedAccessory2.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[4].GetComponent<Character>().accessory2.itemName;
+        }
+        else
+        {
+            equippedAccessory2.itemName.GetComponentInChildren<TMP_Text>().text = "Nothing.";
+        }
+
+        ClearNewWeaponNotif();
+        if (charNewWeapon[4] == true)
+        {
+            charNewWeaponNotif[4].SetActive(true);
+        }
+    }
+
+    public void DisplayBlueStats()
+    {
+
+        charAttackStatsReference[0].text = Engine.e.party[5].GetComponent<Character>().strength.ToString();
+        charAttackStatsReference[1].text = Engine.e.party[5].GetComponent<Character>().intelligence.ToString();
+        charAttackStatsReference[2].text = Engine.e.party[5].GetComponent<Character>().firePhysicalAttackBonus.ToString();
+        charAttackStatsReference[3].text = Engine.e.party[5].GetComponent<Character>().icePhysicalAttackBonus.ToString();
+        charAttackStatsReference[4].text = Engine.e.party[5].GetComponent<Character>().lightningPhysicalAttackBonus.ToString();
+        charAttackStatsReference[5].text = Engine.e.party[5].GetComponent<Character>().waterPhysicalAttackBonus.ToString();
+        charAttackStatsReference[6].text = Engine.e.party[5].GetComponent<Character>().shadowPhysicalAttackBonus.ToString();
+
+        charDefenseStatsReference[0].text = Engine.e.party[5].GetComponent<Character>().physicalDefense + "%";
+        charDefenseStatsReference[1].text = Engine.e.party[5].GetComponent<Character>().fireDefense + "%";
+        charDefenseStatsReference[2].text = Engine.e.party[5].GetComponent<Character>().iceDefense + "%";
+        charDefenseStatsReference[3].text = Engine.e.party[5].GetComponent<Character>().lightningDefense + "%";
+        charDefenseStatsReference[4].text = Engine.e.party[5].GetComponent<Character>().waterDefense + "%";
+        charDefenseStatsReference[5].text = Engine.e.party[5].GetComponent<Character>().shadowDefense + "%";
+
+        equippedWeaponRight.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+        equippedWeaponLeft.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+        equippedChestArmor.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+        equippedAccessory1.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+        equippedAccessory2.itemName.GetComponentInChildren<TMP_Text>().text = string.Empty;
+
+        if (Engine.e.party[5].GetComponent<Character>().weaponRight != null)
+        {
+            equippedWeaponRight.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[5].GetComponent<Character>().weaponRight.itemName;
+        }
+        else
+        {
+            equippedWeaponRight.itemName.GetComponentInChildren<TMP_Text>().text = "Nothing.";
+        }
+
+        if (Engine.e.party[5].GetComponent<Character>().weaponLeft != null)
+        {
+            equippedWeaponLeft.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[5].GetComponent<Character>().weaponLeft.itemName;
+        }
+        else
+        {
+            equippedWeaponLeft.itemName.GetComponentInChildren<TMP_Text>().text = "Nothing.";
+        }
+
+        if (Engine.e.party[5].GetComponent<Character>().chestArmor != null)
+        {
+            equippedChestArmor.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[5].GetComponent<Character>().chestArmor.itemName;
+        }
+        else
+        {
+            equippedChestArmor.itemName.GetComponentInChildren<TMP_Text>().text = "Nothing.";
+        }
+
+        if (Engine.e.party[5].GetComponent<Character>().accessory1 != null)
+        {
+            equippedAccessory1.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[5].GetComponent<Character>().accessory1.itemName;
+        }
+        else
+        {
+            equippedAccessory1.itemName.GetComponentInChildren<TMP_Text>().text = "Nothing.";
+        }
+
+        if (Engine.e.party[5].GetComponent<Character>().accessory2 != null)
+        {
+            equippedAccessory2.itemName.GetComponentInChildren<TMP_Text>().text = Engine.e.party[5].GetComponent<Character>().accessory2.itemName;
+        }
+        else
+        {
+            equippedAccessory2.itemName.GetComponentInChildren<TMP_Text>().text = "Nothing.";
+        }
+
+        ClearNewWeaponNotif();
+        if (charNewWeapon[5] == true)
+        {
+            charNewWeaponNotif[5].SetActive(true);
         }
     }
     public void ClearAccessoryBool()

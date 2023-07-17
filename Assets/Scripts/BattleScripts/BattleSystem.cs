@@ -267,7 +267,6 @@ public class BattleSystem : MonoBehaviour
         //  state = BattleState.CHAR1TURN;
         state = BattleState.ATBCHECK;
         // Char1Turn();
-
     }
 
     public void HandleQueue()
@@ -277,7 +276,7 @@ public class BattleSystem : MonoBehaviour
         {
             if (state == currentInQueue && state != BattleState.ATBCHECK)
             {
-                state = BattleState.ATBCHECK; 
+                state = BattleState.ATBCHECK;
             }
 
             if (!battleQueue.Contains(BattleState.CHAR1TURN) && !battleQueue.Contains(BattleState.CONFCHAR1))
@@ -1334,7 +1333,7 @@ public class BattleSystem : MonoBehaviour
                     {
                         if (characterAttackIndex.GetComponent<Character>().weaponRight.GetComponent<Weapon>() != null)
                         {
-                            HandleMeleeAttackAnim(characterAttacking, enemies[targetEnemy].gameObject, characterAttackIndex.GetComponent<Character>().weaponRight.GetComponent<Weapon>());
+                            //HandleMeleeAttackAnim(characterAttacking, enemies[targetEnemy].gameObject, characterAttackIndex.GetComponent<Character>().weaponRight.GetComponent<Weapon>());
                         }
 
                         enemy.TakePhysicalDamage(targetEnemy, characterAttackIndex.strength, characterAttackIndex.hitChance);

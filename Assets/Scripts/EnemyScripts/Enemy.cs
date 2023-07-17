@@ -130,7 +130,6 @@ public class Enemy : MonoBehaviour
         if (other.name == "ActiveParty")
         {
             GetComponentInParent<EnemyGroup>().OnTriggerEnter2D(other);
-
         }
     }
 

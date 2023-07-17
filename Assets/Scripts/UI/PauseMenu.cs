@@ -12,7 +12,8 @@ public class PauseMenu : MonoBehaviour
     public TextMeshProUGUI[] activePartyMembersText;
     public TextMeshProUGUI[] partyPauseMenuNamesTextReference;
     public TextMeshProUGUI[] partyPauseMenuHPStatsTextReference, partyPauseMenuMPStatsTextReference, partyPauseMenuENRStatsTextReference, partyPauseMenuAPStatsTextReference;
-    public GameObject grieveWeaponFirstButton, grieveWeaponSelection, macWeaponFirstButton, macWeaponSelection, fieldWeaponFirstButton, fieldWeaponSelection, riggsWeaponFirstButton, riggsWeaponSelection;
+    public GameObject grieveWeaponFirstButton, grieveWeaponSelection, macWeaponFirstButton, macWeaponSelection, fieldWeaponFirstButton, fieldWeaponSelection, riggsWeaponFirstButton, riggsWeaponSelection,
+    solaceWeaponFirstButton, solaceWeaponSelection, blueWeaponFirstButton, blueWeaponSelection;
     public TextMeshProUGUI partyMoneyDisplay;
     public TextMeshProUGUI timeOfDayDisplay;
     public TextMeshProUGUI partyLocationDisplay;
@@ -64,11 +65,15 @@ public class PauseMenu : MonoBehaviour
                     DisplayMacPartyText();
                     DisplayFieldPartyText();
                     DisplayRiggsPartyText();
+                    DisplaySolacePartyText();
+                    DisplayBluePartyText();
 
                     Engine.e.DisplayGrieveInventoryStats();
                     Engine.e.DisplayMacInventoryStats();
                     Engine.e.DisplayFieldInventoryStats();
                     Engine.e.DisplayRiggsInventoryStats();
+                    Engine.e.DisplaySolaceInventoryStats();
+                    Engine.e.DisplayBlueInventoryStats();
 
                     DisplayActiveParty1Text();
                     DisplayActiveParty2Text();
@@ -189,6 +194,56 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
+    public void DisplaySolacePartyText()
+    {
+        if (Engine.e.party[4] != null)
+        {
+            partyPauseMenuNamesTextReference[4].text = string.Empty;
+            partyPauseMenuNamesTextReference[4].text += Engine.e.party[4].GetComponent<Character>().characterName
+            + " Lvl. " + Engine.e.party[4].GetComponent<Character>().lvl;
+
+            partyPauseMenuHPStatsTextReference[4].text = string.Empty;
+            partyPauseMenuHPStatsTextReference[4].text += "HP: " + Engine.e.party[4].GetComponent<Character>().currentHealth + " / " + Engine.e.party[4].GetComponent<Character>().maxHealth;
+
+            partyPauseMenuMPStatsTextReference[4].text = string.Empty;
+            partyPauseMenuMPStatsTextReference[4].text += "MP: " + Engine.e.party[4].GetComponent<Character>().currentMana + " / " + Engine.e.party[4].GetComponent<Character>().maxMana;
+
+            partyPauseMenuENRStatsTextReference[4].text = string.Empty;
+            partyPauseMenuENRStatsTextReference[4].text += "ENR: " + Engine.e.party[4].GetComponent<Character>().currentEnergy + " / " + Engine.e.party[4].GetComponent<Character>().maxEnergy;
+
+            if (Engine.e.party[4].GetComponent<Solace>().lvl >= 20)
+            {
+                partyPauseMenuAPStatsTextReference[4].text = string.Empty;
+                partyPauseMenuAPStatsTextReference[4].text += Engine.e.party[4].GetComponent<Character>().availableSkillPoints.ToString();
+            }
+        }
+    }
+
+    public void DisplayBluePartyText()
+    {
+        if (Engine.e.party[5] != null)
+        {
+            partyPauseMenuNamesTextReference[5].text = string.Empty;
+            partyPauseMenuNamesTextReference[5].text += Engine.e.party[5].GetComponent<Character>().characterName
+            + " Lvl. " + Engine.e.party[5].GetComponent<Character>().lvl;
+
+            partyPauseMenuHPStatsTextReference[5].text = string.Empty;
+            partyPauseMenuHPStatsTextReference[5].text += "HP: " + Engine.e.party[5].GetComponent<Character>().currentHealth + " / " + Engine.e.party[5].GetComponent<Character>().maxHealth;
+
+            partyPauseMenuMPStatsTextReference[5].text = string.Empty;
+            partyPauseMenuMPStatsTextReference[5].text += "MP: " + Engine.e.party[5].GetComponent<Character>().currentMana + " / " + Engine.e.party[5].GetComponent<Character>().maxMana;
+
+            partyPauseMenuENRStatsTextReference[5].text = string.Empty;
+            partyPauseMenuENRStatsTextReference[5].text += "ENR: " + Engine.e.party[5].GetComponent<Character>().currentEnergy + " / " + Engine.e.party[5].GetComponent<Character>().maxEnergy;
+
+            if (Engine.e.party[5].GetComponent<Blue>().lvl >= 20)
+            {
+                partyPauseMenuAPStatsTextReference[5].text = string.Empty;
+                partyPauseMenuAPStatsTextReference[5].text += Engine.e.party[5].GetComponent<Character>().availableSkillPoints.ToString();
+            }
+        }
+    }
+
     void Resume()
     {
         pauseMenuUI.SetActive(false);
@@ -281,6 +336,14 @@ public class PauseMenu : MonoBehaviour
         if (Engine.e.party[3] != null)
         {
             Engine.e.equipMenuReference.GetComponent<EquipDisplay>().charSelectionButtons[3].SetActive(true);
+        }
+        if (Engine.e.party[4] != null)
+        {
+            Engine.e.equipMenuReference.GetComponent<EquipDisplay>().charSelectionButtons[4].SetActive(true);
+        }
+        if (Engine.e.party[5] != null)
+        {
+            Engine.e.equipMenuReference.GetComponent<EquipDisplay>().charSelectionButtons[5].SetActive(true);
         }
 
         atPauseMenu = false;
@@ -474,7 +537,7 @@ public class PauseMenu : MonoBehaviour
             gridCharSelect[i].SetActive(false);
         }
 
-        //Engine.e.gridReference.SetSolaceScreen();
+        Engine.e.gridReference.SetSolaceScreen();
         uiReference.PlayTransition();
 
         Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize = 6000f;
@@ -489,6 +552,29 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         atPauseMenu = false;
     }
+    public void OpenGridMenuBlue()
+    {
+        for (int i = 0; i < gridCharSelect.Length; i++)
+        {
+            gridCharSelect[i].SetActive(false);
+        }
+
+        Engine.e.gridReference.SetBlueScreen();
+        uiReference.PlayTransition();
+
+        Engine.e.gridReference.gridPerspective.m_Lens.OrthographicSize = 6000f;
+
+        gridMenu.SetActive(true);
+        Engine.e.canvasReference.SetActive(false);
+        Engine.e.gridReference.gridDisplayed = true;
+
+        EventSystem.current.SetSelectedGameObject(null);
+
+        EventSystem.current.SetSelectedGameObject(Engine.e.gridReference.cursor);
+        Time.timeScale = 1f;
+        atPauseMenu = false;
+    }
+
     public void OpenGrieveWeaponSelection()
     {
         grieveWeaponSelection.SetActive(true);
@@ -544,7 +630,28 @@ public class PauseMenu : MonoBehaviour
 
         atPauseMenu = false;
     }
+    public void OpenSolaceWeaponSelection()
+    {
+        solaceWeaponSelection.SetActive(true);
 
+        EventSystem.current.SetSelectedGameObject(null);
+
+        EventSystem.current.SetSelectedGameObject(solaceWeaponFirstButton);
+
+
+        atPauseMenu = false;
+    }
+    public void OpenBlueWeaponSelection()
+    {
+        blueWeaponSelection.SetActive(true);
+
+        EventSystem.current.SetSelectedGameObject(null);
+
+        EventSystem.current.SetSelectedGameObject(blueWeaponFirstButton);
+
+
+        atPauseMenu = false;
+    }
 
     public void OpenMainMenu()
     {

@@ -1,0 +1,306 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6888847122998605093
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6898221606969792236}
+  - component: {fileID: 7227771083234566710}
+  - component: {fileID: -3540947796665591976}
+  m_Layer: 0
+  m_Name: Blue
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6898221606969792236
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6888847122998605093}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &7227771083234566710
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6888847122998605093}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 10
+  m_Sprite: {fileID: 21300000, guid: c444285f61806404ab93d7663c49a3eb, type: 3}
+  m_Color: {r: 0, g: 0.5101355, b: 0.8396226, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!114 &-3540947796665591976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6888847122998605093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f94e9e8bceeac4c9187377696564b549, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterName: Blue
+  characterClass: 000000000001000000000000
+  classEXP:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  currentClass: Assassin
+  classUnlocked: 000000000001000000000000
+  lvl: 0
+  currentHealth: 0
+  maxHealth: 0
+  currentMana: 0
+  maxMana: 0
+  currentEnergy: 0
+  maxEnergy: 0
+  haste: 0
+  experiencePoints: 0
+  levelUpReq: 0
+  strength: 0
+  intelligence: 0
+  dropCostReduction: 0
+  skillCostReduction: 0
+  fireDropsLevel: 0
+  fireDropsExperience: 0
+  fireDropsLvlReq: 0
+  firePhysicalAttackBonus: 0
+  fireDropAttackBonus: 0
+  iceDropsLevel: 0
+  iceDropsExperience: 0
+  iceDropsLvlReq: 0
+  icePhysicalAttackBonus: 0
+  iceDropAttackBonus: 0
+  waterDropsLevel: 0
+  waterDropsExperience: 0
+  waterDropsLvlReq: 0
+  waterPhysicalAttackBonus: 0
+  waterDropAttackBonus: 0
+  lightningDropsLevel: 0
+  lightningDropsExperience: 0
+  lightningDropsLvlReq: 0
+  lightningPhysicalAttackBonus: 0
+  lightningDropAttackBonus: 0
+  shadowDropsLevel: 0
+  shadowDropsExperience: 0
+  shadowDropsLvlReq: 0
+  shadowPhysicalAttackBonus: 0
+  shadowDropAttackBonus: 0
+  holyDropsLevel: 0
+  holyDropsExperience: 0
+  holyDropsLvlReq: 0
+  holyPhysicalAttackBonus: 0
+  holyDropAttackBonus: 0
+  skillScale: 0
+  healthCapped: 0
+  manaCapped: 0
+  energyCapped: 1
+  canUse2HWeapon: 0
+  canDualWield: 0
+  canSelectNewClass: 0
+  isInParty: 0
+  isInActiveParty: 0
+  isLeader: 0
+  isPoisoned: 0
+  isAsleep: 0
+  isConfused: 0
+  miterInflicted: 0
+  haltInflicted: 0
+  deathInflicted: 0
+  inflicted: 0
+  isProtected: 0
+  isEncompassed: 0
+  isHastened: 0
+  availableSkillPoints: 0
+  healthOffset: 0
+  manaOffset: 0
+  energyOffset: 0
+  strengthOffset: 0
+  intelligenceOffset: 0
+  stealChance: 0
+  physicalDefense: 0
+  fireDefense: 0
+  iceDefense: 0
+  waterDefense: 0
+  lightningDefense: 0
+  shadowDefense: 0
+  holyDefense: 0
+  poisonDefense: 0
+  sleepDefense: 0
+  confuseDefense: 0
+  deathDefense: 0
+  dodgeChance: 0
+  hitChance: 0
+  critChance: 0
+  maxHealthBase: 0
+  maxManaBase: 0
+  maxEnergyBase: 0
+  strengthBase: 0
+  intelligenceBase: 0
+  dodgeChanceBase: 0
+  critChanceBase: 0
+  hasteBase: 0
+  firePhysicalAttackBonusBase: 0
+  icePhysicalAttackBonusBase: 0
+  lightningPhysicalAttackBonusBase: 0
+  waterPhysicalAttackBonusBase: 0
+  shadowPhysicalAttackBonusBase: 0
+  holyPhysicalAttackBonusBase: 0
+  fireDefenseBase: 0
+  iceDefenseBase: 0
+  lightningDefenseBase: 0
+  waterDefenseBase: 0
+  shadowDefenseBase: 0
+  holyDefenseBase: 0
+  sleepDefenseBase: 0
+  poisonDefenseBase: 0
+  confuseDefenseBase: 0
+  deathDefenseBase: 0
+  drops:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  skills:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  canUseFireDrops: 0
+  canUseIceDrops: 0
+  canUseLightningDrops: 0
+  canUseWaterDrops: 0
+  canUseShadowDrops: 0
+  canUseHolyDrops: 0
+  weaponRight: {fileID: 0}
+  weaponLeft: {fileID: 0}
+  chestArmor: {fileID: 0}
+  legArmor: {fileID: 0}
+  accessory1: {fileID: 0}
+  accessory2: {fileID: 0}
+  skillIndex: 0
+  skillTotal: 0
+  poisonDmg: 0
+  sleepTimer: 0
+  confuseTimer: 0
+  deathTimer: 3
+  activePartyIndex: -1
+  partyIndex: 5
+  inSwitchQueue: 0

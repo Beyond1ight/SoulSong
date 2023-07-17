@@ -9,6 +9,7 @@ public class GridCursor : MonoBehaviour
     public ClassSelectNode currentClassSelectNode;
     public GameObject cursorSprite, helpText;
     public bool nodeSet;
+
     //public AbilityStatNode[] nodeDirections;
 
 

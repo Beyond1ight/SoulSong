@@ -65,6 +65,7 @@ public class Engine : MonoBehaviour
     public System.Random randomIndex;
     public CharacterClass charClassReference;
     public string[] charClasses;
+    public bool movingToPos = false;
 
     // Shopping
     public bool selling = false;
@@ -178,9 +179,9 @@ public class Engine : MonoBehaviour
         // Grieve
         playableCharacters[0].characterName = "Grieve";
         playableCharacters[0].characterClass[0] = true;
-        //playableCharacters[0].currentClass = "Soldier";
-        //playableCharacters[0].classEXP[0] = 1f;
-        //playableCharacters[0].classUnlocked[0] = true;
+        playableCharacters[0].currentClass = "Soldier";
+        playableCharacters[0].classEXP[0] = 1f;
+        playableCharacters[0].classUnlocked[0] = true;
 
         playableCharacters[0].lvl = 1;
         playableCharacters[0].healthOffset = 0f;
@@ -797,6 +798,297 @@ public class Engine : MonoBehaviour
 
         playableCharacters[3].GetComponent<SpriteRenderer>().color = Color.white;
 
+        // Solace
+        playableCharacters[4].characterName = "Solace";
+        playableCharacters[4].currentClass = "Shaman";
+        playableCharacters[4].characterClass[3] = true;
+        playableCharacters[4].classEXP[1] = 1f;
+        playableCharacters[4].classUnlocked[1] = true;
+
+        playableCharacters[4].lvl = 1;
+        playableCharacters[4].healthOffset = -20f;
+        playableCharacters[4].manaOffset = 20f;
+        playableCharacters[4].energyOffset = 0f;
+        playableCharacters[4].strengthOffset = -10f;
+        playableCharacters[4].intelligenceOffset = 15f;
+
+        playableCharacters[4].maxHealth = Mathf.Round(healthCurve.Evaluate(playableCharacters[1].lvl) + (healthCurve.Evaluate(playableCharacters[1].lvl) * (playableCharacters[1].healthOffset / 100)));
+        playableCharacters[4].currentHealth = playableCharacters[1].maxHealth;
+        playableCharacters[4].maxMana = Mathf.Round(manaCurve.Evaluate(playableCharacters[1].lvl) + (manaCurve.Evaluate(playableCharacters[1].lvl) * (playableCharacters[1].manaOffset / 100)));
+        playableCharacters[4].currentMana = playableCharacters[1].maxMana;
+        playableCharacters[4].maxEnergy = Mathf.Round(energyCurve.Evaluate(playableCharacters[1].lvl) + (energyCurve.Evaluate(playableCharacters[1].lvl) * (playableCharacters[1].energyOffset / 100)));
+        playableCharacters[4].currentEnergy = playableCharacters[1].maxEnergy;
+        playableCharacters[4].haste = 46;
+        playableCharacters[4].critChance = 10;
+        playableCharacters[4].strength = Mathf.Round(strengthCurve.Evaluate(playableCharacters[1].lvl) + +(strengthCurve.Evaluate(playableCharacters[1].lvl) * (playableCharacters[1].strengthOffset / 100)));
+        playableCharacters[4].intelligence = Mathf.Round(intelligenceCurve.Evaluate(playableCharacters[1].lvl) + +(intelligenceCurve.Evaluate(playableCharacters[1].lvl) * (playableCharacters[1].intelligenceOffset / 100)));
+        playableCharacters[4].experiencePoints = 0;
+        playableCharacters[4].levelUpReq = 100;
+        playableCharacters[4].isInParty = false;
+        playableCharacters[4].isInActiveParty = false;
+        playableCharacters[4].isLeader = false;
+        playableCharacters[4].dropCostReduction = 0f;
+        playableCharacters[4].skillCostReduction = 0f;
+        playableCharacters[4].healthCapped = true;
+        playableCharacters[4].manaCapped = true;
+        playableCharacters[4].energyCapped = true;
+
+        playableCharacters[4].activePartyIndex = -1;
+        playableCharacters[4].partyIndex = 4;
+
+        playableCharacters[4].dodgeChance = 10f;
+
+        playableCharacters[4].physicalDefense = 1;
+        playableCharacters[4].physicalDefense += gameChestArmor[0].GetComponent<ChestArmor>().physicalArmor;
+        playableCharacters[4].fireDefense = 2f;
+        playableCharacters[4].waterDefense = 2f;
+        playableCharacters[4].lightningDefense = 2f;
+        playableCharacters[4].shadowDefense = 1f;
+        playableCharacters[4].holyDefense = 1f;
+        playableCharacters[4].iceDefense = 1f;
+        playableCharacters[4].poisonDefense = 1f;
+        playableCharacters[4].sleepDefense = 1f;
+        playableCharacters[4].confuseDefense = 1f;
+
+        playableCharacters[4].canDualWield = false;
+        playableCharacters[4].canUse2HWeapon = false;
+
+        playableCharacters[4].canUseFireDrops = true;
+        playableCharacters[4].canUseHolyDrops = false;
+        playableCharacters[4].canUseWaterDrops = false;
+        playableCharacters[4].canUseLightningDrops = false;
+        playableCharacters[4].canUseShadowDrops = false;
+        playableCharacters[4].canUseIceDrops = false;
+
+        playableCharacters[4].drops = new Drops[gameDrops.Length];
+
+        //playableCharacters[1].drops[10] = gameDrops[10];
+        //playableCharacters[4].drops[15] = gameDrops[15];
+        //playableCharacters[4].drops[16] = gameDrops[16];
+
+        /* playableCharacters[1].fireDrops = new Drops[10];
+         playableCharacters[1].holyDrops = new Drops[10];
+         playableCharacters[1].waterDrops = new Drops[10];
+         playableCharacters[1].lightningDrops = new Drops[10];
+         playableCharacters[1].shadowDrops = new Drops[10];
+         playableCharacters[1].iceDrops = new Drops[10];
+
+
+
+
+         playableCharacters[1].waterDrops[0] = waterDrops[0];
+         playableCharacters[1].lightningDrops[0] = lightningDrops[0];
+ */
+        playableCharacters[4].fireDropsLevel = 1f;
+        playableCharacters[4].holyDropsLevel = 1f;
+        playableCharacters[4].waterDropsLevel = 5f;
+        playableCharacters[4].lightningDropsLevel = 2f;
+        playableCharacters[4].shadowDropsLevel = 1.0f;
+        playableCharacters[4].iceDropsLevel = 1.0f;
+
+
+        playableCharacters[4].fireDropsExperience = 0f;
+        playableCharacters[4].waterDropsExperience = 0f;
+        playableCharacters[4].lightningDropsExperience = 0f;
+        playableCharacters[4].shadowDropsExperience = 0f;
+        playableCharacters[4].iceDropsExperience = 0f;
+        playableCharacters[4].holyDropsExperience = 0f;
+
+
+        playableCharacters[4].fireDropsLvlReq = 50f;
+        playableCharacters[4].waterDropsLvlReq = 50f;
+        playableCharacters[4].lightningDropsLvlReq = 50f;
+        playableCharacters[4].shadowDropsLvlReq = 50f;
+        playableCharacters[4].iceDropsLvlReq = 50f;
+        playableCharacters[4].holyDropsLvlReq = 50f;
+
+
+        playableCharacters[4].fireDropAttackBonus = 0f;
+        playableCharacters[4].waterDropAttackBonus = 0f;
+        playableCharacters[4].lightningDropAttackBonus = 0f;
+        playableCharacters[4].shadowDropAttackBonus = 0f;
+        playableCharacters[4].iceDropAttackBonus = 0f;
+
+        playableCharacters[4].firePhysicalAttackBonus = 0f;
+        playableCharacters[4].waterPhysicalAttackBonus = 0f;
+        playableCharacters[4].lightningPhysicalAttackBonus = 0f;
+        playableCharacters[4].shadowPhysicalAttackBonus = 0f;
+        playableCharacters[4].icePhysicalAttackBonus = 0f;
+
+        playableCharacters[4].skills = new Skills[30];
+        playableCharacters[4].skillIndex = 5;
+        playableCharacters[4].skillTotal = 1;
+        playableCharacters[4].availableSkillPoints = 0;
+        playableCharacters[4].skillScale = 1f;
+
+        //playableCharacters[4].skills[5] = gameSkills[5];
+
+        playableCharacters[4].isPoisoned = false;
+        playableCharacters[4].isAsleep = false;
+        playableCharacters[4].isConfused = false;
+        playableCharacters[4].deathInflicted = false;
+        playableCharacters[4].inflicted = false;
+        playableCharacters[4].miterInflicted = false;
+        playableCharacters[4].haltInflicted = false;
+
+        playableCharacters[4].isProtected = false;
+        playableCharacters[4].isEncompassed = false;
+        playableCharacters[4].isHastened = false;
+
+        playableCharacters[4].stealChance = 60f;
+
+        playableCharacters[4].poisonDmg = 0f;
+        playableCharacters[4].sleepTimer = 0;
+        playableCharacters[4].confuseTimer = 0;
+        playableCharacters[4].deathTimer = 3;
+
+        //playableCharacters[1].GetComponent<SpriteRenderer>().color = Color.white;
+
+        // Blue
+        playableCharacters[5].characterName = "Blue";
+        playableCharacters[5].currentClass = "Assassin";
+        playableCharacters[5].characterClass[4] = true;
+        playableCharacters[5].classEXP[4] = 1f;
+        playableCharacters[5].classUnlocked[4] = true;
+
+        playableCharacters[5].lvl = 1;
+        playableCharacters[5].healthOffset = -20f;
+        playableCharacters[5].manaOffset = 20f;
+        playableCharacters[5].energyOffset = 0f;
+        playableCharacters[5].strengthOffset = -10f;
+        playableCharacters[5].intelligenceOffset = 15f;
+
+        playableCharacters[5].maxHealth = Mathf.Round(healthCurve.Evaluate(playableCharacters[1].lvl) + (healthCurve.Evaluate(playableCharacters[1].lvl) * (playableCharacters[1].healthOffset / 100)));
+        playableCharacters[5].currentHealth = playableCharacters[1].maxHealth;
+        playableCharacters[5].maxMana = Mathf.Round(manaCurve.Evaluate(playableCharacters[1].lvl) + (manaCurve.Evaluate(playableCharacters[1].lvl) * (playableCharacters[1].manaOffset / 100)));
+        playableCharacters[5].currentMana = playableCharacters[1].maxMana;
+        playableCharacters[5].maxEnergy = Mathf.Round(energyCurve.Evaluate(playableCharacters[1].lvl) + (energyCurve.Evaluate(playableCharacters[1].lvl) * (playableCharacters[1].energyOffset / 100)));
+        playableCharacters[5].currentEnergy = playableCharacters[1].maxEnergy;
+        playableCharacters[5].haste = 46;
+        playableCharacters[5].critChance = 10;
+        playableCharacters[5].strength = Mathf.Round(strengthCurve.Evaluate(playableCharacters[1].lvl) + +(strengthCurve.Evaluate(playableCharacters[1].lvl) * (playableCharacters[1].strengthOffset / 100)));
+        playableCharacters[5].intelligence = Mathf.Round(intelligenceCurve.Evaluate(playableCharacters[1].lvl) + +(intelligenceCurve.Evaluate(playableCharacters[1].lvl) * (playableCharacters[1].intelligenceOffset / 100)));
+        playableCharacters[5].experiencePoints = 0;
+        playableCharacters[5].levelUpReq = 100;
+        playableCharacters[5].isInParty = false;
+        playableCharacters[5].isInActiveParty = false;
+        playableCharacters[5].isLeader = false;
+        playableCharacters[5].dropCostReduction = 0f;
+        playableCharacters[5].skillCostReduction = 0f;
+        playableCharacters[5].healthCapped = true;
+        playableCharacters[5].manaCapped = true;
+        playableCharacters[5].energyCapped = true;
+
+        playableCharacters[5].activePartyIndex = -1;
+        playableCharacters[5].partyIndex = 5;
+
+        playableCharacters[5].dodgeChance = 10f;
+
+        playableCharacters[5].physicalDefense = 1;
+        playableCharacters[5].physicalDefense += gameChestArmor[0].GetComponent<ChestArmor>().physicalArmor;
+        playableCharacters[5].fireDefense = 2f;
+        playableCharacters[5].waterDefense = 2f;
+        playableCharacters[5].lightningDefense = 2f;
+        playableCharacters[5].shadowDefense = 1f;
+        playableCharacters[5].holyDefense = 1f;
+        playableCharacters[5].iceDefense = 1f;
+        playableCharacters[5].poisonDefense = 1f;
+        playableCharacters[5].sleepDefense = 1f;
+        playableCharacters[5].confuseDefense = 1f;
+
+        playableCharacters[5].canDualWield = false;
+        playableCharacters[5].canUse2HWeapon = false;
+
+        playableCharacters[5].canUseFireDrops = true;
+        playableCharacters[5].canUseHolyDrops = false;
+        playableCharacters[5].canUseWaterDrops = false;
+        playableCharacters[5].canUseLightningDrops = false;
+        playableCharacters[5].canUseShadowDrops = false;
+        playableCharacters[5].canUseIceDrops = false;
+
+        playableCharacters[5].drops = new Drops[gameDrops.Length];
+
+        //playableCharacters[1].drops[10] = gameDrops[10];
+        //playableCharacters[4].drops[15] = gameDrops[15];
+        //playableCharacters[4].drops[16] = gameDrops[16];
+
+        /* playableCharacters[1].fireDrops = new Drops[10];
+         playableCharacters[1].holyDrops = new Drops[10];
+         playableCharacters[1].waterDrops = new Drops[10];
+         playableCharacters[1].lightningDrops = new Drops[10];
+         playableCharacters[1].shadowDrops = new Drops[10];
+         playableCharacters[1].iceDrops = new Drops[10];
+
+
+
+
+         playableCharacters[1].waterDrops[0] = waterDrops[0];
+         playableCharacters[1].lightningDrops[0] = lightningDrops[0];
+ */
+        playableCharacters[5].fireDropsLevel = 1f;
+        playableCharacters[5].holyDropsLevel = 1f;
+        playableCharacters[5].waterDropsLevel = 5f;
+        playableCharacters[5].lightningDropsLevel = 2f;
+        playableCharacters[5].shadowDropsLevel = 1.0f;
+        playableCharacters[5].iceDropsLevel = 1.0f;
+
+
+        playableCharacters[5].fireDropsExperience = 0f;
+        playableCharacters[5].waterDropsExperience = 0f;
+        playableCharacters[5].lightningDropsExperience = 0f;
+        playableCharacters[5].shadowDropsExperience = 0f;
+        playableCharacters[5].iceDropsExperience = 0f;
+        playableCharacters[5].holyDropsExperience = 0f;
+
+
+        playableCharacters[5].fireDropsLvlReq = 50f;
+        playableCharacters[5].waterDropsLvlReq = 50f;
+        playableCharacters[5].lightningDropsLvlReq = 50f;
+        playableCharacters[5].shadowDropsLvlReq = 50f;
+        playableCharacters[5].iceDropsLvlReq = 50f;
+        playableCharacters[5].holyDropsLvlReq = 50f;
+
+
+        playableCharacters[5].fireDropAttackBonus = 0f;
+        playableCharacters[5].waterDropAttackBonus = 0f;
+        playableCharacters[5].lightningDropAttackBonus = 0f;
+        playableCharacters[5].shadowDropAttackBonus = 0f;
+        playableCharacters[5].iceDropAttackBonus = 0f;
+
+        playableCharacters[5].firePhysicalAttackBonus = 0f;
+        playableCharacters[5].waterPhysicalAttackBonus = 0f;
+        playableCharacters[5].lightningPhysicalAttackBonus = 0f;
+        playableCharacters[5].shadowPhysicalAttackBonus = 0f;
+        playableCharacters[5].icePhysicalAttackBonus = 0f;
+
+        playableCharacters[5].skills = new Skills[30];
+        playableCharacters[5].skillIndex = 5;
+        playableCharacters[5].skillTotal = 1;
+        playableCharacters[5].availableSkillPoints = 0;
+        playableCharacters[5].skillScale = 1f;
+
+        //playableCharacters[4].skills[5] = gameSkills[5];
+
+        playableCharacters[5].isPoisoned = false;
+        playableCharacters[5].isAsleep = false;
+        playableCharacters[5].isConfused = false;
+        playableCharacters[5].deathInflicted = false;
+        playableCharacters[5].inflicted = false;
+        playableCharacters[5].miterInflicted = false;
+        playableCharacters[5].haltInflicted = false;
+
+        playableCharacters[5].isProtected = false;
+        playableCharacters[5].isEncompassed = false;
+        playableCharacters[5].isHastened = false;
+
+        playableCharacters[5].stealChance = 60f;
+
+        playableCharacters[5].poisonDmg = 0f;
+        playableCharacters[5].sleepTimer = 0;
+        playableCharacters[5].confuseTimer = 0;
+        playableCharacters[5].deathTimer = 3;
+
+        //playableCharacters[1].GetComponent<SpriteRenderer>().color = Color.white;
 
         party[0] = playableCharacters[0].GetComponent<Character>().gameObject;
 
@@ -852,7 +1144,6 @@ public class Engine : MonoBehaviour
             if (party[2] != null)
             {
                 ActivateArrangePartyButton();
-                gridReference.classPaths[2].SetActive(true);
 
                 if (playableCharacters[0].lvl > 1)
                 {
@@ -895,7 +1186,6 @@ public class Engine : MonoBehaviour
             if (party[3] != null)
             {
                 battleSystem.battleSwitchButtons = true;
-                gridReference.classPaths[3].SetActive(true);
 
                 if (playableCharacters[0].lvl < 99)
                 {
@@ -927,6 +1217,81 @@ public class Engine : MonoBehaviour
                 gameSkills[15].isKnown = true;
                 playableCharacters[3].activePartyIndex = -1;
                 gridReference.classPaths[5].SetActive(true);
+
+            }
+
+            if (party[4] != null)
+            {
+                battleSystem.battleSwitchButtons = true;
+
+                if (playableCharacters[0].lvl < 99)
+                {
+                    playableCharacters[4].lvl = playableCharacters[0].lvl + 1;
+                }
+                else
+                {
+                    playableCharacters[4].lvl = playableCharacters[0].lvl;
+                }
+
+                playableCharacters[4].healthOffset = 25f;
+                playableCharacters[4].manaOffset = 20f;
+                playableCharacters[4].energyOffset = 0f;
+                playableCharacters[4].maxHealth = Mathf.Round(healthCurve.Evaluate(playableCharacters[4].lvl) + (healthCurve.Evaluate(playableCharacters[4].lvl) * (playableCharacters[4].healthOffset / 100)));
+                playableCharacters[4].currentHealth = playableCharacters[4].maxHealth;
+                playableCharacters[4].maxMana = Mathf.Round(manaCurve.Evaluate(playableCharacters[4].lvl) + (manaCurve.Evaluate(playableCharacters[4].lvl) * (playableCharacters[4].manaOffset / 100)));
+                playableCharacters[4].currentMana = playableCharacters[4].maxMana;
+                playableCharacters[4].maxEnergy = Mathf.Round(energyCurve.Evaluate(playableCharacters[4].lvl) + (energyCurve.Evaluate(playableCharacters[4].lvl) * (playableCharacters[4].energyOffset / 100)));
+                playableCharacters[4].currentEnergy = playableCharacters[4].maxEnergy;
+                playableCharacters[4].strength = Mathf.Round(strengthCurve.Evaluate(playableCharacters[4].lvl) + +(strengthCurve.Evaluate(playableCharacters[4].lvl) * (playableCharacters[4].strengthOffset / 100)));
+                playableCharacters[4].maxHealthBase = playableCharacters[4].maxHealth;
+                playableCharacters[4].maxManaBase = playableCharacters[4].maxMana;
+                playableCharacters[4].maxEnergyBase = playableCharacters[4].maxEnergy;
+                playableCharacters[4].strength = Mathf.Round(strengthCurve.Evaluate(playableCharacters[4].lvl) + +(strengthCurve.Evaluate(playableCharacters[4].lvl) * (playableCharacters[4].strengthOffset / 100)));
+                playableCharacters[4].intelligence = Mathf.Round(intelligenceCurve.Evaluate(playableCharacters[4].lvl) + +(intelligenceCurve.Evaluate(playableCharacters[4].lvl) * (playableCharacters[4].intelligenceOffset / 100)));
+                //     charAbilityButtons[3].SetActive(true);
+                //     charSkillTierButtons[3].SetActive(true);
+                //         gameDrops[25].isKnown = true;
+                // gameSkills[20].isKnown = true;
+                playableCharacters[4].activePartyIndex = -1;
+                gridReference.classPaths[1].SetActive(true);
+
+
+            }
+
+            if (party[5] != null)
+            {
+                battleSystem.battleSwitchButtons = true;
+
+                if (playableCharacters[0].lvl < 99)
+                {
+                    playableCharacters[5].lvl = playableCharacters[0].lvl + 1;
+                }
+                else
+                {
+                    playableCharacters[5].lvl = playableCharacters[0].lvl;
+                }
+
+                playableCharacters[5].healthOffset = 25f;
+                playableCharacters[5].manaOffset = 20f;
+                playableCharacters[5].energyOffset = 0f;
+                playableCharacters[5].maxHealth = Mathf.Round(healthCurve.Evaluate(playableCharacters[5].lvl) + (healthCurve.Evaluate(playableCharacters[5].lvl) * (playableCharacters[5].healthOffset / 100)));
+                playableCharacters[5].currentHealth = playableCharacters[5].maxHealth;
+                playableCharacters[5].maxMana = Mathf.Round(manaCurve.Evaluate(playableCharacters[5].lvl) + (manaCurve.Evaluate(playableCharacters[5].lvl) * (playableCharacters[5].manaOffset / 100)));
+                playableCharacters[5].currentMana = playableCharacters[5].maxMana;
+                playableCharacters[5].maxEnergy = Mathf.Round(energyCurve.Evaluate(playableCharacters[5].lvl) + (energyCurve.Evaluate(playableCharacters[5].lvl) * (playableCharacters[5].energyOffset / 100)));
+                playableCharacters[5].currentEnergy = playableCharacters[5].maxEnergy;
+                playableCharacters[5].strength = Mathf.Round(strengthCurve.Evaluate(playableCharacters[5].lvl) + +(strengthCurve.Evaluate(playableCharacters[5].lvl) * (playableCharacters[5].strengthOffset / 100)));
+                playableCharacters[5].maxHealthBase = playableCharacters[5].maxHealth;
+                playableCharacters[5].maxManaBase = playableCharacters[5].maxMana;
+                playableCharacters[5].maxEnergyBase = playableCharacters[5].maxEnergy;
+                playableCharacters[5].strength = Mathf.Round(strengthCurve.Evaluate(playableCharacters[5].lvl) + +(strengthCurve.Evaluate(playableCharacters[5].lvl) * (playableCharacters[5].strengthOffset / 100)));
+                playableCharacters[5].intelligence = Mathf.Round(intelligenceCurve.Evaluate(playableCharacters[5].lvl) + +(intelligenceCurve.Evaluate(playableCharacters[5].lvl) * (playableCharacters[5].intelligenceOffset / 100)));
+                //     charAbilityButtons[3].SetActive(true);
+                //     charSkillTierButtons[3].SetActive(true);
+                //         gameDrops[25].isKnown = true;
+                // gameSkills[25].isKnown = true;
+                playableCharacters[5].activePartyIndex = -1;
+                gridReference.classPaths[4].SetActive(true);
 
             }
         }
@@ -1659,7 +2024,7 @@ public class Engine : MonoBehaviour
                 party[i].GetComponent<Character>().maxMana = gameData.charMaxMana[i];
                 party[i].GetComponent<Character>().currentMana = gameData.charMaxMana[i];
                 party[i].GetComponent<Character>().lvl = gameData.charLvl[i];
-
+                party[i].GetComponent<Character>().currentClass = gameData.charClass[i];
                 party[i].GetComponent<Character>().skillScale = gameData.charSkillScale[i];
                 party[i].GetComponent<Character>().skillIndex = gameData.charSkillIndex[i];
                 party[i].GetComponent<Character>().availableSkillPoints = gameData.charAvailableSkillPoints[i];
@@ -1731,6 +2096,33 @@ public class Engine : MonoBehaviour
                 //  party[i].GetComponent<Character>().iceDrops = new Drops[iceDrops.Length];
 
 
+                // Classes
+                for (int classes = 0; classes < charClasses.Length; classes++)
+                {
+                    party[0].GetComponent<Character>().classUnlocked[classes] = gameData.classUnlockedGrieve[classes];
+
+                    if (party[1] != null)
+                    {
+                        party[1].GetComponent<Character>().classUnlocked[classes] = gameData.classUnlockedMac[classes];
+                    }
+                    if (party[2] != null)
+                    {
+                        party[2].GetComponent<Character>().classUnlocked[classes] = gameData.classUnlockedField[classes];
+                    }
+                    if (party[3] != null)
+                    {
+                        party[3].GetComponent<Character>().classUnlocked[classes] = gameData.classUnlockedRiggs[classes];
+                    }
+                    if (party[4] != null)
+                    {
+                        party[4].GetComponent<Character>().classUnlocked[classes] = gameData.classUnlockedSolace[classes];
+                    }
+                    if (party[5] != null)
+                    {
+                        party[5].GetComponent<Character>().classUnlocked[classes] = gameData.classUnlockedBlue[classes];
+                    }
+
+                }
 
                 // Drops
                 for (int _drops = 0; _drops < gameDrops.Length; _drops++)
@@ -2092,10 +2484,10 @@ public class Engine : MonoBehaviour
     // Establishes a battle by communicating with the BattleSystem class.
     public void BeginBattle()
     {
-
-        inBattle = true;
         battleMenu.battleMenuUI.SetActive(true);
         storeDialogueReference.gameObject.SetActive(false);
+        battleSystem.hud.SetEnemyGroupHUD();
+        battleSystem.hud.SetPlayerHUD();
         StartCoroutine(battleSystem.SetupBattle());
         //battleMusic.Play();
 
@@ -2288,6 +2680,42 @@ public class Engine : MonoBehaviour
         }
     }
 
+    public void DisplaySolaceInventoryStats()
+    {
+        if (party[4] != null)
+        {
+            inventoryMenuPartyNameStatsReference[4].text = string.Empty;
+            inventoryMenuPartyNameStatsReference[4].text += party[4].GetComponent<Character>().characterName;
+
+            inventoryMenuPartyHPStatsReference[4].text = string.Empty;
+            inventoryMenuPartyHPStatsReference[4].text += "HP: " + party[4].GetComponent<Character>().currentHealth + " / " + party[4].GetComponent<Character>().maxHealth;
+
+            inventoryMenuPartyMPStatsReference[4].text = string.Empty;
+            inventoryMenuPartyMPStatsReference[4].text += "MP: " + party[4].GetComponent<Character>().currentMana + " / " + party[4].GetComponent<Character>().maxMana;
+
+            inventoryMenuPartyENRStatsReference[4].text = string.Empty;
+            inventoryMenuPartyENRStatsReference[4].text += "ENR: " + party[4].GetComponent<Character>().currentEnergy + " / " + party[4].GetComponent<Character>().maxEnergy;
+        }
+    }
+
+    public void DisplayBlueInventoryStats()
+    {
+        if (party[5] != null)
+        {
+            inventoryMenuPartyNameStatsReference[5].text = string.Empty;
+            inventoryMenuPartyNameStatsReference[5].text += party[5].GetComponent<Character>().characterName;
+
+            inventoryMenuPartyHPStatsReference[5].text = string.Empty;
+            inventoryMenuPartyHPStatsReference[5].text += "HP: " + party[5].GetComponent<Character>().currentHealth + " / " + party[5].GetComponent<Character>().maxHealth;
+
+            inventoryMenuPartyMPStatsReference[5].text = string.Empty;
+            inventoryMenuPartyMPStatsReference[5].text += "MP: " + party[5].GetComponent<Character>().currentMana + " / " + party[5].GetComponent<Character>().maxMana;
+
+            inventoryMenuPartyENRStatsReference[5].text = string.Empty;
+            inventoryMenuPartyENRStatsReference[5].text += "ENR: " + party[5].GetComponent<Character>().currentEnergy + " / " + party[5].GetComponent<Character>().maxEnergy;
+        }
+    }
+
     public int GetRandomRemainingPartyMember()
     {
         remainingPartyMembers = new List<int>();
@@ -2475,6 +2903,8 @@ public class Engine : MonoBehaviour
             AddCharacterToParty("Mac");
             AddCharacterToParty("Field");
             AddCharacterToParty("Riggs");
+            AddCharacterToParty("Solace");
+            AddCharacterToParty("Blue");
 
             activeParty.SetActiveParty();
             // gridReference.tier2Path.SetActive(true);

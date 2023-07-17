@@ -17,13 +17,14 @@ public class EnemyGroup : MonoBehaviour
     public float groupExperienceLevel = 0;
     public CinemachineVirtualCamera battleCamera;
     public List<string> enemyLootReferenceText;
-    public bool moveToPosition = false;
+    public bool moveToPosition = false, startBattle = false;
     public GameObject char1SwitchPos, char2SwitchPos, char3SwitchPos;
     public bool groupInBattle = false;
     public List<Enemy> remainingEnemies;
     int randomEnemyIndex;
     int nextRemainingEnemyIndex;
     public bool inWorld;
+    public bool camSet = false;
 
     void Start()
     {
@@ -43,9 +44,13 @@ public class EnemyGroup : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D other)
     {
 
+
+
         if (other.name == "ActiveParty")
         {
             moveToPosition = true;
+            startBattle = false;
+            camSet = false;
             battleSystem.enemies = new Enemy[4];
             battleSystem.enemyGroup = this;
             battleCamera.gameObject.SetActive(true);
@@ -59,17 +64,12 @@ public class EnemyGroup : MonoBehaviour
                 }
             }
             //GetComponent<Teleport>().OnTriggerEnter2D(other);
+        }
 
-            Engine.e.battleSystem.hud.SetEnemyGroupHUD();
-
-            Engine.e.battleSystem.hud.SetPlayerHUD();
-
-            if (battleCamera != null)
-            {
-                Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = -1;
-            }
-
-            Engine.e.BeginBattle();
+        Engine.e.inBattle = true;
+        if (battleCamera != null)
+        {
+            Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = -1;
 
         }
     }
@@ -211,12 +211,13 @@ public class EnemyGroup : MonoBehaviour
 
     void MoveToPosition()
     {
-
         Vector3 leaderPos = Vector3.MoveTowards(Engine.e.activeParty.transform.position, GetComponent<Teleport>().toLocation.transform.position, 4 * Time.deltaTime);
         Vector3 activeParty2Pos = Vector3.MoveTowards(Engine.e.activePartyMember2.transform.position, GetComponent<Teleport>().activeParty2Location.transform.position, 4 * Time.deltaTime);
         Vector3 activeParty3Pos = Vector3.MoveTowards(Engine.e.activePartyMember3.transform.position, GetComponent<Teleport>().activeParty3Location.transform.position, 4 * Time.deltaTime);
 
+
         Engine.e.activeParty.GetComponent<Rigidbody2D>().MovePosition(leaderPos);
+
         if (Engine.e.party[1] != null)
         {
             Engine.e.activePartyMember2.GetComponent<Rigidbody2D>().MovePosition(activeParty2Pos);
@@ -226,14 +227,120 @@ public class EnemyGroup : MonoBehaviour
             Engine.e.activePartyMember3.GetComponent<Rigidbody2D>().MovePosition(activeParty3Pos);
         }
 
-        if (Engine.e.activeParty.GetComponent<Rigidbody2D>().transform.position == GetComponent<Teleport>().toLocation.transform.position
-        && Engine.e.activePartyMember2.GetComponent<Rigidbody2D>().transform.position == GetComponent<Teleport>().activeParty2Location.transform.position
-        && Engine.e.activePartyMember3.GetComponent<Rigidbody2D>().transform.position == GetComponent<Teleport>().activeParty3Location.transform.position)
+        if (Engine.e.party[2] != null && Engine.e.party[1] != null)
         {
+            if (Engine.e.activeParty.GetComponent<Rigidbody2D>().transform.position == GetComponent<Teleport>().toLocation.transform.position
+            && Engine.e.activePartyMember2.GetComponent<Rigidbody2D>().transform.position == GetComponent<Teleport>().activeParty2Location.transform.position
+            && Engine.e.activePartyMember3.GetComponent<Rigidbody2D>().transform.position == GetComponent<Teleport>().activeParty3Location.transform.position)
+            {
 
-            moveToPosition = false;
+
+                moveToPosition = false;
+
+            }
+        }
+        else
+        {
+            if (Engine.e.party[2] == null && Engine.e.party[1] != null)
+            {
+                if (Engine.e.activeParty.GetComponent<Rigidbody2D>().transform.position == GetComponent<Teleport>().toLocation.transform.position
+                && Engine.e.activePartyMember2.GetComponent<Rigidbody2D>().transform.position == GetComponent<Teleport>().activeParty2Location.transform.position)
+                {
+
+                    moveToPosition = false;
+
+                }
+            }
+            else
+            {
+                if (Engine.e.party[2] == null && Engine.e.party[1] == null)
+                {
+                    if (Engine.e.activeParty.GetComponent<Rigidbody2D>().transform.position == GetComponent<Teleport>().toLocation.transform.position)
+                    {
+
+                        moveToPosition = false;
+
+                    }
+                }
+            }
         }
     }
+
+    void InitialMoveToPosition()
+    {
+
+        Vector3 leaderPos = Vector3.MoveTowards(Engine.e.activeParty.transform.position, GetComponent<Teleport>().toLocation.transform.position, 4 * Time.deltaTime);
+        Vector3 activeParty2Pos = Vector3.MoveTowards(Engine.e.activePartyMember2.transform.position, GetComponent<Teleport>().activeParty2Location.transform.position, 4 * Time.deltaTime);
+        Vector3 activeParty3Pos = Vector3.MoveTowards(Engine.e.activePartyMember3.transform.position, GetComponent<Teleport>().activeParty3Location.transform.position, 4 * Time.deltaTime);
+
+        Engine.e.activeParty.GetComponent<Rigidbody2D>().MovePosition(leaderPos);
+
+        if (Engine.e.party[1] != null)
+        {
+            Engine.e.activePartyMember2.GetComponent<Rigidbody2D>().MovePosition(activeParty2Pos);
+        }
+        if (Engine.e.party[2] != null)
+        {
+            Engine.e.activePartyMember3.GetComponent<Rigidbody2D>().MovePosition(activeParty3Pos);
+        }
+
+        if (Engine.e.party[2] != null && Engine.e.party[1] != null)
+        {
+            if (Engine.e.activeParty.GetComponent<Rigidbody2D>().transform.position == GetComponent<Teleport>().toLocation.transform.position
+            && Engine.e.activePartyMember2.GetComponent<Rigidbody2D>().transform.position == GetComponent<Teleport>().activeParty2Location.transform.position
+            && Engine.e.activePartyMember3.GetComponent<Rigidbody2D>().transform.position == GetComponent<Teleport>().activeParty3Location.transform.position)
+            {
+
+
+                moveToPosition = false;
+                if (battleCamera != null)
+                {
+                    Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = -1;
+
+                }
+                startBattle = true;
+                Engine.e.BeginBattle();
+
+            }
+        }
+        else
+        {
+            if (Engine.e.party[2] == null && Engine.e.party[1] != null)
+            {
+                if (Engine.e.activeParty.GetComponent<Rigidbody2D>().transform.position == GetComponent<Teleport>().toLocation.transform.position
+                && Engine.e.activePartyMember2.GetComponent<Rigidbody2D>().transform.position == GetComponent<Teleport>().activeParty2Location.transform.position)
+                {
+
+                    moveToPosition = false;
+                    startBattle = true;
+                    Engine.e.BeginBattle();
+
+
+                }
+            }
+            else
+            {
+                if (Engine.e.party[2] == null && Engine.e.party[1] == null)
+                {
+                    if (Engine.e.activeParty.GetComponent<Rigidbody2D>().transform.position == GetComponent<Teleport>().toLocation.transform.position)
+                    {
+
+                        moveToPosition = false;
+                        if (battleCamera != null)
+                        {
+                            Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = -1;
+                            camSet = true;
+                        }
+                        startBattle = true;
+                        Engine.e.BeginBattle();
+
+
+                    }
+                }
+            }
+        }
+    }
+
 
     public void SetGroupIndexes()
     {
@@ -364,8 +471,14 @@ public class EnemyGroup : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (moveToPosition)
+        if (moveToPosition && startBattle)
+        {
             MoveToPosition();
+        }
+        if (moveToPosition && !startBattle)
+        {
+            InitialMoveToPosition();
+        }
     }
 
     public List<Enemy> GetRemainingEnemiesInGroup()
