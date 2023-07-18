@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.Playables;
+using UnityEngine.Timeline;
 public class PlayerController : MonoBehaviour
 {
     public float speed;
@@ -11,15 +13,55 @@ public class PlayerController : MonoBehaviour
     Character character;
     public bool isMoving;
     ActiveParty activeParty;
+    Vector3 targetPos;
+    GameObject targetGO;
+    public bool controlledMovement = false;
     void Awake()
     {
 
     }
+
     void FixedUpdate()
     {
-        rb.MovePosition(rb.position + movement.normalized * speed * Time.fixedDeltaTime);
+        if (!controlledMovement)
+        {
+            rb.MovePosition(rb.position + movement.normalized * speed * Time.fixedDeltaTime);
+        }
+        else
+        {
+            StartCoroutine(MoveCharacter());
+        }
     }
 
+    IEnumerator MoveCharacter()
+    {
+        targetPos = Vector3.MoveTowards(rb.transform.position, targetGO.transform.position, speed * Time.fixedDeltaTime);
+        Debug.Log("Bru");
+
+        rb.MovePosition(targetPos);
+
+        if (Vector3.Distance(transform.position, targetPos) < 0.1)
+        {
+            controlledMovement = false;
+        }
+        yield return new WaitForSeconds(0.3f);
+
+    }
+
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Cutscene Trigger")
+        {
+            other.GetComponent<PlayableDirector>().Play();
+            controlledMovement = false;
+        }
+
+        if (other.tag == "Cutscene Move To Start")
+        {
+            targetGO = other.gameObject;
+            controlledMovement = true;
+        }
+    }
 
     // Update is called once per frame
     void Update()
