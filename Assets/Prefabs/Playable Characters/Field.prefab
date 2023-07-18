@@ -101,6 +101,7 @@ MonoBehaviour:
   rb: {fileID: 993049143815856783}
   movement: {x: 0, y: 0}
   isMoving: 0
+  controlledMovement: 0
 --- !u!50 &993049143815856783
 Rigidbody2D:
   serializedVersion: 4

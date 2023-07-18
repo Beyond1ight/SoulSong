@@ -190,7 +190,7 @@ public class ActiveParty : MonoBehaviour
 
 
     }
-        
+
     public void InstantiateBattleActiveParty3(int index)
     {
 
@@ -207,7 +207,7 @@ public class ActiveParty : MonoBehaviour
         }
     }
 
-    // Be smart where you (me, sooo weird I need to get out more) call this. Pretty damn important for battles in particular
+    // Be smart where you (me, so weird I need to get out more) call this. Pretty damn important for battles in particular
     public void SetActivePartyIndexes()
     {
         for (int i = 0; i < Engine.e.party.Length; i++)

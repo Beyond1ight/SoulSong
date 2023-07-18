@@ -13,6 +13,8 @@ TagManager:
   - Camera Bounding Collision
   - Grid AbilityStat Node
   - Grid Class Node
+  - Cutscene Trigger
+  - Cutscene Move To Start
   layers:
   - Default
   - TransparentFX

@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: Grieve
-  characterClass: 000000000000010000000000
+  characterClass: 010000000000000000000000
   classEXP:
   - 1
   - 0
@@ -360,3 +360,4 @@ MonoBehaviour:
   rb: {fileID: 631019898473975974}
   movement: {x: 0, y: 0}
   isMoving: 0
+  controlledMovement: 0
