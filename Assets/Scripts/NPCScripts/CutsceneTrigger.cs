@@ -12,6 +12,8 @@ public class CutsceneTrigger : MonoBehaviour
 
     void Start()
     {
+        director = this.gameObject.GetComponent<PlayableDirector>();
+        //tlAsset = this.gameObject.GetComponent<PlayableDirector>().
         FindEventReferences();
     }
 
