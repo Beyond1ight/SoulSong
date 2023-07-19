@@ -58,7 +58,7 @@ public class Engine : MonoBehaviour
     public CinemachineVirtualCamera mainVirtualCamera;
     public Camera mainCamera;
     public GameObject activateArrangePartyButton,
-    activePartyMember2, activePartyMember3, itemMenuCharFirst;
+    activePartyMember2, activePartyMember3, itemMenuCharFirst, zoneTitleReference;
     public TextMeshProUGUI[] char1LevelUpPanelReference, char2LevelUpPanelReference, char3LevelUpPanelReference;
     public TextMeshProUGUI enemyLootReferenceG, enemyLootReferenceExp, battleHelp;
     Vector3 startingPos;

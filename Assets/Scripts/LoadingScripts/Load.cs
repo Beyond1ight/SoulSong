@@ -14,7 +14,7 @@ public class Load : MonoBehaviour
     public bool loaded;
     public bool unloaded;
     public Animator transition;
-    public bool indoors, inTown;
+    public bool indoors, inTown, partyShown;
     public bool worldMap = false;
 
     private void OnTriggerStay2D(Collider2D other)
@@ -47,23 +47,37 @@ public class Load : MonoBehaviour
                     Engine.e.activeParty.gameObject.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
                     Engine.e.activeParty.GetComponent<PlayerController>().speed = 3.5f;
 
-                    if (Engine.e.activeParty.activeParty[1] != null)
+                    if (partyShown)
                     {
-                        Engine.e.activePartyMember2.GetComponent<APFollow>().speed = 3.5f;
-                        Engine.e.activePartyMember2.GetComponent<APFollow>().distance = 1.0f;
-                        Engine.e.activePartyMember2.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
+                        Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().enabled = true;
+                        Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().enabled = true;
+
+                        if (Engine.e.activeParty.activeParty[1] != null)
+                        {
+                            Engine.e.activePartyMember2.GetComponent<APFollow>().speed = 3.5f;
+                            Engine.e.activePartyMember2.GetComponent<APFollow>().distance = 1.0f;
+                            Engine.e.activePartyMember2.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
+
+                        }
+                        if (Engine.e.activeParty.activeParty[2] != null)
+                        {
+                            Engine.e.activePartyMember3.GetComponent<APFollow>().speed = 3.5f;
+                            Engine.e.activePartyMember3.GetComponent<APFollow>().distance = 1.0f;
+                            Engine.e.activePartyMember3.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
+                        }
+                    }
+                    else
+                    {
+                        Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().enabled = false;
+                        Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().enabled = false;
 
                     }
-                    if (Engine.e.activeParty.activeParty[2] != null)
-                    {
-                        Engine.e.activePartyMember3.GetComponent<APFollow>().speed = 3.5f;
-                        Engine.e.activePartyMember3.GetComponent<APFollow>().distance = 1.0f;
-                        Engine.e.activePartyMember3.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
 
-                    }
                     Engine.e.canvasReference.GetComponent<PauseMenu>().partyLocationDisplay.text = string.Empty;
                     Engine.e.canvasReference.GetComponent<PauseMenu>().partyLocationDisplay.text = "Location: World Map";
                     Engine.e.ableToSave = true;
+
+
                 }
                 else
                 {
@@ -74,25 +88,41 @@ public class Load : MonoBehaviour
 
                     Engine.e.activeParty.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
                     Engine.e.activeParty.GetComponent<PlayerController>().speed = 5.5f;
-                    if (Engine.e.activeParty.activeParty[1] != null)
-                    {
-                        Engine.e.activePartyMember2.GetComponent<APFollow>().speed = 5.5f;
-                        Engine.e.activePartyMember2.GetComponent<APFollow>().distance = 1.25f;
-                        Engine.e.activePartyMember2.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
 
-                    }
-                    if (Engine.e.activeParty.activeParty[2] != null)
-                    {
-                        Engine.e.activePartyMember3.GetComponent<APFollow>().speed = 5.5f;
-                        Engine.e.activePartyMember3.GetComponent<APFollow>().distance = 1.25f;
-                        Engine.e.activePartyMember3.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
-
-                    }
                     Engine.e.canvasReference.GetComponent<PauseMenu>().partyLocationDisplay.text = string.Empty;
                     Engine.e.canvasReference.GetComponent<PauseMenu>().partyLocationDisplay.text = "Location: " + GetComponent<Teleport>().onLoadSceneReference;
                     Engine.e.ableToSave = false;
-                }
 
+                    Engine.e.zoneTitleReference.SetActive(true);
+
+
+                    if (partyShown)
+                    {
+                        Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().enabled = true;
+                        Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().enabled = true;
+
+                        if (Engine.e.activeParty.activeParty[1] != null)
+                        {
+                            Engine.e.activePartyMember2.GetComponent<APFollow>().speed = 5.5f;
+                            Engine.e.activePartyMember2.GetComponent<APFollow>().distance = 1.25f;
+                            Engine.e.activePartyMember2.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
+
+                        }
+                        if (Engine.e.activeParty.activeParty[2] != null)
+                        {
+                            Engine.e.activePartyMember3.GetComponent<APFollow>().speed = 5.5f;
+                            Engine.e.activePartyMember3.GetComponent<APFollow>().distance = 1.25f;
+                            Engine.e.activePartyMember3.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
+
+                        }
+                    }
+                    else
+                    {
+                        Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().enabled = false;
+                        Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().enabled = false;
+
+                    }
+                }
                 if (Engine.e.activeParty.transform.position != GetComponent<Teleport>().toLocation.transform.position)
                 {
                     Engine.e.activeParty.transform.position = GetComponent<Teleport>().toLocation.transform.position;
@@ -106,8 +136,8 @@ public class Load : MonoBehaviour
                 {
                     Engine.e.activePartyMember3.transform.position = Engine.e.activeParty.transform.position;
                 }
-                Engine.e.SaveGame(3);
 
+                Engine.e.SaveGame(3);
             }
         }
         else
@@ -142,24 +172,37 @@ public class Load : MonoBehaviour
                         Engine.e.activeParty.gameObject.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
                         Engine.e.activeParty.GetComponent<PlayerController>().speed = 3.5f;
 
-                        if (Engine.e.activeParty.activeParty[1] != null)
+                        if (partyShown)
                         {
-                            Engine.e.activePartyMember2.GetComponent<APFollow>().speed = 3.5f;
-                            Engine.e.activePartyMember2.GetComponent<APFollow>().distance = 1.0f;
-                            Engine.e.activePartyMember2.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
+                            Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().enabled = true;
+                            Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().enabled = true;
 
+                            if (Engine.e.activeParty.activeParty[1] != null)
+                            {
+                                Engine.e.activePartyMember2.GetComponent<APFollow>().speed = 3.5f;
+                                Engine.e.activePartyMember2.GetComponent<APFollow>().distance = 1.0f;
+                                Engine.e.activePartyMember2.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
+
+                            }
+                            if (Engine.e.activeParty.activeParty[2] != null)
+                            {
+                                Engine.e.activePartyMember3.GetComponent<APFollow>().speed = 3.5f;
+                                Engine.e.activePartyMember3.GetComponent<APFollow>().distance = 1.0f;
+                                Engine.e.activePartyMember3.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
+
+                            }
                         }
-                        if (Engine.e.activeParty.activeParty[2] != null)
+                        else
                         {
-                            Engine.e.activePartyMember3.GetComponent<APFollow>().speed = 3.5f;
-                            Engine.e.activePartyMember3.GetComponent<APFollow>().distance = 1.0f;
-                            Engine.e.activePartyMember3.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
+                            Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().enabled = false;
+                            Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().enabled = false;
 
                         }
 
                     }
                     else
                     {
+
                         if (inTown)
                         {
                             Engine.e.inTown = true;
@@ -174,22 +217,13 @@ public class Load : MonoBehaviour
                             Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 6.5f;
                         }
 
+                        Engine.e.canvasReference.GetComponent<PauseMenu>().partyLocationDisplay.text = string.Empty;
+                        Engine.e.canvasReference.GetComponent<PauseMenu>().partyLocationDisplay.text = "Location: " + GetComponent<Teleport>().onLoadSceneReference;
+                        Engine.e.ableToSave = false;
                         Engine.e.activeParty.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
                         Engine.e.activeParty.GetComponent<PlayerController>().speed = 5.5f;
-                        if (Engine.e.activeParty.activeParty[1] != null)
-                        {
-                            Engine.e.activePartyMember2.GetComponent<APFollow>().speed = 5.5f;
-                            Engine.e.activePartyMember2.GetComponent<APFollow>().distance = 1.25f;
-                            Engine.e.activePartyMember2.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
 
-                        }
-                        if (Engine.e.activeParty.activeParty[2] != null)
-                        {
-                            Engine.e.activePartyMember3.GetComponent<APFollow>().speed = 5.5f;
-                            Engine.e.activePartyMember3.GetComponent<APFollow>().distance = 1.25f;
-                            Engine.e.activePartyMember3.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
-
-                        }
+                        Engine.e.zoneTitleReference.SetActive(true);
 
                     }
 
@@ -204,6 +238,33 @@ public class Load : MonoBehaviour
                     if (Engine.e.activeParty.activeParty[2] != null)
                     {
                         Engine.e.activePartyMember3.transform.position = Engine.e.activeParty.transform.position;
+                    }
+
+                    if (partyShown)
+                    {
+                        Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().enabled = true;
+                        Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().enabled = true;
+
+                        if (Engine.e.activeParty.activeParty[1] != null)
+                        {
+                            Engine.e.activePartyMember2.GetComponent<APFollow>().speed = 5.5f;
+                            Engine.e.activePartyMember2.GetComponent<APFollow>().distance = 1.25f;
+                            Engine.e.activePartyMember2.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
+
+                        }
+                        if (Engine.e.activeParty.activeParty[2] != null)
+                        {
+                            Engine.e.activePartyMember3.GetComponent<APFollow>().speed = 5.5f;
+                            Engine.e.activePartyMember3.GetComponent<APFollow>().distance = 1.25f;
+                            Engine.e.activePartyMember3.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
+
+                        }
+                    }
+                    else
+                    {
+                        Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().enabled = false;
+                        Engine.e.activePartyMember3.GetComponent<SpriteRenderer>().enabled = false;
+
                     }
 
                     Engine.e.SaveGame(3);

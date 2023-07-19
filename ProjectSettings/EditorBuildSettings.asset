@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/NeverUnload.unity
     guid: ae392db358a9a44ff822bcc845b8d97d
   - enabled: 1
-    path: Assets/Scenes/WorldMap.unity
+    path: Assets/Scenes/WorldMap/WorldMap.unity
     guid: 30fb5c71893cb4117a38567b6bc6f4ec
   - enabled: 1
     path: Assets/Scenes/GrieveNameInput.unity
