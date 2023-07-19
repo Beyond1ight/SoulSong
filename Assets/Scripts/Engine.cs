@@ -119,7 +119,7 @@ public class Engine : MonoBehaviour
         SetDropIndexes();
         SetSkillIndexes();
         gridReference.SetupGrid();
-
+        //activeParty.GetComponent<SpriteRenderer>().sprite =
         SetClasses();
         SetParty();
         //abilityScreenReference.ClearNodeUnlocked();

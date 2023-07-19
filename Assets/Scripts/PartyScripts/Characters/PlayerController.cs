@@ -36,7 +36,6 @@ public class PlayerController : MonoBehaviour
     IEnumerator MoveCharacter()
     {
         targetPos = Vector3.MoveTowards(rb.transform.position, targetGO.transform.position, speed * Time.fixedDeltaTime);
-        Debug.Log("Bru");
 
         rb.MovePosition(targetPos);
 

@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
   m_Name: Signal Emitter
   m_EditorClassIdentifier: 
-  m_Time: 4.999999999999999
+  m_Time: 5
   m_Retroactive: 0
   m_EmitOnce: 0
-  m_Asset: {fileID: 11400000, guid: e7254ff8f496040d8a0e92d527c43377, type: 2}
+  m_Asset: {fileID: 11400000, guid: 777580c47ea7141c7b3fd6b2a8670c57, type: 2}
 --- !u!114 &-8642694637133413058
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -28,10 +28,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
   m_Name: Signal Emitter
   m_EditorClassIdentifier: 
-  m_Time: 6.133333333333334
+  m_Time: 5.95
   m_Retroactive: 0
   m_EmitOnce: 0
-  m_Asset: {fileID: 11400000, guid: e7254ff8f496040d8a0e92d527c43377, type: 2}
+  m_Asset: {fileID: 11400000, guid: 2339450c3c40d47c998bc3290b717da4, type: 2}
+--- !u!114 &-6835999045317591614
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
+  m_Name: Signal Emitter
+  m_EditorClassIdentifier: 
+  m_Time: 6.85
+  m_Retroactive: 0
+  m_EmitOnce: 0
+  m_Asset: {fileID: 11400000, guid: 2339450c3c40d47c998bc3290b717da4, type: 2}
 --- !u!74 &-4197397517792719447
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -283,7 +299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bbbdec67f66f484c8a9aa3c33738a22, type: 3}
   m_Name: Dialogue Marker
   m_EditorClassIdentifier: 
-  m_Time: 2.3333333333333335
+  m_Time: 2.5
   retroactive: 0
   emitOnce: 0
   continueConversation: 0
@@ -302,7 +318,6 @@ MonoBehaviour:
   m_Version: 0
   m_Tracks:
   - {fileID: 7594168201631456376}
-  - {fileID: 7135210951303785756}
   m_FixedDuration: 0
   m_EditorSettings:
     m_Framerate: 60
@@ -324,7 +339,7 @@ MonoBehaviour:
   m_Time: 2.5
   m_Retroactive: 0
   m_EmitOnce: 0
-  m_Asset: {fileID: 11400000, guid: e7254ff8f496040d8a0e92d527c43377, type: 2}
+  m_Asset: {fileID: 11400000, guid: 2339450c3c40d47c998bc3290b717da4, type: 2}
 --- !u!114 &4458965947854494248
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -354,6 +369,7 @@ MonoBehaviour:
     - {fileID: 6961844366542149641}
     - {fileID: -4176064160292258029}
     - {fileID: 4834354760954248469}
+    - {fileID: -6835999045317591614}
 --- !u!114 &4834354760954248469
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -366,10 +382,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bbbdec67f66f484c8a9aa3c33738a22, type: 3}
   m_Name: Dialogue Marker
   m_EditorClassIdentifier: 
-  m_Time: 4.85
+  m_Time: 5
   retroactive: 0
   emitOnce: 0
-  continueConversation: 0
+  continueConversation: 1
 --- !u!114 &6961844366542149641
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -382,33 +398,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 363b1e88892314bffa6c895fa5ca682b, type: 3}
   m_Name: Continue Conversation Marker
   m_EditorClassIdentifier: 
-  m_Time: 5.916666666666667
+  m_Time: 5.95
   retroactive: 0
   emitOnce: 0
   continueConversation: 0
---- !u!114 &7135210951303785756
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15e0374501f39d54eb30235764636e0e, type: 3}
-  m_Name: Control Track
-  m_EditorClassIdentifier: 
-  m_Version: 3
-  m_AnimClip: {fileID: 0}
-  m_Locked: 0
-  m_Muted: 0
-  m_CustomPlayableFullTypename: 
-  m_Curves: {fileID: 0}
-  m_Parent: {fileID: 11400000}
-  m_Children: []
-  m_Clips: []
-  m_Markers:
-    m_Objects: []
 --- !u!114 &7594168201631456376
 MonoBehaviour:
   m_ObjectHideFlags: 1

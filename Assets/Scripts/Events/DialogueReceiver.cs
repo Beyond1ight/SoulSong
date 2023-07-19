@@ -9,7 +9,7 @@ public class DialogueReceiver : MonoBehaviour, INotificationReceiver
 {
     public TextMeshProUGUI textDisplay;
     public string[] sentences;
-    public int index, questIndex;
+    public int index, questIndex, conversationCountBeforeMove;
     public float typingSpeed;
     public GameObject continueButton, continueConversationButton;
     public GameObject endButton;
@@ -35,17 +35,20 @@ public class DialogueReceiver : MonoBehaviour, INotificationReceiver
 
             Talk();
         }
-        if (notification is ContinueConversationMarker continueMarker)
+        else
         {
-            continueConversation = true;
+            if (notification is ContinueConversationMarker continueMarker)
+            {
+                continueConversation = true;
 
-            index++;
-            Engine.e.inBattle = true;
-            textDisplay.text = string.Empty;
-            dialogueScreen.SetActive(true);
-            GetComponent<PlayableDirector>().Pause();
+                index++;
+                Engine.e.inBattle = true;
+                textDisplay.text = string.Empty;
+                dialogueScreen.SetActive(true);
+                GetComponent<PlayableDirector>().Pause();
 
-            Talk();
+                Talk();
+            }
         }
     }
 
@@ -76,6 +79,7 @@ public class DialogueReceiver : MonoBehaviour, INotificationReceiver
 
     void Update()
     {
+        Debug.Log(continueConversation);
         if (talking)
         {
             if (quest == null)
@@ -90,9 +94,19 @@ public class DialogueReceiver : MonoBehaviour, INotificationReceiver
                     }
                     else
                     {
-                        continueConversationButton.SetActive(true);
-                        EventSystem.current.SetSelectedGameObject(null);
-                        EventSystem.current.SetSelectedGameObject(continueConversationButton);
+                        if (conversationCountBeforeMove != 0)
+                        {
+                            continueConversationButton.SetActive(true);
+                            EventSystem.current.SetSelectedGameObject(null);
+                            EventSystem.current.SetSelectedGameObject(continueConversationButton);
+                        }
+                        else
+                        {
+                            continueConversation = false;
+                            continueButton.SetActive(true);
+                            EventSystem.current.SetSelectedGameObject(null);
+                            EventSystem.current.SetSelectedGameObject(continueButton);
+                        }
                     }
                 }
 
@@ -204,15 +218,20 @@ public class DialogueReceiver : MonoBehaviour, INotificationReceiver
         }
     }
 
-    public void BoolSwitch(bool on)
+    public void ContinueConversationBool(bool _on)
     {
-        continueConversation = on;
+        continueConversation = _on;
     }
-
 
     public void NextSentence()
     {
+        if (continueConversation && conversationCountBeforeMove != 0)
+        {
+            conversationCountBeforeMove--;
+        }
+
         continueButton.SetActive(false);
+        continueConversationButton.SetActive(false);
 
         if (index < sentences.Length - 1)
         {
@@ -223,8 +242,14 @@ public class DialogueReceiver : MonoBehaviour, INotificationReceiver
         }
     }
 
+    public void SetAmountUntilConversationContinuesMovement(int _amount)
+    {
+        conversationCountBeforeMove = _amount;
+    }
+
     public void EndDialogue()
     {
+        GetComponent<PlayableDirector>().Resume();
         textDisplay.text = string.Empty;
         textDisplay.text = sentences[index];
 
