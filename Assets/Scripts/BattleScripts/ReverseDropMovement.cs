@@ -32,14 +32,14 @@ public class ReverseDropMovement : MonoBehaviour
 
         Engine.e.battleSystem.animExists = true;
 
-        if (Engine.e.timeOfDay < 300 || Engine.e.timeOfDay > 700)
+        /*if (Engine.e.timeOfDay < 300 || Engine.e.timeOfDay > 700)
         {
             GetComponent<Light2D>().intensity = 0.5f;
         }
         else
         {
             GetComponent<Light2D>().intensity = 1f;
-        }
+        }*/
     }
 
     public IEnumerator CheckDistance()

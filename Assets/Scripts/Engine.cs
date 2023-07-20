@@ -7,6 +7,8 @@ using TMPro;
 using Cinemachine;
 using UnityEngine.EventSystems;
 using UnityEngine.U2D;
+using UnityEngine.Experimental.Rendering.Universal;
+
 public class Engine : MonoBehaviour
 {
 
@@ -16,7 +18,6 @@ public class Engine : MonoBehaviour
     public Character[] playableCharacters;
     public Item[] charEquippedWeaponRight, charEquippedWeaponLeft, charEquippedChestArmor, charEquippedLegArmor, charEquippedAccessory1, charEquippedAccessory2;
     public int partyMoney;
-    public float timeOfDay;
     public string currentScene;
     public bool inBattle = false;
     public bool indoors = false;
@@ -26,9 +27,19 @@ public class Engine : MonoBehaviour
     public bool battleModeActive = true;
     public bool aboveLayer = false;
     public bool autoSaveReady, recentAutoSave = false;
+
+    // Time of Day References
+    [SerializeField] private Gradient lightColor;
+    [SerializeField] private GameObject lighting;
+    public GameObject[] lockedDoors;
+    public GameObject[] landLightSources;
+    public int hour, minute, militaryHour;
+    public float daylightTimer = 0.5f, dayFullCycleTimer, dayToNightEvaluation, dayDurationPercentage, durationOfDay = 1440f, percentageOfDayRemaining;
+    public bool daylight, am;
+
     // Stat Curves
     [SerializeField]
-    AnimationCurve healthCurve, manaCurve, energyCurve, strengthCurve, intelligenceCurve;
+    AnimationCurve healthCurve, manaCurve, energyCurve, strengthCurve, intelligenceCurve, dayAndNightCurve;
 
     // Drops
     public Drops[] gameDrops;
@@ -133,7 +144,15 @@ public class Engine : MonoBehaviour
         SceneManager.LoadSceneAsync("GrieveNameInput", LoadSceneMode.Additive);
 
         activeParty.SetLeaderSprite();
-        timeOfDay = 750f;
+
+        // Starting Time of Day 
+        militaryHour = 23;
+        hour = 11;
+        minute = 0;
+        am = false;
+        daylight = false;
+        daylightTimer = 1f;
+        durationOfDay = 1440f;
         recentAutoSave = true;
         arrangePartyButtonActive = false;
         mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 10;
@@ -2372,14 +2391,14 @@ public class Engine : MonoBehaviour
         partyPosition.y = gameData.partyPosition[1];
         partyPosition.z = gameData.partyPosition[2];
 
-        if (gameData.time <= 50)
-        {
-            timeOfDay = 51;
-        }
-        else
-        {
-            timeOfDay = gameData.time;
-        }
+        //if (gameData.time <= 50)
+        //{
+        //    timeOfDay = 51;
+        //}
+        //else
+        //{
+        //    timeOfDay = gameData.time;
+        //}
         partyMoney = gameData.partyMoney;
         activeParty.gameObject.GetComponent<SpriteRenderer>().sprite = activeParty.activeParty[0].gameObject.GetComponent<SpriteRenderer>().sprite;
         activeParty.gameObject.transform.position = partyPosition;
@@ -2833,6 +2852,122 @@ public class Engine : MonoBehaviour
     void Update()
     {
 
+        if (gameStart)
+        {
+            if (!pauseMenuReference.isPaused)
+            { //&& !inTown
+              // durationofday\
+
+                float dayDurationCheck = 0f;
+
+
+
+                if (!daylight)
+                {
+                    daylightTimer -= Time.deltaTime * 2;
+
+                }
+                else
+                {
+                    daylightTimer -= Time.deltaTime;
+                }
+
+                if (daylightTimer <= 0)
+                {
+                    minute++;
+
+                    if (minute >= 60)
+                    {
+                        minute = 0;
+                        hour++;
+                        militaryHour++;
+                    }
+                    daylightTimer = 1;
+                }
+
+                if (militaryHour < 12)
+                {
+                    am = true;
+                }
+                else
+                {
+                    am = false;
+                }
+
+                if (militaryHour < 8 || militaryHour >= 20)
+                {
+                    daylight = false;
+                }
+
+                if (militaryHour >= 8 && militaryHour < 20)
+                {
+                    daylight = true;
+
+                }
+
+                if (hour >= 13)
+                {
+                    hour = 1;
+                }
+
+                if (militaryHour >= 24)
+                {
+                    militaryHour = 0;
+                }
+
+                if (am)
+                {
+                    float hourOffset = 12f;
+
+                    percentageOfDayRemaining = (((hourOffset + militaryHour) * 60) + minute);
+
+                    dayDurationCheck = (durationOfDay - percentageOfDayRemaining);
+                    dayDurationPercentage = (dayDurationCheck / durationOfDay);
+
+                    Debug.Log(dayDurationPercentage + "% remaining");
+                }
+                else
+                {
+                    if (hour != 12)
+                    {
+                        percentageOfDayRemaining = (((hour) * 60) + minute);
+
+                        dayDurationCheck = (durationOfDay - percentageOfDayRemaining);
+                        dayDurationPercentage = (dayDurationCheck / durationOfDay);
+
+                    }
+                    else
+                    {
+                        percentageOfDayRemaining = (((hour + militaryHour) * 60) + minute);
+
+                        dayDurationCheck = (durationOfDay - percentageOfDayRemaining);
+                        dayDurationPercentage = (dayDurationCheck / durationOfDay);
+
+                    }
+                }
+
+                lighting.GetComponent<Light2D>().color = lightColor.Evaluate(dayDurationPercentage);
+                Debug.Log(dayDurationPercentage + "% remaining");
+
+
+            }
+            else
+            {
+                if (am)
+                {
+                    pauseMenuReference.timeOfDayDisplay.text = hour + ":" + minute.ToString("00") + "am";
+                }
+                else
+                {
+                    pauseMenuReference.timeOfDayDisplay.text = hour + ":" + minute.ToString("00") + "pm";
+                }
+            }
+
+
+            //lighting.GetComponent<Light2D>().color = lightColor.Evaluate(dayToNightEvaluation * 0.001f);
+
+        }
+
         if (!inBattle)
         {
             mainCamera.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 0;
@@ -2840,20 +2975,6 @@ public class Engine : MonoBehaviour
         else
         {
             mainCamera.GetComponent<CinemachineBrain>().m_DefaultBlend.m_Time = 2;
-        }
-
-        if (gameStart && !pauseMenuReference.isPaused && !inTown)
-        {
-            if (timeOfDay > 650 || timeOfDay < 400)
-            {
-                //timeOfDay += Time.deltaTime / 2;
-                timeOfDay += Time.deltaTime * 2;
-
-            }
-            else
-            {
-                timeOfDay += Time.deltaTime;
-            }
         }
 
         if (autoSaveReady && ableToSave && !inBattle && !recentAutoSave)

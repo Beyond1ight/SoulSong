@@ -79,7 +79,6 @@ public class DialogueReceiver : MonoBehaviour, INotificationReceiver
 
     void Update()
     {
-        Debug.Log(continueConversation);
         if (talking)
         {
             if (quest == null)

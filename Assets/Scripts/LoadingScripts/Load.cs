@@ -25,7 +25,7 @@ public class Load : MonoBehaviour
             {
                 Engine.e.loadTimer = true;
                 Engine.e.inBattle = true;
-                GameObject.Find("DayNightCycle").SetActive(false);
+                //GameObject.Find("DayNightCycle").SetActive(false);
                 unloaded = false;
 
                 transition.SetTrigger("Start");
@@ -150,7 +150,7 @@ public class Load : MonoBehaviour
                 {
                     Engine.e.loadTimer = true;
                     Engine.e.inBattle = true;
-                    GameObject.Find("DayNightCycle").SetActive(false);
+                    //GameObject.Find("DayNightCycle").SetActive(false);
                     unloaded = false;
 
                     transition.SetTrigger("Start");

@@ -126,7 +126,7 @@ public class TavernBarkeeperDialogue : MonoBehaviour
             textDisplay.text = "A room is " + roomFee + "G to rent. Would you like one?";
             EventSystem.current.SetSelectedGameObject(null);
             //StartCoroutine(Type());
-            if (Engine.e.timeOfDay <= 400f || Engine.e.timeOfDay >= 650f)
+            if (Engine.e.daylight)
             {
                 sleepUntilButtons[1].SetActive(true);
                 EventSystem.current.SetSelectedGameObject(sleepUntilButtons[1]);
@@ -181,7 +181,10 @@ public class TavernBarkeeperDialogue : MonoBehaviour
                 Engine.e.party[i].GetComponent<Character>().currentMana = Engine.e.party[i].GetComponent<Character>().maxMana + 30;
                 Engine.e.party[i].GetComponent<Character>().currentEnergy = Engine.e.party[i].GetComponent<Character>().maxEnergy + 25;
 
-                Engine.e.timeOfDay = 750f;
+                Engine.e.hour = 8;
+                Engine.e.minute = 0;
+                Engine.e.am = true;
+                Engine.e.daylight = true;
             }
         }
 
@@ -206,7 +209,10 @@ public class TavernBarkeeperDialogue : MonoBehaviour
                 Engine.e.party[i].GetComponent<Character>().currentMana = Engine.e.party[i].GetComponent<Character>().maxMana + 30;
                 Engine.e.party[i].GetComponent<Character>().currentEnergy = Engine.e.party[i].GetComponent<Character>().maxEnergy + 25;
 
-                Engine.e.timeOfDay = 400f;
+                Engine.e.hour = 8;
+                Engine.e.minute = 0;
+                Engine.e.am = false;
+                Engine.e.daylight = false;
             }
         }
 

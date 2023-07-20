@@ -49,7 +49,7 @@ public class PauseMenu : MonoBehaviour
                     Pause();
 
                     partyMoneyDisplay.text = "G: " + Engine.e.partyMoney;
-                    timeOfDayDisplay.text = "Time: " + Mathf.Round(Engine.e.timeOfDay);
+
                     if (Engine.e.battleModeActive)
                     {
                         battleModeReference.text = string.Empty;

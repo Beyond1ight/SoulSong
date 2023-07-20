@@ -76,7 +76,8 @@ public class GameData
     public string[] completedQuests;
     public bool[] questTurnedIn;
     public string scene;
-    public float time;
+    public float[] time;
+    public bool daylight, am;
     public bool battleModeActive;
     public bool aboveLayer;
     public bool inWorldMap;
@@ -553,7 +554,14 @@ public class GameData
         aboveLayer = Engine.e.aboveLayer;
         whichLayer = Engine.e.activeParty.GetComponent<SpriteRenderer>().sortingLayerName;
         scene = gameManager.currentScene;
-        time = gameManager.timeOfDay;
+
+        time = new float[2];
+
+        time[0] = gameManager.hour;
+        time[1] = gameManager.minute;
+        daylight = gameManager.daylight;
+        am = gameManager.am;
+
         inWorldMap = Engine.e.inWorldMap;
         partyMoney = gameManager.partyMoney;
     }
