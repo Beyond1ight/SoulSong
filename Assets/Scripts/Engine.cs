@@ -76,6 +76,7 @@ public class Engine : MonoBehaviour
     public CharacterClass charClassReference;
     public string[] charClasses;
     public bool movingToPos = false;
+    public GameObject zoneTransition;
 
     // Shopping
     public bool selling = false;
@@ -145,11 +146,11 @@ public class Engine : MonoBehaviour
         activeParty.SetLeaderSprite();
 
         // Starting Time of Day 
-        militaryHour = 0;
-        hour = 12;
+        militaryHour = 18;
+        hour = 6;
         minute = 0;
-        am = true;
-        daylight = false;
+        am = false;
+        daylight = true;
 
         daylightTimer = 1f;
         durationOfDay = 1440f;
@@ -2868,12 +2869,12 @@ public class Engine : MonoBehaviour
 
                 if (!daylight)
                 {
-                    daylightTimer -= Time.deltaTime * 2;
+                    daylightTimer -= Time.deltaTime;
 
                 }
                 else
                 {
-                    daylightTimer -= Time.deltaTime;
+                    daylightTimer -= Time.deltaTime * 2;
                 }
 
                 if (daylightTimer <= 0)

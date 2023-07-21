@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Was merged with Load class.
 public class Teleport : MonoBehaviour
 {
     public GameObject toLocation;
@@ -32,7 +33,10 @@ public class Teleport : MonoBehaviour
             Engine.e.activePartyMember2.transform.position = new Vector3(activeParty2Location.transform.position.x, activeParty2Location.transform.position.y);
             Engine.e.activePartyMember3.transform.position = new Vector3(activeParty3Location.transform.position.x, activeParty3Location.transform.position.y);
 
-
+            //if (Engine.e.activeParty.transform.position != toLocation.transform.position)
+            //{
+            //    Engine.e.activeParty.transform.position = toLocation.transform.position;
+            //}
         }
     }
 }
