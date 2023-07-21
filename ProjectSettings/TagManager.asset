@@ -15,6 +15,10 @@ TagManager:
   - Grid Class Node
   - Cutscene Trigger
   - Cutscene Move To Start
+  - AbleToLock
+  - LocksAtNight
+  - ActivatesAtNight
+  - SceneMisc
   layers:
   - Default
   - TransparentFX

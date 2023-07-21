@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 28491645}
   m_Layer: 0
   m_Name: ItemShop
-  m_TagString: Untagged
+  m_TagString: LocksAtNight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2745,6 +2745,9 @@ MonoBehaviour:
   unloaded: 0
   transition: {fileID: 1723678983}
   indoors: 0
+  indoorLighting: 0
+  inTown: 0
+  partyShown: 0
   worldMap: 1
 --- !u!61 &1361075686
 BoxCollider2D:
@@ -2846,6 +2849,9 @@ MonoBehaviour:
   unloaded: 0
   transition: {fileID: 1099268876}
   indoors: 1
+  indoorLighting: 0
+  inTown: 0
+  partyShown: 0
   worldMap: 0
 --- !u!61 &1449242853
 BoxCollider2D:
@@ -3597,6 +3603,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 3932494963896587814, guid: 6a23f7160efac4dc3b1f8c70b258be8e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5907642815693464936, guid: 6a23f7160efac4dc3b1f8c70b258be8e, type: 3}
       propertyPath: m_LightType
       value: 4
@@ -3885,3 +3895,72 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1001 &3287997663812498267
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1878819965141787533, guid: 4c625e58236cd473e884a2f5a34a9eed, type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1878819965141787533, guid: 4c625e58236cd473e884a2f5a34a9eed, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -458.61475
+      objectReference: {fileID: 0}
+    - target: {fileID: 1878819965141787533, guid: 4c625e58236cd473e884a2f5a34a9eed, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -182.21854
+      objectReference: {fileID: 0}
+    - target: {fileID: 1878819965141787533, guid: 4c625e58236cd473e884a2f5a34a9eed, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1613.4116
+      objectReference: {fileID: 0}
+    - target: {fileID: 1878819965141787533, guid: 4c625e58236cd473e884a2f5a34a9eed, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1878819965141787533, guid: 4c625e58236cd473e884a2f5a34a9eed, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1878819965141787533, guid: 4c625e58236cd473e884a2f5a34a9eed, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1878819965141787533, guid: 4c625e58236cd473e884a2f5a34a9eed, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1878819965141787533, guid: 4c625e58236cd473e884a2f5a34a9eed, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1878819965141787533, guid: 4c625e58236cd473e884a2f5a34a9eed, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1878819965141787533, guid: 4c625e58236cd473e884a2f5a34a9eed, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521623800540680806, guid: 4c625e58236cd473e884a2f5a34a9eed, type: 3}
+      propertyPath: lockedObjects.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521623800540680806, guid: 4c625e58236cd473e884a2f5a34a9eed, type: 3}
+      propertyPath: activationLights.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2521623800540680806, guid: 4c625e58236cd473e884a2f5a34a9eed, type: 3}
+      propertyPath: lockedObjects.Array.data[0]
+      value: 
+      objectReference: {fileID: 1449242849}
+    - target: {fileID: 8490286478353802409, guid: 4c625e58236cd473e884a2f5a34a9eed, type: 3}
+      propertyPath: m_Name
+      value: Scene Misc
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4c625e58236cd473e884a2f5a34a9eed, type: 3}

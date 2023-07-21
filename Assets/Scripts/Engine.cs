@@ -31,11 +31,10 @@ public class Engine : MonoBehaviour
     // Time of Day References
     [SerializeField] private Gradient lightColor;
     [SerializeField] private GameObject lighting;
-    public GameObject[] lockedDoors;
-    public GameObject[] landLightSources;
+    public GameObject[] lockedObjects, landLightSources;
     public int hour, minute, militaryHour;
-    public float daylightTimer = 0.5f, dayFullCycleTimer, dayToNightEvaluation, dayDurationPercentage, durationOfDay = 1440f, percentageOfDayRemaining;
-    public bool daylight, am;
+    public float daylightTimer = 0.5f, dayDurationPercentage, durationOfDay = 1440f, percentageOfDayRemaining;
+    public bool daylight, am, indoorLighting;
 
     // Stat Curves
     [SerializeField]
@@ -146,13 +145,15 @@ public class Engine : MonoBehaviour
         activeParty.SetLeaderSprite();
 
         // Starting Time of Day 
-        militaryHour = 23;
-        hour = 11;
+        militaryHour = 0;
+        hour = 12;
         minute = 0;
-        am = false;
+        am = true;
         daylight = false;
+
         daylightTimer = 1f;
         durationOfDay = 1440f;
+
         recentAutoSave = true;
         arrangePartyButtonActive = false;
         mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 10;
@@ -2854,6 +2855,9 @@ public class Engine : MonoBehaviour
 
         if (gameStart)
         {
+
+            durationOfDay = 1440f;
+
             if (!pauseMenuReference.isPaused)
             { //&& !inTown
               // durationofday\
@@ -2915,40 +2919,47 @@ public class Engine : MonoBehaviour
                     militaryHour = 0;
                 }
 
-                if (am)
+                if (!indoorLighting)
                 {
-                    float hourOffset = 12f;
+                    GetComponent<Light2D>().enabled = true;
 
-                    percentageOfDayRemaining = (((hourOffset + militaryHour) * 60) + minute);
-
-                    dayDurationCheck = (durationOfDay - percentageOfDayRemaining);
-                    dayDurationPercentage = (dayDurationCheck / durationOfDay);
-
-                    Debug.Log(dayDurationPercentage + "% remaining");
-                }
-                else
-                {
-                    if (hour != 12)
+                    if (am)
                     {
-                        percentageOfDayRemaining = (((hour) * 60) + minute);
+                        float _hourOffset = 12f;
+
+                        percentageOfDayRemaining = (((_hourOffset + militaryHour) * 60) + minute);
 
                         dayDurationCheck = (durationOfDay - percentageOfDayRemaining);
                         dayDurationPercentage = (dayDurationCheck / durationOfDay);
 
+                        //Debug.Log(dayDurationPercentage + "% remaining");
                     }
                     else
                     {
-                        percentageOfDayRemaining = (((hour + militaryHour) * 60) + minute);
+                        if (hour != 12)
+                        {
+                            percentageOfDayRemaining = (((hour) * 60) + minute);
 
-                        dayDurationCheck = (durationOfDay - percentageOfDayRemaining);
-                        dayDurationPercentage = (dayDurationCheck / durationOfDay);
+                            dayDurationCheck = (durationOfDay - percentageOfDayRemaining);
+                            dayDurationPercentage = (dayDurationCheck / durationOfDay);
 
+                        }
+                        else
+                        {
+                            float hourOffset = durationOfDay--;
+                            percentageOfDayRemaining = (((hour + militaryHour) * 60) + minute);
+
+                            dayDurationCheck = (durationOfDay - percentageOfDayRemaining);
+                            dayDurationPercentage = (hourOffset / durationOfDay);
+                        }
                     }
+
+                    lighting.GetComponent<Light2D>().color = lightColor.Evaluate(dayDurationPercentage);
                 }
-
-                lighting.GetComponent<Light2D>().color = lightColor.Evaluate(dayDurationPercentage);
-                Debug.Log(dayDurationPercentage + "% remaining");
-
+                else
+                {
+                    GetComponent<Light2D>().enabled = false;
+                }
 
             }
             else

@@ -14,8 +14,9 @@ public class Load : MonoBehaviour
     public bool loaded;
     public bool unloaded;
     public Animator transition;
-    public bool indoors, inTown, partyShown;
+    public bool indoors, indoorLighting, inTown, partyShown;
     public bool worldMap = false;
+
 
     private void OnTriggerStay2D(Collider2D other)
     {
@@ -26,15 +27,20 @@ public class Load : MonoBehaviour
                 Engine.e.loadTimer = true;
                 Engine.e.inBattle = true;
                 //GameObject.Find("DayNightCycle").SetActive(false);
+                //referenceObj.GetComponent<SceneMisc>().SceneManagement();
                 unloaded = false;
 
                 transition.SetTrigger("Start");
 
+
+
                 SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
+
 
                 loaded = true;
                 Engine.e.currentScene = scene;
                 Engine.e.indoors = indoors;
+                Engine.e.indoorLighting = indoorLighting;
                 Engine.e.inWorldMap = worldMap;
 
                 if (Engine.e.inWorldMap)
@@ -93,6 +99,8 @@ public class Load : MonoBehaviour
                     Engine.e.canvasReference.GetComponent<PauseMenu>().partyLocationDisplay.text = "Location: " + GetComponent<Teleport>().onLoadSceneReference;
                     Engine.e.ableToSave = false;
 
+                    Engine.e.zoneTitleReference.GetComponent<TextMeshProUGUI>().text = string.Empty;
+                    Engine.e.zoneTitleReference.GetComponent<TextMeshProUGUI>().text = GetComponent<Teleport>().onLoadSceneReference;
                     Engine.e.zoneTitleReference.SetActive(true);
 
 
@@ -150,10 +158,12 @@ public class Load : MonoBehaviour
                 {
                     Engine.e.loadTimer = true;
                     Engine.e.inBattle = true;
+
                     //GameObject.Find("DayNightCycle").SetActive(false);
                     unloaded = false;
 
                     transition.SetTrigger("Start");
+
 
                     SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
 
@@ -202,7 +212,6 @@ public class Load : MonoBehaviour
                     }
                     else
                     {
-
                         if (inTown)
                         {
                             Engine.e.inTown = true;
@@ -223,6 +232,8 @@ public class Load : MonoBehaviour
                         Engine.e.activeParty.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
                         Engine.e.activeParty.GetComponent<PlayerController>().speed = 5.5f;
 
+                        Engine.e.zoneTitleReference.GetComponent<TextMeshProUGUI>().text = string.Empty;
+                        Engine.e.zoneTitleReference.GetComponent<TextMeshProUGUI>().text = GetComponent<Teleport>().onLoadSceneReference;
                         Engine.e.zoneTitleReference.SetActive(true);
 
                     }
@@ -239,7 +250,6 @@ public class Load : MonoBehaviour
                     {
                         Engine.e.activePartyMember3.transform.position = Engine.e.activeParty.transform.position;
                     }
-
                     if (partyShown)
                     {
                         Engine.e.activePartyMember2.GetComponent<SpriteRenderer>().enabled = true;
@@ -284,7 +294,6 @@ public class Load : MonoBehaviour
             Engine.e.UnloadScene(sceneUnload);
             loaded = false;
             sceneUnload = string.Empty;
-
 
         }
     }
