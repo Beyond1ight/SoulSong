@@ -13,4 +13,9 @@ public class LoadZoneStart : MonoBehaviour
     {
         Load.l.SceneLoadManager();
     }
+
+    public void GiveBackControl()
+    {
+        Engine.e.inBattle = false;
+    }
 }

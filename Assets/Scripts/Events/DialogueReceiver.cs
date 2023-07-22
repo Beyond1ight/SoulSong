@@ -15,7 +15,8 @@ public class DialogueReceiver : MonoBehaviour, INotificationReceiver
     public GameObject endButton;
     public GameObject dialogueScreen;
     bool talking = false, currentlyTalking = false;
-    public bool continueConversation = false;
+    public bool continueConversation = false, hasBeenShown = false;
+
 
     public Quest quest;
 
@@ -241,6 +242,11 @@ public class DialogueReceiver : MonoBehaviour, INotificationReceiver
         }
     }
 
+    public void ReturnMovement()
+    {
+        Engine.e.inBattle = false;
+    }
+
     public void SetAmountUntilConversationContinuesMovement(int _amount)
     {
         conversationCountBeforeMove = _amount;
@@ -258,7 +264,6 @@ public class DialogueReceiver : MonoBehaviour, INotificationReceiver
         dialogueScreen.SetActive(false);
         continueButton.SetActive(false);
         endButton.SetActive(false);
-        Engine.e.inBattle = false;
 
     }
 }

@@ -9,7 +9,7 @@ public class CutsceneTrigger : MonoBehaviour
 
     public PlayableDirector director;
     public TimelineAsset tlAsset;
-
+    public bool oneTimeCutscene;
     void Start()
     {
         director = this.gameObject.GetComponent<PlayableDirector>();

@@ -16,10 +16,7 @@ public class PlayerController : MonoBehaviour
     Vector3 targetPos;
     GameObject targetGO;
     public bool controlledMovement = false;
-    void Awake()
-    {
 
-    }
 
     void FixedUpdate()
     {
@@ -39,26 +36,39 @@ public class PlayerController : MonoBehaviour
 
         rb.MovePosition(targetPos);
 
-        if (Vector3.Distance(transform.position, targetPos) < 0.1)
-        {
-            controlledMovement = false;
-        }
         yield return new WaitForSeconds(0.3f);
 
     }
 
     public void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Cutscene Trigger")
-        {
-            other.GetComponent<PlayableDirector>().Play();
-            controlledMovement = false;
-        }
-
         if (other.tag == "Cutscene Move To Start")
         {
             targetGO = other.gameObject;
+            Engine.e.inBattle = true;
             controlledMovement = true;
+        }
+
+        if (other.tag == "Scene Transition")
+        {
+            Engine.e.sceneToBeLoaded = other.GetComponent<Load>().scene;
+            Engine.e.sceneToBeLoadedName = other.GetComponent<Load>().onLoadSceneReference;
+        }
+        if (other.tag == "Cutscene Trigger" && other.GetComponent<CutsceneTrigger>().oneTimeCutscene)
+        {
+
+            Engine.e.AddOneTimeCutscenesForDataReference(other.gameObject);
+
+        }
+    }
+
+    public void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.tag == "Cutscene Trigger" && Vector3.Distance(transform.position, targetPos) < 0.01)
+        {
+            other.GetComponent<PlayableDirector>().Play();
+
+            controlledMovement = false;
         }
     }
 
@@ -85,11 +95,6 @@ public class PlayerController : MonoBehaviour
             {
                 movement.x = 0;
                 movement.y = 0;
-            }
-
-            if (Engine.e.loadTimer)
-            {
-                StartCoroutine(UnloadTimer());
             }
 
             if (movement.x != 0 || movement.y != 0)
@@ -126,16 +131,6 @@ public class PlayerController : MonoBehaviour
 
 
             }
-        }
-    }
-
-    IEnumerator UnloadTimer()
-    {
-        if (Engine.e.loadTimer)
-        {
-            Engine.e.loadTimer = false;
-            yield return new WaitForSeconds(1f);
-            Engine.e.inBattle = false;
         }
     }
 }

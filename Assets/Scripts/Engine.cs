@@ -18,7 +18,7 @@ public class Engine : MonoBehaviour
     public Character[] playableCharacters;
     public Item[] charEquippedWeaponRight, charEquippedWeaponLeft, charEquippedChestArmor, charEquippedLegArmor, charEquippedAccessory1, charEquippedAccessory2;
     public int partyMoney;
-    public string currentScene;
+    public string currentScene, sceneToBeLoaded, sceneToBeLoadedName; // sceneToBeLoaded is the file reference, whereas sceneToBeLoadedName is the actual name. i.e. WorldMap / World Map
     public bool inBattle = false;
     public bool indoors = false;
     public bool inTown = false;
@@ -77,6 +77,7 @@ public class Engine : MonoBehaviour
     public string[] charClasses;
     public bool movingToPos = false;
     public GameObject zoneTransition;
+    public List<string> oneTimeCutscenesForDataReference;
 
     // Shopping
     public bool selling = false;
@@ -133,6 +134,8 @@ public class Engine : MonoBehaviour
         //activeParty.GetComponent<SpriteRenderer>().sprite =
         SetClasses();
         SetParty();
+
+        SetCutscenes();
         //abilityScreenReference.ClearNodeUnlocked();
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
@@ -141,6 +144,7 @@ public class Engine : MonoBehaviour
         //SceneManager.LoadSceneAsync("OpeningScene", LoadSceneMode.Additive);
         //SceneManager.LoadSceneAsync("MariaWest", LoadSceneMode.Additive);
         loadTimer = true;
+
         SceneManager.LoadSceneAsync("GrieveNameInput", LoadSceneMode.Additive);
 
         activeParty.SetLeaderSprite();
@@ -2393,14 +2397,11 @@ public class Engine : MonoBehaviour
         partyPosition.y = gameData.partyPosition[1];
         partyPosition.z = gameData.partyPosition[2];
 
-        //if (gameData.time <= 50)
-        //{
-        //    timeOfDay = 51;
-        //}
-        //else
-        //{
-        //    timeOfDay = gameData.time;
-        //}
+        // Time of day
+        hour = gameData.time[0];
+        minute = gameData.time[1];
+        militaryHour = gameData.time[2];
+
         partyMoney = gameData.partyMoney;
         activeParty.gameObject.GetComponent<SpriteRenderer>().sprite = activeParty.activeParty[0].gameObject.GetComponent<SpriteRenderer>().sprite;
         activeParty.gameObject.transform.position = partyPosition;
@@ -2464,9 +2465,16 @@ public class Engine : MonoBehaviour
         {
             ActivateArrangePartyButton();
         }
+
+        for (int i = 0; i < gameData.cutsceneData.Length; i++)
+        {
+            oneTimeCutscenesForDataReference.Add(gameData.cutsceneData[i]);
+        }
+
         currentScene = gameData.scene;
 
         SceneManager.LoadSceneAsync(gameData.scene, LoadSceneMode.Additive);
+
 
         battleModeActive = gameData.battleModeActive;
         Engine.e.canvasReference.GetComponent<PauseMenu>().partyLocationDisplay.text = gameData.scene;
@@ -2584,6 +2592,17 @@ public class Engine : MonoBehaviour
                 gameSkills[i].isKnown = false;
             }
         }
+    }
+
+    void SetCutscenes()
+    {
+        oneTimeCutscenesForDataReference = new List<string>();
+    }
+
+    public void AddOneTimeCutscenesForDataReference(GameObject cutsceneObj)
+    {
+        if (!oneTimeCutscenesForDataReference.Contains(cutsceneObj.name))
+            oneTimeCutscenesForDataReference.Add(cutsceneObj.name);
     }
 
     void ClearGameQuests()

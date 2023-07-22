@@ -76,7 +76,7 @@ public class GameData
     public string[] completedQuests;
     public bool[] questTurnedIn;
     public string scene;
-    public float[] time;
+    public int[] time;
     public bool daylight, am;
     public bool battleModeActive;
     public bool aboveLayer;
@@ -85,6 +85,8 @@ public class GameData
     public string whichLayer;
     public bool[] grieveNodes, macNodes, fieldNodes, riggsNodes;
     public int[] charNodePositions;
+    public string[] cutsceneData;
+
     public GameData(Engine gameManager)
     {
         charNames = new string[gameManager.party.Length];
@@ -555,12 +557,20 @@ public class GameData
         whichLayer = Engine.e.activeParty.GetComponent<SpriteRenderer>().sortingLayerName;
         scene = gameManager.currentScene;
 
-        time = new float[2];
+        time = new int[3];
 
         time[0] = gameManager.hour;
         time[1] = gameManager.minute;
+        time[2] = gameManager.militaryHour;
         daylight = gameManager.daylight;
         am = gameManager.am;
+
+        cutsceneData = new string[Engine.e.oneTimeCutscenesForDataReference.Count];
+
+        for (int i = 0; i < cutsceneData.Length; i++)
+        {
+            cutsceneData[i] = Engine.e.oneTimeCutscenesForDataReference[i];
+        }
 
         inWorldMap = Engine.e.inWorldMap;
         partyMoney = gameManager.partyMoney;

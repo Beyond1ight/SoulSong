@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SceneMisc : MonoBehaviour
 {
-    public GameObject[] lockedObjects, activationLights;
+    public GameObject[] lockedObjects, activationLights, cutscenes;
 
     public void SceneManagement()
     {

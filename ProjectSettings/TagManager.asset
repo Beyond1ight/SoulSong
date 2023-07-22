@@ -19,6 +19,7 @@ TagManager:
   - LocksAtNight
   - ActivatesAtNight
   - SceneMisc
+  - Scene Transition
   layers:
   - Default
   - TransparentFX
