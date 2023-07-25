@@ -13,7 +13,7 @@ public class GameData
     public float[] charMaxMana;
     public float[] charCurrentMana;
     public int[] charLvl;
-    public float[] charXP;
+    public float[] charXP, charClassXP;
     public float[] charLvlUpReq;
     public float[] charBaseDamage;
     public float[] charPhysicalDamage;
@@ -67,7 +67,6 @@ public class GameData
     public int[] partyInvAmounts;
     public int partySize;
     public string[] partyArmor;
-    public float[] partyPosition;
     public int partyMoney;
 
     public string[] partyQuests;
@@ -80,12 +79,15 @@ public class GameData
     public bool daylight, am;
     public bool battleModeActive;
     public bool aboveLayer;
-    public bool inWorldMap;
+    public bool inWorldMap, partyShown, indoors, indoorLighting;
     public bool recentAutoSave;
     public string whichLayer;
     public bool[] grieveNodes, macNodes, fieldNodes, riggsNodes;
     public int[] charNodePositions;
     public string[] cutsceneData;
+    public float[] partyPosition;
+    public string onLoadSceneReference;
+    public float[] charEXPMultiplier, charDropsEXPMultiplier;
 
     public GameData(Engine gameManager)
     {
@@ -138,6 +140,7 @@ public class GameData
         charBaseDamage = new float[gameManager.party.Length];
         charPhysicalDamage = new float[gameManager.party.Length];
         charXP = new float[gameManager.party.Length];
+        charClassXP = new float[gameManager.party.Length];
         charLvlUpReq = new float[gameManager.party.Length];
         charInParty = new bool[gameManager.party.Length];
         charDodgeChance = new float[gameManager.party.Length];
@@ -151,6 +154,8 @@ public class GameData
         charSleepDefense = new float[gameManager.party.Length];
         charConfuseDefense = new float[gameManager.party.Length];
         charHaste = new float[gameManager.party.Length];
+        charEXPMultiplier = new float[gameManager.party.Length];
+        charDropsEXPMultiplier = new float[gameManager.party.Length];
 
         charDrops = new string[Engine.e.party.Length, Engine.e.gameDrops.Length];
         charSkills = new string[Engine.e.party.Length, Engine.e.gameSkills.Length];
@@ -183,6 +188,8 @@ public class GameData
                 charMaxMana[i] = gameManager.party[i].GetComponent<Character>().maxMana;
                 charLvl[i] = gameManager.party[i].GetComponent<Character>().lvl;
                 currentCharClass[i] = gameManager.party[i].GetComponent<Character>().currentClass;
+                charEXPMultiplier[i] = gameManager.party[i].GetComponent<Character>().expMultiplier;
+                charDropsEXPMultiplier[i] = gameManager.party[i].GetComponent<Character>().dropsEXPMultiplier;
 
                 charFireDropLevel[i] = gameManager.party[i].GetComponent<Character>().fireDropsLevel;
                 charWaterDropLevel[i] = gameManager.party[i].GetComponent<Character>().waterDropsLevel;
@@ -271,7 +278,11 @@ public class GameData
                     {
                         classCompleteBlue[f] = gameManager.playableCharacters[5].GetComponent<Character>().classCompleted[f];
                     }
+
+                    charClassXP[f] = gameManager.party[i].GetComponent<Character>().classEXP[f];
+
                 }
+
 
                 for (int f = 0; f < Engine.e.party[i].GetComponent<Character>().drops.Length; f++)
                 {
@@ -535,10 +546,10 @@ public class GameData
         }
 
         // World Position
-        partyPosition = new float[3];
+        partyPosition = new float[2];
         partyPosition[0] = Engine.e.activeParty.transform.position.x;
         partyPosition[1] = Engine.e.activeParty.transform.position.y;
-        partyPosition[2] = Engine.e.activeParty.transform.position.z;
+
 
         activeParty = new string[3];
 
@@ -573,6 +584,11 @@ public class GameData
         }
 
         inWorldMap = Engine.e.inWorldMap;
+        indoors = Engine.e.indoors;
+        indoorLighting = Engine.e.indoorLighting;
+        partyShown = Engine.e.partyShown;
+        // onLoadSceneReference = Engine.e.partyLocationDisplay.text;
+
         partyMoney = gameManager.partyMoney;
     }
 

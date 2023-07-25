@@ -132,7 +132,7 @@ MonoBehaviour:
   - 0
   - 0
   - 0
-  - 1
+  - 0
   - 0
   - 0
   - 0
@@ -146,8 +146,8 @@ MonoBehaviour:
   lvl: 1
   currentHealth: 80
   maxHealth: 80
-  currentMana: 60
-  maxMana: 60
+  currentMana: 72
+  maxMana: 72
   currentEnergy: 30
   maxEnergy: 30
   haste: 46
@@ -187,6 +187,8 @@ MonoBehaviour:
   holyDropsLvlReq: 50
   holyPhysicalAttackBonus: 0
   holyDropAttackBonus: 0
+  expMultiplier: 1
+  dropsEXPMultiplier: 1.25
   skillScale: 1
   healthCapped: 1
   manaCapped: 1
@@ -194,6 +196,7 @@ MonoBehaviour:
   canUse2HWeapon: 1
   canDualWield: 0
   canSelectNewClass: 0
+  classIndex: 3
   isInParty: 1
   isInActiveParty: 1
   isLeader: 0
@@ -217,7 +220,7 @@ MonoBehaviour:
   physicalDefense: 6
   fireDefense: 2
   iceDefense: 1
-  waterDefense: 2
+  waterDefense: 2.2
   lightningDefense: 2
   shadowDefense: 1
   holyDefense: 1

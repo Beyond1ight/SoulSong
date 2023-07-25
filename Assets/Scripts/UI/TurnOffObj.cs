@@ -8,4 +8,9 @@ public class TurnOffObj : MonoBehaviour
     {
         this.gameObject.SetActive(false);
     }
+
+    public void TurnOffLeaderSprite()
+    {
+        Engine.e.activeParty.GetComponent<SpriteRenderer>().enabled = false;
+    }
 }

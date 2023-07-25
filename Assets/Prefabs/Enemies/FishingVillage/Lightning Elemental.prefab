@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: 7155909388087368162}
   - component: {fileID: 4355832393731490133}
   - component: {fileID: 8386404295868770387}
+  - component: {fileID: 7878133942246848501}
   m_Layer: 0
-  m_Name: Water Elemental
+  m_Name: Lightning Elemental
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +77,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 86e4aa7b23e824dab9aa9438bfda0993, type: 3}
-  m_Color: {r: 0, g: 0.36862746, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.9557737, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -98,62 +99,64 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 550444e963d434843b39a0e08de9f7a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyName: Water Elemental
-  health: 50
-  maxHealth: 50
-  mana: 50
-  lvl: 2
+  enemyName: Lightning Elemental
+  currentHealth: 80
+  maxHealth: 80
+  currentMana: 200
+  maxMana: 200
+  haste: 50
   experiencePoints: 50
-  damage: 15
-  groupIndex: 2
-  moneyDropAmount: 50
-  enemies: []
-  drops:
-  - {fileID: 11400000, guid: f7911b3b316a64289b089119b0194868, type: 2}
   choiceAttack: 60
   damageTotal: 0
   hitChance: 99
+  poisonDmg: 0
+  lvl: 2
+  strength: 0
+  intelligence: 0
+  groupIndex: 2
+  moneyLootAmount: 0
+  sleepTimer: 0
+  confuseTimer: 0
+  deathTimer: 3
+  drops:
+  - {fileID: 4561571794371166769, guid: aa424de30ac5443eb81c992bf59a844b, type: 3}
   isPoisoned: 0
   isConfused: 0
   isAsleep: 0
   deathInflicted: 0
   inflicted: 0
-  poisonDmg: 0
-  sleepTimer: 0
-  confuseTimer: 0
-  deathTimer: 3
-  deathTimerPopup: {fileID: 0}
-  haste: 12
-  dodgeChance: 30
+  isProtected: 0
+  isEncompassed: 0
+  isHastened: 0
   physicalDefense: 50
+  dodgeChance: 30
   fireDefense: -30
   iceDefense: 20
-  waterDefense: 200
-  holyDefense: 0
   lightningDefense: -200
+  waterDefense: 200
   shadowDefense: 0
+  holyDefense: 0
   poisonDefense: 0
   sleepDefense: 0
   confuseDefense: 0
   deathDefense: 0
+  instantDeathDefense: 0
+  fireDropsLevel: 0
+  iceDropsLevel: 0
+  lightningDropsLevel: 0
+  waterDropsLevel: 0
+  shadowDropsLevel: 0
+  holyDropsLevel: 0
+  stealChance: 0
   itemDrops:
   - {fileID: 7844609031142243219, guid: 194647bb24d784bb2b5523bdabac818f, type: 3}
   stealableItem: {fileID: 0}
-  stealChance: 0
-  grieveWeaponDrops: []
-  macWeaponDrops:
-  - {fileID: 74038548412459640, guid: e7ac73c37eff54d568ce191afbffb2f1, type: 3}
-  fieldWeaponDrops: []
-  riggsWeaponDrops: []
-  chestArmorDrops: []
   itemDropChance: 50
-  weaponDropChance: 25
-  armorDropChance: 0
-  enemyInformation: {fileID: 4940071092695679937, guid: d269223ced9d843ef9eef14876428f50, type: 3}
   battleSystem: {fileID: 0}
   enemyPos: {fileID: 4768688437275014393}
   worldZone: SampleScene
   currentBattlePos: {x: 0, y: 0, z: 0}
+  enemyContext: {fileID: 0}
 --- !u!50 &7155909388087368162
 Rigidbody2D:
   serializedVersion: 4
@@ -220,3 +223,15 @@ MonoBehaviour:
   enemy: {fileID: 7725212224698786321}
   rb: {fileID: 7155909388087368162}
   speed: 0
+--- !u!114 &7878133942246848501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7725212224698786321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61cd9375b62d84e93a5d1bcfc961eee7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

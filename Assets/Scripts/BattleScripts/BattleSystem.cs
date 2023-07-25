@@ -45,7 +45,7 @@ public class BattleSystem : MonoBehaviour
     public int char1SwitchToIndex, char2SwitchToIndex, char3SwitchToIndex;
     public Item char1ItemToBeUsed, char2ItemToBeUsed, char3ItemToBeUsed;
     public bool isDead;
-    public float enemyGroupExperiencePoints;
+    public float enemyGroupExperiencePoints, enemyGroupClassExperiencePoints;
     public bool animExists = false;
     public bool enemyMoving = false, charMoving = false;
     public Vector3 leaderPos, activeParty2Pos, activeParty3Pos;
@@ -242,7 +242,8 @@ public class BattleSystem : MonoBehaviour
 
         state = BattleState.START;
         dialogueText.text = string.Empty;
-        enemyGroupExperiencePoints = enemyGroup.groupExperienceLevel;
+        enemyGroupExperiencePoints = enemyGroup.groupExperience;
+        enemyGroupClassExperiencePoints = enemyGroup.groupClassExperience;
         charIndexName = new string[activeParty.activeParty.Length];
 
         charIndexName[0] = activeParty.activeParty[0].gameObject.GetComponent<Character>().characterName;
@@ -2933,7 +2934,7 @@ public class BattleSystem : MonoBehaviour
             enemyGroup.GroupItemDrops();
 
             Engine.e.battleSystem.enemyLootPanelReference.SetActive(true);
-            Engine.e.GiveExperiencePoints(enemyGroupExperiencePoints);
+            Engine.e.GiveExperiencePoints(enemyGroupExperiencePoints, enemyGroupClassExperiencePoints);
 
             if (Engine.e.char1LevelUp == true || Engine.e.char2LevelUp == true || Engine.e.char3LevelUp == true)
             {

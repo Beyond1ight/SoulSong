@@ -103,21 +103,21 @@ MonoBehaviour:
   - 0
   - 0
   - 0
-  - 1
   - 0
   - 0
   - 0
   - 0
   - 0
   - 0
-  currentClass: Ronin
+  - 0
+  currentClass: 
   classCompleted: 000000000000000000000000
   lvl: 5
   currentHealth: 200
   maxHealth: 200
   currentMana: 50
   maxMana: 50
-  currentEnergy: 24
+  currentEnergy: 20
   maxEnergy: 20
   haste: 42
   experiencePoints: 0
@@ -156,6 +156,8 @@ MonoBehaviour:
   holyDropsLvlReq: 50
   holyPhysicalAttackBonus: 0
   holyDropAttackBonus: 0
+  expMultiplier: 1
+  dropsEXPMultiplier: 1
   skillScale: 1
   healthCapped: 1
   manaCapped: 1
@@ -163,6 +165,7 @@ MonoBehaviour:
   canUse2HWeapon: 1
   canDualWield: 0
   canSelectNewClass: 0
+  classIndex: 5
   isInParty: 0
   isInActiveParty: 0
   isLeader: 0

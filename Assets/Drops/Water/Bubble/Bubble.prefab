@@ -166,6 +166,7 @@ MonoBehaviour:
   isDrop: 1
   weapon: 0
   chestArmor: 0
+  accessory: 0
   useableOutOfBattle: 1
   targetAll: 0
 --- !u!114 &7034761061552869381
@@ -189,10 +190,10 @@ MonoBehaviour:
   experiencePoints: 10
   dps: 1
   support: 0
-  targetAll: 0
+  targetAll: 1
   dropValue: 0
   dropIndex: 15
-  isKnown: 0
+  isKnown: 1
 --- !u!95 &877545466755599595
 Animator:
   serializedVersion: 3

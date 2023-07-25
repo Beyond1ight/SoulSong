@@ -140,7 +140,6 @@ MonoBehaviour:
   classEXP:
   - 0
   - 0
-  - 1
   - 0
   - 0
   - 0
@@ -150,7 +149,8 @@ MonoBehaviour:
   - 0
   - 0
   - 0
-  currentClass: Thief
+  - 0
+  currentClass: 
   classCompleted: 000000000000000000000000
   lvl: 3
   currentHealth: 80
@@ -196,6 +196,8 @@ MonoBehaviour:
   holyDropsLvlReq: 50
   holyPhysicalAttackBonus: 0
   holyDropAttackBonus: 0
+  expMultiplier: 1
+  dropsEXPMultiplier: 1
   skillScale: 1
   healthCapped: 1
   manaCapped: 1
@@ -203,6 +205,7 @@ MonoBehaviour:
   canUse2HWeapon: 0
   canDualWield: 1
   canSelectNewClass: 0
+  classIndex: 2
   isInParty: 1
   isInActiveParty: 1
   isLeader: 0

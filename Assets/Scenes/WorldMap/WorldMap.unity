@@ -208,6 +208,7 @@ MonoBehaviour:
   partyShown: 0
   worldMap: 0
   loadOnInteraction: 1
+  loadSave: 0
   leaderToPosition: {fileID: 1898304354}
   activeParty2Location: {fileID: 681683573}
   activeParty3Location: {fileID: 555351256}
@@ -415,11 +416,12 @@ MonoBehaviour:
   loaded: 0
   unloaded: 0
   indoors: 1
-  indoorLighting: 0
+  indoorLighting: 1
   inTown: 0
   partyShown: 1
   worldMap: 0
   loadOnInteraction: 1
+  loadSave: 0
   leaderToPosition: {fileID: 1547092849}
   activeParty2Location: {fileID: 1051126979}
   activeParty3Location: {fileID: 581321923}
@@ -697,6 +699,7 @@ MonoBehaviour:
   partyShown: 0
   worldMap: 0
   loadOnInteraction: 1
+  loadSave: 0
   leaderToPosition: {fileID: 1209720138}
   activeParty2Location: {fileID: 1000804782}
   activeParty3Location: {fileID: 2030567904}

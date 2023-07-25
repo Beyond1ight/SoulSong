@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 6674938201007304770}
   - component: {fileID: 2891966160705350119}
   - component: {fileID: 5945371287743672861}
+  - component: {fileID: -5356113665115515209}
   m_Layer: 0
   m_Name: Skeleton Warrior
   m_TagString: Untagged
@@ -131,30 +132,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyName: Skeleton Warrior
-  currentHealth: 0
-  maxHealth: 15
-  currentMana: 0
-  maxMana: 0
-  haste: 0
+  currentHealth: 150
+  maxHealth: 150
+  currentMana: 40
+  maxMana: 40
+  haste: 40
   experiencePoints: 50
   choiceAttack: 0
   damageTotal: 0
   hitChance: 99
   poisonDmg: 0
   lvl: 2
-  physicalDamage: 0
+  strength: 0
+  intelligence: 0
   groupIndex: -1
   moneyLootAmount: 0
   sleepTimer: 0
   confuseTimer: 0
   deathTimer: 3
   drops:
-  - {fileID: 0}
+  - {fileID: 75677074133245748, guid: 3be602a3cc95143ec96f22e804f02c79, type: 3}
   isPoisoned: 0
   isConfused: 0
   isAsleep: 0
   deathInflicted: 0
   inflicted: 0
+  isProtected: 0
+  isEncompassed: 0
+  isHastened: 0
   physicalDefense: 1
   dodgeChance: 2
   fireDefense: 1
@@ -204,7 +209,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 2
+  m_Constraints: 4
 --- !u!61 &2891966160705350119
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -250,6 +255,18 @@ MonoBehaviour:
   enemy: {fileID: 4156135878294280772}
   rb: {fileID: 6674938201007304770}
   speed: 0
+--- !u!114 &-5356113665115515209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4156135878294280772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47dcec0b764a54539bf1059d30e201d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4291325746919204253
 GameObject:
   m_ObjectHideFlags: 0

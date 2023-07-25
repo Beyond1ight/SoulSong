@@ -320,30 +320,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyName: Cave Bat
-  currentHealth: 0
-  maxHealth: 9999
+  currentHealth: 100
+  maxHealth: 100
   currentMana: 0
   maxMana: 0
-  haste: 0
-  experiencePoints: 200
+  haste: 60
+  experiencePoints: 10
   choiceAttack: 100
   damageTotal: 11
   hitChance: 99
   poisonDmg: 0
   lvl: 1
-  physicalDamage: 0
+  strength: 0
+  intelligence: 0
   groupIndex: 0
   moneyLootAmount: 0
   sleepTimer: 0
   confuseTimer: 0
   deathTimer: 3
   drops:
-  - {fileID: 11400000, guid: f925fe39fda49454abd0dfe3fec0ced2, type: 2}
+  - {fileID: 0}
   isPoisoned: 0
   isConfused: 0
   isAsleep: 0
   deathInflicted: 0
   inflicted: 0
+  isProtected: 0
+  isEncompassed: 0
+  isHastened: 0
   physicalDefense: 1
   dodgeChance: 7
   fireDefense: 2

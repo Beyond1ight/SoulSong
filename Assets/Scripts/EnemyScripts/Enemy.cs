@@ -8,9 +8,8 @@ public class Enemy : MonoBehaviour
 {
     public string enemyName;
     public float currentHealth, maxHealth, currentMana, maxMana, haste, experiencePoints, choiceAttack, damageTotal, hitChance, poisonDmg;
-    public int lvl, strength, intelligence, groupIndex, moneyLootAmount, sleepTimer, confuseTimer, deathTimer = 3;
+    public int lvl, strength, intelligence, groupIndex, moneyLootAmount, sleepTimer, confuseTimer, deathTimer = 3, classExperiencePoints;
     public Drops[] drops;
-
     // Negative Status Effects
     public bool isPoisoned, isConfused, isAsleep, deathInflicted, inflicted;
 
@@ -52,6 +51,17 @@ public class Enemy : MonoBehaviour
             case "Cave Bat":
                 GetComponent<CaveBatBattleLogic>().Logic(_enemyTarget);
                 break;
+            case "Lighting Elemental":
+                GetComponent<LightningElementalLogic>().Logic(_enemyTarget);
+                break;
+            case "Fire Elemental":
+                GetComponent<FireElementalLogic>().Logic(_enemyTarget);
+                break;
+            case "Skeleton Warrior":
+                GetComponent<SkeletonWarriorLogic>().Logic(_enemyTarget);
+                break;
+
+
 
             // Bosses
             case "Xelient the Aggressor":
@@ -64,7 +74,7 @@ public class Enemy : MonoBehaviour
     {
 
         GameObject targetGOLoc = null;
-
+        Debug.Log("Generic Moveset");
         if (target == 0)
         {
             targetGOLoc = Engine.e.activeParty.gameObject;

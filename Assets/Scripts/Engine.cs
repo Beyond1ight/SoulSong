@@ -20,9 +20,8 @@ public class Engine : MonoBehaviour
     public int partyMoney;
     public string currentScene, sceneToBeLoaded, sceneToBeLoadedName; // sceneToBeLoaded is the file reference, whereas sceneToBeLoadedName is the actual name. i.e. WorldMap / World Map
     public bool inBattle = false;
-    public bool indoors = false;
-    public bool inTown = false;
-    public bool inWorldMap = false;
+
+    public bool inTown, partyShown;
     public bool inRange = false;
     public bool battleModeActive = true;
     public bool aboveLayer = false;
@@ -76,8 +75,10 @@ public class Engine : MonoBehaviour
     public CharacterClass charClassReference;
     public string[] charClasses;
     public bool movingToPos = false;
-    public GameObject zoneTransition;
+    public GameObject zoneTransition, loadIntoGameTransition, transitionFadeOnly;
     public List<string> oneTimeCutscenesForDataReference;
+    public bool indoors, inWorldMap;
+    public int loadFileReference;
 
     // Shopping
     public bool selling = false;
@@ -130,12 +131,10 @@ public class Engine : MonoBehaviour
         ClearGameQuests();
         SetDropIndexes();
         SetSkillIndexes();
-        gridReference.SetupGrid();
-        //activeParty.GetComponent<SpriteRenderer>().sprite =
-        SetClasses();
+        SetCutscenes();
         SetParty();
 
-        SetCutscenes();
+        gridReference.SetupGrid();
         //abilityScreenReference.ClearNodeUnlocked();
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
@@ -143,12 +142,16 @@ public class Engine : MonoBehaviour
         activeParty.SetActiveParty();
         //SceneManager.LoadSceneAsync("OpeningScene", LoadSceneMode.Additive);
         //SceneManager.LoadSceneAsync("MariaWest", LoadSceneMode.Additive);
-        loadTimer = true;
 
-        SceneManager.LoadSceneAsync("GrieveNameInput", LoadSceneMode.Additive);
+        //sceneToBeLoaded = "GriveNameInput";
+        CreateNewGame();
+        //SceneManager.LoadSceneAsync("GrieveNameInput", LoadSceneMode.Additive);
 
-        activeParty.SetLeaderSprite();
 
+    }
+
+    void CreateNewGame()
+    {
         // Starting Time of Day 
         militaryHour = 18;
         hour = 6;
@@ -159,6 +162,8 @@ public class Engine : MonoBehaviour
         daylightTimer = 1f;
         durationOfDay = 1440f;
 
+        activeParty.SetLeaderSprite();
+        loading = false;
         recentAutoSave = true;
         arrangePartyButtonActive = false;
         mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 10;
@@ -171,6 +176,11 @@ public class Engine : MonoBehaviour
         activeParty.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Layer1";
         activePartyMember2.GetComponent<SpriteRenderer>().sortingLayerName = "Layer1";
         activePartyMember3.GetComponent<SpriteRenderer>().sortingLayerName = "Layer1";
+        gameStart = false;
+
+        loadIntoGameTransition.SetActive(true);
+
+        //SceneManager.LoadSceneAsync("GrieveNameInput", LoadSceneMode.Additive);
 
     }
 
@@ -204,8 +214,6 @@ public class Engine : MonoBehaviour
         // Grieve
         playableCharacters[0].characterName = "Grieve";
         playableCharacters[0].characterClass[0] = true;
-        playableCharacters[0].currentClass = "Soldier";
-        playableCharacters[0].classEXP[0] = 1f;
         // playableCharacters[0].classCompleted[0] = true;
 
         playableCharacters[0].lvl = 1;
@@ -236,6 +244,8 @@ public class Engine : MonoBehaviour
         playableCharacters[0].healthCapped = true;
         playableCharacters[0].manaCapped = true;
         playableCharacters[0].energyCapped = true;
+        playableCharacters[0].expMultiplier = 1f;
+        playableCharacters[0].dropsEXPMultiplier = 1f;
 
         playableCharacters[0].activePartyIndex = 0;
         playableCharacters[0].partyIndex = 0;
@@ -387,14 +397,13 @@ public class Engine : MonoBehaviour
 
 
         playableCharacters[0].GetComponent<SpriteRenderer>().color = Color.white;
+        playableCharacters[0].SetClass(0);
 
 
 
         // Mac
         playableCharacters[1].characterName = "Mac";
-        playableCharacters[1].currentClass = "Mage";
         playableCharacters[1].characterClass[3] = true;
-        playableCharacters[1].classEXP[3] = 1f;
 
         playableCharacters[1].lvl = 1;
         playableCharacters[1].healthOffset = -20f;
@@ -423,6 +432,8 @@ public class Engine : MonoBehaviour
         playableCharacters[1].healthCapped = true;
         playableCharacters[1].manaCapped = true;
         playableCharacters[1].energyCapped = true;
+        playableCharacters[1].expMultiplier = 1f;
+        playableCharacters[1].dropsEXPMultiplier = 1f;
 
         playableCharacters[1].activePartyIndex = 1;
         playableCharacters[1].partyIndex = 1;
@@ -538,9 +549,7 @@ public class Engine : MonoBehaviour
 
         //Field
         playableCharacters[2].characterName = "Field";
-        playableCharacters[2].currentClass = "Thief";
         playableCharacters[2].characterClass[2] = true;
-        playableCharacters[2].classEXP[2] = 1f;
 
         playableCharacters[2].lvl = 3;
         playableCharacters[2].healthOffset = -20f;
@@ -572,6 +581,8 @@ public class Engine : MonoBehaviour
         playableCharacters[2].healthCapped = true;
         playableCharacters[2].manaCapped = true;
         playableCharacters[2].energyCapped = true;
+        playableCharacters[2].expMultiplier = 1f;
+        playableCharacters[2].dropsEXPMultiplier = 1f;
 
         playableCharacters[2].activePartyIndex = 2;
         playableCharacters[2].partyIndex = 2;
@@ -682,9 +693,7 @@ public class Engine : MonoBehaviour
 
         //Riggs
         playableCharacters[3].characterName = "Riggs";
-        playableCharacters[3].currentClass = "Ronin";
         playableCharacters[3].characterClass[5] = true;
-        playableCharacters[3].classEXP[5] = 1f;
 
 
         playableCharacters[3].lvl = 5;
@@ -715,6 +724,8 @@ public class Engine : MonoBehaviour
         playableCharacters[3].healthCapped = true;
         playableCharacters[3].manaCapped = true;
         playableCharacters[3].energyCapped = true;
+        playableCharacters[3].expMultiplier = 1f;
+        playableCharacters[3].dropsEXPMultiplier = 1f;
 
         playableCharacters[3].activePartyIndex = -1;
         playableCharacters[3].partyIndex = 3;
@@ -822,9 +833,7 @@ public class Engine : MonoBehaviour
 
         // Solace
         playableCharacters[4].characterName = "Solace";
-        playableCharacters[4].currentClass = "Shaman";
         playableCharacters[4].characterClass[3] = true;
-        playableCharacters[4].classEXP[1] = 1f;
 
         playableCharacters[4].lvl = 1;
         playableCharacters[4].healthOffset = -20f;
@@ -853,6 +862,8 @@ public class Engine : MonoBehaviour
         playableCharacters[4].healthCapped = true;
         playableCharacters[4].manaCapped = true;
         playableCharacters[4].energyCapped = true;
+        playableCharacters[4].expMultiplier = 1f;
+        playableCharacters[4].dropsEXPMultiplier = 1f;
 
         playableCharacters[4].activePartyIndex = -1;
         playableCharacters[4].partyIndex = 4;
@@ -967,9 +978,7 @@ public class Engine : MonoBehaviour
 
         // Blue
         playableCharacters[5].characterName = "Blue";
-        playableCharacters[5].currentClass = "Assassin";
         playableCharacters[5].characterClass[4] = true;
-        playableCharacters[5].classEXP[4] = 1f;
 
         playableCharacters[5].lvl = 1;
         playableCharacters[5].healthOffset = -20f;
@@ -998,6 +1007,8 @@ public class Engine : MonoBehaviour
         playableCharacters[5].healthCapped = true;
         playableCharacters[5].manaCapped = true;
         playableCharacters[5].energyCapped = true;
+        playableCharacters[5].expMultiplier = 1f;
+        playableCharacters[5].dropsEXPMultiplier = 1f;
 
         playableCharacters[5].activePartyIndex = -1;
         playableCharacters[5].partyIndex = 5;
@@ -1109,6 +1120,14 @@ public class Engine : MonoBehaviour
         playableCharacters[5].deathTimer = 3;
 
         //playableCharacters[1].GetComponent<SpriteRenderer>().color = Color.white;
+        SetClasses();
+
+        for (int i = 0; i < playableCharacters.Length; i++)
+        {
+            playableCharacters[i].currentHealth = playableCharacters[i].maxHealth;
+            playableCharacters[i].currentMana = playableCharacters[i].maxMana;
+            playableCharacters[i].currentEnergy = playableCharacters[i].maxEnergy;
+        }
 
         party[0] = playableCharacters[0].GetComponent<Character>().gameObject;
 
@@ -1157,7 +1176,7 @@ public class Engine : MonoBehaviour
                 party[i].GetComponent<Character>().isInParty = true;
                 ActivatePauseMenuCharacterPanels();
             }
-            if (party[1] != null)
+            if (party[1] != null)   // Mac
             {
                 activePartyMember2.GetComponent<SpriteRenderer>().sprite = party[1].GetComponent<SpriteRenderer>().sprite;
                 activePartyMember2.SetActive(true);
@@ -1165,9 +1184,10 @@ public class Engine : MonoBehaviour
                 gameSkills[5].isKnown = true;
                 playableCharacters[1].activePartyIndex = 1;
                 gridReference.classPaths[3].SetActive(true);
+                //playableCharacters[1].SetClass(3);
 
             }
-            if (party[2] != null)
+            if (party[2] != null)   // Field
             {
                 ActivateArrangePartyButton();
 
@@ -1205,11 +1225,12 @@ public class Engine : MonoBehaviour
                 gameSkills[10].isKnown = true;
                 playableCharacters[2].activePartyIndex = 2;
                 gridReference.classPaths[2].SetActive(true);
+                //playableCharacters[2].SetClass(2);
 
                 activeParty.SetActivePartyIndexes();
 
             }
-            if (party[3] != null)
+            if (party[3] != null)   // Riggs
             {
                 battleSystem.battleSwitchButtons = true;
 
@@ -1243,10 +1264,12 @@ public class Engine : MonoBehaviour
                 gameSkills[15].isKnown = true;
                 playableCharacters[3].activePartyIndex = -1;
                 gridReference.classPaths[5].SetActive(true);
+                //playableCharacters[3].SetClass(5);
+
 
             }
 
-            if (party[4] != null)
+            if (party[4] != null)   // Solace
             {
                 battleSystem.battleSwitchButtons = true;
 
@@ -1280,11 +1303,12 @@ public class Engine : MonoBehaviour
                 // gameSkills[20].isKnown = true;
                 playableCharacters[4].activePartyIndex = -1;
                 gridReference.classPaths[1].SetActive(true);
+                //playableCharacters[4].SetClass(1);
 
 
             }
 
-            if (party[5] != null)
+            if (party[5] != null)   // Blue
             {
                 battleSystem.battleSwitchButtons = true;
 
@@ -1318,13 +1342,14 @@ public class Engine : MonoBehaviour
                 // gameSkills[25].isKnown = true;
                 playableCharacters[5].activePartyIndex = -1;
                 gridReference.classPaths[4].SetActive(true);
+                //playableCharacters[5].SetClass(4);
 
             }
         }
     }
 
     // Handles Experience Point gain, as well as character Level Ups.
-    public void GiveExperiencePoints(float xp)
+    public void GiveExperiencePoints(float xp, float classXP)
     {
         for (int i = 0; i < party.Length; i++)
         {
@@ -1334,11 +1359,12 @@ public class Engine : MonoBehaviour
                 {
                     if (party[i].GetComponent<Character>().isInActiveParty == true)
                     {
-                        party[i].GetComponent<Character>().experiencePoints += xp;
+                        party[i].GetComponent<Character>().experiencePoints += (xp * party[i].GetComponent<Character>().expMultiplier);
+                        party[i].GetComponent<Character>().classEXP[party[i].GetComponent<Character>().classIndex] += (classXP * party[i].GetComponent<Character>().expMultiplier);
                     }
                     else
                     {
-                        party[i].GetComponent<Character>().experiencePoints += Mathf.Round((xp / 1.5f));
+                        party[i].GetComponent<Character>().experiencePoints += Mathf.Round(((xp * party[i].GetComponent<Character>().expMultiplier) / 1.5f));
                     }
 
                     // Level Up
@@ -1592,7 +1618,7 @@ public class Engine : MonoBehaviour
                 if (party[i].GetComponent<Character>().lvl < 99)
                 {
 
-                    party[i].GetComponent<Character>().experiencePoints += xp;
+                    party[i].GetComponent<Character>().experiencePoints += xp * party[i].GetComponent<Character>().expMultiplier;
 
                     // Level Up
                     if (party[i].GetComponent<Character>().experiencePoints >= party[i].GetComponent<Character>().levelUpReq)
@@ -1959,13 +1985,6 @@ public class Engine : MonoBehaviour
     // Calls the Coroutine for unloading the previous scene. Used on scene transitions.
     public void UnloadScene(string scene)
     {
-        StartCoroutine(Unload(scene));
-    }
-
-    // Unloads the previous scene. 
-    IEnumerator Unload(string scene)
-    {
-        yield return null;
         SceneManager.UnloadSceneAsync(scene);
     }
 
@@ -1992,14 +2011,18 @@ public class Engine : MonoBehaviour
             playableCharacters[i].classCompleted = new bool[charClasses.Length];
             playableCharacters[i].characterClass = new bool[charClasses.Length];
 
+            for (int f = 0; f < playableCharacters[i].classEXP.Length; f++)
+            {
+                playableCharacters[i].classEXP[f] = 0f;
+            }
         }
 
-        playableCharacters[0].characterClass[0].Equals(true);
-        playableCharacters[1].characterClass[3].Equals(true);
-        playableCharacters[2].characterClass[2].Equals(true);
-        playableCharacters[3].characterClass[5].Equals(true);
-        playableCharacters[4].characterClass[1].Equals(true);
-        playableCharacters[5].characterClass[4].Equals(true);
+        playableCharacters[0].SetClass(0);
+        playableCharacters[1].SetClass(3);
+        playableCharacters[2].SetClass(2);
+        playableCharacters[3].SetClass(5);
+        playableCharacters[4].SetClass(1);
+        playableCharacters[5].SetClass(4);
 
 
     }
@@ -2023,6 +2046,7 @@ public class Engine : MonoBehaviour
     public void LoadGame(int saveSlot)
     {
         GameData gameData = SaveSystem.LoadGame(saveSlot);
+        inBattle = true;
         loading = true;
         recentAutoSave = true;
         fileMenuReference.loading = false;
@@ -2031,6 +2055,10 @@ public class Engine : MonoBehaviour
         SetInventoryArrayPositions();
         party = new GameObject[playableCharacters.Length];
         activeParty.activeParty = new GameObject[3];
+
+
+        transitionFadeOnly.SetActive(true);
+
 
         partyInventoryReference.partyInventory = new Item[partyInventoryReference.itemInventorySlots.Length];
 
@@ -2066,7 +2094,8 @@ public class Engine : MonoBehaviour
                 party[i].GetComponent<Character>().availableSkillPoints = gameData.charAvailableSkillPoints[i];
                 party[i].GetComponent<Character>().stealChance = gameData.charStealChance[i];
                 party[i].GetComponent<Character>().haste = gameData.charHaste[i];
-
+                party[i].GetComponent<Character>().expMultiplier = gameData.charEXPMultiplier[i];
+                party[i].GetComponent<Character>().dropsEXPMultiplier = gameData.charDropsEXPMultiplier[i];
 
                 party[i].GetComponent<Character>().fireDropsLevel = gameData.charFireDropLevel[i];
                 party[i].GetComponent<Character>().waterDropsLevel = gameData.charWaterDropLevel[i];
@@ -2170,6 +2199,9 @@ public class Engine : MonoBehaviour
                     {
                         party[5].GetComponent<Character>().classCompleted[f] = gameData.classCompleteBlue[f];
                     }
+
+                    party[i].GetComponent<Character>().classEXP[f] = gameData.charClassXP[f];
+
                 }
 
                 // Drops
@@ -2390,35 +2422,18 @@ public class Engine : MonoBehaviour
             }
         }
 
-
-        // World Position
-        Vector3 partyPosition;
-        partyPosition.x = gameData.partyPosition[0];
-        partyPosition.y = gameData.partyPosition[1];
-        partyPosition.z = gameData.partyPosition[2];
-
-        // Time of day
-        hour = gameData.time[0];
-        minute = gameData.time[1];
-        militaryHour = gameData.time[2];
-
-        partyMoney = gameData.partyMoney;
-        activeParty.gameObject.GetComponent<SpriteRenderer>().sprite = activeParty.activeParty[0].gameObject.GetComponent<SpriteRenderer>().sprite;
-        activeParty.gameObject.transform.position = partyPosition;
-        activePartyMember2.gameObject.transform.position = partyPosition;
-        inWorldMap = gameData.inWorldMap;
         if (activeParty.activeParty[1] != null)
         {
             activePartyMember2.gameObject.GetComponent<SpriteRenderer>().sprite = activeParty.activeParty[1].gameObject.GetComponent<SpriteRenderer>().sprite;
             activePartyMember2.gameObject.SetActive(true);
-            activePartyMember2.gameObject.transform.position = partyPosition;
+            activePartyMember2.gameObject.transform.position = activeParty.transform.position;
         }
 
         if (activeParty.activeParty[2] != null)
         {
             activePartyMember3.gameObject.GetComponent<SpriteRenderer>().sprite = activeParty.activeParty[2].gameObject.GetComponent<SpriteRenderer>().sprite;
             activePartyMember3.gameObject.SetActive(true);
-            activePartyMember3.gameObject.transform.position = partyPosition;
+            activePartyMember3.gameObject.transform.position = activeParty.transform.position;
         }
 
         if (party[1] != null)
@@ -2458,6 +2473,7 @@ public class Engine : MonoBehaviour
         {
             activePartyMember3.GetComponent<SpriteRenderer>().sortingLayerName = activeParty.GetComponent<SpriteRenderer>().sortingLayerName;
         }
+
         ActivatePauseMenuCharacterPanels();
         arrangePartyButtonActive = gameData.arrangePartyButtonActive;
 
@@ -2471,66 +2487,153 @@ public class Engine : MonoBehaviour
             oneTimeCutscenesForDataReference.Add(gameData.cutsceneData[i]);
         }
 
-        currentScene = gameData.scene;
+        // Time of day
+        hour = gameData.time[0];
+        minute = gameData.time[1];
+        militaryHour = gameData.time[2];
 
-        SceneManager.LoadSceneAsync(gameData.scene, LoadSceneMode.Additive);
+        partyMoney = gameData.partyMoney;
+        activeParty.gameObject.GetComponent<SpriteRenderer>().sprite = activeParty.activeParty[0].gameObject.GetComponent<SpriteRenderer>().sprite;
+
+        inWorldMap = gameData.inWorldMap;
+        indoors = gameData.indoors;
+        indoorLighting = gameData.indoorLighting;
+        currentScene = gameData.scene;
+        float partyXPos = gameData.partyPosition[0];
+        float partyYPos = gameData.partyPosition[1];
+
+        SceneLoadManageOnStartup(currentScene, indoors, indoorLighting, inWorldMap, partyShown, partyXPos, partyYPos);
 
 
         battleModeActive = gameData.battleModeActive;
         Engine.e.canvasReference.GetComponent<PauseMenu>().partyLocationDisplay.text = gameData.scene;
 
-        if (gameData.scene == "WorldMap")
-        {
-            if (Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 6.5f)
-            {
-                Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 10f;
-            }
-
-            Engine.e.activeParty.gameObject.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
-            Engine.e.activeParty.GetComponent<PlayerController>().speed = 3.5f;
-
-            if (Engine.e.activeParty.activeParty[1] != null)
-            {
-                Engine.e.activePartyMember2.GetComponent<APFollow>().speed = 3.5f;
-                Engine.e.activePartyMember2.GetComponent<APFollow>().distance = 1.0f;
-                Engine.e.activePartyMember2.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
-
-            }
-            if (Engine.e.activeParty.activeParty[2] != null)
-            {
-                Engine.e.activePartyMember3.GetComponent<APFollow>().speed = 3.5f;
-                Engine.e.activePartyMember3.GetComponent<APFollow>().distance = 1.0f;
-                Engine.e.activePartyMember3.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
-
-            }
-
-            ableToSave = true;
-        }
-        else
-        {
-            if (Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 10f)
-            {
-                Engine.e.mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 6.5f;
-            }
-
-            Engine.e.activeParty.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
-            Engine.e.activeParty.GetComponent<PlayerController>().speed = 4.5f;
-            if (Engine.e.activeParty.activeParty[1] != null)
-            {
-                Engine.e.activePartyMember2.GetComponent<APFollow>().speed = 4.5f;
-                Engine.e.activePartyMember2.GetComponent<APFollow>().distance = 1.25f;
-                Engine.e.activePartyMember2.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
-
-            }
-            if (Engine.e.activeParty.activeParty[2] != null)
-            {
-                Engine.e.activePartyMember3.GetComponent<APFollow>().speed = 4.5f;
-                Engine.e.activePartyMember3.GetComponent<APFollow>().distance = 1.25f;
-                Engine.e.activePartyMember3.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
-
-            }
-        }
+        inBattle = false;
         gameStart = true;
+    }
+
+    public void SceneLoadManageOnStartup(string _sceneToBeLoaded, bool _indoors, bool _indoorLighting, bool _worldMap, bool _partyShown, float _leaderPositionX, float _leaderPositionY)
+    {
+
+        loadIntoGameTransition.GetComponent<Animator>().speed = 0f;
+
+        currentScene = _sceneToBeLoaded;
+        indoors = _indoors;
+        indoorLighting = _indoorLighting;
+        inWorldMap = _worldMap;
+
+        var operation = SceneManager.LoadSceneAsync(_sceneToBeLoaded, LoadSceneMode.Additive);
+        operation.completed += (x) =>
+        {
+            Teleport(_leaderPositionX, _leaderPositionY);
+            //Engine.e.sceneToBeLoaded = string.Empty;
+            //Engine.e.sceneToBeLoadedName = string.Empty;
+
+            GameObject sceneMiscGO = GameObject.FindGameObjectWithTag("SceneMisc");
+
+
+            for (int i = 0; i < sceneMiscGO.GetComponent<SceneMisc>().cutscenes.Length; i++)
+            {
+                if (oneTimeCutscenesForDataReference.Contains(sceneMiscGO.GetComponent<SceneMisc>().cutscenes[i].name))
+                {
+                    sceneMiscGO.GetComponent<SceneMisc>().cutscenes[i].SetActive(false);
+                }
+            }
+
+            if (inWorldMap)
+            {
+                if (mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 6.5f)
+                {
+                    mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 10f;
+                }
+
+                activeParty.gameObject.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
+                activeParty.GetComponent<PlayerController>().speed = 3.5f;
+
+                if (_partyShown)
+                {
+                    activePartyMember2.GetComponent<SpriteRenderer>().enabled = true;
+                    activePartyMember3.GetComponent<SpriteRenderer>().enabled = true;
+
+                    if (activeParty.activeParty[1] != null)
+                    {
+                        activePartyMember2.GetComponent<APFollow>().speed = 3.5f;
+                        activePartyMember2.GetComponent<APFollow>().distance = 1.0f;
+                        activePartyMember2.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
+
+                    }
+                    if (activeParty.activeParty[2] != null)
+                    {
+                        activePartyMember3.GetComponent<APFollow>().speed = 3.5f;
+                        activePartyMember3.GetComponent<APFollow>().distance = 1.0f;
+                        activePartyMember3.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
+                    }
+                }
+                else
+                {
+                    activePartyMember2.GetComponent<SpriteRenderer>().enabled = false;
+                    activePartyMember3.GetComponent<SpriteRenderer>().enabled = false;
+
+                }
+
+                ableToSave = true;
+            }
+            else
+            {
+                if (mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize == 10f)
+                {
+                    mainVirtualCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.OrthographicSize = 6.5f;
+                }
+
+                activeParty.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
+                activeParty.GetComponent<PlayerController>().speed = 5.5f;
+
+                ableToSave = false;
+
+                if (_partyShown)
+                {
+                    activePartyMember2.GetComponent<SpriteRenderer>().enabled = true;
+                    activePartyMember3.GetComponent<SpriteRenderer>().enabled = true;
+
+                    if (activeParty.activeParty[1] != null)
+                    {
+                        activePartyMember2.GetComponent<APFollow>().speed = 5.5f;
+                        activePartyMember2.GetComponent<APFollow>().distance = 1.25f;
+                        activePartyMember2.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
+
+                    }
+                    if (activeParty.activeParty[2] != null)
+                    {
+                        activePartyMember3.GetComponent<APFollow>().speed = 5.5f;
+                        activePartyMember3.GetComponent<APFollow>().distance = 1.25f;
+                        activePartyMember3.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
+
+                    }
+                }
+                else
+                {
+                    activePartyMember2.GetComponent<SpriteRenderer>().enabled = false;
+                    activePartyMember3.GetComponent<SpriteRenderer>().enabled = false;
+
+                }
+            }
+
+            loadIntoGameTransition.GetComponent<Animator>().speed = 1f;
+
+            zoneTitleReference.GetComponent<TextMeshProUGUI>().text = string.Empty;
+            zoneTitleReference.GetComponent<TextMeshProUGUI>().text = Engine.e.sceneToBeLoaded;
+            canvasReference.GetComponent<PauseMenu>().partyLocationDisplay.text = string.Empty;
+            //canvasReference.GetComponent<PauseMenu>().partyLocationDisplay.text = "Location: " + onLoadSceneReference;
+            //SaveGame(3);
+        };
+    }
+
+    public void Teleport(float _leaderPositionX, float _leaderPositionY)
+    {
+
+        Engine.e.activeParty.transform.position = new Vector3(_leaderPositionX, _leaderPositionY);
+        Engine.e.activePartyMember2.transform.position = activeParty.transform.position;
+        Engine.e.activePartyMember3.transform.position = activeParty.transform.position;
     }
 
     // Establishes a battle by communicating with the BattleSystem class.
@@ -3017,6 +3120,8 @@ public class Engine : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            playableCharacters[0].SetClass(3);
+
             adventureLogReference.AddQuestToAdventureLog(gameQuests[0]);
 
             adventureLogReference.AddQuestToAdventureLog(gameQuests[1]);

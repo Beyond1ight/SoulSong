@@ -14,7 +14,7 @@ public class EnemyGroup : MonoBehaviour
     public List<Item> itemDrops;
     public Item item;
     public BattleSystem battleSystem;
-    public float groupExperienceLevel = 0;
+    public float groupExperience = 0f, groupClassExperience = 0f;
     public CinemachineVirtualCamera battleCamera;
     public List<string> enemyLootReferenceText;
     public bool moveToPosition = false, startBattle = false;
@@ -75,15 +75,20 @@ public class EnemyGroup : MonoBehaviour
     }
 
 
-    public float GroupExperienceValue()
+    public void GroupExperienceValue()
     {
         for (int i = 0; i < enemies.Length; i++)
         {
             if (enemies[i] != null)
-                groupExperienceLevel += enemies[i].experiencePoints;
+            {
+                groupExperience += Mathf.Round(enemies[i].experiencePoints);
+                groupClassExperience += enemies[i].classExperiencePoints;
+            }
+
+            groupClassExperience = Mathf.Round((groupClassExperience / enemies.Length));
         }
-        return groupExperienceLevel;
     }
+
 
     public void GroupItemDrops()
     {
@@ -96,7 +101,7 @@ public class EnemyGroup : MonoBehaviour
             {
                 // EXP Gained
                 Engine.e.enemyLootReferenceExp.text = string.Empty;
-                Engine.e.enemyLootReferenceExp.text = "Exp Gained: " + groupExperienceLevel;
+                Engine.e.enemyLootReferenceExp.text = "Exp Gained: " + groupExperience;
 
                 // Money
                 Engine.e.partyMoney += enemies[i].GetComponent<Enemy>().moneyLootAmount;

@@ -21,12 +21,12 @@ public class Character : MonoBehaviour
     waterDropsLevel, waterDropsExperience, waterDropsLvlReq, waterPhysicalAttackBonus, waterDropAttackBonus,
     lightningDropsLevel, lightningDropsExperience, lightningDropsLvlReq, lightningPhysicalAttackBonus, lightningDropAttackBonus,
     shadowDropsLevel, shadowDropsExperience, shadowDropsLvlReq, shadowPhysicalAttackBonus, shadowDropAttackBonus,
-    holyDropsLevel, holyDropsExperience, holyDropsLvlReq, holyPhysicalAttackBonus, holyDropAttackBonus,
+    holyDropsLevel, holyDropsExperience, holyDropsLvlReq, holyPhysicalAttackBonus, holyDropAttackBonus, expMultiplier, dropsEXPMultiplier,
     skillScale;
     public bool healthCapped, manaCapped, energyCapped = true;
     public bool canUse2HWeapon, canDualWield = false;
     public bool canSelectNewClass = false;
-
+    public int classIndex;
     // Negative Status Effects
     public bool isInParty, isInActiveParty, isLeader, isPoisoned, isAsleep, isConfused, miterInflicted, haltInflicted, deathInflicted, inflicted;
 
@@ -60,6 +60,166 @@ public class Character : MonoBehaviour
     public int sleepTimer, confuseTimer = 0, deathTimer = 3;
     public int activePartyIndex, partyIndex; // activePartyIndex is Mostly for battles
     public bool inSwitchQueue = false;
+
+    // Class Index for reference:
+    // 0 - Soldier
+    // 1 - Shaman
+    // 2 - Thief
+    // 3 - Mage
+    // 4 - Assassin
+    // 5 - Ronin
+    // 6 - Monk
+    // 7 - Watcher 
+    // 8 - Quickpocket
+    // 9 - Evoker
+    // 10 - Shinobi
+    // 11 - Bushi
+    public void SetClass(int _classIndex)
+    {
+        // Removing Previous Class Inherent Stats
+        switch (currentClass)
+        {
+            case ("Soldier"):
+                {
+                    maxHealth -= Mathf.Round(maxHealth * 0.1f);
+                    strength -= strength * 0.1f;
+                    haste += haste * 0.1f;
+                    lightningDefense -= lightningDefense * 0.1f;
+
+                    break;
+                }
+            case ("Shaman"):
+                {
+                    maxMana -= Mathf.Round(maxMana * 0.1f);
+                    haste -= haste * 0.1f;
+                    fireDefense -= fireDefense * 0.2f;
+                    fireDropAttackBonus += fireDropAttackBonus * 0.1f;
+                    break;
+                }
+            case ("Thief"):
+                {
+                    maxEnergy += Mathf.Round(maxEnergy * 0.1f);
+                    haste -= haste * 0.2f;
+                    shadowDefense -= shadowDefense * 0.1f;
+                    break;
+                }
+            case ("Mage"):
+                {
+                    maxMana -= Mathf.Round(maxMana * 0.2f);
+                    waterDefense -= waterDefense * 0.1f;
+                    dropsEXPMultiplier -= 1.25f;
+                    break;
+                }
+            case ("Assassin"):
+                {
+                    break;
+                }
+            case ("Ronin"):
+                {
+                    break;
+                }
+            case ("Monk"):
+                {
+                    break;
+                }
+            case ("Watcher"):
+                {
+                    break;
+                }
+            case ("Quickpocket"):
+                {
+                    break;
+                }
+            case ("Evoker"):
+                {
+                    break;
+                }
+            case ("Shinobi"):
+                {
+                    break;
+                }
+            case ("Bushi"):
+                {
+                    break;
+                }
+        }
+
+        // Removing Previous Class
+        for (int i = 0; i < characterClass.Length; i++)
+        {
+            characterClass[i] = false;
+        }
+
+        currentClass = string.Empty;
+
+        // Setting New Class
+        switch (_classIndex)
+        {
+            case 0:
+                currentClass = "Soldier";
+                maxHealth += Mathf.Round(maxHealth * 0.1f);
+                strength += strength * 0.1f;
+                haste -= haste * 0.1f;
+                lightningDefense += lightningDefense * 0.1f;
+
+                break;
+            case 1:
+
+                break;
+            case 2:
+
+                break;
+            case 3:
+                currentClass = "Mage";
+                maxMana += Mathf.Round(maxMana * 0.2f);
+                waterDefense += waterDefense * 0.1f;
+                dropsEXPMultiplier = 1.25f;
+                break;
+            case 4:
+
+                break;
+            case 5:
+
+                break;
+            case 6:
+
+                break;
+            case 7:
+
+                break;
+            case 8:
+
+                break;
+            case 9:
+
+                break;
+            case 10:
+
+                break;
+            case 11:
+
+                break;
+
+
+        }
+
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
+        if (currentMana > maxMana)
+        {
+            currentMana = maxMana;
+        }
+        if (currentEnergy > maxEnergy)
+        {
+            currentEnergy = maxEnergy;
+        }
+
+        classIndex = _classIndex;
+        characterClass[_classIndex] = true;
+
+    }
 
     public void UseDrop(Drops dropChoice)
     {
@@ -1257,7 +1417,7 @@ public class Character : MonoBehaviour
         {
             if (fireDropsLevel < 99)
             {
-                fireDropsExperience += _dropChoice.experiencePoints;
+                fireDropsExperience += (_dropChoice.experiencePoints * dropsEXPMultiplier);
                 // Level Up
                 if (fireDropsExperience >= fireDropsLvlReq)
                 {
@@ -1265,10 +1425,10 @@ public class Character : MonoBehaviour
                     fireDropsExperience -= fireDropsLvlReq;
                     fireDropsLvlReq = (fireDropsLvlReq * 3 / 2);
                     fireDefense += 0.5f;
-                    GameObject levelUp = Instantiate(Engine.e.battleSystem.levelUpPopup, transform.position, Quaternion.identity);
-                    levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Fire Lvl Up! (Lvl: " + fireDropsLevel + ")";
+                    //GameObject levelUp = Instantiate(Engine.e.battleSystem.levelUpPopup, transform.position, Quaternion.identity);
+                    //levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Fire Lvl Up! (Lvl: " + fireDropsLevel + ")";
                     //levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(212, 1, 1, 255);
-                    Destroy(levelUp, 2f);
+                    //Destroy(levelUp, 2f);
                 }
             }
         }
@@ -1277,7 +1437,7 @@ public class Character : MonoBehaviour
         {
             if (iceDropsLevel < 99)
             {
-                iceDropsExperience += _dropChoice.experiencePoints;
+                iceDropsExperience += (_dropChoice.experiencePoints * dropsEXPMultiplier);
                 // Level Up
                 if (iceDropsExperience >= iceDropsLvlReq)
                 {
@@ -1285,10 +1445,10 @@ public class Character : MonoBehaviour
                     iceDropsExperience -= iceDropsLvlReq;
                     iceDropsLvlReq = (iceDropsLvlReq * 3 / 2);
                     iceDefense += 0.5f;
-                    GameObject levelUp = Instantiate(Engine.e.battleSystem.levelUpPopup, transform.position, Quaternion.identity);
-                    levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Ice Lvl Up! (Lvl: " + iceDropsLevel + ")";
+                    //GameObject levelUp = Instantiate(Engine.e.battleSystem.levelUpPopup, transform.position, Quaternion.identity);
+                    //levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Ice Lvl Up! (Lvl: " + iceDropsLevel + ")";
                     //levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(212, 1, 1, 255);
-                    Destroy(levelUp, 2f);
+                    //Destroy(levelUp, 2f);
                 }
             }
         }
@@ -1297,7 +1457,7 @@ public class Character : MonoBehaviour
         {
             if (lightningDropsLevel < 99)
             {
-                lightningDropsExperience += _dropChoice.experiencePoints;
+                lightningDropsExperience += (_dropChoice.experiencePoints * dropsEXPMultiplier);
                 // Level Up
                 if (lightningDropsExperience >= lightningDropsLvlReq)
                 {
@@ -1305,10 +1465,10 @@ public class Character : MonoBehaviour
                     lightningDropsExperience -= fireDropsLvlReq;
                     lightningDropsLvlReq = (fireDropsLvlReq * 3 / 2);
                     lightningDefense += 0.5f;
-                    GameObject levelUp = Instantiate(Engine.e.battleSystem.levelUpPopup, transform.position, Quaternion.identity);
-                    levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Lightning Lvl Up! (Lvl: " + lightningDropsLevel + ")";
+                    //GameObject levelUp = Instantiate(Engine.e.battleSystem.levelUpPopup, transform.position, Quaternion.identity);
+                    //levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Lightning Lvl Up! (Lvl: " + lightningDropsLevel + ")";
                     //levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(212, 1, 1, 255);
-                    Destroy(levelUp, 2f);
+                    //Destroy(levelUp, 2f);
                 }
             }
         }
@@ -1317,7 +1477,7 @@ public class Character : MonoBehaviour
         {
             if (waterDropsLevel < 99)
             {
-                waterDropsExperience += _dropChoice.experiencePoints;
+                waterDropsExperience += (_dropChoice.experiencePoints * dropsEXPMultiplier);
                 // Level Up
                 if (waterDropsExperience >= waterDropsLvlReq)
                 {
@@ -1325,10 +1485,10 @@ public class Character : MonoBehaviour
                     waterDropsExperience -= waterDropsLvlReq;
                     waterDropsLvlReq = (waterDropsLvlReq * 3 / 2);
                     waterDefense += 0.5f;
-                    GameObject levelUp = Instantiate(Engine.e.battleSystem.levelUpPopup, transform.position, Quaternion.identity);
-                    levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Water Lvl Up! (Lvl: " + waterDropsLevel + ")";
+                    //GameObject levelUp = Instantiate(Engine.e.battleSystem.levelUpPopup, transform.position, Quaternion.identity);
+                    //levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Water Lvl Up! (Lvl: " + waterDropsLevel + ")";
                     //levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(212, 1, 1, 255);
-                    Destroy(levelUp, 2f);
+                    //Destroy(levelUp, 2f);
                 }
             }
         }
@@ -1337,7 +1497,7 @@ public class Character : MonoBehaviour
         {
             if (shadowDropsLevel < 99)
             {
-                shadowDropsExperience += _dropChoice.experiencePoints;
+                shadowDropsExperience += (_dropChoice.experiencePoints * dropsEXPMultiplier);
                 // Level Up
                 if (shadowDropsExperience >= shadowDropsLvlReq)
                 {
@@ -1345,10 +1505,10 @@ public class Character : MonoBehaviour
                     shadowDropsExperience -= shadowDropsLvlReq;
                     shadowDropsLvlReq = (shadowDropsLvlReq * 3 / 2);
                     shadowDefense += 0.5f;
-                    GameObject levelUp = Instantiate(Engine.e.battleSystem.levelUpPopup, transform.position, Quaternion.identity);
-                    levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Shadow Lvl Up! (Lvl: " + shadowDropsLevel + ")";
+                    //GameObject levelUp = Instantiate(Engine.e.battleSystem.levelUpPopup, transform.position, Quaternion.identity);
+                    //levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Shadow Lvl Up! (Lvl: " + shadowDropsLevel + ")";
                     //levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(212, 1, 1, 255);
-                    Destroy(levelUp, 2f);
+                    //Destroy(levelUp, 2f);
                 }
             }
         }
@@ -1357,7 +1517,7 @@ public class Character : MonoBehaviour
         {
             if (holyDropsLevel < 99)
             {
-                holyDropsExperience += _dropChoice.experiencePoints;
+                holyDropsExperience += (_dropChoice.experiencePoints * dropsEXPMultiplier);
                 // Level Up
                 if (holyDropsExperience >= holyDropsLvlReq)
                 {
@@ -1365,10 +1525,10 @@ public class Character : MonoBehaviour
                     holyDropsExperience -= holyDropsLvlReq;
                     holyDropsLvlReq = (holyDropsLvlReq * 3 / 2);
                     holyDefense += 0.5f;
-                    GameObject levelUp = Instantiate(Engine.e.battleSystem.levelUpPopup, transform.position, Quaternion.identity);
-                    levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Holy Lvl Up! (Lvl: " + holyDropsLevel + ")";
+                    //GameObject levelUp = Instantiate(Engine.e.battleSystem.levelUpPopup, transform.position, Quaternion.identity);
+                    //levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().text = "Holy Lvl Up! (Lvl: " + holyDropsLevel + ")";
                     //levelUp.transform.GetChild(0).GetComponent<TextMeshPro>().color = new Color32(212, 1, 1, 255);
-                    Destroy(levelUp, 2f);
+                    //Destroy(levelUp, 2f);
                 }
             }
         }

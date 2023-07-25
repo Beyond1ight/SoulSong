@@ -14,7 +14,7 @@ public class Load : MonoBehaviour
 
     public bool loaded;
     public bool unloaded;
-    public bool indoors, indoorLighting, inTown, partyShown, worldMap = false, loadOnInteraction;
+    public bool indoors, indoorLighting, inTown, partyShown, worldMap = false, loadOnInteraction, loadSave;
     public static Load l;
     public GameObject leaderToPosition;
     public GameObject activeParty2Location;
@@ -37,6 +37,7 @@ public class Load : MonoBehaviour
 
     public void SceneUnload()
     {
+
         sceneUnload = Engine.e.currentScene;
         Engine.e.zoneTitleReference.SetActive(false);
         //Engine.e.sceneToBeLoaded = scene;
@@ -55,6 +56,7 @@ public class Load : MonoBehaviour
         loaded = false;
         sceneUnload = string.Empty;
         Engine.e.loadTimer = true;
+
     }
 
     public void SceneLoadManager()
@@ -73,6 +75,13 @@ public class Load : MonoBehaviour
         Engine.e.indoors = indoors;
         Engine.e.indoorLighting = indoorLighting;
         Engine.e.inWorldMap = worldMap;
+        Engine.e.partyShown = partyShown;
+        //Debug.Log(Engine.e.sceneToBeLoaded);
+
+        if (Engine.e.loading)
+        {
+            Engine.e.sceneToBeLoaded = scene;
+        }
 
         var operation = SceneManager.LoadSceneAsync(Engine.e.sceneToBeLoaded, LoadSceneMode.Additive);
         operation.completed += (x) =>
@@ -207,5 +216,14 @@ public class Load : MonoBehaviour
         }
     }
 
+    public void LoadIntoGame() // Is called on New Game, as well as Load Save
+    {
+
+        l = this;
+        Engine.e.zoneTransition.SetActive(true);
+        //SceneLoadManager();
+
+    }
 }
+
 

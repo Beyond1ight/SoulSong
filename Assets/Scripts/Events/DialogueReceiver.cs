@@ -247,6 +247,11 @@ public class DialogueReceiver : MonoBehaviour, INotificationReceiver
         Engine.e.inBattle = false;
     }
 
+    public void SpriteRemove()
+    {
+        Engine.e.activeParty.GetComponent<SpriteRenderer>().enabled = false;
+    }
+
     public void SetAmountUntilConversationContinuesMovement(int _amount)
     {
         conversationCountBeforeMove = _amount;
