@@ -361,19 +361,23 @@ MonoBehaviour:
   hitChance: 99
   poisonDmg: 0
   lvl: 2
-  physicalDamage: 0
+  strength: 0
+  intelligence: 0
   groupIndex: -1
   moneyLootAmount: 0
   sleepTimer: 0
   confuseTimer: 0
   deathTimer: 3
-  drops:
-  - {fileID: 11400000, guid: f7911b3b316a64289b089119b0194868, type: 2}
+  classExperiencePoints: 0
+  drops: []
   isPoisoned: 0
   isConfused: 0
   isAsleep: 0
   deathInflicted: 0
   inflicted: 0
+  isProtected: 0
+  isEncompassed: 0
+  isHastened: 0
   physicalDefense: 1
   dodgeChance: 7
   fireDefense: 25

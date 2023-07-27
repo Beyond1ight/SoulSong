@@ -26,6 +26,7 @@ public class CaveBatBattleLogic : MonoBehaviour
             enemyPos = 3;
         }
 
+
         if (Engine.e.battleSystem.enemies[0].currentHealth < Engine.e.battleSystem.enemies[0].maxHealth / 2
         || (Engine.e.battleSystem.enemies[1] != null && Engine.e.battleSystem.enemies[1].currentHealth < Engine.e.battleSystem.enemies[1].maxHealth / 2)
         || (Engine.e.battleSystem.enemies[2] != null && Engine.e.battleSystem.enemies[2].currentHealth < Engine.e.battleSystem.enemies[2].maxHealth / 2)
@@ -37,8 +38,8 @@ public class CaveBatBattleLogic : MonoBehaviour
             Engine.e.battleSystem.enemyAttackDrop = true;
             Engine.e.battleSystem.lastDropChoice = GetComponent<Enemy>().drops[0];
             Engine.e.battleSystem.enemies[GetComponentInParent<EnemyGroup>().GetLowestHealthEnemy()].GetComponent<Enemy>().DropEffect(Engine.e.battleSystem.enemies[enemyPos].GetComponent<Enemy>().drops[0]);
-
-            Engine.e.battleSystem.HandleDropAnim(this.gameObject, this.gameObject, GetComponent<Enemy>().drops[0]);
+            int targetSupport = GetComponentInParent<EnemyGroup>().GetLowestHealthEnemy();
+            Engine.e.battleSystem.HandleDropAnim(this.gameObject, Engine.e.battleSystem.enemies[targetSupport].gameObject, GetComponent<Enemy>().drops[0]);
             GetComponent<Enemy>().currentMana -= GetComponent<Enemy>().drops[0].dropCost;
 
             Engine.e.battleSystem.enemyAttacking = false;

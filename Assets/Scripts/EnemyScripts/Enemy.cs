@@ -839,6 +839,11 @@ public class Enemy : MonoBehaviour
                 battleSystem.enemyUI[GetComponentInParent<EnemyGroup>().GetEnemyIndex(this)].SetActive(false);
             }
         }
+
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
     }
 
     public void UseItem(Item item)
@@ -995,6 +1000,11 @@ public class Enemy : MonoBehaviour
                 GetComponentInChildren<SpriteRenderer>().color = Color.white;
 
             }
+        }
+
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
         }
     }
 

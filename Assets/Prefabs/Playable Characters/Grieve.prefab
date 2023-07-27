@@ -240,14 +240,14 @@ MonoBehaviour:
   dodgeChance: 10
   hitChance: 99
   critChance: 15
-  maxHealthBase: 100
+  maxHealthBase: 109
   maxManaBase: 35
   maxEnergyBase: 30
-  strengthBase: 15
+  strengthBase: 16.335001
   intelligenceBase: 14
   dodgeChanceBase: 10
   critChanceBase: 15
-  hasteBase: 56
+  hasteBase: 49.896004
   firePhysicalAttackBonusBase: 0
   icePhysicalAttackBonusBase: 0
   lightningPhysicalAttackBonusBase: 0
@@ -256,7 +256,7 @@ MonoBehaviour:
   holyPhysicalAttackBonusBase: 0
   fireDefenseBase: 1
   iceDefenseBase: 1
-  lightningDefenseBase: 3
+  lightningDefenseBase: 3.267
   waterDefenseBase: 1
   shadowDefenseBase: 3
   holyDefenseBase: 1

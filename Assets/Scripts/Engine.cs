@@ -132,9 +132,10 @@ public class Engine : MonoBehaviour
         SetDropIndexes();
         SetSkillIndexes();
         SetCutscenes();
+        gridReference.SetupGrid();
+
         SetParty();
 
-        gridReference.SetupGrid();
         //abilityScreenReference.ClearNodeUnlocked();
         //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;

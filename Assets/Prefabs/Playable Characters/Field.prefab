@@ -150,20 +150,20 @@ MonoBehaviour:
   - 0
   - 0
   - 0
-  currentClass: 
+  currentClass: Thief
   classCompleted: 000000000000000000000000
-  lvl: 3
+  lvl: 1
   currentHealth: 80
   maxHealth: 80
-  currentMana: 20
-  maxMana: 20
-  currentEnergy: 50
-  maxEnergy: 50
-  haste: 60
+  currentMana: 50
+  maxMana: 50
+  currentEnergy: 36
+  maxEnergy: 36
+  haste: 72
   experiencePoints: 0
   levelUpReq: 100
-  strength: 16
-  intelligence: 19
+  strength: 13
+  intelligence: 15
   dropCostReduction: 0
   skillCostReduction: 0
   fireDropsLevel: 1
@@ -231,7 +231,7 @@ MonoBehaviour:
   iceDefense: 1
   waterDefense: 1
   lightningDefense: 1
-  shadowDefense: 3
+  shadowDefense: 3.3
   holyDefense: 1
   poisonDefense: 2
   sleepDefense: 1

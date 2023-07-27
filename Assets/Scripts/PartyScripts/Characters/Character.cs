@@ -83,9 +83,9 @@ public class Character : MonoBehaviour
                 {
                     maxHealth -= Mathf.Round(maxHealth * 0.1f);
                     strength -= strength * 0.1f;
+                    physicalDefense -= 0.1f;
                     haste += haste * 0.1f;
                     lightningDefense -= lightningDefense * 0.1f;
-
                     break;
                 }
             case ("Shaman"):
@@ -93,7 +93,7 @@ public class Character : MonoBehaviour
                     maxMana -= Mathf.Round(maxMana * 0.1f);
                     haste -= haste * 0.1f;
                     fireDefense -= fireDefense * 0.2f;
-                    fireDropAttackBonus += fireDropAttackBonus * 0.1f;
+                    fireDropAttackBonus -= fireDropAttackBonus * 0.1f;
                     break;
                 }
             case ("Thief"):
@@ -112,10 +112,18 @@ public class Character : MonoBehaviour
                 }
             case ("Assassin"):
                 {
+                    maxEnergy -= Mathf.Round(maxEnergy * 0.2f);
+                    haste -= haste * 0.1f;
+                    iceDefense -= iceDefense * 0.1f;
+                    shadowDefense -= shadowDefense * 0.1f;
                     break;
                 }
             case ("Ronin"):
                 {
+                    strength += strength * 0.1f;
+                    physicalDefense -= 0.2f;
+                    haste -= haste * 0.1f;
+                    holyDefense -= holyDefense * 0.1f;
                     break;
                 }
             case ("Monk"):
@@ -159,15 +167,23 @@ public class Character : MonoBehaviour
                 currentClass = "Soldier";
                 maxHealth += Mathf.Round(maxHealth * 0.1f);
                 strength += strength * 0.1f;
+                physicalDefense += 0.1f;
                 haste -= haste * 0.1f;
                 lightningDefense += lightningDefense * 0.1f;
 
                 break;
             case 1:
-
+                currentClass = "Shaman";
+                maxMana += Mathf.Round(maxMana * 0.1f);
+                haste += haste * 0.1f;
+                fireDefense += fireDefense * 0.2f;
+                fireDropAttackBonus += fireDropAttackBonus * 0.1f;
                 break;
             case 2:
-
+                currentClass = "Thief";
+                maxEnergy += Mathf.Round(maxEnergy * 0.1f);
+                haste += haste * 0.2f;
+                shadowDefense += shadowDefense * 0.1f;
                 break;
             case 3:
                 currentClass = "Mage";
@@ -176,10 +192,18 @@ public class Character : MonoBehaviour
                 dropsEXPMultiplier = 1.25f;
                 break;
             case 4:
-
+                currentClass = "Assassin";
+                maxEnergy += Mathf.Round(maxEnergy * 0.2f);
+                haste += haste * 0.1f;
+                iceDefense += iceDefense * 0.1f;
+                shadowDefense += shadowDefense * 0.1f;
                 break;
             case 5:
-
+                currentClass = "Ronin";
+                strength -= strength * 0.1f;
+                physicalDefense += 0.2f;
+                haste += haste * 0.1f;
+                holyDefense += holyDefense * 0.1f;
                 break;
             case 6:
 

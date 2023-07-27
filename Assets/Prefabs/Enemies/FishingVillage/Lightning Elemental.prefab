@@ -118,6 +118,7 @@ MonoBehaviour:
   sleepTimer: 0
   confuseTimer: 0
   deathTimer: 3
+  classExperiencePoints: 0
   drops:
   - {fileID: 4561571794371166769, guid: aa424de30ac5443eb81c992bf59a844b, type: 3}
   isPoisoned: 0
@@ -130,10 +131,10 @@ MonoBehaviour:
   isHastened: 0
   physicalDefense: 50
   dodgeChance: 30
-  fireDefense: -30
-  iceDefense: 20
-  lightningDefense: -200
-  waterDefense: 200
+  fireDefense: 0
+  iceDefense: 0
+  lightningDefense: 200
+  waterDefense: -200
   shadowDefense: 0
   holyDefense: 0
   poisonDefense: 0

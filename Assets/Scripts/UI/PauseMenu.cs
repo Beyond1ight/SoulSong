@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;
+using UnityEngine.Experimental.Rendering.Universal;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -31,7 +32,7 @@ public class PauseMenu : MonoBehaviour
     public bool shoppingArmor = false, shoppingWeapons = false, shoppingDrops = false, shoppingItems = false;
     public TextMeshProUGUI battleModeReference;
     public GameUI uiReference;
-
+    bool globalLightOnBeforePause;
 
     void Start()
     {
@@ -246,6 +247,11 @@ public class PauseMenu : MonoBehaviour
 
     void Resume()
     {
+        if (globalLightOnBeforePause)
+        {
+            Engine.e.GetComponent<Light2D>().enabled = true;
+        }
+
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         isPaused = false;
@@ -254,6 +260,7 @@ public class PauseMenu : MonoBehaviour
 
     void Pause()
     {
+        globalLightOnBeforePause = Engine.e.indoorLighting;
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         isPaused = true;
@@ -435,6 +442,8 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenGridMenuGrieve()
     {
+        Engine.e.GetComponent<Light2D>().enabled = false;
+
         for (int i = 0; i < gridCharSelect.Length; i++)
         {
             gridCharSelect[i].SetActive(false);
@@ -461,6 +470,8 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenGridMenuMac()
     {
+        Engine.e.GetComponent<Light2D>().enabled = false;
+
         for (int i = 0; i < gridCharSelect.Length; i++)
         {
             gridCharSelect[i].SetActive(false);
@@ -485,6 +496,8 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenGridMenuField()
     {
+        Engine.e.GetComponent<Light2D>().enabled = false;
+
         for (int i = 0; i < gridCharSelect.Length; i++)
         {
             gridCharSelect[i].SetActive(false);
@@ -508,6 +521,8 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenGridMenuRiggs()
     {
+        Engine.e.GetComponent<Light2D>().enabled = false;
+
         for (int i = 0; i < gridCharSelect.Length; i++)
         {
             gridCharSelect[i].SetActive(false);
@@ -532,6 +547,8 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenGridMenuSolace()
     {
+        Engine.e.GetComponent<Light2D>().enabled = false;
+
         for (int i = 0; i < gridCharSelect.Length; i++)
         {
             gridCharSelect[i].SetActive(false);
@@ -554,6 +571,8 @@ public class PauseMenu : MonoBehaviour
     }
     public void OpenGridMenuBlue()
     {
+        Engine.e.GetComponent<Light2D>().enabled = false;
+
         for (int i = 0; i < gridCharSelect.Length; i++)
         {
             gridCharSelect[i].SetActive(false);

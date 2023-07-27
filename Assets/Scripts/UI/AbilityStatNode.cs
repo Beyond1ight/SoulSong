@@ -10,8 +10,9 @@ public class AbilityStatNode : MonoBehaviour
     public AbilityStatNode[] connectedNodes;
     public GameObject[] connectionLines;
 
-    public bool grieveUnlocked, macUnlocked, fieldUnlocked, riggsUnlocked;
+    public bool grieveUnlocked, macUnlocked, fieldUnlocked, riggsUnlocked, solaceUnlocked, blueUnlocked;
     public int nodeIndex;
+    public bool skillNode;
 
 
     private void Start()

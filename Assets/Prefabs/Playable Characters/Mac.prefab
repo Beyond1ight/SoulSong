@@ -232,7 +232,7 @@ MonoBehaviour:
   hitChance: 99
   critChance: 10
   maxHealthBase: 80
-  maxManaBase: 60
+  maxManaBase: 72
   maxEnergyBase: 30
   strengthBase: 14
   intelligenceBase: 17
@@ -248,7 +248,7 @@ MonoBehaviour:
   fireDefenseBase: 2
   iceDefenseBase: 1
   lightningDefenseBase: 2
-  waterDefenseBase: 2
+  waterDefenseBase: 2.2
   shadowDefenseBase: 1
   holyDefenseBase: 1
   sleepDefenseBase: 1

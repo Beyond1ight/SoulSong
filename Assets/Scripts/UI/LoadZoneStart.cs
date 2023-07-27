@@ -22,7 +22,7 @@ public class LoadZoneStart : MonoBehaviour
             GameObject startingPos = GameObject.FindGameObjectWithTag("NewGameSpawnLocation");
             SceneManager.UnloadSceneAsync("GrieveNameInput");
             //Engine.e.SceneLoadManageOnStartup("OpeningCutscene", false, false, false, false, startingPos.transform.position.x, startingPos.transform.position.y);
-            Engine.e.SceneLoadManageOnStartup("Sturgeon", false, false, false, false, startingPos.transform.position.x, startingPos.transform.position.y);
+            Engine.e.SceneLoadManageOnStartup("Sturgeon", false, false, false, true, startingPos.transform.position.x, startingPos.transform.position.y);
         }
         else
         {

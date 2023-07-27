@@ -338,8 +338,9 @@ MonoBehaviour:
   sleepTimer: 0
   confuseTimer: 0
   deathTimer: 3
+  classExperiencePoints: 1
   drops:
-  - {fileID: 0}
+  - {fileID: 1283034272721629902, guid: 9ca2e510d807948a6909c25c348f1710, type: 3}
   isPoisoned: 0
   isConfused: 0
   isAsleep: 0
@@ -355,7 +356,7 @@ MonoBehaviour:
   lightningDefense: 0
   waterDefense: 0
   shadowDefense: 0
-  holyDefense: 1
+  holyDefense: 0
   poisonDefense: 0
   sleepDefense: 0
   confuseDefense: 0

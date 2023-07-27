@@ -85,8 +85,9 @@ public class EnemyGroup : MonoBehaviour
                 groupClassExperience += enemies[i].classExperiencePoints;
             }
 
-            groupClassExperience = Mathf.Round((groupClassExperience / enemies.Length));
         }
+
+        groupClassExperience = Mathf.Round((groupClassExperience / enemies.Length));
     }
 
 
