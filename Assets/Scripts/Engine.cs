@@ -44,7 +44,7 @@ public class Engine : MonoBehaviour
 
     // Skills    
     public Skills[] gameSkills;
-
+    public Class[] gameClasses;
 
     // Inventory / Weapons / Armor / Drops
     // "Game Inventory" is the most important. The other lists are mainly for visual reference.
@@ -96,6 +96,8 @@ public class Engine : MonoBehaviour
     public PauseMenu pauseMenuReference;
     public AdventureLog adventureLogReference;
     public EquipDisplay equipMenuReference;
+    //public AugmentMenu augmentMenuReference;
+
     public FileMenu fileMenuReference;
     public Status statusMenuReference;
     public BattleMenu battleMenu;
@@ -365,12 +367,12 @@ public class Engine : MonoBehaviour
 
 
 
-        playableCharacters[0].skills = new Skills[30];
+        playableCharacters[0].skills = new Skills[60];
         playableCharacters[0].skillIndex = 0;
         playableCharacters[0].skillTotal = 1;
         playableCharacters[0].skillScale = 1f;
-        playableCharacters[0].availableSkillPoints = 0;
-        playableCharacters[0].skills[0] = gameSkills[0];
+        //playableCharacters[0].availableSkillPoints = 0;
+        //playableCharacters[0].skills[0] = gameSkills[0];
         gameSkills[0].isKnown = true;
 
         playableCharacters[0].stealChance = 60f;
@@ -398,7 +400,7 @@ public class Engine : MonoBehaviour
 
 
         playableCharacters[0].GetComponent<SpriteRenderer>().color = Color.white;
-        playableCharacters[0].SetClass(0);
+        //playableCharacters[0].SetClass(0);
 
 
 
@@ -518,13 +520,12 @@ public class Engine : MonoBehaviour
         playableCharacters[1].shadowPhysicalAttackBonus = 0f;
         playableCharacters[1].icePhysicalAttackBonus = 0f;
 
-        playableCharacters[1].skills = new Skills[30];
+        playableCharacters[1].skills = new Skills[60];
         playableCharacters[1].skillIndex = 5;
         playableCharacters[1].skillTotal = 1;
-        playableCharacters[1].availableSkillPoints = 0;
+        //playableCharacters[1].availableSkillPoints = 0;
         playableCharacters[1].skillScale = 1f;
 
-        playableCharacters[1].skills[5] = gameSkills[5];
 
         playableCharacters[1].isPoisoned = false;
         playableCharacters[1].isAsleep = false;
@@ -663,12 +664,12 @@ public class Engine : MonoBehaviour
         playableCharacters[2].shadowPhysicalAttackBonus = 0f;
         playableCharacters[2].icePhysicalAttackBonus = 0f;
 
-        playableCharacters[2].skills = new Skills[30];
+        playableCharacters[2].skills = new Skills[60];
         playableCharacters[2].skillIndex = 10;
         playableCharacters[2].skillTotal = 1;
         playableCharacters[2].skillScale = 1f;
-        playableCharacters[2].availableSkillPoints = 0;
-        playableCharacters[2].skills[10] = gameSkills[10];
+        //playableCharacters[2].availableSkillPoints = 0;
+        //playableCharacters[2].skills[10] = gameSkills[10];
 
         playableCharacters[2].isPoisoned = false;
         playableCharacters[2].isAsleep = false;
@@ -804,12 +805,12 @@ public class Engine : MonoBehaviour
         playableCharacters[3].shadowPhysicalAttackBonus = 0f;
         playableCharacters[3].icePhysicalAttackBonus = 0f;
 
-        playableCharacters[3].skills = new Skills[30];
+        playableCharacters[3].skills = new Skills[60];
         playableCharacters[3].skillIndex = 15;
         playableCharacters[3].skillTotal = 1;
         playableCharacters[3].skillScale = 1f;
-        playableCharacters[3].availableSkillPoints = 0;
-        playableCharacters[3].skills[15] = gameSkills[15];
+        //playableCharacters[3].availableSkillPoints = 0;
+        //playableCharacters[3].skills[15] = gameSkills[15];
 
         playableCharacters[3].isPoisoned = false;
         playableCharacters[3].isAsleep = false;
@@ -948,10 +949,10 @@ public class Engine : MonoBehaviour
         playableCharacters[4].shadowPhysicalAttackBonus = 0f;
         playableCharacters[4].icePhysicalAttackBonus = 0f;
 
-        playableCharacters[4].skills = new Skills[30];
+        playableCharacters[4].skills = new Skills[60];
         playableCharacters[4].skillIndex = 5;
         playableCharacters[4].skillTotal = 1;
-        playableCharacters[4].availableSkillPoints = 0;
+        //playableCharacters[4].availableSkillPoints = 0;
         playableCharacters[4].skillScale = 1f;
 
         //playableCharacters[4].skills[5] = gameSkills[5];
@@ -1093,10 +1094,10 @@ public class Engine : MonoBehaviour
         playableCharacters[5].shadowPhysicalAttackBonus = 0f;
         playableCharacters[5].icePhysicalAttackBonus = 0f;
 
-        playableCharacters[5].skills = new Skills[30];
+        playableCharacters[5].skills = new Skills[60];
         playableCharacters[5].skillIndex = 5;
         playableCharacters[5].skillTotal = 1;
-        playableCharacters[5].availableSkillPoints = 0;
+        //playableCharacters[5].availableSkillPoints = 0;
         playableCharacters[5].skillScale = 1f;
 
         //playableCharacters[4].skills[5] = gameSkills[5];
@@ -1182,7 +1183,7 @@ public class Engine : MonoBehaviour
                 activePartyMember2.GetComponent<SpriteRenderer>().sprite = party[1].GetComponent<SpriteRenderer>().sprite;
                 activePartyMember2.SetActive(true);
                 //                gameDrops[15].isKnown = true;
-                gameSkills[5].isKnown = true;
+                //                gameSkills[5].isKnown = true;
                 playableCharacters[1].activePartyIndex = 1;
                 gridReference.classPaths[3].SetActive(true);
                 //playableCharacters[1].SetClass(3);
@@ -1262,7 +1263,7 @@ public class Engine : MonoBehaviour
                 //     charAbilityButtons[3].SetActive(true);
                 //     charSkillTierButtons[3].SetActive(true);
                 //         gameDrops[25].isKnown = true;
-                gameSkills[15].isKnown = true;
+                //    gameSkills[15].isKnown = true;
                 playableCharacters[3].activePartyIndex = -1;
                 gridReference.classPaths[5].SetActive(true);
                 //playableCharacters[3].SetClass(5);
@@ -1361,7 +1362,6 @@ public class Engine : MonoBehaviour
                     if (party[i].GetComponent<Character>().isInActiveParty == true)
                     {
                         party[i].GetComponent<Character>().experiencePoints += (xp * party[i].GetComponent<Character>().expMultiplier);
-                        party[i].GetComponent<Character>().classEXP[party[i].GetComponent<Character>().classIndex] += (classXP * party[i].GetComponent<Character>().expMultiplier);
                     }
                     else
                     {
@@ -1603,6 +1603,42 @@ public class Engine : MonoBehaviour
                                 }
                             }
                         }
+                    }
+                }
+
+                if (party[i].GetComponent<Character>().classLvl[party[i].GetComponent<Character>().classIndex] < gameClasses[party[i].GetComponent<Character>().classIndex].GetComponent<Class>().skill.Length)
+                {
+
+                    if (party[i].GetComponent<Character>().classEXP[party[i].GetComponent<Character>().classIndex] < party[i].GetComponent<Character>().currentClassEXPReq)
+                    {
+                        if (party[i].GetComponent<Character>().isInActiveParty == true)
+                        {
+                            party[i].GetComponent<Character>().classEXP[party[i].GetComponent<Character>().classIndex] += Mathf.Round(classXP * party[i].GetComponent<Character>().expMultiplier);
+                        }
+                        else
+                        {
+                            party[i].GetComponent<Character>().classEXP[party[i].GetComponent<Character>().classIndex] += Mathf.Round((classXP * party[i].GetComponent<Character>().expMultiplier) / 1.5f);
+                        }
+                    }
+
+                    // Level Up
+                    if (party[i].GetComponent<Character>().classEXP[party[i].GetComponent<Character>().classIndex] >= party[i].GetComponent<Character>().currentClassEXPReq)
+                    {
+                        Debug.Log("Class Lvl: " + party[i].GetComponent<Character>().classLvl[party[i].GetComponent<Character>().classIndex]);
+                        party[i].GetComponent<Character>().classLvl[party[i].GetComponent<Character>().classIndex] += 1;
+                        Debug.Log("Class Lvl: " + party[i].GetComponent<Character>().classLvl[party[i].GetComponent<Character>().classIndex]);
+
+                        party[i].GetComponent<Character>().TeachSkill();
+
+                        if (party[i].GetComponent<Character>().classLvl[party[i].GetComponent<Character>().classIndex] < Engine.e.gameClasses[party[i].GetComponent<Character>().classIndex].skill.Length)
+                        {
+                            party[i].GetComponent<Character>().currentClassEXPReq = gameClasses[party[i].GetComponent<Character>().classIndex].skill[party[i].GetComponent<Character>().classLvl[party[i].GetComponent<Character>().classIndex] + 1].skillCostToUnlock;
+                        }
+                        else
+                        {
+                            //currentClassEXPReq = 99999999;
+                        }
+                        //party[i].GetComponent<Character>().currentClassEXPReq =
                     }
                 }
             }
@@ -1991,21 +2027,12 @@ public class Engine : MonoBehaviour
 
     public void SetClasses()
     {
-        charClasses = new string[12];
-
-        charClasses[0] = "Soldier";
-        charClasses[1] = "Shaman";
-        charClasses[2] = "Thief";
-        charClasses[3] = "Mage";
-        charClasses[4] = "Assassin";
-        charClasses[5] = "Ronin";
-
-        charClasses[6] = "Monk";
-        charClasses[7] = "Watcher";
-        charClasses[8] = "Quickpocket";
-        charClasses[9] = "Evoker";
-        charClasses[10] = "Shinobi";
-        charClasses[11] = "Bushi";
+        playableCharacters[0].SetClass(0);
+        playableCharacters[1].SetClass(0); // 3
+        playableCharacters[2].SetClass(2);
+        playableCharacters[3].SetClass(5);
+        playableCharacters[4].SetClass(1);
+        playableCharacters[5].SetClass(4);
 
         for (int i = 0; i < playableCharacters.Length; i++)
         {
@@ -2015,15 +2042,11 @@ public class Engine : MonoBehaviour
             for (int f = 0; f < playableCharacters[i].classEXP.Length; f++)
             {
                 playableCharacters[i].classEXP[f] = 0f;
+
+                playableCharacters[i].classLvl[f] = 0;
             }
         }
 
-        playableCharacters[0].SetClass(0);
-        playableCharacters[1].SetClass(3);
-        playableCharacters[2].SetClass(2);
-        playableCharacters[3].SetClass(5);
-        playableCharacters[4].SetClass(1);
-        playableCharacters[5].SetClass(4);
 
 
     }
@@ -2201,7 +2224,13 @@ public class Engine : MonoBehaviour
                         party[5].GetComponent<Character>().classCompleted[f] = gameData.classCompleteBlue[f];
                     }
 
-                    party[i].GetComponent<Character>().classEXP[f] = gameData.charClassXP[f];
+                    party[0].GetComponent<Character>().classEXP[f] = gameData.charClassXPGrieve[f];
+                    party[1].GetComponent<Character>().classEXP[f] = gameData.charClassXPMac[f];
+                    party[2].GetComponent<Character>().classEXP[f] = gameData.charClassXPField[f];
+                    party[3].GetComponent<Character>().classEXP[f] = gameData.charClassXPRiggs[f];
+                    party[4].GetComponent<Character>().classEXP[f] = gameData.charClassXPSolace[f];
+                    party[5].GetComponent<Character>().classEXP[f] = gameData.charClassXPBlue[f];
+
 
                 }
 
@@ -2941,6 +2970,7 @@ public class Engine : MonoBehaviour
             {
                 playableCharacters[i].characterClass[k] = false;
                 playableCharacters[i].classEXP[k] = 0f;
+                playableCharacters[i].classLvl[k] = 0;
             }
         }
     }
