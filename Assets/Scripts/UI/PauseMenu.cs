@@ -18,7 +18,7 @@ public class PauseMenu : MonoBehaviour
     public TextMeshProUGUI partyMoneyDisplay;
     public TextMeshProUGUI timeOfDayDisplay;
     public TextMeshProUGUI partyLocationDisplay;
-    public GameObject pauseMenu, equipMenu, mainMenuScreen, gridMenu, adventureLogMenu, fileMenu, statusMenu;
+    public GameObject pauseMenu, equipMenu, mainMenuScreen, gridMenu, augmentMenu, adventureLogMenu, fileMenu, statusMenu;
 
     // Controller Support UI
     // Menu(s) First Choice
@@ -354,6 +354,14 @@ public class PauseMenu : MonoBehaviour
         }
 
         atPauseMenu = false;
+    }
+
+    public void OpenAugmentMenu()
+    {
+        augmentMenu.SetActive(true);
+
+        //Engine.e.augmentMenuReference.OpenFileMenuSaving();
+
     }
 
     public void OpenFileMenuSaving()

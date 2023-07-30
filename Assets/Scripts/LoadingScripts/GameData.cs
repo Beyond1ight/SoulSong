@@ -13,7 +13,8 @@ public class GameData
     public float[] charMaxMana;
     public float[] charCurrentMana;
     public int[] charLvl;
-    public float[] charXP, charClassXP;
+    public float[] charXP, charClassXPGrieve, charClassXPMac, charClassXPField, charClassXPRiggs, charClassXPSolace, charClassXPBlue,
+    charClassLevelGrieve, charClassLevelMac, charClassLevelField, charClassLevelRiggs, charClassLevelSolace, charClassLevelBlue;
     public float[] charLvlUpReq;
     public float[] charBaseDamage;
     public float[] charPhysicalDamage;
@@ -139,8 +140,28 @@ public class GameData
 
         charBaseDamage = new float[gameManager.party.Length];
         charPhysicalDamage = new float[gameManager.party.Length];
+
         charXP = new float[gameManager.party.Length];
-        charClassXP = new float[gameManager.party.Length];
+        charClassXPGrieve = new float[gameManager.charClasses.Length];
+        charClassXPMac = new float[gameManager.charClasses.Length];
+        charClassXPField = new float[gameManager.charClasses.Length];
+        charClassXPRiggs = new float[gameManager.charClasses.Length];
+        charClassXPSolace = new float[gameManager.charClasses.Length];
+        charClassXPBlue = new float[gameManager.charClasses.Length];
+
+        charClassLevelGrieve = new float[gameManager.charClasses.Length];
+        charClassLevelMac = new float[gameManager.charClasses.Length];
+        charClassLevelField = new float[gameManager.charClasses.Length];
+        charClassLevelRiggs = new float[gameManager.charClasses.Length];
+        charClassLevelSolace = new float[gameManager.charClasses.Length];
+        charClassLevelBlue = new float[gameManager.charClasses.Length];
+
+        charClassXPMac = new float[gameManager.charClasses.Length];
+        charClassXPField = new float[gameManager.charClasses.Length];
+        charClassXPRiggs = new float[gameManager.charClasses.Length];
+        charClassXPSolace = new float[gameManager.charClasses.Length];
+        charClassXPBlue = new float[gameManager.charClasses.Length];
+
         charLvlUpReq = new float[gameManager.party.Length];
         charInParty = new bool[gameManager.party.Length];
         charDodgeChance = new float[gameManager.party.Length];
@@ -257,30 +278,45 @@ public class GameData
                     if (gameManager.party[0] != null)
                     {
                         classCompleteGrieve[f] = gameManager.party[0].GetComponent<Character>().classCompleted[f];
+                        charClassXPGrieve[f] = gameManager.party[0].GetComponent<Character>().classEXP[f];
+                        charClassLevelGrieve[f] = gameManager.party[0].GetComponent<Character>().classLvl[f];
+
                     }
                     if (gameManager.party[1] != null)
                     {
                         classCompleteMac[f] = gameManager.party[1].GetComponent<Character>().classCompleted[f];
+                        charClassXPMac[f] = gameManager.party[1].GetComponent<Character>().classEXP[f];
+                        charClassLevelMac[f] = gameManager.party[1].GetComponent<Character>().classLvl[f];
+
                     }
                     if (gameManager.party[2] != null)
                     {
                         classCompleteField[f] = gameManager.party[2].GetComponent<Character>().classCompleted[f];
+                        charClassXPField[f] = gameManager.party[2].GetComponent<Character>().classEXP[f];
+                        charClassLevelField[f] = gameManager.party[2].GetComponent<Character>().classLvl[f];
+
                     }
                     if (gameManager.party[3] != null)
                     {
                         classCompleteRiggs[f] = gameManager.party[3].GetComponent<Character>().classCompleted[f];
+                        charClassXPRiggs[f] = gameManager.party[3].GetComponent<Character>().classEXP[f];
+                        charClassLevelRiggs[f] = gameManager.party[3].GetComponent<Character>().classLvl[f];
+
                     }
                     if (gameManager.party[4] != null)
                     {
                         classCompleteSolace[f] = gameManager.playableCharacters[4].GetComponent<Character>().classCompleted[f];
+                        charClassXPSolace[f] = gameManager.party[4].GetComponent<Character>().classEXP[f];
+                        charClassLevelSolace[f] = gameManager.party[4].GetComponent<Character>().classLvl[f];
+
                     }
                     if (gameManager.party[5] != null)
                     {
                         classCompleteBlue[f] = gameManager.playableCharacters[5].GetComponent<Character>().classCompleted[f];
+                        charClassXPBlue[f] = gameManager.party[5].GetComponent<Character>().classEXP[f];
+                        charClassLevelBlue[f] = gameManager.party[5].GetComponent<Character>().classLvl[f];
+
                     }
-
-                    charClassXP[f] = gameManager.party[i].GetComponent<Character>().classEXP[f];
-
                 }
 
 

@@ -137,6 +137,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Field
   characterClass: 000001000000000000000000
+  currentClass: Thief
+  classCompleted: 000000000000000000000000
+  lvl: 3
+  classLvl: 000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000
   classEXP:
   - 0
   - 0
@@ -150,20 +154,18 @@ MonoBehaviour:
   - 0
   - 0
   - 0
-  currentClass: Thief
-  classCompleted: 000000000000000000000000
-  lvl: 1
   currentHealth: 80
   maxHealth: 80
-  currentMana: 50
-  maxMana: 50
-  currentEnergy: 36
-  maxEnergy: 36
+  currentMana: 20
+  maxMana: 20
+  currentEnergy: 55
+  maxEnergy: 55
   haste: 72
   experiencePoints: 0
   levelUpReq: 100
-  strength: 13
-  intelligence: 15
+  currentClassEXPReq: 0
+  strength: 16
+  intelligence: 19
   dropCostReduction: 0
   skillCostReduction: 0
   fireDropsLevel: 1
@@ -306,7 +308,37 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 6822994532976135968, guid: 134536cd5093b4606a2277e88715bd4f, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

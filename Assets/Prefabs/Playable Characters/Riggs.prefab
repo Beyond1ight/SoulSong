@@ -97,6 +97,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Riggs
   characterClass: 000000000001000000000000
+  currentClass: Ronin
+  classCompleted: 000000000000000000000000
+  lvl: 5
+  classLvl: 000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000
   classEXP:
   - 0
   - 0
@@ -110,20 +114,18 @@ MonoBehaviour:
   - 0
   - 0
   - 0
-  currentClass: Ronin
-  classCompleted: 000000000000000000000000
-  lvl: 2
-  currentHealth: 177
-  maxHealth: 177
-  currentMana: 52
-  maxMana: 52
-  currentEnergy: 24
-  maxEnergy: 24
+  currentHealth: 200
+  maxHealth: 200
+  currentMana: 50
+  maxMana: 50
+  currentEnergy: 20
+  maxEnergy: 20
   haste: 46.2
   experiencePoints: 0
   levelUpReq: 100
-  strength: 20
-  intelligence: 14
+  currentClassEXPReq: 0
+  strength: 25.2
+  intelligence: 20
   dropCostReduction: 0
   skillCostReduction: 0
   fireDropsLevel: 1
@@ -166,7 +168,7 @@ MonoBehaviour:
   canDualWield: 0
   canSelectNewClass: 0
   classIndex: 5
-  isInParty: 1
+  isInParty: 0
   isInActiveParty: 0
   isLeader: 0
   isPoisoned: 0
@@ -271,7 +273,37 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 6153573029152560378, guid: 114db7e30792c485993741576521d6ae, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

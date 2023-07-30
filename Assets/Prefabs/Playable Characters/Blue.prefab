@@ -97,12 +97,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Blue
   characterClass: 000000000100000000000000
+  currentClass: 
+  classCompleted: 000000000000000000000000
+  lvl: 1
+  classLvl: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   classEXP:
   - 0
   - 0
   - 0
   - 0
-  - 1
   - 0
   - 0
   - 0
@@ -110,9 +113,7 @@ MonoBehaviour:
   - 0
   - 0
   - 0
-  currentClass: Assassin
-  classCompleted: 000000000000000000000000
-  lvl: 1
+  - 0
   currentHealth: 80
   maxHealth: 80
   currentMana: 60
@@ -122,6 +123,7 @@ MonoBehaviour:
   haste: 46
   experiencePoints: 0
   levelUpReq: 100
+  currentClassEXPReq: 0
   strength: 14
   intelligence: 17
   dropCostReduction: 0
@@ -156,6 +158,8 @@ MonoBehaviour:
   holyDropsLvlReq: 50
   holyPhysicalAttackBonus: 0
   holyDropAttackBonus: 0
+  expMultiplier: 1
+  dropsEXPMultiplier: 1
   skillScale: 1
   healthCapped: 1
   manaCapped: 1
@@ -163,6 +167,7 @@ MonoBehaviour:
   canUse2HWeapon: 0
   canDualWield: 0
   canSelectNewClass: 0
+  classIndex: 0
   isInParty: 0
   isInActiveParty: 0
   isLeader: 0
@@ -253,6 +258,36 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   skills:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

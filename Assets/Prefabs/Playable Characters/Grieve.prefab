@@ -136,33 +136,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: Grieve
-  characterClass: 010000000000000000000000
-  classEXP:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
+  characterClass: 000000000000000000000000
   currentClass: Soldier
   classCompleted: 000000000000000000000000
   lvl: 1
-  currentHealth: 109
-  maxHealth: 109
-  currentMana: 35
+  classLvl: 010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  classEXP:
+  - 1
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  currentHealth: 110
+  maxHealth: 110
+  currentMana: 5
   maxMana: 35
   currentEnergy: 30
   maxEnergy: 30
-  haste: 49.896004
-  experiencePoints: 0
+  haste: 50.4
+  experiencePoints: 40
   levelUpReq: 100
-  strength: 16.335001
+  currentClassEXPReq: 10
+  strength: 16.5
   intelligence: 14
   dropCostReduction: 0
   skillCostReduction: 0
@@ -182,7 +184,7 @@ MonoBehaviour:
   waterPhysicalAttackBonus: 0
   waterDropAttackBonus: 0
   lightningDropsLevel: 5
-  lightningDropsExperience: 0
+  lightningDropsExperience: 30
   lightningDropsLvlReq: 50
   lightningPhysicalAttackBonus: 0
   lightningDropAttackBonus: 0
@@ -226,11 +228,11 @@ MonoBehaviour:
   strengthOffset: 0
   intelligenceOffset: -10
   stealChance: 60
-  physicalDefense: 7
+  physicalDefense: 7.1
   fireDefense: 1
   iceDefense: 1
   waterDefense: 1
-  lightningDefense: 3.267
+  lightningDefense: 3.3
   shadowDefense: 3
   holyDefense: 1
   poisonDefense: 1
@@ -240,14 +242,14 @@ MonoBehaviour:
   dodgeChance: 10
   hitChance: 99
   critChance: 15
-  maxHealthBase: 109
+  maxHealthBase: 110
   maxManaBase: 35
   maxEnergyBase: 30
-  strengthBase: 16.335001
+  strengthBase: 16.5
   intelligenceBase: 14
   dodgeChanceBase: 10
   critChanceBase: 15
-  hasteBase: 49.896004
+  hasteBase: 50.4
   firePhysicalAttackBonusBase: 0
   icePhysicalAttackBonusBase: 0
   lightningPhysicalAttackBonusBase: 0
@@ -256,7 +258,7 @@ MonoBehaviour:
   holyPhysicalAttackBonusBase: 0
   fireDefenseBase: 1
   iceDefenseBase: 1
-  lightningDefenseBase: 3.267
+  lightningDefenseBase: 3.3
   waterDefenseBase: 1
   shadowDefenseBase: 3
   holyDefenseBase: 1
@@ -296,7 +298,37 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   skills:
-  - {fileID: 565931186836030038, guid: bfbced9c1df294ceda6441cb67d27c96, type: 3}
+  - {fileID: 8901647567139126937, guid: 9fc303164d1ed451c8e3843bf1ce8851, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

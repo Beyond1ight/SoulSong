@@ -8,6 +8,7 @@ public class Skills : MonoBehaviour
 
     public float skillPower;
     public float skillCost;
+    public float skillCostToUnlock;
     public string skillName;
     public string skillDescription;
     public float skillPointReturn = 0;

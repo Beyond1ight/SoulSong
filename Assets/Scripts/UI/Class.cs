@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "new Node", menuName = "Class", order = 0)]
-public class Class : ScriptableObject
+public class Class : MonoBehaviour
 {
     public string className, classDescription;
-    public Skills skill;
+    public Skills[] skill;
 
 }

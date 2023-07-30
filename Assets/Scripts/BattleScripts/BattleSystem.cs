@@ -5386,24 +5386,12 @@ public class BattleSystem : MonoBehaviour
                     DeactivateChar3MenuButtons();
                 }
 
-
-                if (activeParty.activeParty[2] != null)
+                if (!animExists)
                 {
-                    if (activeParty.activeParty[0].GetComponent<Character>().currentHealth <= 0 && activeParty.activeParty[1].GetComponent<Character>().currentHealth <= 0
-                    && activeParty.activeParty[2].GetComponent<Character>().currentHealth <= 0)
+                    if (activeParty.activeParty[2] != null)
                     {
-                        state = BattleState.LOST;
-                    }
-                    else
-                    {
-                        state = BattleState.LEVELUPCHECK;
-                    }
-                }
-                else
-                {
-                    if (activeParty.activeParty[1] != null)
-                    {
-                        if (activeParty.activeParty[0].GetComponent<Character>().currentHealth <= 0 && activeParty.activeParty[1].GetComponent<Character>().currentHealth <= 0)
+                        if (activeParty.activeParty[0].GetComponent<Character>().currentHealth <= 0 && activeParty.activeParty[1].GetComponent<Character>().currentHealth <= 0
+                        && activeParty.activeParty[2].GetComponent<Character>().currentHealth <= 0)
                         {
                             state = BattleState.LOST;
                         }
@@ -5414,14 +5402,28 @@ public class BattleSystem : MonoBehaviour
                     }
                     else
                     {
-                        if (activeParty.activeParty[0].GetComponent<Character>().currentHealth <= 0)
+                        if (activeParty.activeParty[1] != null)
                         {
-                            state = BattleState.LOST;
+                            if (activeParty.activeParty[0].GetComponent<Character>().currentHealth <= 0 && activeParty.activeParty[1].GetComponent<Character>().currentHealth <= 0)
+                            {
+                                state = BattleState.LOST;
+                            }
+                            else
+                            {
+                                state = BattleState.LEVELUPCHECK;
+                            }
                         }
                         else
                         {
-                            state = BattleState.LEVELUPCHECK;
+                            if (activeParty.activeParty[0].GetComponent<Character>().currentHealth <= 0)
+                            {
+                                state = BattleState.LOST;
+                            }
+                            else
+                            {
+                                state = BattleState.LEVELUPCHECK;
 
+                            }
                         }
                     }
                 }
@@ -5434,7 +5436,6 @@ public class BattleSystem : MonoBehaviour
                 {
                     StartCoroutine(EndBattle());
                 }
-
             }
         }
 

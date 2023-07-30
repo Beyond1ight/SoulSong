@@ -54,10 +54,10 @@ public class ClassSelectNode : MonoBehaviour
 
                         if (node.skill != null)
                         {
-                            if (!Engine.e.party[0].GetComponent<Character>().KnowsSkill(node.skill))
-                            {
-                                Engine.e.party[0].GetComponent<Character>().skills[node.skill.skillIndex] = node.skill;
-                            }
+                            //if (!Engine.e.party[0].GetComponent<Character>().KnowsSkill(node.skill))
+                            //{
+                            //    Engine.e.party[0].GetComponent<Character>().skills[node.skill.skillIndex] = node.skill;
+                            //}
                         }
 
                         grieveUnlocked = true;
@@ -96,10 +96,7 @@ public class ClassSelectNode : MonoBehaviour
 
                         if (node.skill != null)
                         {
-                            if (!Engine.e.party[1].GetComponent<Character>().KnowsSkill(node.skill))
-                            {
-                                Engine.e.party[1].GetComponent<Character>().skills[node.skill.skillIndex] = node.skill;
-                            }
+
                         }
 
                         macUnlocked = true;
@@ -137,10 +134,7 @@ public class ClassSelectNode : MonoBehaviour
 
                         if (node.skill != null)
                         {
-                            if (!Engine.e.party[2].GetComponent<Character>().KnowsSkill(node.skill))
-                            {
-                                Engine.e.party[2].GetComponent<Character>().skills[node.skill.skillIndex] = node.skill;
-                            }
+
                         }
 
 
@@ -179,10 +173,7 @@ public class ClassSelectNode : MonoBehaviour
 
                             if (node.skill != null)
                             {
-                                if (!Engine.e.party[3].GetComponent<Character>().KnowsSkill(node.skill))
-                                {
-                                    Engine.e.party[3].GetComponent<Character>().skills[node.skill.skillIndex] = node.skill;
-                                }
+
                             }
 
                             Engine.e.gridReference.riggsPosition = nodeIndex;

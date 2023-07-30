@@ -10,11 +10,12 @@ public class Character : MonoBehaviour
     // General Information
     public string characterName;
     public bool[] characterClass;
-    public float[] classEXP;
     public string currentClass;
     public bool[] classCompleted;
     public int lvl;
-    public float currentHealth, maxHealth, currentMana, maxMana, currentEnergy, maxEnergy, haste, experiencePoints, levelUpReq,
+    public int[] classLvl;
+    public float[] classEXP;
+    public float currentHealth, maxHealth, currentMana, maxMana, currentEnergy, maxEnergy, haste, experiencePoints, levelUpReq, currentClassEXPReq,
     strength, intelligence, dropCostReduction, skillCostReduction,
     fireDropsLevel, fireDropsExperience, fireDropsLvlReq, firePhysicalAttackBonus, fireDropAttackBonus,
     iceDropsLevel, iceDropsExperience, iceDropsLvlReq, icePhysicalAttackBonus, iceDropAttackBonus,
@@ -240,9 +241,23 @@ public class Character : MonoBehaviour
             currentEnergy = maxEnergy;
         }
 
+
+        int nextClassLevel = classLvl[_classIndex] += 1;
+
+        if (Engine.e.gameClasses[_classIndex].skill[nextClassLevel] != null)
+        {
+            if (classLvl[_classIndex] < Engine.e.gameClasses[_classIndex].skill.Length)
+            {
+                currentClassEXPReq = Engine.e.gameClasses[_classIndex].skill[nextClassLevel].skillCostToUnlock;
+            }
+            else
+            {
+                currentClassEXPReq = 99999999;
+            }
+        }
+
         classIndex = _classIndex;
         characterClass[_classIndex] = true;
-
     }
 
     public void UseDrop(Drops dropChoice)
@@ -1574,10 +1589,17 @@ public class Character : MonoBehaviour
         drops[_drop.dropIndex] = _drop;
         _drop.isKnown = true;
     }
-    public void TeachSkill(Skills _skill)
+
+    public void TeachSkill()
     {
-        skills[_skill.skillIndex] = _skill;
-        _skill.isKnown = true;
+        for (int i = 0; i < skills.Length; i++)
+        {
+            if (skills[i] == null)
+            {
+                skills[i] = Engine.e.gameClasses[classIndex].skill[classLvl[classIndex]];
+                break;
+            }
+        }
     }
 
     public void EquipWeapon()
