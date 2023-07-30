@@ -215,7 +215,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillPower: 0
   skillCost: 0
-  skillCostToUnlock: 1
+  skillCostToUnlock: 10
   skillName: Vigilance
   skillDescription: Increases Max Health by 20%.
   skillPointReturn: 0
@@ -225,10 +225,10 @@ MonoBehaviour:
   targetSupport: 0
   targetAll: 0
   instantCast: 0
-  skillIndex: 5
-  isKnown: 0
+  skillIndex: 0
+  isKnown: 1
   passiveSkill: 1
-  health: 20
+  health: 0.2
   mana: 0
   energy: 0
   haste: 0
@@ -243,6 +243,7 @@ MonoBehaviour:
   iceDefense: 0
   shadowDefense: 0
   holyDefense: 0
+  equipping: 1
 --- !u!1 &6146880152382044197
 GameObject:
   m_ObjectHideFlags: 0

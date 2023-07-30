@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: Mac
-  characterClass: 000000000000000000000000
+  characterClass: 010000000000000000000000
   currentClass: Soldier
   classCompleted: 000000000000000000000000
   lvl: 1
@@ -147,14 +147,14 @@ MonoBehaviour:
   - 0
   currentHealth: 88
   maxHealth: 88
-  currentMana: 40
+  currentMana: 60
   maxMana: 60
   currentEnergy: 30
   maxEnergy: 30
   haste: 41.4
   experiencePoints: 0
   levelUpReq: 100
-  currentClassEXPReq: 1
+  currentClassEXPReq: 10
   strength: 15.4
   intelligence: 17
   dropCostReduction: 0
@@ -170,7 +170,7 @@ MonoBehaviour:
   icePhysicalAttackBonus: 0
   iceDropAttackBonus: 0
   waterDropsLevel: 5
-  waterDropsExperience: 20
+  waterDropsExperience: 0
   waterDropsLvlReq: 50
   waterPhysicalAttackBonus: 0
   waterDropAttackBonus: 0
@@ -349,6 +349,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  equippedSkills: []
   canUseFireDrops: 0
   canUseIceDrops: 0
   canUseLightningDrops: 1

@@ -49,7 +49,7 @@ public class Character : MonoBehaviour
 
     // Drops & Skills
     public Drops[] drops;
-    public Skills[] skills;
+    public Skills[] skills, equippedSkills;
 
 
     public bool canUseFireDrops, canUseIceDrops, canUseLightningDrops, canUseWaterDrops, canUseShadowDrops, canUseHolyDrops = false;
@@ -172,6 +172,8 @@ public class Character : MonoBehaviour
                 haste -= haste * 0.1f;
                 lightningDefense += lightningDefense * 0.1f;
 
+                currentClassEXPReq = Engine.e.gameClasses[0].GetComponent<Class>().skill[classLvl[0] + 1].skillCostToUnlock;
+
                 break;
             case 1:
                 currentClass = "Shaman";
@@ -179,18 +181,27 @@ public class Character : MonoBehaviour
                 haste += haste * 0.1f;
                 fireDefense += fireDefense * 0.2f;
                 fireDropAttackBonus += fireDropAttackBonus * 0.1f;
+
+                //currentClassEXPReq = Engine.e.gameClasses[1].GetComponent<Class>().skill[classLvl[1] + 1].skillCostToUnlock;
+
                 break;
             case 2:
                 currentClass = "Thief";
                 maxEnergy += Mathf.Round(maxEnergy * 0.1f);
                 haste += haste * 0.2f;
                 shadowDefense += shadowDefense * 0.1f;
+
+                //currentClassEXPReq = Engine.e.gameClasses[2].GetComponent<Class>().skill[classLvl[2] + 1].skillCostToUnlock;
+
                 break;
             case 3:
                 currentClass = "Mage";
                 maxMana += Mathf.Round(maxMana * 0.2f);
                 waterDefense += waterDefense * 0.1f;
                 dropsEXPMultiplier = 1.25f;
+
+                currentClassEXPReq = Engine.e.gameClasses[3].GetComponent<Class>().skill[classLvl[3] + 1].skillCostToUnlock;
+
                 break;
             case 4:
                 currentClass = "Assassin";
@@ -198,6 +209,9 @@ public class Character : MonoBehaviour
                 haste += haste * 0.1f;
                 iceDefense += iceDefense * 0.1f;
                 shadowDefense += shadowDefense * 0.1f;
+
+                //currentClassEXPReq = Engine.e.gameClasses[4].GetComponent<Class>().skill[classLvl[4] + 1].skillCostToUnlock;
+
                 break;
             case 5:
                 currentClass = "Ronin";
@@ -205,6 +219,9 @@ public class Character : MonoBehaviour
                 physicalDefense += 0.2f;
                 haste += haste * 0.1f;
                 holyDefense += holyDefense * 0.1f;
+
+                //currentClassEXPReq = Engine.e.gameClasses[5].GetComponent<Class>().skill[classLvl[5] + 1].skillCostToUnlock;
+
                 break;
             case 6:
 
@@ -242,7 +259,7 @@ public class Character : MonoBehaviour
         }
 
 
-        int nextClassLevel = classLvl[_classIndex] += 1;
+        /*int nextClassLevel = classLvl[_classIndex] + 1;
 
         if (Engine.e.gameClasses[_classIndex].skill[nextClassLevel] != null)
         {
@@ -254,8 +271,12 @@ public class Character : MonoBehaviour
             {
                 currentClassEXPReq = 99999999;
             }
-        }
+        }*/
 
+        //if (classLvl[_classIndex] < Engine.e.gameClasses[_classIndex].skill.Length)
+        //{
+        //    currentClassEXPReq = Engine.e.gameClasses[_classIndex].GetComponent<Class>().skill[classLvl[_classIndex] + 1].skillCostToUnlock;
+        // }
         classIndex = _classIndex;
         characterClass[_classIndex] = true;
     }
@@ -1596,11 +1617,13 @@ public class Character : MonoBehaviour
         {
             if (skills[i] == null)
             {
+                Debug.Log(characterName + " " + classLvl[classIndex]);
                 skills[i] = Engine.e.gameClasses[classIndex].skill[classLvl[classIndex]];
                 break;
             }
         }
     }
+
 
     public void EquipWeapon()
     {

@@ -136,13 +136,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: Grieve
-  characterClass: 000000000000000000000000
+  characterClass: 010000000000000000000000
   currentClass: Soldier
   classCompleted: 000000000000000000000000
   lvl: 1
-  classLvl: 010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  classLvl: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   classEXP:
-  - 1
+  - 5
   - 0
   - 0
   - 0
@@ -156,12 +156,12 @@ MonoBehaviour:
   - 0
   currentHealth: 110
   maxHealth: 110
-  currentMana: 5
+  currentMana: 35
   maxMana: 35
   currentEnergy: 30
   maxEnergy: 30
   haste: 50.4
-  experiencePoints: 40
+  experiencePoints: 0
   levelUpReq: 100
   currentClassEXPReq: 10
   strength: 16.5
@@ -184,7 +184,7 @@ MonoBehaviour:
   waterPhysicalAttackBonus: 0
   waterDropAttackBonus: 0
   lightningDropsLevel: 5
-  lightningDropsExperience: 30
+  lightningDropsExperience: 0
   lightningDropsLvlReq: 50
   lightningPhysicalAttackBonus: 0
   lightningDropAttackBonus: 0
@@ -242,7 +242,7 @@ MonoBehaviour:
   dodgeChance: 10
   hitChance: 99
   critChance: 15
-  maxHealthBase: 110
+  maxHealthBase: 158
   maxManaBase: 35
   maxEnergyBase: 30
   strengthBase: 16.5
@@ -298,7 +298,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   skills:
-  - {fileID: 8901647567139126937, guid: 9fc303164d1ed451c8e3843bf1ce8851, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -356,6 +355,10 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  equippedSkills:
   - {fileID: 0}
   - {fileID: 0}
   canUseFireDrops: 1

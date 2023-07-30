@@ -27,8 +27,8 @@ public class PauseMenu : MonoBehaviour
     public GameObject arrangeIndex1Grieve,
     arrangeIndex2Grieve, arrangeIndex2Mac,
     arrangeIndex3Grieve, arrangeIndex3Mac, arrangeIndex3Field;
-    public GameObject[] gridCharSelect;
-    public GameObject equipWeaponFirst, equipChestArmorCharFirst;
+    public GameObject[] gridCharSelect, augmentCharSelect;
+    public GameObject equipWeaponFirst, equipChestArmorCharFirst, augmentMenuFirstButton;
     public bool shoppingArmor = false, shoppingWeapons = false, shoppingDrops = false, shoppingItems = false;
     public TextMeshProUGUI battleModeReference;
     public GameUI uiReference;
@@ -360,7 +360,10 @@ public class PauseMenu : MonoBehaviour
     {
         augmentMenu.SetActive(true);
 
-        //Engine.e.augmentMenuReference.OpenFileMenuSaving();
+        EventSystem.current.SetSelectedGameObject(null);
+        //EventSystem.current.SetSelectedGameObject(augmentMenuFirstButton);
+
+        atPauseMenu = false;
 
     }
 
@@ -405,6 +408,90 @@ public class PauseMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(Engine.e.statusMenuReference.charSelectionButtons[0]);
     }
 
+    public void OpenAugmentMenuCharSelect()
+    {
+        for (int i = 0; i < Engine.e.party.Length; i++)
+        {
+            if (Engine.e.party[i] != null)
+            {
+                augmentCharSelect[i].SetActive(true);
+            }
+        }
+
+        EventSystem.current.SetSelectedGameObject(null);
+
+        EventSystem.current.SetSelectedGameObject(augmentCharSelect[0].gameObject);
+    }
+
+    public void OpenAugmentMenuGrieve()
+    {
+
+        for (int i = 0; i < augmentCharSelect.Length; i++)
+        {
+            augmentCharSelect[i].SetActive(false);
+        }
+
+        //Engine.e.augmentMenuReference.SetSelectWeaponBool(true);
+        Engine.e.augmentMenuReference.SetGrieveScreen();
+        augmentMenu.SetActive(true);
+
+    }
+
+    public void OpenAugmentMenuMac()
+    {
+        for (int i = 0; i < augmentCharSelect.Length; i++)
+        {
+            augmentCharSelect[i].SetActive(false);
+        }
+
+        Engine.e.augmentMenuReference.SetMacScreen();
+        augmentMenu.SetActive(true);
+    }
+
+    public void OpenAugmentMenuField()
+    {
+        for (int i = 0; i < augmentCharSelect.Length; i++)
+        {
+            augmentCharSelect[i].SetActive(false);
+        }
+
+        Engine.e.augmentMenuReference.SetFieldScreen();
+        augmentMenu.SetActive(true);
+    }
+
+    public void OpenAugmentMenuRiggs()
+    {
+        for (int i = 0; i < augmentCharSelect.Length; i++)
+        {
+            augmentCharSelect[i].SetActive(false);
+        }
+
+        Engine.e.augmentMenuReference.SetRiggsScreen();
+        augmentMenu.SetActive(true);
+    }
+
+    public void OpenAugmentenuSolace()
+    {
+        for (int i = 0; i < augmentCharSelect.Length; i++)
+        {
+            augmentCharSelect[i].SetActive(false);
+        }
+
+        Engine.e.augmentMenuReference.SetSolaceScreen();
+        augmentMenu.SetActive(true);
+    }
+
+    public void OpenAugmentenuBlue()
+    {
+        for (int i = 0; i < augmentCharSelect.Length; i++)
+        {
+            augmentCharSelect[i].SetActive(false);
+        }
+
+        Engine.e.augmentMenuReference.SetBlueScreen();
+        augmentMenu.SetActive(true);
+    }
+
     public void OpenGridMenuCharSelect()
     {
         for (int i = 0; i < Engine.e.party.Length; i++)
@@ -446,7 +533,10 @@ public class PauseMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
 
         EventSystem.current.SetSelectedGameObject(gridCharSelect[0].gameObject);
+
+
     }
+
 
     public void OpenGridMenuGrieve()
     {

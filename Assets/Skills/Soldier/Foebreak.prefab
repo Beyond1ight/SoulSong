@@ -215,7 +215,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillPower: 20
   skillCost: 15
-  skillCostToUnlock: 10
+  skillCostToUnlock: 20
   skillName: Foebreak
   skillDescription: Deals 2x physical damage to an enemy
   skillPointReturn: 0
@@ -228,7 +228,7 @@ MonoBehaviour:
   skillIndex: 1
   isKnown: 0
   passiveSkill: 0
-  health: 0
+  health: 0.2
   mana: 0
   energy: 0
   haste: 0
@@ -243,6 +243,7 @@ MonoBehaviour:
   iceDefense: 0
   shadowDefense: 0
   holyDefense: 0
+  equipping: 1
 --- !u!1 &8570265824503285632
 GameObject:
   m_ObjectHideFlags: 0

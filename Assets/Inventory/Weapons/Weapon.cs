@@ -5,6 +5,7 @@ using UnityEngine;
 public class Weapon : Item
 {
     public bool grieveWeapon, macWeapon, fieldWeapon, riggsWeapon, solaceWeapon, blueWeapon;
+    public int skillAmount;
     public string weightClassification;
     public int strengthBonus, intelligenceBonus, weight;
     public float fireAttack;
@@ -13,6 +14,7 @@ public class Weapon : Item
     public float lightningAttack;
     public float shadowAttack;
     public bool mainHand, offHand, twoHand;
+
 
     public void EquipWeapon()
     {

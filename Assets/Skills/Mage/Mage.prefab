@@ -47,8 +47,4 @@ MonoBehaviour:
   classDescription: Description needed.
   skill:
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 3843857172235643000, guid: 4c64158a9b4db40d0b9cb8a84bd4f10a, type: 3}

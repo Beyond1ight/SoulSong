@@ -40,6 +40,7 @@ public class GameData
 
 
     public string[,] charDrops, charSkills;
+    public string[] grieveEquippedSkills, macEquippedSkills, fieldEquippedSkills, riggsEquippedSkills, solaceEquippedSkills, blueEquippedSkills;
 
 
     public float[] charFireDropLevel, charWaterDropLevel, charLightningDropLevel, charShadowDropLevel, charIceDropLevel, charHolyDropLevel;
@@ -181,6 +182,28 @@ public class GameData
         charDrops = new string[Engine.e.party.Length, Engine.e.gameDrops.Length];
         charSkills = new string[Engine.e.party.Length, Engine.e.gameSkills.Length];
 
+        grieveEquippedSkills = new string[Engine.e.playableCharacters[0].equippedSkills.Length];
+
+        if (Engine.e.playableCharacters[1] != null)
+        {
+            macEquippedSkills = new string[Engine.e.playableCharacters[1].equippedSkills.Length];
+        }
+        if (Engine.e.playableCharacters[2] != null)
+        {
+            fieldEquippedSkills = new string[Engine.e.playableCharacters[2].equippedSkills.Length];
+        }
+        if (Engine.e.playableCharacters[3] != null)
+        {
+            riggsEquippedSkills = new string[Engine.e.playableCharacters[3].equippedSkills.Length];
+        }
+        if (Engine.e.playableCharacters[4] != null)
+        {
+            solaceEquippedSkills = new string[Engine.e.playableCharacters[4].equippedSkills.Length];
+        }
+        if (Engine.e.playableCharacters[5] != null)
+        {
+            blueEquippedSkills = new string[Engine.e.playableCharacters[5].equippedSkills.Length];
+        }
         /*charFireDrops = new string[gameManager.party.Length, gameManager.fireDrops.Length];
         charHolyDrops = new string[gameManager.party.Length, gameManager.holyDrops.Length];
         charWaterDrops = new string[gameManager.party.Length, gameManager.waterDrops.Length];
@@ -273,53 +296,7 @@ public class GameData
                 currentCharClass[i] = gameManager.party[i].GetComponent<Character>().currentClass;
 
 
-                for (int f = 0; f < gameManager.party[i].GetComponent<Character>().classCompleted.Length; f++)
-                {
-                    if (gameManager.party[0] != null)
-                    {
-                        classCompleteGrieve[f] = gameManager.party[0].GetComponent<Character>().classCompleted[f];
-                        charClassXPGrieve[f] = gameManager.party[0].GetComponent<Character>().classEXP[f];
-                        charClassLevelGrieve[f] = gameManager.party[0].GetComponent<Character>().classLvl[f];
-
-                    }
-                    if (gameManager.party[1] != null)
-                    {
-                        classCompleteMac[f] = gameManager.party[1].GetComponent<Character>().classCompleted[f];
-                        charClassXPMac[f] = gameManager.party[1].GetComponent<Character>().classEXP[f];
-                        charClassLevelMac[f] = gameManager.party[1].GetComponent<Character>().classLvl[f];
-
-                    }
-                    if (gameManager.party[2] != null)
-                    {
-                        classCompleteField[f] = gameManager.party[2].GetComponent<Character>().classCompleted[f];
-                        charClassXPField[f] = gameManager.party[2].GetComponent<Character>().classEXP[f];
-                        charClassLevelField[f] = gameManager.party[2].GetComponent<Character>().classLvl[f];
-
-                    }
-                    if (gameManager.party[3] != null)
-                    {
-                        classCompleteRiggs[f] = gameManager.party[3].GetComponent<Character>().classCompleted[f];
-                        charClassXPRiggs[f] = gameManager.party[3].GetComponent<Character>().classEXP[f];
-                        charClassLevelRiggs[f] = gameManager.party[3].GetComponent<Character>().classLvl[f];
-
-                    }
-                    if (gameManager.party[4] != null)
-                    {
-                        classCompleteSolace[f] = gameManager.playableCharacters[4].GetComponent<Character>().classCompleted[f];
-                        charClassXPSolace[f] = gameManager.party[4].GetComponent<Character>().classEXP[f];
-                        charClassLevelSolace[f] = gameManager.party[4].GetComponent<Character>().classLvl[f];
-
-                    }
-                    if (gameManager.party[5] != null)
-                    {
-                        classCompleteBlue[f] = gameManager.playableCharacters[5].GetComponent<Character>().classCompleted[f];
-                        charClassXPBlue[f] = gameManager.party[5].GetComponent<Character>().classEXP[f];
-                        charClassLevelBlue[f] = gameManager.party[5].GetComponent<Character>().classLvl[f];
-
-                    }
-                }
-
-
+                // Drops
                 for (int f = 0; f < Engine.e.party[i].GetComponent<Character>().drops.Length; f++)
                 {
                     if (Engine.e.party[i].GetComponent<Character>().drops[f] != null)
@@ -331,6 +308,7 @@ public class GameData
                     }
                 }
 
+                // Skills
                 for (int f = 0; f < Engine.e.party[i].GetComponent<Character>().skills.Length; f++)
                 {
                     if (Engine.e.party[i].GetComponent<Character>().skills[f] != null)
@@ -341,85 +319,101 @@ public class GameData
                         }
                     }
                 }
-                /*  // Fire Drops
-                  for (int f = 0; f < gameManager.party[i].GetComponent<Character>().fireDrops.Length; f++)
-                  {
-                      if (gameManager.party[i].GetComponent<Character>().fireDrops[f] != null)
-                      {
-                          if (gameManager.party[i].GetComponent<Character>().fireDrops[f] = gameManager.fireDrops[f])
-                          {
-                              charFireDrops[i, f] = gameManager.fireDrops[f].dropName;
-                              fireDropsisKnown[f] = true;
-                          }
-                      }
-                  }
-                  // Holy Drops
-                  for (int f = 0; f < gameManager.party[i].GetComponent<Character>().holyDrops.Length; f++)
-                  {
-                      if (gameManager.party[i].GetComponent<Character>().holyDrops[f] != null)
-                      {
-                          if (gameManager.party[i].GetComponent<Character>().holyDrops[f] = gameManager.holyDrops[f])
-                          {
-                              charHolyDrops[i, f] = gameManager.holyDrops[f].dropName;
-                              holyDropsisKnown[f] = true;
-
-                          }
-                      }
-                  }
-                  // Water Drops
-                  for (int f = 0; f < gameManager.party[i].GetComponent<Character>().waterDrops.Length; f++)
-                  {
-                      if (gameManager.party[i].GetComponent<Character>().waterDrops[f] != null)
-                      {
-                          if (gameManager.party[i].GetComponent<Character>().waterDrops[f] = gameManager.waterDrops[f])
-                          {
-                              charWaterDrops[i, f] = gameManager.waterDrops[f].dropName;
-                              waterDropsisKnown[f] = true;
-
-                          }
-                      }
-                  }
-                  // Lightning Drops
-                  for (int f = 0; f < gameManager.party[i].GetComponent<Character>().lightningDrops.Length; f++)
-                  {
-                      if (gameManager.party[i].GetComponent<Character>().lightningDrops[f] != null)
-                      {
-                          if (gameManager.party[i].GetComponent<Character>().lightningDrops[f] = gameManager.lightningDrops[f])
-                          {
-                              charLightningDrops[i, f] = gameManager.lightningDrops[f].dropName;
-                              lightningDropsisKnown[f] = true;
-
-                          }
-                      }
-                  }
-                  // Shadow Drops
-                  for (int f = 0; f < gameManager.party[i].GetComponent<Character>().shadowDrops.Length; f++)
-                  {
-                      if (gameManager.party[i].GetComponent<Character>().shadowDrops[f] != null)
-                      {
-                          if (gameManager.party[i].GetComponent<Character>().shadowDrops[f] = gameManager.shadowDrops[f])
-                          {
-                              charShadowDrops[i, f] = gameManager.shadowDrops[f].dropName;
-                              shadowDropsisKnown[f] = true;
-
-                          }
-                      }
-                  }
-                  // Ice Drops
-                  for (int f = 0; f < gameManager.party[i].GetComponent<Character>().iceDrops.Length; f++)
-                  {
-                      if (gameManager.party[i].GetComponent<Character>().iceDrops[f] != null)
-                      {
-                          if (gameManager.party[i].GetComponent<Character>().iceDrops[f] = gameManager.iceDrops[f])
-                          {
-                              charIceDrops[i, f] = gameManager.iceDrops[f].dropName;
-                              iceDropsisKnown[f] = true;
-
-                          }
-                      }
-                  }
-        */
                 partySize++;
+            }
+        }
+
+        for (int f = 0; f < 12; f++)
+        {
+            if (gameManager.party[0] != null)
+            {
+                classCompleteGrieve[f] = gameManager.party[0].GetComponent<Character>().classCompleted[f];
+                charClassXPGrieve[f] = gameManager.party[0].GetComponent<Character>().classEXP[f];
+                charClassLevelGrieve[f] = gameManager.party[0].GetComponent<Character>().classLvl[f];
+
+            }
+            if (gameManager.party[1] != null)
+            {
+                classCompleteMac[f] = gameManager.party[1].GetComponent<Character>().classCompleted[f];
+                charClassXPMac[f] = gameManager.party[1].GetComponent<Character>().classEXP[f];
+                charClassLevelMac[f] = gameManager.party[1].GetComponent<Character>().classLvl[f];
+
+            }
+            if (gameManager.party[2] != null)
+            {
+                classCompleteField[f] = gameManager.party[2].GetComponent<Character>().classCompleted[f];
+                charClassXPField[f] = gameManager.party[2].GetComponent<Character>().classEXP[f];
+                charClassLevelField[f] = gameManager.party[2].GetComponent<Character>().classLvl[f];
+
+            }
+            if (gameManager.party[3] != null)
+            {
+                classCompleteRiggs[f] = gameManager.party[3].GetComponent<Character>().classCompleted[f];
+                charClassXPRiggs[f] = gameManager.party[3].GetComponent<Character>().classEXP[f];
+                charClassLevelRiggs[f] = gameManager.party[3].GetComponent<Character>().classLvl[f];
+
+            }
+            if (gameManager.party[4] != null)
+            {
+                classCompleteSolace[f] = gameManager.playableCharacters[4].GetComponent<Character>().classCompleted[f];
+                charClassXPSolace[f] = gameManager.party[4].GetComponent<Character>().classEXP[f];
+                charClassLevelSolace[f] = gameManager.party[4].GetComponent<Character>().classLvl[f];
+
+            }
+            if (gameManager.party[5] != null)
+            {
+                classCompleteBlue[f] = gameManager.playableCharacters[5].GetComponent<Character>().classCompleted[f];
+                charClassXPBlue[f] = gameManager.party[5].GetComponent<Character>().classEXP[f];
+                charClassLevelBlue[f] = gameManager.party[5].GetComponent<Character>().classLvl[f];
+
+            }
+        }
+
+        for (int i = 0; i < grieveEquippedSkills.Length; i++)
+        {
+            if (gameManager.playableCharacters[0].GetComponent<Character>().equippedSkills[i] != null)
+            {
+                grieveEquippedSkills[i] = gameManager.playableCharacters[0].GetComponent<Character>().equippedSkills[i].skillName;
+            }
+        }
+
+        for (int i = 0; i < macEquippedSkills.Length; i++)
+        {
+            if (gameManager.playableCharacters[1].GetComponent<Character>().equippedSkills[i] != null)
+            {
+                macEquippedSkills[i] = gameManager.playableCharacters[1].GetComponent<Character>().equippedSkills[i].skillName;
+            }
+        }
+
+        for (int i = 0; i < fieldEquippedSkills.Length; i++)
+        {
+            if (gameManager.playableCharacters[2].GetComponent<Character>().equippedSkills[i] != null)
+            {
+                fieldEquippedSkills[i] = gameManager.playableCharacters[2].GetComponent<Character>().equippedSkills[i].skillName;
+            }
+        }
+
+        for (int i = 0; i < riggsEquippedSkills.Length; i++)
+        {
+            if (gameManager.playableCharacters[3].GetComponent<Character>().equippedSkills[i] != null)
+            {
+                riggsEquippedSkills[i] = gameManager.playableCharacters[3].GetComponent<Character>().equippedSkills[i].skillName;
+            }
+        }
+
+        for (int i = 0; i < solaceEquippedSkills.Length; i++)
+        {
+            if (gameManager.playableCharacters[4].GetComponent<Character>().equippedSkills[i] != null)
+            {
+                solaceEquippedSkills[i] = gameManager.playableCharacters[4].GetComponent<Character>().equippedSkills[i].skillName;
+            }
+        }
+
+        for (int i = 0; i < blueEquippedSkills.Length; i++)
+        {
+            if (gameManager.playableCharacters[5].GetComponent<Character>().equippedSkills[i] != null)
+            {
+                blueEquippedSkills[i] = gameManager.playableCharacters[5].GetComponent<Character>().equippedSkills[i].skillName;
             }
         }
 

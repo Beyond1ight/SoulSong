@@ -3753,6 +3753,20 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
+    public void SetupCharSkills()
+    {
+        foreach (Skills skill in Engine.e.activeParty.activeParty[0].GetComponent<Character>().equippedSkills)
+        {
+            if (Engine.e.activeParty.activeParty[0].GetComponent<Character>().equippedSkills.Length == 0)
+            {
+                char1MenuButtons[1].SetActive(false);
+            }
+            else
+            {
+
+            }
+        }
+    }
     public void ActivateChar1MenuButtons()
     {
         if (!isDead)
@@ -4546,13 +4560,68 @@ public class BattleSystem : MonoBehaviour
 
     public void ActivateCharSkillsUI()
     {
-        for (int i = 0; i < skillButtons.Length; i++)
+        if (state == BattleState.CHAR1TURN)
+        {
+            for (int i = 0; i < Engine.e.activeParty.activeParty[0].GetComponent<Character>().equippedSkills.Length; i++)
+            {
+                if (Engine.e.activeParty.activeParty[0].GetComponent<Character>().equippedSkills[i] != null)
+                {
+                    if (!Engine.e.activeParty.activeParty[0].GetComponent<Character>().equippedSkills[i].passiveSkill)
+                    {
+                        skillButtons[i].GetComponent<BattleSkillsUIHolder>().skill = (Engine.e.activeParty.activeParty[0].GetComponent<Character>().equippedSkills[i]);
+                        skillButtons[i].GetComponent<BattleSkillsUIHolder>().GetComponentInChildren<TextMeshProUGUI>().text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().equippedSkills[i].skillName;
+                        skillButtons[i].SetActive(true);
+
+                    }
+                }
+            }
+        }
+
+        if (state == BattleState.CHAR2TURN)
+        {
+            for (int i = 0; i < Engine.e.activeParty.activeParty[1].GetComponent<Character>().equippedSkills.Length; i++)
+            {
+                if (Engine.e.activeParty.activeParty[1].GetComponent<Character>().equippedSkills[i] != null)
+                {
+                    if (!Engine.e.activeParty.activeParty[1].GetComponent<Character>().equippedSkills[i].passiveSkill)
+                    {
+                        skillButtons[i].GetComponent<BattleSkillsUIHolder>().skill = (Engine.e.activeParty.activeParty[1].GetComponent<Character>().equippedSkills[i]);
+                        skillButtons[i].GetComponent<BattleSkillsUIHolder>().GetComponentInChildren<TextMeshProUGUI>().text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().equippedSkills[i].skillName;
+
+                        skillButtons[i].SetActive(true);
+                    }
+                }
+            }
+
+        }
+
+        if (state == BattleState.CHAR3TURN)
+        {
+            for (int i = 0; i < Engine.e.activeParty.activeParty[2].GetComponent<Character>().equippedSkills.Length; i++)
+            {
+                if (Engine.e.activeParty.activeParty[2].GetComponent<Character>().equippedSkills[i] != null)
+                {
+                    if (!Engine.e.activeParty.activeParty[2].GetComponent<Character>().equippedSkills[i].passiveSkill)
+                    {
+                        skillButtons[i].GetComponent<BattleSkillsUIHolder>().skill = (Engine.e.activeParty.activeParty[2].GetComponent<Character>().equippedSkills[i]);
+                        skillButtons[i].GetComponent<BattleSkillsUIHolder>().GetComponentInChildren<TextMeshProUGUI>().text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().equippedSkills[i].skillName;
+
+                        skillButtons[i].SetActive(true);
+                    }
+                }
+
+            }
+        }
+
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(skillButtons[0]);
+        /*for (int i = 0; i < skillButtons.Length; i++)
         {
             if (skillButtons[i].GetComponent<BattleSkillsUIHolder>().skill != null)
             {
                 skillButtons[i].GetComponent<BattleSkillsUIHolder>().SetSkillText();
             }
-        }
+        }*/
     }
 
     public void DeactivateSkillsUI()

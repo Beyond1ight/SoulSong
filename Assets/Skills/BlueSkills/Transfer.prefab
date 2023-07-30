@@ -215,10 +215,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillPower: 0
   skillCost: 30
+  skillCostToUnlock: 50
   skillName: Transfer
   skillDescription: Swaps turn with a teammate
   skillPointReturn: 0
-  abilityPointCost: 0
   physicalDps: 0
   rangedDps: 0
   selfSupport: 0
@@ -227,6 +227,23 @@ MonoBehaviour:
   instantCast: 0
   skillIndex: 0
   isKnown: 0
+  passiveSkill: 0
+  health: 0
+  mana: 0
+  energy: 0
+  haste: 0
+  strength: 0
+  intelligence: 0
+  dropCostReduction: 0
+  skillCostReduction: 0
+  physicalDefense: 0
+  lightningDefense: 0
+  waterDefense: 0
+  fireDefense: 0
+  iceDefense: 0
+  shadowDefense: 0
+  holyDefense: 0
+  equipping: 0
 --- !u!1 &7746570629281434654
 GameObject:
   m_ObjectHideFlags: 0

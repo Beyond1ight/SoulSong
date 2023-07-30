@@ -96,7 +96,7 @@ public class Engine : MonoBehaviour
     public PauseMenu pauseMenuReference;
     public AdventureLog adventureLogReference;
     public EquipDisplay equipMenuReference;
-    //public AugmentMenu augmentMenuReference;
+    public AugmentMenu augmentMenuReference;
 
     public FileMenu fileMenuReference;
     public Status statusMenuReference;
@@ -1166,6 +1166,11 @@ public class Engine : MonoBehaviour
         playableCharacters[1].GetComponent<Mac>().weaponLeft = null;
         // party[1] = playableCharacters[1].GetComponent<Character>().gameObject;
 
+
+        for (int i = 0; i < playableCharacters.Length; i++)
+        {
+            playableCharacters[i].equippedSkills = new Skills[playableCharacters[i].weaponRight.GetComponent<Weapon>().skillAmount];
+        }
     }
 
     public void AddCharacterToParty(string _name)
@@ -1406,6 +1411,7 @@ public class Engine : MonoBehaviour
                         else
                         {
                             party[i].GetComponent<Character>().maxHealth = newHealth;
+                            party[i].GetComponent<Character>().maxHealthBase = newHealth;
                         }
 
                         if (newMana > 999f)
@@ -1422,6 +1428,8 @@ public class Engine : MonoBehaviour
                         else
                         {
                             party[i].GetComponent<Character>().maxMana = newMana;
+                            party[i].GetComponent<Character>().maxManaBase = newMana;
+
                         }
 
                         if (newEnergy > 999f)
@@ -1438,6 +1446,7 @@ public class Engine : MonoBehaviour
                         else
                         {
                             party[i].GetComponent<Character>().maxEnergy = newEnergy;
+                            party[i].GetComponent<Character>().maxEnergyBase = newEnergy;
 
                         }
 
@@ -1597,7 +1606,7 @@ public class Engine : MonoBehaviour
                                     {
                                         if (activeParty.activeParty[2].GetComponent<Character>().lvl % 3 == 0)
                                         {
-                                            char3LevelUpPanelReference[6].text = "Skill Point earned!";
+                                            //char3LevelUpPanelReference[6].text = "Skill Point earned!";
                                         }
                                     }
                                 }
@@ -1608,7 +1617,6 @@ public class Engine : MonoBehaviour
 
                 if (party[i].GetComponent<Character>().classLvl[party[i].GetComponent<Character>().classIndex] < gameClasses[party[i].GetComponent<Character>().classIndex].GetComponent<Class>().skill.Length)
                 {
-
                     if (party[i].GetComponent<Character>().classEXP[party[i].GetComponent<Character>().classIndex] < party[i].GetComponent<Character>().currentClassEXPReq)
                     {
                         if (party[i].GetComponent<Character>().isInActiveParty == true)
@@ -1619,13 +1627,14 @@ public class Engine : MonoBehaviour
                         {
                             party[i].GetComponent<Character>().classEXP[party[i].GetComponent<Character>().classIndex] += Mathf.Round((classXP * party[i].GetComponent<Character>().expMultiplier) / 1.5f);
                         }
+                        Debug.Log("Hello");
                     }
 
                     // Level Up
                     if (party[i].GetComponent<Character>().classEXP[party[i].GetComponent<Character>().classIndex] >= party[i].GetComponent<Character>().currentClassEXPReq)
                     {
                         Debug.Log("Class Lvl: " + party[i].GetComponent<Character>().classLvl[party[i].GetComponent<Character>().classIndex]);
-                        party[i].GetComponent<Character>().classLvl[party[i].GetComponent<Character>().classIndex] += 1;
+                        party[i].GetComponent<Character>().classLvl[party[i].GetComponent<Character>().classIndex]++;
                         Debug.Log("Class Lvl: " + party[i].GetComponent<Character>().classLvl[party[i].GetComponent<Character>().classIndex]);
 
                         party[i].GetComponent<Character>().TeachSkill();
@@ -2027,12 +2036,6 @@ public class Engine : MonoBehaviour
 
     public void SetClasses()
     {
-        playableCharacters[0].SetClass(0);
-        playableCharacters[1].SetClass(0); // 3
-        playableCharacters[2].SetClass(2);
-        playableCharacters[3].SetClass(5);
-        playableCharacters[4].SetClass(1);
-        playableCharacters[5].SetClass(4);
 
         for (int i = 0; i < playableCharacters.Length; i++)
         {
@@ -2042,12 +2045,18 @@ public class Engine : MonoBehaviour
             for (int f = 0; f < playableCharacters[i].classEXP.Length; f++)
             {
                 playableCharacters[i].classEXP[f] = 0f;
-
                 playableCharacters[i].classLvl[f] = 0;
+                playableCharacters[i].currentClassEXPReq = 0;
+
             }
         }
 
-
+        playableCharacters[0].SetClass(0);
+        playableCharacters[1].SetClass(0); // 3
+        playableCharacters[2].SetClass(2);
+        playableCharacters[3].SetClass(5);
+        playableCharacters[4].SetClass(1);
+        playableCharacters[5].SetClass(4);
 
     }
 
@@ -2201,36 +2210,39 @@ public class Engine : MonoBehaviour
                 {
                     if (party[0] != null)
                     {
+                        party[0].GetComponent<Character>().classEXP[f] = gameData.charClassXPGrieve[f];
                         party[0].GetComponent<Character>().classCompleted[f] = gameData.classCompleteGrieve[f];
                     }
                     if (party[1] != null)
                     {
                         party[1].GetComponent<Character>().classCompleted[f] = gameData.classCompleteMac[f];
+                        party[1].GetComponent<Character>().classEXP[f] = gameData.charClassXPMac[f];
+
                     }
                     if (party[2] != null)
                     {
                         party[2].GetComponent<Character>().classCompleted[f] = gameData.classCompleteField[f];
+                        party[2].GetComponent<Character>().classEXP[f] = gameData.charClassXPField[f];
+
                     }
                     if (party[3] != null)
                     {
                         party[3].GetComponent<Character>().classCompleted[f] = gameData.classCompleteRiggs[f];
+                        party[3].GetComponent<Character>().classEXP[f] = gameData.charClassXPRiggs[f];
+
                     }
                     if (party[4] != null)
                     {
                         party[4].GetComponent<Character>().classCompleted[f] = gameData.classCompleteSolace[f];
+                        party[4].GetComponent<Character>().classEXP[f] = gameData.charClassXPSolace[f];
+
                     }
                     if (party[5] != null)
                     {
                         party[5].GetComponent<Character>().classCompleted[f] = gameData.classCompleteBlue[f];
+                        party[5].GetComponent<Character>().classEXP[f] = gameData.charClassXPBlue[f];
+
                     }
-
-                    party[0].GetComponent<Character>().classEXP[f] = gameData.charClassXPGrieve[f];
-                    party[1].GetComponent<Character>().classEXP[f] = gameData.charClassXPMac[f];
-                    party[2].GetComponent<Character>().classEXP[f] = gameData.charClassXPField[f];
-                    party[3].GetComponent<Character>().classEXP[f] = gameData.charClassXPRiggs[f];
-                    party[4].GetComponent<Character>().classEXP[f] = gameData.charClassXPSolace[f];
-                    party[5].GetComponent<Character>().classEXP[f] = gameData.charClassXPBlue[f];
-
 
                 }
 
@@ -2275,8 +2287,127 @@ public class Engine : MonoBehaviour
                     activeParty.activeParty[2] = party[i].gameObject;
                 }
             }
-
         }
+
+        playableCharacters[0].equippedSkills = new Skills[gameData.grieveEquippedSkills.Length];
+
+        if (playableCharacters[1] != null)
+        {
+            playableCharacters[1].equippedSkills = new Skills[gameData.macEquippedSkills.Length];
+        }
+        if (playableCharacters[2] != null)
+        {
+            playableCharacters[2].equippedSkills = new Skills[gameData.fieldEquippedSkills.Length];
+        }
+        if (playableCharacters[3] != null)
+        {
+            playableCharacters[3].equippedSkills = new Skills[gameData.riggsEquippedSkills.Length];
+        }
+        if (playableCharacters[4] != null)
+        {
+            playableCharacters[4].equippedSkills = new Skills[gameData.solaceEquippedSkills.Length];
+        }
+        if (playableCharacters[5] != null)
+        {
+            playableCharacters[5].equippedSkills = new Skills[gameData.blueEquippedSkills.Length];
+        }
+
+
+        for (int i = 0; i < gameData.grieveEquippedSkills.Length; i++)
+        {
+            for (int k = 0; k < gameSkills.Length; k++)
+            {
+                if (gameSkills[k] != null)
+                {
+                    if (gameData.grieveEquippedSkills[i] == gameSkills[k].skillName)
+                    {
+                        playableCharacters[0].equippedSkills[i] = gameSkills[k];
+                        break;
+                    }
+                }
+            }
+        }
+
+
+        for (int i = 0; i < gameData.macEquippedSkills.Length; i++)
+        {
+            for (int k = 0; k < gameSkills.Length; k++)
+            {
+                if (gameSkills[k] != null)
+                {
+                    if (gameData.macEquippedSkills[i] == gameSkills[k].skillName)
+                    {
+                        playableCharacters[1].equippedSkills[i] = gameSkills[k];
+                        break;
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < gameData.fieldEquippedSkills.Length; i++)
+        {
+            for (int k = 0; k < gameSkills.Length; k++)
+            {
+                if (gameSkills[k] != null)
+                {
+                    if (gameData.fieldEquippedSkills[i] == gameSkills[k].skillName)
+                    {
+                        playableCharacters[2].equippedSkills[i] = gameSkills[k];
+                        break;
+                    }
+                }
+            }
+        }
+
+
+        for (int i = 0; i < gameData.riggsEquippedSkills.Length; i++)
+        {
+            for (int k = 0; k < gameSkills.Length; k++)
+            {
+                if (gameSkills[k] != null)
+                {
+                    if (gameData.riggsEquippedSkills[i] == gameSkills[k].skillName)
+                    {
+                        playableCharacters[3].equippedSkills[i] = gameSkills[k];
+                        break;
+                    }
+                }
+            }
+        }
+
+
+        for (int i = 0; i < gameData.solaceEquippedSkills.Length; i++)
+        {
+            for (int k = 0; k < gameSkills.Length; k++)
+            {
+                if (gameSkills[k] != null)
+                {
+                    if (gameData.solaceEquippedSkills[i] == gameSkills[k].skillName)
+                    {
+                        playableCharacters[4].equippedSkills[i] = gameSkills[k];
+                        break;
+                    }
+                }
+            }
+        }
+
+
+        for (int i = 0; i < gameData.blueEquippedSkills.Length; i++)
+        {
+            for (int k = 0; k < gameSkills.Length; k++)
+            {
+                if (gameSkills[k] != null)
+                {
+                    if (gameData.blueEquippedSkills[i] == gameSkills[k].skillName)
+                    {
+                        playableCharacters[5].equippedSkills[i] = gameSkills[k];
+                        break;
+                    }
+                }
+            }
+        }
+
+
 
         for (int i = 0; i < gameData.partyInvNames.Length; i++)
         {
@@ -2958,6 +3089,16 @@ public class Engine : MonoBehaviour
         {
             adventureLogReference.questSlots[i].index = i;
         }
+
+        for (int i = 0; i < augmentMenuReference.weaponSkillSlots.Length; i++)
+        {
+            augmentMenuReference.weaponSkillSlots[i].GetComponent<WeaponSkillSlot>().index = i;
+        }
+
+        for (int i = 0; i < augmentMenuReference.skillSlots.Length; i++)
+        {
+            augmentMenuReference.skillSlots[i].GetComponent<SkillSlot>().index = i;
+        }
     }
 
     public void ResetCharClasses()
@@ -3151,7 +3292,6 @@ public class Engine : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            playableCharacters[0].SetClass(3);
 
             adventureLogReference.AddQuestToAdventureLog(gameQuests[0]);
 
@@ -3200,7 +3340,14 @@ public class Engine : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P))
         {
 
+            GiveExperiencePoints(0f, 5f);
         }
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+
+            playableCharacters[0].SetClass(3);
+        }
+
 
         if (Input.GetKeyDown(KeyCode.M))
         {
