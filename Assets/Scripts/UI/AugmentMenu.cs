@@ -23,6 +23,7 @@ public class AugmentMenu : MonoBehaviour
 
         weaponReference.GetComponentInChildren<TextMeshProUGUI>().text = string.Empty;
 
+        // Weapon Name Reference
         if (Engine.e.playableCharacters[0].GetComponent<Character>().weaponRight.GetComponent<Weapon>() != null)
         {
             weaponReference.GetComponentInChildren<TextMeshProUGUI>().text = Engine.e.playableCharacters[0].GetComponent<Character>().weaponRight.GetComponent<Weapon>().itemName + " - " + Engine.e.playableCharacters[0].GetComponent<Character>().weaponRight.GetComponent<Weapon>().skillAmount + " Slots";
@@ -32,6 +33,7 @@ public class AugmentMenu : MonoBehaviour
             weaponReference.GetComponentInChildren<TextMeshProUGUI>().text = "Nothing Equipped.";
         }
 
+        // Weapon Skill Slots
         for (int i = 0; i < Engine.e.playableCharacters[0].GetComponent<Character>().weaponRight.GetComponent<Weapon>().skillAmount; i++)
         {
             if (Engine.e.playableCharacters[0].equippedSkills[i] != null)
@@ -49,17 +51,22 @@ public class AugmentMenu : MonoBehaviour
 
         }
 
+        // Skills
         for (int i = 0; i < Engine.e.playableCharacters[0].GetComponent<Character>().skills.Length; i++)
         {
             if (Engine.e.playableCharacters[0].GetComponent<Character>().skills[i] != null)
             {
-                skillSlots[i].GetComponent<SkillSlot>().skill = Engine.e.playableCharacters[0].GetComponent<Character>().skills[i];
-                skillSlots[i].GetComponent<SkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = Engine.e.playableCharacters[0].skills[i].skillName;
-                //skillSlots[i].GetComponent<SkillSlot>().skillDescription.GetComponent<TextMeshProUGUI>().text = Engine.e.playableCharacters[0].skills[i].skillDescription;
+                if (!Engine.e.playableCharacters[0].GetComponent<Character>().skills[i].grieveEquipped)
+                {
+                    skillSlots[i].GetComponent<SkillSlot>().skill = Engine.e.playableCharacters[0].GetComponent<Character>().skills[i];
+                    skillSlots[i].GetComponent<SkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = Engine.e.playableCharacters[0].skills[i].skillName;
+                    //skillSlots[i].GetComponent<SkillSlot>().skillDescription.GetComponent<TextMeshProUGUI>().text = Engine.e.playableCharacters[0].skills[i].skillDescription;
 
-                skillSlots[i].SetActive(true);
+                    skillSlots[i].SetActive(true);
+                }
             }
         }
+
         /*if (Engine.e.party[1] != null)
         {
             charTMP[1].color = Color.gray;
@@ -80,6 +87,7 @@ public class AugmentMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(weaponReference);
 
     }
+
     public void SetMacScreen()
     {
         grieveScreen = false;
@@ -359,6 +367,7 @@ public class AugmentMenu : MonoBehaviour
 
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(skillSlots[skillPointerIndex].gameObject);
+
     }
 
     public void AugmentSkill(Skills _skill)
@@ -385,6 +394,8 @@ public class AugmentMenu : MonoBehaviour
 
                 _skill.StatChange(0);
 
+                _skill.grieveEquipped = true;
+
             }
             else
             {
@@ -395,49 +406,228 @@ public class AugmentMenu : MonoBehaviour
 
                     weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill = null;
                     weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = "-";
+                    weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill.grieveEquipped = false;
 
                     Engine.e.playableCharacters[0].equippedSkills[weaponSkillSlotReference] = null; // Removing Skill
 
                 }
             }
+        }
 
-            if (macScreen)
+        if (macScreen)
+        {
+            if (weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill != null)
             {
+                weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill.equipping = false;
+                weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill.StatChange(1);
+            }
+
+            // check if there is a skill in slot, and if so, remove and update stats
+            if (skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skill != null)  // Equipping Skill
+            {
+                _skill.equipping = true;
                 Engine.e.playableCharacters[1].equippedSkills[weaponSkillSlotReference] = _skill;
+
+                weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill = _skill;
+                weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = Engine.e.playableCharacters[1].equippedSkills[weaponSkillSlotReference].skillName;
+
+                skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skill = null;
+                skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = "-";
+
                 _skill.StatChange(1);
 
+                _skill.macEquipped = true;
+
+
             }
-            if (fieldScreen)
+            else
             {
-                Engine.e.playableCharacters[2].equippedSkills[weaponSkillSlotReference] = _skill;
-                _skill.StatChange(2);
+                if (weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill != null)
+                {
+                    skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skill = weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill;
+                    skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill.skillName;
 
-            }
-            if (riggsScreen)
-            {
-                Engine.e.playableCharacters[3].equippedSkills[weaponSkillSlotReference] = _skill;
-                _skill.StatChange(3);
+                    weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill = null;
+                    weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = "-";
+                    weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill.macEquipped = false;
 
-            }
-            if (solaceScreen)
-            {
-                Engine.e.playableCharacters[4].equippedSkills[weaponSkillSlotReference] = _skill;
-                _skill.StatChange(4);
+                    Engine.e.playableCharacters[1].equippedSkills[weaponSkillSlotReference] = null; // Removing Skill
 
-            }
-            if (blueScreen)
-            {
-                Engine.e.playableCharacters[5].equippedSkills[weaponSkillSlotReference] = _skill;
-                _skill.StatChange(5);
-
+                }
             }
 
-            selectingSkill = false;
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(weaponSkillSlots[weaponPointerIndex].gameObject);
-            //weaponSkillSlotReference = 0;
         }
+        if (fieldScreen)
+        {
+            if (weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill != null)
+            {
+                weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill.equipping = false;
+                weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill.StatChange(2);
+            }
+
+            // check if there is a skill in slot, and if so, remove and update stats
+            if (skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skill != null)  // Equipping Skill
+            {
+                _skill.equipping = true;
+                Engine.e.playableCharacters[2].equippedSkills[weaponSkillSlotReference] = _skill;
+
+                weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill = _skill;
+                weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = Engine.e.playableCharacters[2].equippedSkills[weaponSkillSlotReference].skillName;
+
+                skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skill = null;
+                skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = "-";
+
+                _skill.StatChange(2);
+                _skill.fieldEquipped = true;
+
+            }
+            else
+            {
+                if (weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill != null)
+                {
+                    skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skill = weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill;
+                    skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill.skillName;
+
+                    weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill = null;
+                    weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = "-";
+                    weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill.fieldEquipped = false;
+
+                    Engine.e.playableCharacters[2].equippedSkills[weaponSkillSlotReference] = null; // Removing Skill
+
+                }
+            }
+
+        }
+        if (riggsScreen)
+        {
+            if (weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill != null)
+            {
+                weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill.equipping = false;
+                weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill.StatChange(3);
+            }
+
+            // check if there is a skill in slot, and if so, remove and update stats
+            if (skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skill != null)  // Equipping Skill
+            {
+                _skill.equipping = true;
+                Engine.e.playableCharacters[3].equippedSkills[weaponSkillSlotReference] = _skill;
+
+                weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill = _skill;
+                weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = Engine.e.playableCharacters[3].equippedSkills[weaponSkillSlotReference].skillName;
+
+                skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skill = null;
+                skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = "-";
+
+                _skill.StatChange(3);
+                _skill.riggsEquipped = true;
+
+            }
+            else
+            {
+                if (weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill != null)
+                {
+                    skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skill = weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill;
+                    skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill.skillName;
+
+                    weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill = null;
+                    weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = "-";
+                    weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill.riggsEquipped = false;
+
+                    Engine.e.playableCharacters[3].equippedSkills[weaponSkillSlotReference] = null; // Removing Skill
+
+                }
+            }
+
+        }
+        if (solaceScreen)
+        {
+            if (weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill != null)
+            {
+                weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill.equipping = false;
+                weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill.StatChange(4);
+            }
+
+            // check if there is a skill in slot, and if so, remove and update stats
+            if (skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skill != null)  // Equipping Skill
+            {
+                _skill.equipping = true;
+                Engine.e.playableCharacters[4].equippedSkills[weaponSkillSlotReference] = _skill;
+
+                weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill = _skill;
+                weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = Engine.e.playableCharacters[0].equippedSkills[weaponSkillSlotReference].skillName;
+
+                skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skill = null;
+                skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = "-";
+
+                _skill.StatChange(4);
+                _skill.solaceEquipped = true;
+
+            }
+            else
+            {
+                if (weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill != null)
+                {
+                    skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skill = weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill;
+                    skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill.skillName;
+
+                    weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill = null;
+                    weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = "-";
+                    weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill.solaceEquipped = false;
+
+                    Engine.e.playableCharacters[4].equippedSkills[weaponSkillSlotReference] = null; // Removing Skill
+
+                }
+            }
+
+        }
+        if (blueScreen)
+        {
+            if (weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill != null)
+            {
+                weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill.equipping = false;
+                weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill.StatChange(5);
+            }
+
+            // check if there is a skill in slot, and if so, remove and update stats
+            if (skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skill != null)  // Equipping Skill
+            {
+                _skill.equipping = true;
+                Engine.e.playableCharacters[5].equippedSkills[weaponSkillSlotReference] = _skill;
+
+                weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill = _skill;
+                weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = Engine.e.playableCharacters[5].equippedSkills[weaponSkillSlotReference].skillName;
+
+                skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skill = null;
+                skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = "-";
+
+                _skill.StatChange(5);
+                _skill.blueEquipped = true;
+
+            }
+            else
+            {
+                if (weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill != null)
+                {
+                    skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skill = weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill;
+                    skillSlots[skillPointerIndex].GetComponent<SkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill.skillName;
+
+                    weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill = null;
+                    weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = "-";
+                    weaponSkillSlots[weaponSkillSlotReference].GetComponent<WeaponSkillSlot>().skill.blueEquipped = false;
+
+                    Engine.e.playableCharacters[5].equippedSkills[weaponSkillSlotReference] = null; // Removing Skill
+
+                }
+            }
+
+        }
+
+        selectingSkill = false;
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(weaponSkillSlots[weaponPointerIndex].gameObject);
+        //weaponSkillSlotReference = 0;
     }
+
 
     void HandleWeaponSlots()
     {
@@ -486,6 +676,7 @@ public class AugmentMenu : MonoBehaviour
             }
         }
 
+
         if (selectingSkill && !selectingWeapon)
         {
             if (vertMove > 0 && pressDown)
@@ -522,6 +713,16 @@ public class AugmentMenu : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+
+    public void ClearAugments()
+    {
+        for (int i = 0; i < weaponSkillSlots.Length; i++)
+        {
+            weaponSkillSlots[i].GetComponent<WeaponSkillSlot>().skill = null;
+            weaponSkillSlots[i].GetComponent<WeaponSkillSlot>().skillName.GetComponent<TextMeshProUGUI>().text = "-";
+            weaponSkillSlots[i].SetActive(false);
         }
     }
 

@@ -83,7 +83,7 @@ public class BattleSystem : MonoBehaviour
     public GameObject[] char3MenuButtons;
 
     // Skills
-    public GameObject[] skillButtons;
+    public GameObject[] char1SkillButtons, char2SkillButtons, char3SkillButtons;
 
     // Drops
     public GameObject[] dropsButtons;
@@ -168,6 +168,8 @@ public class BattleSystem : MonoBehaviour
 
         lastDropChoice = null;
         lastSkillChoice = null;
+
+        SetupCharSkills();
 
         for (int i = 0; i < Engine.e.party.Length; i++)
         {
@@ -3099,8 +3101,8 @@ public class BattleSystem : MonoBehaviour
         ActivateChar1MenuButtons();
         DeactivateDropsUI();
         ActivateCharDropsUI();
-        DeactivateSkillsUI();
-        ActivateCharSkillsUI();
+        //DeactivateSkillsUI();
+        //ActivateCharSkillsUI();
         EnableButtonInteraction();
 
         inBattleMenu = false;
@@ -3168,8 +3170,8 @@ public class BattleSystem : MonoBehaviour
         ActivateChar2MenuButtons();
         DeactivateDropsUI();
         ActivateCharDropsUI();
-        DeactivateSkillsUI();
-        ActivateCharSkillsUI();
+        //DeactivateSkillsUI();
+        //ActivateCharSkillsUI();
         EnableButtonInteraction();
 
         inBattleMenu = false;
@@ -3237,8 +3239,8 @@ public class BattleSystem : MonoBehaviour
         ActivateChar3MenuButtons();
         DeactivateDropsUI();
         ActivateCharDropsUI();
-        DeactivateSkillsUI();
-        ActivateCharSkillsUI();
+        //DeactivateSkillsUI();
+        //ActivateCharSkillsUI();
         EnableButtonInteraction();
 
         inBattleMenu = false;
@@ -3753,20 +3755,64 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    public void SetupCharSkills()
+    public void SetupCharSkills()   // Make skills rearrangeable with ultimate weapons equipped. Base skills off of list of all known skills, as opposed of buttons based on weapon skill order.
     {
-        foreach (Skills skill in Engine.e.activeParty.activeParty[0].GetComponent<Character>().equippedSkills)
+        if (Engine.e.activeParty.activeParty[0].GetComponent<Character>().equippedSkills.Length == 0)
         {
-            if (Engine.e.activeParty.activeParty[0].GetComponent<Character>().equippedSkills.Length == 0)
+            char1MenuButtons[1].SetActive(false);
+        }
+        else
+        {
+            for (int i = 0; i < Engine.e.activeParty.activeParty[0].GetComponent<Character>().equippedSkills.Length; i++)
             {
-                char1MenuButtons[1].SetActive(false);
+                if (!Engine.e.activeParty.activeParty[0].GetComponent<Character>().equippedSkills[i].passiveSkill)
+                {
+                    char1SkillButtons[i].GetComponent<BattleSkillsUIHolder>().skill = Engine.e.activeParty.activeParty[0].GetComponent<Character>().equippedSkills[i];
+                    char1SkillButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().equippedSkills[i].skillName;
+                    char1SkillButtons[i].SetActive(true);
+                }
+            }
+        }
+        if (Engine.e.activeParty.activeParty[1] != null)
+        {
+            if (Engine.e.activeParty.activeParty[1].GetComponent<Character>().equippedSkills.Length == 0)
+            {
+                char2MenuButtons[1].SetActive(false);
             }
             else
             {
-
+                for (int i = 0; i < Engine.e.activeParty.activeParty[1].GetComponent<Character>().equippedSkills.Length; i++)
+                {
+                    if (!Engine.e.activeParty.activeParty[1].GetComponent<Character>().equippedSkills[i].passiveSkill)
+                    {
+                        char2SkillButtons[i].GetComponent<BattleSkillsUIHolder>().skill = Engine.e.activeParty.activeParty[1].GetComponent<Character>().equippedSkills[i];
+                        char2SkillButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().equippedSkills[i].skillName;
+                        char2SkillButtons[i].SetActive(true);
+                    }
+                }
+            }
+        }
+        if (Engine.e.activeParty.activeParty[2] != null)
+        {
+            if (Engine.e.activeParty.activeParty[2].GetComponent<Character>().equippedSkills.Length == 0)
+            {
+                char2MenuButtons[2].SetActive(false);
+            }
+            else
+            {
+                for (int i = 0; i < Engine.e.activeParty.activeParty[2].GetComponent<Character>().equippedSkills.Length; i++)
+                {
+                    if (!Engine.e.activeParty.activeParty[2].GetComponent<Character>().equippedSkills[i].passiveSkill)
+                    {
+                        char2SkillButtons[i].GetComponent<BattleSkillsUIHolder>().skill = Engine.e.activeParty.activeParty[2].GetComponent<Character>().equippedSkills[i];
+                        char2SkillButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().equippedSkills[i].skillName;
+                        char2SkillButtons[i].SetActive(true);
+                    }
+                }
             }
         }
     }
+
     public void ActivateChar1MenuButtons()
     {
         if (!isDead)
@@ -4562,66 +4608,21 @@ public class BattleSystem : MonoBehaviour
     {
         if (state == BattleState.CHAR1TURN)
         {
-            for (int i = 0; i < Engine.e.activeParty.activeParty[0].GetComponent<Character>().equippedSkills.Length; i++)
-            {
-                if (Engine.e.activeParty.activeParty[0].GetComponent<Character>().equippedSkills[i] != null)
-                {
-                    if (!Engine.e.activeParty.activeParty[0].GetComponent<Character>().equippedSkills[i].passiveSkill)
-                    {
-                        skillButtons[i].GetComponent<BattleSkillsUIHolder>().skill = (Engine.e.activeParty.activeParty[0].GetComponent<Character>().equippedSkills[i]);
-                        skillButtons[i].GetComponent<BattleSkillsUIHolder>().GetComponentInChildren<TextMeshProUGUI>().text = Engine.e.activeParty.activeParty[0].GetComponent<Character>().equippedSkills[i].skillName;
-                        skillButtons[i].SetActive(true);
-
-                    }
-                }
-            }
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(char1SkillButtons[0]);
         }
 
         if (state == BattleState.CHAR2TURN)
         {
-            for (int i = 0; i < Engine.e.activeParty.activeParty[1].GetComponent<Character>().equippedSkills.Length; i++)
-            {
-                if (Engine.e.activeParty.activeParty[1].GetComponent<Character>().equippedSkills[i] != null)
-                {
-                    if (!Engine.e.activeParty.activeParty[1].GetComponent<Character>().equippedSkills[i].passiveSkill)
-                    {
-                        skillButtons[i].GetComponent<BattleSkillsUIHolder>().skill = (Engine.e.activeParty.activeParty[1].GetComponent<Character>().equippedSkills[i]);
-                        skillButtons[i].GetComponent<BattleSkillsUIHolder>().GetComponentInChildren<TextMeshProUGUI>().text = Engine.e.activeParty.activeParty[1].GetComponent<Character>().equippedSkills[i].skillName;
-
-                        skillButtons[i].SetActive(true);
-                    }
-                }
-            }
-
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(char2SkillButtons[0]);
         }
 
         if (state == BattleState.CHAR3TURN)
         {
-            for (int i = 0; i < Engine.e.activeParty.activeParty[2].GetComponent<Character>().equippedSkills.Length; i++)
-            {
-                if (Engine.e.activeParty.activeParty[2].GetComponent<Character>().equippedSkills[i] != null)
-                {
-                    if (!Engine.e.activeParty.activeParty[2].GetComponent<Character>().equippedSkills[i].passiveSkill)
-                    {
-                        skillButtons[i].GetComponent<BattleSkillsUIHolder>().skill = (Engine.e.activeParty.activeParty[2].GetComponent<Character>().equippedSkills[i]);
-                        skillButtons[i].GetComponent<BattleSkillsUIHolder>().GetComponentInChildren<TextMeshProUGUI>().text = Engine.e.activeParty.activeParty[2].GetComponent<Character>().equippedSkills[i].skillName;
-
-                        skillButtons[i].SetActive(true);
-                    }
-                }
-
-            }
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(char3SkillButtons[0]);
         }
-
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(skillButtons[0]);
-        /*for (int i = 0; i < skillButtons.Length; i++)
-        {
-            if (skillButtons[i].GetComponent<BattleSkillsUIHolder>().skill != null)
-            {
-                skillButtons[i].GetComponent<BattleSkillsUIHolder>().SetSkillText();
-            }
-        }*/
     }
 
     public void DeactivateSkillsUI()
@@ -4638,14 +4639,14 @@ public class BattleSystem : MonoBehaviour
         {
             char3BattlePanel.SetActive(true);
         }
-        skillListReference.SetActive(false);
+        /*skillListReference.SetActive(false);
         for (int i = 0; i < Engine.e.gameSkills.Length; i++)
         {
             if (Engine.e.gameSkills[i] != null)
             {
                 skillButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = "-";
             }
-        }
+        }*/
 
     }
 

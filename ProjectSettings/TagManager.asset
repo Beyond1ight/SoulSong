@@ -20,6 +20,7 @@ TagManager:
   - ActivatesAtNight
   - SceneMisc
   - Scene Transition
+  - ForceCamRatio
   layers:
   - Default
   - TransparentFX

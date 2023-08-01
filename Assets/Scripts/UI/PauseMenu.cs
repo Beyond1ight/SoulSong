@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.Experimental.Rendering.Universal;
+using AutoLetterbox;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -28,7 +29,7 @@ public class PauseMenu : MonoBehaviour
     arrangeIndex2Grieve, arrangeIndex2Mac,
     arrangeIndex3Grieve, arrangeIndex3Mac, arrangeIndex3Field;
     public GameObject[] gridCharSelect, augmentCharSelect;
-    public GameObject equipWeaponFirst, equipChestArmorCharFirst, augmentMenuFirstButton;
+    public GameObject equipWeaponFirst, equipChestArmorCharFirst, augmentMenuFirstButton, optionsMenuFirstButton;
     public bool shoppingArmor = false, shoppingWeapons = false, shoppingDrops = false, shoppingItems = false;
     public TextMeshProUGUI battleModeReference;
     public GameUI uiReference;
@@ -770,6 +771,15 @@ public class PauseMenu : MonoBehaviour
         atPauseMenu = false;
     }
 
+    public void OpenOptionsMenu()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+
+        EventSystem.current.SetSelectedGameObject(optionsMenuFirstButton);
+
+
+        atPauseMenu = false;
+    }
     public void OpenMainMenu()
     {
         mainMenuScreen.SetActive(true);
@@ -846,6 +856,20 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
+    public void SwitchCamRatioSixteenByNine()
+    {
+        Vector2 sixteenByNine = new Vector2(16, 9);
+
+        Engine.e.cameraRatioReference.GetComponent<ForceCameraRatio>().ratio = sixteenByNine;
+    }
+    public void SwitchCamRatioTwentyOneByNine()
+    {
+        Vector2 twentyOneByNine = new Vector2(21, 9);
+
+        Engine.e.cameraRatioReference.GetComponent<ForceCameraRatio>().ratio = twentyOneByNine;
+
+    }
+
     public void ChangeBattleMode()
     {
         if (Engine.e.battleModeActive)
@@ -871,6 +895,11 @@ public class PauseMenu : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void ClearAugmentsReference()
+    {
+        Engine.e.augmentMenuReference.ClearAugments();
     }
 
 }

@@ -19,7 +19,7 @@ public class Skills : MonoBehaviour
     public bool passiveSkill;
     public float health, mana, energy, haste, strength, intelligence, dropCostReduction, skillCostReduction, physicalDefense, lightningDefense, waterDefense, fireDefense,
     iceDefense, shadowDefense, holyDefense;
-    public bool equipping;
+    public bool equipping, grieveEquipped, macEquipped, fieldEquipped, riggsEquipped, solaceEquipped, blueEquipped;
 
     public void SpriteDamageFlash()
     {

@@ -131,9 +131,9 @@ MonoBehaviour:
   currentClass: Soldier
   classCompleted: 000000000000000000000000
   lvl: 1
-  classLvl: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  classLvl: 020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   classEXP:
-  - 0
+  - 20
   - 0
   - 0
   - 0
@@ -154,7 +154,7 @@ MonoBehaviour:
   haste: 41.4
   experiencePoints: 0
   levelUpReq: 100
-  currentClassEXPReq: 10
+  currentClassEXPReq: 40
   strength: 15.4
   intelligence: 17
   dropCostReduction: 0
@@ -289,8 +289,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   skills:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8901647567139126937, guid: 9fc303164d1ed451c8e3843bf1ce8851, type: 3}
+  - {fileID: 565931186836030038, guid: bfbced9c1df294ceda6441cb67d27c96, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

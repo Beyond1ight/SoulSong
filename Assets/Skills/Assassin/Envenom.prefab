@@ -349,10 +349,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillPower: 30
   skillCost: 30
+  skillCostToUnlock: 10
   skillName: Envenom
   skillDescription: Inflicts Poison while dealing damage
   skillPointReturn: 0
-  abilityPointCost: 0
   physicalDps: 1
   rangedDps: 0
   selfSupport: 0
@@ -361,3 +361,20 @@ MonoBehaviour:
   instantCast: 0
   skillIndex: 0
   isKnown: 0
+  passiveSkill: 0
+  health: 0
+  mana: 0
+  energy: 0
+  haste: 0
+  strength: 0
+  intelligence: 0
+  dropCostReduction: 0
+  skillCostReduction: 0
+  physicalDefense: 0
+  lightningDefense: 0
+  waterDefense: 0
+  fireDefense: 0
+  iceDefense: 0
+  shadowDefense: 0
+  holyDefense: 0
+  equipping: 0

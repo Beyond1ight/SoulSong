@@ -8,6 +8,7 @@ using Cinemachine;
 using UnityEngine.EventSystems;
 using UnityEngine.U2D;
 using UnityEngine.Experimental.Rendering.Universal;
+using AutoLetterbox;
 
 public class Engine : MonoBehaviour
 {
@@ -107,6 +108,7 @@ public class Engine : MonoBehaviour
     public GameObject[] pauseMenuCharacterPanels, itemMenuPanels;
     public GameObject canvasReference;
     public GameObject[] charAbilityButtons, charSkillTierButtons;
+    public GameObject cameraRatioReference;
     public bool saveExists;
 
     [SerializeField]
@@ -124,6 +126,7 @@ public class Engine : MonoBehaviour
         gameStart = false;
         e = this;
         SaveSystem.CheckFilesForDisplay();
+        cameraRatioReference.GetComponent<ForceCameraRatio>().ratio = new Vector2(16, 9);
     }
 
     // Establishes a New Game. Clears multiple variables to their default states for a fresh start.
