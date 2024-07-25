@@ -2055,7 +2055,7 @@ public class Engine : MonoBehaviour
         }
 
         playableCharacters[0].SetClass(0);
-        playableCharacters[1].SetClass(0); // 3
+        playableCharacters[1].SetClass(3); // 3
         playableCharacters[2].SetClass(2);
         playableCharacters[3].SetClass(5);
         playableCharacters[4].SetClass(1);

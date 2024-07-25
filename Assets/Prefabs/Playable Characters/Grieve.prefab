@@ -140,9 +140,9 @@ MonoBehaviour:
   currentClass: Soldier
   classCompleted: 000000000000000000000000
   lvl: 1
-  classLvl: 020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  classLvl: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   classEXP:
-  - 20
+  - 0
   - 0
   - 0
   - 0
@@ -155,7 +155,7 @@ MonoBehaviour:
   - 0
   - 0
   currentHealth: 110
-  maxHealth: 132
+  maxHealth: 110
   currentMana: 35
   maxMana: 35
   currentEnergy: 30
@@ -163,7 +163,7 @@ MonoBehaviour:
   haste: 50.4
   experiencePoints: 0
   levelUpReq: 100
-  currentClassEXPReq: 40
+  currentClassEXPReq: 10
   strength: 16.5
   intelligence: 14
   dropCostReduction: 0
@@ -298,8 +298,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   skills:
-  - {fileID: 8901647567139126937, guid: 9fc303164d1ed451c8e3843bf1ce8851, type: 3}
-  - {fileID: 565931186836030038, guid: bfbced9c1df294ceda6441cb67d27c96, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -359,7 +359,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   equippedSkills:
-  - {fileID: 8901647567139126937, guid: 9fc303164d1ed451c8e3843bf1ce8851, type: 3}
+  - {fileID: 0}
   - {fileID: 0}
   canUseFireDrops: 1
   canUseIceDrops: 1

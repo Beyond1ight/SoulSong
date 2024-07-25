@@ -127,13 +127,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterName: Mac
-  characterClass: 010000000000000000000000
-  currentClass: Soldier
+  characterClass: 000000010000000000000000
+  currentClass: Mage
   classCompleted: 000000000000000000000000
   lvl: 1
-  classLvl: 020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  classLvl: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   classEXP:
-  - 20
   - 0
   - 0
   - 0
@@ -145,17 +144,18 @@ MonoBehaviour:
   - 0
   - 0
   - 0
-  currentHealth: 88
-  maxHealth: 88
-  currentMana: 60
-  maxMana: 60
+  - 0
+  currentHealth: 80
+  maxHealth: 80
+  currentMana: 72
+  maxMana: 72
   currentEnergy: 30
   maxEnergy: 30
-  haste: 41.4
+  haste: 46
   experiencePoints: 0
   levelUpReq: 100
-  currentClassEXPReq: 40
-  strength: 15.4
+  currentClassEXPReq: 10
+  strength: 14
   intelligence: 17
   dropCostReduction: 0
   skillCostReduction: 0
@@ -190,7 +190,7 @@ MonoBehaviour:
   holyPhysicalAttackBonus: 0
   holyDropAttackBonus: 0
   expMultiplier: 1
-  dropsEXPMultiplier: 1
+  dropsEXPMultiplier: 1.25
   skillScale: 1
   healthCapped: 1
   manaCapped: 1
@@ -198,7 +198,7 @@ MonoBehaviour:
   canUse2HWeapon: 1
   canDualWield: 0
   canSelectNewClass: 0
-  classIndex: 0
+  classIndex: 3
   isInParty: 1
   isInActiveParty: 1
   isLeader: 0
@@ -219,11 +219,11 @@ MonoBehaviour:
   strengthOffset: -10
   intelligenceOffset: 15
   stealChance: 60
-  physicalDefense: 6.1
+  physicalDefense: 6
   fireDefense: 2
   iceDefense: 1
-  waterDefense: 2
-  lightningDefense: 2.2
+  waterDefense: 2.2
+  lightningDefense: 2
   shadowDefense: 1
   holyDefense: 1
   poisonDefense: 1
@@ -233,14 +233,14 @@ MonoBehaviour:
   dodgeChance: 10
   hitChance: 99
   critChance: 10
-  maxHealthBase: 88
-  maxManaBase: 60
+  maxHealthBase: 80
+  maxManaBase: 72
   maxEnergyBase: 30
-  strengthBase: 15.4
+  strengthBase: 14
   intelligenceBase: 17
   dodgeChanceBase: 10
   critChanceBase: 10
-  hasteBase: 41.4
+  hasteBase: 46
   firePhysicalAttackBonusBase: 0
   icePhysicalAttackBonusBase: 0
   lightningPhysicalAttackBonusBase: 0
@@ -249,8 +249,8 @@ MonoBehaviour:
   holyPhysicalAttackBonusBase: 0
   fireDefenseBase: 2
   iceDefenseBase: 1
-  lightningDefenseBase: 2.2
-  waterDefenseBase: 2
+  lightningDefenseBase: 2
+  waterDefenseBase: 2.2
   shadowDefenseBase: 1
   holyDefenseBase: 1
   sleepDefenseBase: 1
@@ -289,8 +289,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   skills:
-  - {fileID: 8901647567139126937, guid: 9fc303164d1ed451c8e3843bf1ce8851, type: 3}
-  - {fileID: 565931186836030038, guid: bfbced9c1df294ceda6441cb67d27c96, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -349,7 +347,10 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  equippedSkills: []
+  - {fileID: 0}
+  - {fileID: 0}
+  equippedSkills:
+  - {fileID: 0}
   canUseFireDrops: 0
   canUseIceDrops: 0
   canUseLightningDrops: 1

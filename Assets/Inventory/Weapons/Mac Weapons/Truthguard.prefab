@@ -173,6 +173,7 @@ MonoBehaviour:
   riggsWeapon: 0
   solaceWeapon: 0
   blueWeapon: 0
+  skillAmount: 1
   weightClassification: Heavy
   strengthBonus: 6
   intelligenceBonus: 0

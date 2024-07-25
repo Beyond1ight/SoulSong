@@ -169,7 +169,7 @@ public class BattleSystem : MonoBehaviour
         lastDropChoice = null;
         lastSkillChoice = null;
 
-        SetupCharSkills();
+        //SetupCharSkills();
 
         for (int i = 0; i < Engine.e.party.Length; i++)
         {
