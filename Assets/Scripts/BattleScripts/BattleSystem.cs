@@ -1303,7 +1303,7 @@ public class BattleSystem : MonoBehaviour
             }
         }
 
-        if (charAttacking && charAtBattlePos)
+        if (charAttacking) //&& charAtBattlePos
         {
             switch (index)
             {
@@ -1325,167 +1325,174 @@ public class BattleSystem : MonoBehaviour
 
             if (!targetingTeam)
             {
-                Vector3 targetPos = Vector3.MoveTowards(characterAttacking.GetComponent<Rigidbody2D>().transform.position, enemies[targetEnemy].transform.position, 8f * Time.deltaTime);
-
-                characterAttacking.GetComponent<Rigidbody2D>().MovePosition(targetPos);
-
-                if (Vector3.Distance(characterAttacking.transform.position, enemies[targetEnemy].transform.position) < 1)
+                if (!charUsingSkill)
                 {
+                    if (characterAttackIndex.GetComponent<Character>().weaponRight.GetComponent<Weapon>() != null)
+                    {
+                        HandleMeleeAttackAnim(characterAttacking, enemies[targetEnemy].gameObject, characterAttackIndex.GetComponent<Character>().weaponRight.GetComponent<Weapon>());
+                    }
+
+                    enemy.TakePhysicalDamage(targetEnemy, characterAttackIndex.strength, characterAttackIndex.hitChance);
+                    //Vector3 targetPos = Vector3.MoveTowards(characterAttacking.GetComponent<Rigidbody2D>().transform.position, enemies[targetEnemy].transform.position, 8f * Time.deltaTime);
+
+                    //characterAttacking.GetComponent<Rigidbody2D>().MovePosition(targetPos);
+
+                    // if (Vector3.Distance(characterAttacking.transform.position, enemies[targetEnemy].transform.position) < 1)
+                    //{
 
                     charAttacking = false;
                     charAtBattlePos = false;
 
-                    if (!charUsingSkill)
+
+                }
+                else
+                {
+                    Skills _skillChoice = null;
+
+                    if (index == 0)
                     {
-                        if (characterAttackIndex.GetComponent<Character>().weaponRight.GetComponent<Weapon>() != null)
-                        {
-                            //HandleMeleeAttackAnim(characterAttacking, enemies[targetEnemy].gameObject, characterAttackIndex.GetComponent<Character>().weaponRight.GetComponent<Weapon>());
-                        }
-
-                        enemy.TakePhysicalDamage(targetEnemy, characterAttackIndex.strength, characterAttackIndex.hitChance);
-
+                        _skillChoice = char1SkillChoice;
                     }
-                    else
+                    if (index == 1)
                     {
-                        Skills _skillChoice = null;
-
-                        if (index == 0)
-                        {
-                            _skillChoice = char1SkillChoice;
-                        }
-                        if (index == 1)
-                        {
-                            _skillChoice = char2SkillChoice;
-                        }
-                        if (index == 2)
-                        {
-                            _skillChoice = char3SkillChoice;
-                        }
-
-                        switch (_skillChoice.skillIndex)
-                        {
-                            case 0: // Foebreak
-                                enemy.TakeSkillDamage(damageTotal, targetEnemy);
-                                break;
-                            case 1: // Berserk
-                                if (enemies[0].currentHealth > 0)
-                                {
-                                    enemies[0].TakeSkillDamage(damageTotal, 0);
-                                    SpriteDamageFlash(0);
-                                }
-                                if (enemies[1] != null && enemies[1].currentHealth > 0)
-                                {
-                                    enemies[1].TakeSkillDamage(damageTotal, 1);
-                                    SpriteDamageFlash(1);
-
-                                }
-                                if (enemies[2] != null && enemies[2].currentHealth > 0)
-                                {
-                                    enemies[2].TakeSkillDamage(damageTotal, 2);
-                                    SpriteDamageFlash(2);
-
-                                }
-                                if (enemies[3] != null && enemies[3].currentHealth > 0)
-                                {
-                                    enemies[3].TakeSkillDamage(damageTotal, 3);
-                                    SpriteDamageFlash(3);
-
-                                }
-
-                                //SetDamagePopupTextAllEnemies(damageTotal.ToString(), Color.white);
-
-                                break;
-                            case 10: // Steal
-                                enemy.StealAttempt(targetEnemy, characterAttackIndex.stealChance);
-                                break;
-                            case 11: // Daze
-                                float hitChanceReduction = 10 + Mathf.Round(characterAttackIndex.skillScale * 10 / 25);
-                                enemy.hitChance -= hitChanceReduction;
-                                break;
-                            case 13: // Envenom
-                                enemy.TakeSkillDamage(damageTotal, targetEnemy);
-                                enemy.InflictBio(index, 10);
-                                break;
-                            case 14: // Assassinate
-                                enemy.InflictDeath();
-                                break;
-                        }
+                        _skillChoice = char2SkillChoice;
+                    }
+                    if (index == 2)
+                    {
+                        _skillChoice = char3SkillChoice;
                     }
 
-
-
-                    if (dodgedAttack == true)
+                    switch (_skillChoice.skillIndex)
                     {
-                        dodgedAttack = false;
-                    }
-                    else
-                    {
-                        SpriteDamageFlash(targetEnemy);
+                        case 0: // Foebreak
+                            enemy.TakeSkillDamage(damageTotal, targetEnemy);
+                            break;
+                        case 1: // Berserk
+                            if (enemies[0].currentHealth > 0)
+                            {
+                                enemies[0].TakeSkillDamage(damageTotal, 0);
+                                SpriteDamageFlash(0);
+                            }
+                            if (enemies[1] != null && enemies[1].currentHealth > 0)
+                            {
+                                enemies[1].TakeSkillDamage(damageTotal, 1);
+                                SpriteDamageFlash(1);
+
+                            }
+                            if (enemies[2] != null && enemies[2].currentHealth > 0)
+                            {
+                                enemies[2].TakeSkillDamage(damageTotal, 2);
+                                SpriteDamageFlash(2);
+
+                            }
+                            if (enemies[3] != null && enemies[3].currentHealth > 0)
+                            {
+                                enemies[3].TakeSkillDamage(damageTotal, 3);
+                                SpriteDamageFlash(3);
+
+                            }
+
+                            //SetDamagePopupTextAllEnemies(damageTotal.ToString(), Color.white);
+
+                            break;
+                        case 10: // Steal
+                            enemy.StealAttempt(targetEnemy, characterAttackIndex.stealChance);
+                            break;
+                        case 11: // Daze
+                            float hitChanceReduction = 10 + Mathf.Round(characterAttackIndex.skillScale * 10 / 25);
+                            enemy.hitChance -= hitChanceReduction;
+                            break;
+                        case 13: // Envenom
+                            enemy.TakeSkillDamage(damageTotal, targetEnemy);
+                            enemy.InflictBio(index, 10);
+                            break;
+                        case 14: // Assassinate
+                            enemy.InflictDeath();
+                            break;
                     }
                 }
+
+
+
+                if (dodgedAttack == true)
+                {
+                    dodgedAttack = false;
+                }
+                else
+                {
+                    SpriteDamageFlash(targetEnemy);
+                }
+
             }
             else
             {
-                Vector3 targetPos = Vector3.MoveTowards(characterAttacking.GetComponent<Rigidbody2D>().transform.position, characterTarget.transform.position, 8f * Time.deltaTime);
+                //Vector3 targetPos = Vector3.MoveTowards(characterAttacking.GetComponent<Rigidbody2D>().transform.position, characterTarget.transform.position, 8f * Time.deltaTime);
 
-                characterAttacking.GetComponent<Rigidbody2D>().MovePosition(targetPos);
+                //characterAttacking.GetComponent<Rigidbody2D>().MovePosition(targetPos);
 
-                if (Vector3.Distance(characterAttacking.transform.position, characterTarget.transform.position) < 1)
+                //if (Vector3.Distance(characterAttacking.transform.position, characterTarget.transform.position) < 1)
+                //{
+
+                charAttacking = false;
+                charAtBattlePos = false;
+
+                activeParty.activeParty[targetEnemy].GetComponent<Character>().TakePhysicalDamage(targetEnemy, characterAttackIndex.strength);
+
+
+
+                if (dodgedAttack == true)
                 {
-
-                    charAttacking = false;
-                    charAtBattlePos = false;
-
-                    activeParty.activeParty[targetEnemy].GetComponent<Character>().TakePhysicalDamage(targetEnemy, characterAttackIndex.strength);
-
-
-
-                    if (dodgedAttack == true)
-                    {
-                        dodgedAttack = false;
-                    }
-                    else
-                    {
-                        SpriteDamageFlash(targetEnemy);
-                    }
+                    dodgedAttack = false;
+                }
+                else
+                {
+                    SpriteDamageFlash(targetEnemy);
+                    //   }
+                    //}
                 }
             }
         }
-
-        if (!charAttacking && !charAtBattlePos)
+        else
         {
-            enemyGroup.moveToPosition = true;
 
-            if (index == 0)
+            /*if (!charAttacking && !charAtBattlePos)
             {
-                if (characterAttacking.transform.position == leaderPos)
-                {
-                    charAtBattlePos = true;
-                }
-            }
-            if (index == 1)
-            {
-                if (characterAttacking.transform.position == activeParty2Pos)
-                {
-                    charAtBattlePos = true;
-                }
-            }
-            if (index == 2)
-            {
-                if (characterAttacking.transform.position == activeParty3Pos)
-                {
-                    charAtBattlePos = true;
-                }
-            }
 
-            if (charAtBattlePos && !charAttacking)
+                enemyGroup.moveToPosition = true;
+
+                if (index == 0)
+                {
+                    if (characterAttacking.transform.position == leaderPos)
+                    {
+                        charAtBattlePos = true;
+                    }
+                }
+                if (index == 1)
+                {
+                    if (characterAttacking.transform.position == activeParty2Pos)
+                    {
+                        charAtBattlePos = true;
+                    }
+                }
+                if (index == 2)
+                {
+                    if (characterAttacking.transform.position == activeParty3Pos)
+                    {
+                        charAtBattlePos = true;
+                    }
+                }
+            }*/
+
+            if (!charAttacking && animState == AnimState.NONE) // if (charAtBattlePos && !charAttacking)
             {
+                charAtBattlePos = true;
+                Debug.Log("Entered last step");
+
                 if (!attackingTeam)
                 {
                     if (enemies[targetEnemy].gameObject.GetComponent<Enemy>().currentHealth <= 0)
                     {
                         enemies[targetEnemy].gameObject.GetComponent<Enemy>().currentHealth = 0;
-
                         isDead = EnemyGroup.enemyGroup.CheckEndBattle();
 
                         if (isDead)
@@ -1653,6 +1660,8 @@ public class BattleSystem : MonoBehaviour
             {
                 charAttackDrop = false;
                 animExists = false;
+                charAttacking = false;
+
                 for (int i = 0; i < currentAnimation.Length; i++)
                 {
                     if (currentAnimation[i].GetComponent<Animator>().runtimeAnimatorController != null)

@@ -3156,7 +3156,7 @@ public class Engine : MonoBehaviour
 
             durationOfDay = 1440f;
 
-            if (!pauseMenuReference.isPaused)
+            if (!pauseMenuReference.isPaused && !inTown)
             { //&& !inTown
               // durationofday\
 

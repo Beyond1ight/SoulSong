@@ -80,10 +80,10 @@ public class BattleAnimations : MonoBehaviour
         Engine.e.battleSystem.currentAnimation[0].GetComponent<Animator>().runtimeAnimatorController = weapon.GetComponent<Animator>().runtimeAnimatorController;
         Engine.e.battleSystem.currentAnimation[0].transform.position = _targetLoc.transform.position;
 
-        Debug.Log(_spawnLoc.transform.position.x);
-        Debug.Log(_targetLoc.transform.position.x);
+        //Debug.Log(_spawnLoc.transform.position.x);
+        //Debug.Log(_targetLoc.transform.position.x);
 
-        if (_targetLoc.transform.position.y > _spawnLoc.transform.position.y)
+        /*if (_targetLoc.transform.position.y > _spawnLoc.transform.position.y)
         {
             Debug.Log("Rotation");
             Engine.e.battleSystem.currentAnimation[0].transform.rotation = Quaternion.Euler(0, 0, 90f);
@@ -93,7 +93,7 @@ public class BattleAnimations : MonoBehaviour
         {
             Debug.Log("Rotation");
             Engine.e.battleSystem.currentAnimation[0].transform.rotation = Quaternion.Euler(0, 0, 90f);
-        }
+        }*/
 
         Engine.e.battleSystem.currentAnimation[0].GetComponent<Animator>().enabled = true;
         Engine.e.battleSystem.currentAnimation[0].SetActive(true);
@@ -101,11 +101,12 @@ public class BattleAnimations : MonoBehaviour
         Engine.e.battleSystem.animState = AnimState.ATTACKANIM;
         Engine.e.battleSystem.animExists = true;
         Engine.e.battleSystem.animationTimer = weapon.animationClip.length;
+
         for (int i = 0; i < Engine.e.battleSystem.currentAnimation.Length; i++)
         {
             if (Engine.e.battleSystem.currentAnimation[i].GetComponent<Animator>().runtimeAnimatorController != null)
             {
-                Engine.e.battleSystem.currentAnimation[i].GetComponent<Animator>().Play("Start");
+                //Engine.e.battleSystem.currentAnimation[i].GetComponent<Animator>().Play("Start");
             }
         }
 
