@@ -4,6 +4,8 @@ using UnityEngine;
 using Cinemachine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
+using System.Transactions;
+using UnityEngine.Animations;
 public class PlayerController : MonoBehaviour
 {
     public float speed;
@@ -16,22 +18,31 @@ public class PlayerController : MonoBehaviour
     Vector3 targetPos;
     GameObject targetGO;
     public bool controlledMovement = false;
+    public Transform movePoint;
 
 
+    void Start()
+    {
+        movePoint.parent = null;
+    }
     void FixedUpdate()
     {
-        if (!controlledMovement)
+        if (!Engine.e.inWorldMap)
         {
-            rb.MovePosition(rb.position + movement.normalized * speed * Time.fixedDeltaTime);
-        }
-        else
-        {
-            StartCoroutine(MoveCharacter());
+            if (!controlledMovement)
+            {
+                rb.MovePosition(rb.position + movement.normalized * speed * Time.fixedDeltaTime);
+            }
+            else
+            {
+                StartCoroutine(MoveCharacter());
+            }
         }
     }
 
     IEnumerator MoveCharacter()
     {
+
         targetPos = Vector3.MoveTowards(rb.transform.position, targetGO.transform.position, speed * Time.fixedDeltaTime);
 
         rb.MovePosition(targetPos);
@@ -129,7 +140,30 @@ public class PlayerController : MonoBehaviour
                     Engine.e.mainVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_YDamping = 0;
                 }
 
+            }
 
+
+            if (Engine.e.inWorldMap)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, movePoint.position, speed * Time.deltaTime);
+                {
+                    if (Vector3.Distance(transform.position, movePoint.position) <= 0.2f)
+                    {
+
+                        //Engine.e.activeParty.transform.position = movePoint.position;
+
+                        if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f)
+                        {
+                            movePoint.position += new Vector3(Input.GetAxisRaw("Horizontal"), 0f, 0f);
+                        }
+
+                        if (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1f)
+                        {
+                            movePoint.position += new Vector3(0f, Input.GetAxisRaw("Vertical"), 0f);
+
+                        }
+                    }
+                }
             }
         }
     }

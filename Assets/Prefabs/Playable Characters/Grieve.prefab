@@ -399,3 +399,4 @@ MonoBehaviour:
   movement: {x: 0, y: 0}
   isMoving: 0
   controlledMovement: 0
+  movePoint: {fileID: 0}

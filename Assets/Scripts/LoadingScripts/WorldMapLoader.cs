@@ -35,9 +35,4 @@ public class WorldMapLoader : MonoBehaviour
 
         SceneManager.LoadSceneAsync(worldMap);
     }
-
-    void Update()
-    {
-
-    }
 }

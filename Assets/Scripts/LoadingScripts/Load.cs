@@ -14,7 +14,7 @@ public class Load : MonoBehaviour
 
     public bool loaded;
     public bool unloaded;
-    public bool indoors, indoorLighting, inTown, partyShown, worldMap = false, loadOnInteraction, loadSave;
+    public bool indoors, indoorLighting, inTown, partyShown, worldMap = false, loadOnInteraction, loadSave, charInLoadingZone;
     public static Load l;
     public GameObject leaderToPosition;
     public GameObject activeParty2Location;
@@ -33,6 +33,10 @@ public class Load : MonoBehaviour
         Engine.e.activeParty.transform.position = new Vector3(leaderToPosition.transform.position.x, leaderToPosition.transform.position.y);
         Engine.e.activePartyMember2.transform.position = new Vector3(activeParty2Location.transform.position.x, activeParty2Location.transform.position.y);
         Engine.e.activePartyMember3.transform.position = new Vector3(activeParty3Location.transform.position.x, activeParty3Location.transform.position.y);
+
+        Engine.e.activeParty.GetComponent<PlayerController>().movePoint.position = new Vector2(leaderToPosition.transform.position.x, Mathf.Round(leaderToPosition.transform.position.y) + 0.5f);
+
+
     }
 
     public void SceneUnload()
@@ -76,6 +80,7 @@ public class Load : MonoBehaviour
         Engine.e.indoorLighting = indoorLighting;
         Engine.e.inWorldMap = worldMap;
         Engine.e.partyShown = partyShown;
+        Engine.e.inTown = inTown;
         //Debug.Log(Engine.e.sceneToBeLoaded);
 
         if (Engine.e.loading)
@@ -109,7 +114,10 @@ public class Load : MonoBehaviour
                 }
 
                 Engine.e.activeParty.gameObject.transform.localScale = new Vector3(0.65f, 0.65f, 1f);
-                Engine.e.activeParty.GetComponent<PlayerController>().speed = 3.5f;
+                Engine.e.activeParty.GetComponent<PlayerController>().speed = 3.0f;
+                //Engine.e.activeParty.GetComponent<BoxCollider2D>().size = new Vector2(1.5f, 1.5f);
+                Engine.e.activeParty.GetComponent<BoxCollider2D>().offset = new Vector2(0f, -0.75f);
+
 
                 if (partyShown)
                 {
@@ -141,7 +149,6 @@ public class Load : MonoBehaviour
                 Engine.e.canvasReference.GetComponent<PauseMenu>().partyLocationDisplay.text = "Location: World Map";
                 Engine.e.ableToSave = true;
 
-
             }
             else
             {
@@ -152,6 +159,8 @@ public class Load : MonoBehaviour
 
                 Engine.e.activeParty.gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
                 Engine.e.activeParty.GetComponent<PlayerController>().speed = 5.5f;
+                //Engine.e.activeParty.GetComponent<BoxCollider2D>().size = new Vector2(1.0f, 1.0f);
+                Engine.e.activeParty.GetComponent<BoxCollider2D>().offset = new Vector2(0f, 0.0f);
 
                 Engine.e.ableToSave = false;
 
@@ -187,6 +196,9 @@ public class Load : MonoBehaviour
             }
 
             Engine.e.zoneTransition.GetComponent<Animator>().speed = 1f;
+            charInLoadingZone = false;
+            Engine.e.interactionPopup.SetActive(false);
+            Engine.e.interactionPopup.GetComponent<TextMeshProUGUI>().text = "(E)";
 
             Engine.e.SaveGame(3);
         };
@@ -194,27 +206,41 @@ public class Load : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
+        if (!loadOnInteraction)
+        {
+            l = this;
+            Engine.e.zoneTransition.SetActive(true);
+            //SceneUnload();
+        }
+    }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
         if (other.tag == "Player" && !loaded)
         {
-
             if (loadOnInteraction)
             {
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    l = this;
-                    Engine.e.zoneTransition.SetActive(true);
-                    //SceneLoadManager();
-                }
-            }
-            else
-            {
-                l = this;
-                Engine.e.zoneTransition.SetActive(true);
-                //SceneUnload();
+                Engine.e.interactionPopup.GetComponent<TextMeshProUGUI>().text = onLoadSceneReference;
+                charInLoadingZone = true;
+                Engine.e.interactionPopup.SetActive(true);
             }
         }
     }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.tag == "Player" && !loaded)
+        {
+            if (loadOnInteraction)
+            {
+                charInLoadingZone = false;
+                Engine.e.interactionPopup.GetComponent<TextMeshProUGUI>().text = "(E)";
+                Engine.e.interactionPopup.SetActive(false);
+
+            }
+        }
+    }
+
 
     public void LoadIntoGame() // Is called on New Game, as well as Load Save
     {
@@ -224,6 +250,16 @@ public class Load : MonoBehaviour
         //SceneLoadManager();
 
     }
-}
 
+    void Update()
+    {
+        if (Engine.e.inWorldMap && Input.GetKeyDown(KeyCode.E) && charInLoadingZone)
+        {
+            l = this;
+            Engine.e.zoneTransition.SetActive(true);
+            //SceneLoadManager();
+
+        }
+    }
+}
 

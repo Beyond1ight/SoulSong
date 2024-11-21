@@ -137,7 +137,7 @@ GameObject:
   m_Layer: 0
   m_Name: JuniperTransition
   m_TagString: Scene Transition
-  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -149,7 +149,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 312402714}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -160.9, y: 52.2, z: 0}
+  m_LocalPosition: {x: 113, y: -181, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1898304355}
@@ -172,7 +172,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.21508789, y: 0.20346451}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -183,7 +183,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.8486328, y: 2.6161041}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
 --- !u!114 &312402718
 MonoBehaviour:
@@ -197,6 +197,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b2994a76ed9b4f98bee9bf8e34173ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  context: {fileID: 11400000, guid: 0f2f2c7fce56e4d4ca53ced9ea67e481, type: 2}
+  playerInRange: 0
   scene: Juniper
   sceneUnload: WorldMap
   sceneToBeLoaded: 
@@ -209,6 +211,7 @@ MonoBehaviour:
   worldMap: 0
   loadOnInteraction: 1
   loadSave: 0
+  charInLoadingZone: 0
   leaderToPosition: {fileID: 1898304354}
   activeParty2Location: {fileID: 681683573}
   activeParty3Location: {fileID: 555351256}
@@ -237,7 +240,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 421298893}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -285.60004, y: -232.1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1444008425}
@@ -270,7 +273,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 555351256}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.95, y: 1.7, z: 0}
+  m_LocalPosition: {x: -553.66, y: 2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 312402715}
@@ -330,7 +333,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 681683573}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.9500804, y: 1.699997, z: 0}
+  m_LocalPosition: {x: -553.66, y: 2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 312402715}
@@ -410,6 +413,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b2994a76ed9b4f98bee9bf8e34173ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  context: {fileID: 0}
+  playerInRange: 0
   scene: MariaCave
   sceneUnload: WorldMap
   sceneToBeLoaded: 
@@ -422,6 +427,7 @@ MonoBehaviour:
   worldMap: 0
   loadOnInteraction: 1
   loadSave: 0
+  charInLoadingZone: 0
   leaderToPosition: {fileID: 1547092849}
   activeParty2Location: {fileID: 1051126979}
   activeParty3Location: {fileID: 581321923}
@@ -450,7 +456,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000804782}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.13, y: 9.409977, z: 0}
+  m_LocalPosition: {x: -556, y: 11, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1444008425}
@@ -560,7 +566,7 @@ GameObject:
   m_Layer: 0
   m_Name: LeaderLocation
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -572,7 +578,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209720138}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.129944, y: 9.409982, z: 0}
+  m_LocalPosition: {x: -556, y: 11, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1444008425}
@@ -633,6 +639,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9206302531138866491, guid: 4d0673be57d3a4f17b6ed34679a984f8, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d0673be57d3a4f17b6ed34679a984f8, type: 3}
 --- !u!4 &1227886473 stripped
@@ -654,7 +664,7 @@ GameObject:
   m_Layer: 0
   m_Name: SturgeonTransition
   m_TagString: Scene Transition
-  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -666,7 +676,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1444008424}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -173.15, y: 47.74, z: 0}
+  m_LocalPosition: {x: 102, y: -186, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1209720139}
@@ -688,6 +698,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b2994a76ed9b4f98bee9bf8e34173ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  context: {fileID: 11400000, guid: 0f2f2c7fce56e4d4ca53ced9ea67e481, type: 2}
+  playerInRange: 0
   scene: Sturgeon
   sceneUnload: WorldMap
   sceneToBeLoaded: 
@@ -700,6 +712,7 @@ MonoBehaviour:
   worldMap: 0
   loadOnInteraction: 1
   loadSave: 0
+  charInLoadingZone: 0
   leaderToPosition: {fileID: 1209720138}
   activeParty2Location: {fileID: 1000804782}
   activeParty3Location: {fileID: 2030567904}
@@ -717,7 +730,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.21508789, y: 0.20346451}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -728,7 +741,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.8486328, y: 2.6161041}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
 --- !u!1001 &1512156978
 PrefabInstance:
@@ -737,6 +750,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -6344185663006305075, guid: 8363bf29860394824b00233857fbf866, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6344185663006305075, guid: 8363bf29860394824b00233857fbf866, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -576054137299122398, guid: 8363bf29860394824b00233857fbf866, type: 3}
       propertyPath: m_Name
       value: WorldMap
@@ -751,11 +772,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 970724285606830408, guid: 8363bf29860394824b00233857fbf866, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -560
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 970724285606830408, guid: 8363bf29860394824b00233857fbf866, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 970724285606830408, guid: 8363bf29860394824b00233857fbf866, type: 3}
       propertyPath: m_LocalPosition.z
@@ -788,6 +809,14 @@ PrefabInstance:
     - target: {fileID: 970724285606830408, guid: 8363bf29860394824b00233857fbf866, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3007133113486897583, guid: 8363bf29860394824b00233857fbf866, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5230783772651479231, guid: 8363bf29860394824b00233857fbf866, type: 3}
+      propertyPath: m_CellSize.x
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: -2695619058785784247, guid: 8363bf29860394824b00233857fbf866, type: 3}
@@ -881,7 +910,7 @@ GameObject:
   m_Layer: 0
   m_Name: LeaderLocation
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -893,7 +922,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1898304354}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.950012, y: 1.6999941, z: 0}
+  m_LocalPosition: {x: -553.66, y: 2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 312402715}
@@ -923,7 +952,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2030567904}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.1299276, y: 9.41, z: 0}
+  m_LocalPosition: {x: -556, y: 11, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1444008425}
@@ -937,12 +966,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 1444008425}
     m_Modifications:
     - target: {fileID: 9206302531138866489, guid: 4d0673be57d3a4f17b6ed34679a984f8, type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+    - target: {fileID: 9206302531138866489, guid: 4d0673be57d3a4f17b6ed34679a984f8, type: 3}
       propertyPath: m_Name
       value: MiniMapLoc (Scene Transition)
       objectReference: {fileID: 0}
+    - target: {fileID: 9206302531138866489, guid: 4d0673be57d3a4f17b6ed34679a984f8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9206302531138866490, guid: 4d0673be57d3a4f17b6ed34679a984f8, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9206302531138866490, guid: 4d0673be57d3a4f17b6ed34679a984f8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -982,6 +1019,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9206302531138866490, guid: 4d0673be57d3a4f17b6ed34679a984f8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9206302531138866491, guid: 4d0673be57d3a4f17b6ed34679a984f8, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
